@@ -1,0 +1,106 @@
+rules_version = '2';
+
+// Prezidan Pa M — Firestore rules.
+//
+// Design (works on the free Spark plan, no Cloud Functions required):
+//  - votes/{uid}        one document per signed-in user (anonymous or phone auth).
+//                       Only the owner can write it; everyone can read (reasons are
+//                       public and anonymous by design — no phone number is stored).
+//  - polls/{pollId}     weekly polls. Public read; only admins (email allowlist) write.
+//  - pollVotes/{pollId_uid} one answer per user per poll. Owner writes, public read.
+//  - stats/{doc}        optional aggregates written by Cloud Functions (Blaze plan).
+//                       Public read, never client-writable.
+//  - meta/{doc}         app metadata (last updated, candidate list version). Admin write.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---- helpers -------------------------------------------------------
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'pierrelouisfredler@gmail.com',
+          'fredler.pierre-louis@edlight.org'
+        ];
+    }
+
+    // CEP registry, Oct 30 2026 (19 registrants) — keep in sync with src/data/candidates.ts
+    function validCandidate(id) {
+      return id in [
+        'martelly', 'claude-joseph', 'privert', 'bodeau', 'jeudy', 'muscadin',
+        'maxo-joseph', 'ricardo-jean-pierre', 'wilner-joseph', 'mourra',
+        'dorfeuille', 'deronneth', 'adrien', 'durocher', 'gue', 'st-fort',
+        'salomon', 'tardieu', 'barrau'
+      ];
+    }
+    function validDepartment(d) {
+      return d in [
+        'ouest', 'sud-est', 'nord', 'nord-est', 'artibonite', 'centre',
+        'sud', 'grand-anse', 'nord-ouest', 'nippes', 'dyaspora', 'na'
+      ];
+    }
+    function validPriority(p) {
+      return p in [
+        'security', 'education', 'infrastructure', 'economy', 'health',
+        'agriculture', 'justice', 'utilities', 'diaspora', 'environment',
+        'institutions', 'youth'
+      ];
+    }
+    function validLang(l) { return l in ['ht', 'fr', 'en']; }
+    // Reasons: text only, max 240 chars, no URLs (the client strips them too).
+    function validReason(r) {
+      return r is string
+        && r.size() <= 240
+        && !r.matches('.*(https?://|www\\.|[a-z0-9-]+\\.(com|net|org|ht|io|co|info)).*');
+    }
+    function validPriorities(arr) {
+      return arr is list && arr.size() <= 3
+        && (arr.size() < 1 || validPriority(arr[0]))
+        && (arr.size() < 2 || validPriority(arr[1]))
+        && (arr.size() < 3 || validPriority(arr[2]));
+    }
+
+    // ---- presidential vote -------------------------------------------
+    match /votes/{uid} {
+      allow read: if true;
+      allow create, update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['candidate', 'reason', 'department', 'priorities', 'lang', 'createdAt', 'updatedAt'])
+        && validCandidate(request.resource.data.candidate)
+        && validReason(request.resource.data.get('reason', ''))
+        && validDepartment(request.resource.data.get('department', 'na'))
+        && validPriorities(request.resource.data.get('priorities', []))
+        && validLang(request.resource.data.get('lang', 'ht'))
+        && request.resource.data.updatedAt == request.time
+        && (request.method == 'update' || request.resource.data.createdAt == request.time);
+      allow delete: if isOwner(uid);
+    }
+
+    // ---- weekly polls ----------------------------------------------------
+    match /polls/{pollId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /pollVotes/{voteId} {
+      allow read: if true;
+      allow create, update: if signedIn()
+        && voteId == request.resource.data.pollId + '_' + request.auth.uid
+        && request.resource.data.keys().hasOnly(['pollId', 'option', 'lang', 'updatedAt'])
+        && request.resource.data.option is string
+        && request.resource.data.option.size() <= 40
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if signedIn() && voteId.matches('.*_' + request.auth.uid);
+    }
+
+    // ---- aggregates & metadata --------------------------------------------
+    match /stats/{doc} {
+      allow read: if true;
+      allow write: if false; // Cloud Functions only (admin SDK bypasses rules)
+    }
+    match /meta/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+  }
+}
