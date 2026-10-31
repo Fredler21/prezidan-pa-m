@@ -1,0 +1,28 @@
+{
+  "projectId": "16900759932870491329",
+  "designSystem": {
+    "displayName": "Prezidan Pa M",
+    "theme": {
+      "colorMode": "LIGHT",
+      "colorVariant": "FIDELITY",
+      "customColor": "#1A3BB5",
+      "overridePrimaryColor": "#1A3BB5",
+      "overrideSecondaryColor": "#0B1230",
+      "overrideTertiaryColor": "#D41E3C",
+      "overrideNeutralColor": "#F3F5FA",
+      "headlineFont": "BRICOLAGE_GROTESQUE",
+      "bodyFont": "BRICOLAGE_GROTESQUE",
+      "labelFont": "BRICOLAGE_GROTESQUE",
+      "roundness": "ROUND_TWELVE",
+      "spacing": { "xs": "4px", "sm": "8px", "md": "16px", "lg": "24px", "xl": "32px", "2xl": "48px" },
+      "typography": {
+        "display-lg": { "fontFamily": "Bricolage Grotesque", "fontSize": "40px", "fontWeight": "800", "lineHeight": "1.05", "letterSpacing": "-0.02em" },
+        "headline-md": { "fontFamily": "Bricolage Grotesque", "fontSize": "24px", "fontWeight": "700", "lineHeight": "1.2", "letterSpacing": "-0.01em" },
+        "title-md": { "fontFamily": "Bricolage Grotesque", "fontSize": "18px", "fontWeight": "600", "lineHeight": "1.3" },
+        "body-md": { "fontFamily": "Bricolage Grotesque", "fontSize": "16px", "fontWeight": "400", "lineHeight": "1.5" },
+        "label-md": { "fontFamily": "Bricolage Grotesque", "fontSize": "14px", "fontWeight": "500", "lineHeight": "1.4" }
+      },
+      "designMd": "# Prezidan Pa M — design system\n\nA premium, mobile-first civic site where Haitians choose the president they want, starting from what they want changed in the country. Specific to Haiti, not a template. Default language Haitian Kreyòl.\n\n## Palette (light)\n- Night indigo #0B1230 — header, hero background, footer.\n- Ultramarine #1A3BB5 — primary: selected priority tiles, primary buttons, links, progress bars, rank badges.\n- Flag red #D41E3C — ONLY for the Vote action button. Never for anything else.\n- Cool white #F3F5FA — page background.\n- White #FFFFFF — cards.\n- Ink #0B1A4A — body text and headings on light surfaces.\n- Muted ink #5B6480 — secondary text.\n- Hairline #E1E5F0 — card borders, dividers.\n\n## Palette (dark, prefers-color-scheme)\n- Background #070B1F, cards #0F1636, text #EAF0FF, muted #9AA6C8, hairline #22305E, ultramarine lifted to #5B7CFF for text/links, flag red stays #D41E3C.\n\n## Typography\n- One typeface only: Bricolage Grotesque (optical sizing on). System-ui fallback.\n- Hero headline: big, confident, tight leading, weight 800, in Kreyòl: « Kisa w ta vle chanje an Ayiti? »\n- Sentence case everywhere. No all-caps labels, no letter-spaced small caps.\n\n## Shape & motion\n- Radius 12px on tiles and cards, 999px on pills and the vote button.\n- Soft single shadow on cards (0 1px 2px rgba(11,26,74,.06)). No glassmorphism, no gradients except a subtle indigo-to-ultramarine wash in the hero.\n- One orchestrated reveal on load (staggered fade-up of hero then tiles). After that, motion only on user actions (tile select, sheet open, bar growth). Respect prefers-reduced-motion.\n- No hover effects on everything; hover only on buttons and tiles.\n\n## Signature component: the priorities grid\n- 12 large tactile tiles in a 2-column grid on mobile (3 on tablet, 4 on desktop), min height 112px, thumb-size.\n- Each tile: a simple 24px line icon (1.75px stroke) top-left, the label bottom-left, sentence case.\n- Unselected: white card, hairline border, ink text, ultramarine icon.\n- Selected: fills ultramarine #1A3BB5, white text and icon, and shows a 24px circular rank badge « 1 » « 2 » « 3 » top-right (white badge, ultramarine numeral) matching the order tapped.\n- Max 3 selections; the fourth tap gently shakes nothing — tiles beyond 3 are simply dimmed to 60% until one is deselected.\n\n## Candidates — neutrality rules (non-negotiable)\n- Every candidate card has the identical format and size. Random order on every load.\n- Avatar: 44px monogram circle in a shared blue/indigo hue range (never party colors). If a photo is used, it is the same size and crop for everyone, grayscale-tinted indigo duotone, no party logos.\n- Match shown as « 2 of your 3 priorities » with a small ultramarine bar. Candidates without a published platform go in a second section titled « Platform not yet published ».\n- A visible note: the ranking is not a recommendation; the vote is a people's vote, not a scientific poll.\n\n## Layout\n- Mobile-first, 16px side gutters, max content width 720px on desktop centered, 44px minimum touch targets.\n- Header: night indigo bar, wordmark « Prezidan Pa M » left, language switch pill (KR · FR · EN) right.\n- Sticky bottom action bar (white, hairline top, safe-area padding) appears after the first pick: shows the picks count and a primary ultramarine button « Wè kandida yo ».\n- Profile opens as a bottom sheet/dialog with a drag handle.\n- Visible focus rings: 2px ultramarine outline, 2px offset.\n\n## Avoid\n- Cream/terracotta AI-template look, all-caps labels, numbered markers where there is no sequence, generic SaaS card kits, hover effects on everything, stock illustrations, flags or party colors on candidates."
+    }
+  }
+}
