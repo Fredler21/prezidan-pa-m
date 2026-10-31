@@ -1,6 +1,6 @@
 import type { Candidate, PriorityId } from '../types';
 
-/** Fisher–Yates; a new order on every page load (neutrality rule). */
+/** Fisher-Yates; a new order on every page load (neutrality rule). */
 export function shuffle<T>(arr: readonly T[]): T[] {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -53,7 +53,7 @@ export function initials(name: string): string {
   return (first + last).toUpperCase();
 }
 
-/** Deterministic hue in a shared blue/indigo range (215–250) so no avatar reads as a party color. */
+/** Deterministic hue in a shared blue/indigo range (215-250) so no avatar reads as a party color. */
 export function avatarColor(id: string): string {
   let hash = 0;
   for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) >>> 0;

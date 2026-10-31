@@ -8,7 +8,7 @@ import { toast } from './toast';
 
 const ADMIN_EMAILS = ['pierrelouisfredler@gmail.com', 'fredler.pierre-louis@edlight.org'];
 
-/** #admin — post the weekly poll. Google sign-in; Firestore rules enforce the admin allowlist. */
+/** #admin, post the weekly poll. Google sign-in; Firestore rules enforce the admin allowlist. */
 export function renderAdmin(main: HTMLElement): void {
   clear(main);
   const s = S().admin;

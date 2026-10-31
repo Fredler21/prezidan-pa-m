@@ -23,7 +23,7 @@ export function avatar(c: Candidate, large = false): HTMLElement {
 
 export interface CardOptions {
   onClick: () => void;
-  /** Visitor's picks and the ones this candidate matches — renders the match bar. */
+  /** Visitor's picks and the ones this candidate matches, renders the match bar. */
   picks?: readonly PriorityId[];
   matched?: readonly PriorityId[];
   /** Radio-style selectable row (vote picker). */
@@ -66,11 +66,16 @@ export function sourceList(sources: readonly Source[]): HTMLElement {
   ));
 }
 
-export function modeBadge(): HTMLElement {
-  const demo = STORAGE_MODE === 'local';
-  return h('span', { class: demo ? 'mode demo' : 'mode' }, h('i', { 'aria-hidden': 'true' }), demo ? S().demoMode : S().liveMode);
+/** Shown only in localStorage demo mode so nobody mistakes device-local votes for live ones. */
+export function demoBadge(): HTMLElement | null {
+  if (STORAGE_MODE !== 'local') return null;
+  return h('span', { class: 'mode demo' }, h('i', { 'aria-hidden': 'true' }), S().demoMode);
 }
 
 export function footer(): HTMLElement {
-  return h('div', { class: 'foot' }, modeBadge(), h('br'), h('a', { href: '#about' }, S().nav.about));
+  const f = h('div', { class: 'foot' });
+  const demo = demoBadge();
+  if (demo) f.append(demo, h('br'));
+  f.append(h('a', { href: '#about' }, S().nav.about));
+  return f;
 }

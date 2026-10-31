@@ -3,7 +3,7 @@ import { ICON } from '../lib/icons';
 import { S, fmt, fmtDate, l } from '../i18n';
 import { DATES, DATES_UPDATED, CONTENT_UPDATED, GENERAL_SOURCES } from '../data/dates';
 import { CANDIDATES } from '../data/candidates';
-import { sourceList, modeBadge } from './common';
+import { sourceList, demoBadge } from './common';
 
 export const REPO_URL = 'https://github.com/Fredler21/prezidan-pa-m';
 
@@ -36,7 +36,7 @@ export function renderAbout(main: HTMLElement): void {
 
   page.append(h('section', { class: 'section card', style: 'text-align:center' },
     h('p', null, h('b', null, fmt(s.lastUpdated, { d: fmtDate(CONTENT_UPDATED) }))),
-    h('p', { class: 'muted small', style: 'margin-top:6px' }, modeBadge()),
+    demoBadge(),
     h('p', { class: 'muted small', style: 'margin-top:10px' }, s.language),
     h('p', { class: 'small', style: 'margin-top:10px' }, h('a', { href: REPO_URL, target: '_blank', rel: 'noopener noreferrer' }, s.code))));
 }

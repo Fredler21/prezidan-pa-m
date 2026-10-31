@@ -19,7 +19,7 @@ export function renderResults(main: HTMLElement): () => void {
   const page = h('div', { class: 'wrap page' });
   main.append(page);
 
-  const total = h('span', { class: 'bignum' }, '—');
+  const total = h('span', { class: 'bignum' }, '-');
   const updated = h('p', { class: 'muted small', style: 'margin-top:6px' }, S().loading);
   page.append(h('div', { class: 'card' }, h('div', null, total, h('span', null, s.participants)), updated, h('div', { style: 'margin-top:12px;border-top:1px solid var(--hair);padding-top:12px' }, note(s.peoplesVote, ICON.info, true))));
 

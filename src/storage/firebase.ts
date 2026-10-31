@@ -84,26 +84,26 @@ export function createFirebaseStorage(): StorageAdapter {
     },
 
     subscribeVotes(cb) {
-      let timer: number | undefined;
+      // Count queries first (fast unary calls), so the page never waits on the realtime
+      // stream; the stats/presidential listener takes over whenever Functions maintain it.
       let stopped = false;
       let usingStats = false;
       const refresh = async () => {
         if (stopped || usingStats) return;
-        try { cb(await countResults()); } catch (e) { console.warn('results refresh failed', e); }
+        try { const r = await countResults(); if (!stopped && !usingStats) cb(r); } catch (e) { console.warn('results refresh failed', e); }
       };
+      void refresh();
+      const timer = window.setInterval(refresh, REFRESH_MS);
       const offStats = onSnapshot(doc(db(), 'stats', 'presidential'), (snap) => {
-        if (snap.exists()) {
-          usingStats = true;
-          const d = snap.data();
-          cb({ total: Number(d.total ?? 0), counts: d.counts ?? {}, reasons: Array.isArray(d.reasons) ? d.reasons.map((r: DocumentData) => ({ text: String(r.text ?? ''), department: (r.department ?? 'na') as DepartmentId, at: ms(r.at) })) : [], updatedAt: ms(d.updatedAt) });
-        } else if (!timer) {
-          void refresh();
-          timer = window.setInterval(refresh, REFRESH_MS);
-        }
-      }, () => { if (!timer) { void refresh(); timer = window.setInterval(refresh, REFRESH_MS); } });
+        if (!snap.exists()) return;
+        usingStats = true;
+        clearInterval(timer);
+        const d = snap.data();
+        cb({ total: Number(d.total ?? 0), counts: d.counts ?? {}, reasons: Array.isArray(d.reasons) ? d.reasons.map((r: DocumentData) => ({ text: String(r.text ?? ''), department: (r.department ?? 'na') as DepartmentId, at: ms(r.at) })) : [], updatedAt: ms(d.updatedAt) });
+      }, (e) => console.warn('stats listener failed', e));
       const onVisible = () => { if (document.visibilityState === 'visible') void refresh(); };
       document.addEventListener('visibilitychange', onVisible);
-      return () => { stopped = true; offStats(); if (timer) clearInterval(timer); document.removeEventListener('visibilitychange', onVisible); };
+      return () => { stopped = true; offStats(); clearInterval(timer); document.removeEventListener('visibilitychange', onVisible); };
     },
 
     async getActivePoll() {
@@ -128,23 +128,27 @@ export function createFirebaseStorage(): StorageAdapter {
       await setDoc(doc(db(), 'pollVotes', `${pollId}_${user.uid}`), { pollId, option: optionId, lang: document.documentElement.lang || 'ht', updatedAt: serverTimestamp() });
     },
     subscribePollResults(pollId, cb) {
-      let timer: number | undefined;
+      let stopped = false;
       let usingStats = false;
       const refresh = async () => {
-        if (usingStats) return;
+        if (stopped || usingStats) return;
         try {
-          const votes = collection(db(), 'pollVotes');
-          const snap = await getDocs(query(votes, where('pollId', '==', pollId)));
+          const snap = await getDocs(query(collection(db(), 'pollVotes'), where('pollId', '==', pollId)));
           const counts: Record<string, number> = {};
           snap.docs.forEach((d) => { const o = String(d.data().option); counts[o] = (counts[o] ?? 0) + 1; });
-          cb({ total: snap.size, counts } satisfies PollResults);
+          if (!stopped && !usingStats) cb({ total: snap.size, counts } satisfies PollResults);
         } catch (e) { console.warn('poll refresh failed', e); }
       };
+      void refresh();
+      const timer = window.setInterval(refresh, REFRESH_MS);
       const off = onSnapshot(doc(db(), 'stats', `poll_${pollId}`), (snap) => {
-        if (snap.exists()) { usingStats = true; const d = snap.data(); cb({ total: Number(d.total ?? 0), counts: d.counts ?? {} }); }
-        else if (!timer) { void refresh(); timer = window.setInterval(refresh, REFRESH_MS); }
-      }, () => { if (!timer) { void refresh(); timer = window.setInterval(refresh, REFRESH_MS); } });
-      return () => { off(); if (timer) clearInterval(timer); };
+        if (!snap.exists()) return;
+        usingStats = true;
+        clearInterval(timer);
+        const d = snap.data();
+        cb({ total: Number(d.total ?? 0), counts: d.counts ?? {} });
+      }, (e) => console.warn('poll stats listener failed', e));
+      return () => { stopped = true; off(); clearInterval(timer); };
     },
   };
 }

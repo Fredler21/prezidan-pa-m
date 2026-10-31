@@ -5,7 +5,7 @@ import type { StorageAdapter, StorageMode } from '../types';
  * (e.g. `npm run dev` with a .env.local), anything else uses Firebase.
  *
  * The adapter is loaded on demand so the Start / Match / Profile / About pages never
- * download the Firebase SDK — only Vote, Results, Poll and Admin do.
+ * download the Firebase SDK, only Vote, Results, Poll and Admin do.
  */
 export const STORAGE_MODE: StorageMode = import.meta.env.VITE_STORAGE === 'local' ? 'local' : 'firebase';
 

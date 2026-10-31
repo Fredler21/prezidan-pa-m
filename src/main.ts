@@ -47,7 +47,7 @@ function render(loc: Location): void {
   }
   renderBottom(loc.route);
   window.scrollTo({ top: 0 });
-  document.title = loc.route === 'start' ? `${S().appName} — Ayiti 2027` : `${S().appName} · ${S().nav[loc.route === 'match' || loc.route === 'vote' ? 'candidates' : loc.route === 'admin' ? 'poll' : loc.route] ?? ''}`;
+  document.title = loc.route === 'start' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${S().nav[loc.route === 'match' || loc.route === 'vote' ? 'candidates' : loc.route === 'admin' ? 'poll' : loc.route] ?? ''}`;
 }
 
 onRoute(render);

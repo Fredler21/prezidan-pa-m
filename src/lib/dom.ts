@@ -1,7 +1,7 @@
 type Child = Node | string | null | undefined | false;
 type Props = Record<string, string | number | boolean | EventListener | undefined> & { html?: string };
 
-/** Tiny element builder. Text children go through textContent (never innerHTML) — only trusted
+/** Tiny element builder. Text children go through textContent (never innerHTML), only trusted
  *  inline SVG from lib/icons.ts is injected via the explicit `html` prop. */
 export function h<K extends keyof HTMLElementTagNameMap>(tag: K, props?: Props | null, ...children: Child[]): HTMLElementTagNameMap[K] {
   const el = document.createElement(tag);

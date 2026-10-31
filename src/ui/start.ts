@@ -34,7 +34,7 @@ export function renderStart(main: HTMLElement): void {
         if (badge) badge.textContent = String(rank + 1);
         else btn.append(h('span', { class: 'badge', 'aria-hidden': 'true' }, String(rank + 1)));
       } else badge?.remove();
-      btn.setAttribute('aria-label', on ? `${l(p.label)} — ${rank + 1}` : l(p.label));
+      btn.setAttribute('aria-label', on ? `${l(p.label)}, ${rank + 1}` : l(p.label));
     }
     renderBottom('start');
   };
