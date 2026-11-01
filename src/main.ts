@@ -6,6 +6,7 @@ import { getStorage, STORAGE_MODE } from './storage';
 import { candidateById, refreshContent, onContentChange } from './content';
 import { renderHeader } from './ui/header';
 import { renderBottom } from './ui/nav';
+import { renderHome } from './ui/home';
 import { renderStart } from './ui/start';
 import { renderMatch } from './ui/match';
 import { openProfile, closeProfile } from './ui/profile';
@@ -33,6 +34,7 @@ function render(loc: Location): void {
   // Chrome first: the Vote view mounts its own bar into #bottom and must not be cleared after.
   renderBottom(loc.route);
   switch (loc.route) {
+    case 'home': cleanup = renderHome(main); break;
     case 'start': renderStart(main); break;
     case 'match': renderMatch(main, false); break;
     case 'candidates': {
@@ -49,7 +51,7 @@ function render(loc: Location): void {
   }
   window.scrollTo({ top: 0 });
   const nav = S().nav as Record<string, string>;
-  document.title = loc.route === 'start' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[loc.route === 'match' || loc.route === 'vote' ? 'candidates' : loc.route === 'admin' ? 'poll' : loc.route] ?? ''}`;
+  document.title = loc.route === 'home' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[loc.route === 'match' || loc.route === 'vote' ? 'candidates' : loc.route === 'admin' ? 'poll' : loc.route === 'start' ? 'priorities' : loc.route] ?? ''}`;
 }
 
 onRoute(render);
@@ -61,7 +63,7 @@ render(current);
 
 // Firestore content (candidates, priorities, dates) is fetched after the first paint and only
 // re-renders read-only pages, so a refresh never closes an open profile or wipes a half-typed vote.
-const REFRESHABLE = new Set(['start', 'match', 'candidates', 'results', 'about']);
+const REFRESHABLE = new Set(['home', 'start', 'match', 'candidates', 'results', 'about']);
 onContentChange(() => {
   if (REFRESHABLE.has(current.route) && !document.querySelector('dialog[open]')) render(current);
 });

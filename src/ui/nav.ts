@@ -8,9 +8,9 @@ import { go, type Route } from '../router';
 type Chrome = 'nav' | 'bar' | 'none';
 
 /**
- * Bottom chrome per route (DESIGN-V2 section 10):
- *   Start: nav until the first pick, then the action bar · Kandida: action bar with the red Vote
- *   Vote: its own vote bar (rendered by the view) · Rezilta, Sondaj, Admin: nav · About: none.
+ * Bottom chrome per route (docs/design/DESIGN.md section 10, plus the Home tab):
+ *   Home: nav · Start: nav until the first pick, then the action bar · Kandida: action bar with the
+ *   red Vote · Vote: its own vote bar (rendered by the view) · Rezilta, Sondaj, Admin: nav · About: none.
  */
 export function renderBottom(route: Route): void {
   const el = document.getElementById('bottom');
@@ -37,6 +37,7 @@ export function renderBottom(route: Route): void {
     chrome = 'none';
   } else {
     const tabs: { route: Route; label: string; icon: string; active: Route[] }[] = [
+      { route: 'home', label: s.nav.home, icon: ICON.home, active: ['home'] },
       { route: 'start', label: s.nav.priorities, icon: ICON.sliders, active: ['start'] },
       { route: 'candidates', label: s.nav.candidates, icon: ICON.people, active: ['candidates', 'match'] },
       { route: 'results', label: s.nav.results, icon: ICON.bars, active: ['results'] },

@@ -26,6 +26,8 @@ export const ICON = {
   expand: wrap('<path d="M6 9l6 6 6-6"/>'),
   outward: wrap('<path d="M7 17L17 7"/><path d="M8 7h9v9"/>'),
   generic: wrap('<circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/>'),
+  home: wrap('<path d="M4 11l8-7 8 7"/><path d="M6 10v10h5v-6h2v6h5V10"/>'),
+  calendar: wrap('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/><path d="M8 14h3v3H8z"/>'),
   brand: wrap('<path d="M5 15h14l-1.5 5h-11z"/><path d="M8.5 15V6.5A1.5 1.5 0 0110 5h4a1.5 1.5 0 011.5 1.5V15"/><path d="M10.5 9.5l1.2 1.2 2-2.2"/>'),
   check: wrap('<path d="M5 12l4.5 4.5L19 7"/>'),
   info: wrap('<circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/>'),

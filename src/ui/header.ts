@@ -19,9 +19,9 @@ export function renderHeader(route: Route): void {
   const s = S();
   el.className = 'hdr';
 
-  if (route === 'start') {
+  if (route === 'home' || route === 'start') {
     el.append(
-      h('div', { class: 'wrap hdr-row top' }, h('a', { class: 'wordmark', href: '#start' }, svg(ICON.brand), s.appName), langPill()),
+      h('div', { class: 'wrap hdr-row top' }, h('a', { class: 'wordmark', href: '#home' }, svg(ICON.brand), s.appName), langPill()),
       h('div', { class: 'strip' }, s.tagline),
     );
     return;
@@ -36,7 +36,7 @@ export function renderHeader(route: Route): void {
 
   const titles: Partial<Record<Route, string>> = { match: s.match.title, candidates: s.match.allTitle, vote: s.vote.title, about: s.about.title };
   el.append(h('div', { class: 'wrap hdr-row' },
-    h('a', { class: 'hdr-back', href: route === 'vote' ? '#match' : '#start', 'aria-label': s.back }, svg(ICON.back)),
+    h('a', { class: 'hdr-back', href: route === 'vote' ? '#match' : route === 'match' ? '#start' : '#home', 'aria-label': s.back }, svg(ICON.back)),
     h('span', { class: 'hdr-title' }, titles[route] ?? s.appName),
     langPill()));
 }

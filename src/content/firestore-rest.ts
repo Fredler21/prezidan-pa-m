@@ -81,6 +81,52 @@ function keyParam(cfg: RestConfig): string {
   return `key=${encodeURIComponent(cfg.apiKey)}`;
 }
 
+async function postJson(url: string, body: unknown, timeoutMs: number): Promise<RestResult<unknown>> {
+  if (typeof fetch !== 'function') return { ok: false, error: 'fetch unavailable' };
+  const ctrl = typeof AbortController === 'function' ? new AbortController() : null;
+  const timer = setTimeout(() => ctrl?.abort(), timeoutMs);
+  try {
+    const init: RequestInit = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
+    if (ctrl) init.signal = ctrl.signal;
+    const res = await fetch(url, init);
+    if (!res.ok) return { ok: false, error: `HTTP ${res.status}`, status: res.status };
+    return { ok: true, value: (await res.json()) as unknown };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Server-side count of a collection, optionally filtered on one string field (count() aggregation: 1 read per 1000 docs). */
+export async function countDocuments(cfg: RestConfig, collection: string, where?: { field: string; equals: string }): Promise<RestResult<number>> {
+  const structuredQuery: Obj = { from: [{ collectionId: collection }] };
+  if (where) structuredQuery.where = { fieldFilter: { field: { fieldPath: where.field }, op: 'EQUAL', value: { stringValue: where.equals } } };
+  const r = await postJson(`${documentsUrl(cfg.projectId)}:runAggregationQuery?${keyParam(cfg)}`, { structuredAggregationQuery: { aggregations: [{ alias: 'n', count: {} }], structuredQuery } }, cfg.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+  if (!r.ok) return r;
+  const rows = Array.isArray(r.value) ? r.value : [];
+  for (const row of rows) {
+    if (!isObj(row) || !isObj(row.result)) continue;
+    const fields = isObj(row.result.aggregateFields) ? row.result.aggregateFields : {};
+    const n = decodeValue(fields.n);
+    return { ok: true, value: typeof n === 'number' && Number.isFinite(n) ? n : 0 };
+  }
+  return { ok: true, value: 0 };
+}
+
+/** The newest document of a collection where a boolean field is true (used for the active poll). value is null when none. */
+export async function findActive(cfg: RestConfig, collection: string, flagField: string, orderByField: string): Promise<RestResult<{ id: string; data: Decoded } | null>> {
+  const body = { structuredQuery: { from: [{ collectionId: collection }], where: { fieldFilter: { field: { fieldPath: flagField }, op: 'EQUAL', value: { booleanValue: true } } }, orderBy: [{ field: { fieldPath: orderByField }, direction: 'DESCENDING' }], limit: 1 } };
+  const r = await postJson(`${documentsUrl(cfg.projectId)}:runQuery?${keyParam(cfg)}`, body, cfg.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+  if (!r.ok) return r;
+  const rows = Array.isArray(r.value) ? r.value : [];
+  for (const row of rows) {
+    if (!isObj(row) || !isObj(row.document)) continue;
+    return { ok: true, value: { id: docId(row.document.name), data: decodeFields(row.document.fields) } };
+  }
+  return { ok: true, value: null };
+}
+
 /** GET one document, e.g. getDocument(cfg, 'meta/content'). value is null when it does not exist (404). */
 export async function getDocument(cfg: RestConfig, path: string): Promise<RestResult<Decoded | null>> {
   const r = await getJson(`${documentsUrl(cfg.projectId)}/${path}?${keyParam(cfg)}`, cfg.timeoutMs ?? DEFAULT_TIMEOUT_MS);

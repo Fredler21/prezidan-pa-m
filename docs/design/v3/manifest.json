@@ -2,8 +2,16 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project. Regenerated from the premium prompts (docs/design/DESIGN.md) after the earlier screens were deleted; s4 and s6 are one edit later. Older screens still in the project carry an em dash in their title and can be deleted.",
+  "note": "Current screens in the Stitch project: s0-home is the landing page (first screen a visitor sees), s1 to s7 the flow. Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted.",
   "screens": [
+    {
+      "key": "s0-home",
+      "id": "363ac10487e8429e9b7358757882d4b9",
+      "name": "projects/16900759932870491329/screens/363ac10487e8429e9b7358757882d4b9",
+      "stitchTitle": "Prezidan Pa M · Akèy",
+      "png": "s0-home.png",
+      "html": "s0-home.html"
+    },
     {
       "key": "s1-start",
       "id": "626fd272539b49fc8219e28dcf931302",

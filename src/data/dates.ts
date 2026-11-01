@@ -4,6 +4,8 @@ import type { KeyDate, Source } from '../types';
  *  Dates have changed several times; verify against cephaiti.ht before publishing. */
 export const DATES_UPDATED = '2026-10-28';
 export const CONTENT_UPDATED = '2026-10-30';
+/** First round of the presidential election; the home page counts down to it. */
+export const FIRST_ROUND = '2027-07-18';
 
 export const DATES: readonly KeyDate[] = [
   { date: '2026-11-15', label: { ht: 'Fèmti enskripsyon kandida an liy', fr: 'Clôture de l’inscription en ligne des candidats', en: 'Online candidate registration closes' } },
