@@ -2,7 +2,7 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project. Regenerated from the premium prompts (docs/design/DESIGN-V2.md) after the earlier screens were deleted; s4 and s6 are one edit later. Older screens still in the project carry an em dash in their title and can be deleted.",
+  "note": "Current screens in the Stitch project. Regenerated from the premium prompts (docs/design/DESIGN.md) after the earlier screens were deleted; s4 and s6 are one edit later. Older screens still in the project carry an em dash in their title and can be deleted.",
   "screens": [
     {
       "key": "s1-start",
