@@ -22,25 +22,27 @@ export function renderResults(main: HTMLElement): () => void {
 
   const total = h('b', null, '·');
   const updated = h('p', { class: 'stamp' }, S().loading);
-  page.append(h('div', { class: 'card roomy', style: 'margin-top:8px' },
+  const statCard = h('div', { class: 'card roomy', style: 'margin-top:8px' },
     h('div', { class: 'stat' }, total, h('span', null, s.participants)),
     updated,
     h('hr', { class: 'hr' }),
-    note(s.peoplesVote, ICON.info, false)));
+    note(s.peoplesVote, ICON.info, false));
 
   let showAll = false;
   const list = h('div', { class: 'stack grow' });
   const toggle = h('button', { class: 'link-btn', type: 'button', onclick: () => { showAll = !showAll; if (last) draw(last); } });
-  page.append(h('section', { class: 'section' }, h('h2', null, s.byVotes), list, h('div', { style: 'text-align:center;margin-top:4px' }, toggle)));
+  const col = h('div', { class: 'main-col' }, statCard,
+    h('section', { class: 'section' }, h('h2', null, s.byVotes), list, h('div', { class: 'toggle-row', style: 'margin-top:4px' }, toggle)));
 
   const reasons = h('div', { class: 'stack' });
-  page.append(h('section', { class: 'section' }, h('h2', null, s.latestReasons), reasons));
-
   const url = siteUrl();
-  page.append(h('div', { class: 'share' },
-    h('a', { class: 'btn btn-primary', href: whatsappUrl(fmt(s.shareText, { url })), target: '_blank', rel: 'noopener noreferrer' }, svg(ICON.whatsapp), s.shareWhatsApp),
-    h('button', { class: 'btn btn-outline', type: 'button', onclick: async () => { toast((await copyText(url)) ? s.copied : url); } }, svg(ICON.link), s.copyLink),
-  ), footer());
+  const aside = h('aside', { class: 'side-col' },
+    h('section', { class: 'section' }, h('h2', null, s.latestReasons), reasons),
+    h('div', { class: 'share' },
+      h('a', { class: 'btn btn-primary', href: whatsappUrl(fmt(s.shareText, { url })), target: '_blank', rel: 'noopener noreferrer' }, svg(ICON.whatsapp), s.shareWhatsApp),
+      h('button', { class: 'btn btn-outline', type: 'button', onclick: async () => { toast((await copyText(url)) ? s.copied : url); } }, svg(ICON.link), s.copyLink)));
+
+  page.append(h('div', { class: 'layout-2 wide-side' }, col, aside), footer());
 
   let last: Results | null = null;
   let drawn = 0;

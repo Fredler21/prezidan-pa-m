@@ -2,7 +2,7 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: s0-home is the landing page (first screen a visitor sees), s1 to s7 the flow. Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted.",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted.",
   "screens": [
     {
       "key": "s0-home",
@@ -67,6 +67,72 @@
       "stitchTitle": "Sondaj semèn nan · Prezidan Pa M",
       "png": "s7-poll.png",
       "html": "s7-poll.html"
+    }
+  ],
+  "desktop": [
+    {
+      "key": "s0-home",
+      "id": "f933345ae79e4281a6fc77e1326fd97a",
+      "name": "projects/16900759932870491329/screens/f933345ae79e4281a6fc77e1326fd97a",
+      "stitchTitle": "Prezidan Pa M · Akèy · Òdinatè",
+      "png": "desktop/s0-home.png",
+      "html": "desktop/s0-home.html"
+    },
+    {
+      "key": "s1-start",
+      "id": "6db879b5c4bc42019a2efd8b0cec7b7d",
+      "name": "projects/16900759932870491329/screens/6db879b5c4bc42019a2efd8b0cec7b7d",
+      "stitchTitle": "Prezidan Pa M · Kisa w ta vle chanje an Ayiti? · Òdinatè",
+      "png": "desktop/s1-start.png",
+      "html": "desktop/s1-start.html"
+    },
+    {
+      "key": "s2-match",
+      "id": "8b793c723d374ddc8e6aa6ecf3a481d0",
+      "name": "projects/16900759932870491329/screens/8b793c723d374ddc8e6aa6ecf3a481d0",
+      "stitchTitle": "Match — Kandida yo · Prezidan Pa M · Òdinatè",
+      "png": "desktop/s2-match.png",
+      "html": "desktop/s2-match.html"
+    },
+    {
+      "key": "s3-profile",
+      "id": "d3d262f650d247fd862b57c44cf8ac5b",
+      "name": "projects/16900759932870491329/screens/d3d262f650d247fd862b57c44cf8ac5b",
+      "stitchTitle": "Prezidan Pa M · Pwofil kandida · Òdinatè",
+      "png": "desktop/s3-profile.png",
+      "html": "desktop/s3-profile.html"
+    },
+    {
+      "key": "s4-vote",
+      "id": "e66d7bdd3c9f4c4480e144dab058ce8e",
+      "name": "projects/16900759932870491329/screens/e66d7bdd3c9f4c4480e144dab058ce8e",
+      "stitchTitle": "Prezidan Pa M · Vote · Òdinatè",
+      "png": "desktop/s4-vote.png",
+      "html": "desktop/s4-vote.html"
+    },
+    {
+      "key": "s5-results",
+      "id": "6f9f4115f2454d7d804595675b588350",
+      "name": "projects/16900759932870491329/screens/6f9f4115f2454d7d804595675b588350",
+      "stitchTitle": "Prezidan Pa M · Rezilta · Òdinatè",
+      "png": "desktop/s5-results.png",
+      "html": "desktop/s5-results.html"
+    },
+    {
+      "key": "s6-about",
+      "id": "ffa77224da3b4892b52e856c811d2478",
+      "name": "projects/16900759932870491329/screens/ffa77224da3b4892b52e856c811d2478",
+      "stitchTitle": "Prezidan Pa M · Kijan sa mache · Òdinatè",
+      "png": "desktop/s6-about.png",
+      "html": "desktop/s6-about.html"
+    },
+    {
+      "key": "s7-poll",
+      "id": "1e0e595d16d34efbbfa8ed88ee28b38a",
+      "name": "projects/16900759932870491329/screens/1e0e595d16d34efbbfa8ed88ee28b38a",
+      "stitchTitle": "Prezidan Pa M · Sondaj semèn nan · Òdinatè",
+      "png": "desktop/s7-poll.png",
+      "html": "desktop/s7-poll.html"
     }
   ]
 }

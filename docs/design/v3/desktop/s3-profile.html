@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prezidan Pa M · Pwofil kandida · Òdinatè</title>
+  <!-- Google Fonts: Bricolage Grotesque exact axis string -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'night-indigo': '#0B1230',
+            'ultramarine': '#1A3BB5',
+            'ultramarine-tint': '#EAEEFA',
+            'lighter-ring': '#7D93E8',
+            'flag-red': '#D41E3C',
+            'page-bg': '#F3F5FA',
+            'ink': '#0B1A4A',
+            'muted-ink': '#5B6480',
+            'hairline': '#E1E5F0',
+            'bar-track': '#E6EAF5',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    html, body {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-optical-sizing: auto;
+      background-color: #F3F5FA;
+      color: #0B1A4A;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    /* Custom clean scrollbar for internal modal scroll */
+    .modal-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .modal-scroll::-webkit-scrollbar-track {
+      background: #F3F5FA;
+      border-radius: 8px;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb {
+      background: #D5DAE8;
+      border-radius: 8px;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb:hover {
+      background: #B9C4E6;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-modal {
+        animation: none !important;
+        transform: none !important;
+      }
+    }
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .reveal-modal {
+      animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+  </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+
+  <!-- ======================================================== -->
+  <!-- BACKGROUND SIMULATION: Desktop "Kandida yo" Page (Dimmed) -->
+  <!-- ======================================================== -->
+  <div class="w-full min-h-screen select-none pointer-events-none filter blur-[2px] transition duration-200">
+    <!-- Desktop Header -->
+    <header class="w-full h-16 bg-[#0B1230] text-white flex items-center justify-between px-8 border-b border-[#E1E5F0]/10">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-white text-[24px]">how_to_vote</span>
+        <span class="text-[18px] font-bold tracking-tight text-white">Prezidan Pa M</span>
+      </div>
+      <nav class="flex items-center gap-7">
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6]">Akèy</a>
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6]">Priyorite</a>
+        <a href="#" class="text-[15px] font-semibold text-white relative py-1">
+          Kandida
+          <span class="absolute bottom-[-8px] left-0 w-full h-[2px] bg-[#1A3BB5]"></span>
+        </a>
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6]">Rezilta</a>
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6]">Sondaj</a>
+      </nav>
+      <div>
+        <span class="h-8 px-3 inline-flex items-center text-[13px] font-medium text-white border border-white/30 rounded-full">
+          Kreyòl ▾
+        </span>
+      </div>
+    </header>
+
+    <!-- Background Content Container -->
+    <main class="max-w-[1120px] mx-auto px-8 py-8">
+      <!-- Progress rail -->
+      <div class="mb-8">
+        <div class="grid grid-cols-4 gap-2 mb-2">
+          <div class="h-[3px] rounded-full bg-[#1A3BB5]"></div>
+          <div class="h-[3px] rounded-full bg-[#1A3BB5]"></div>
+          <div class="h-[3px] rounded-full bg-[#E1E5F0]"></div>
+          <div class="h-[3px] rounded-full bg-[#E1E5F0]"></div>
+        </div>
+        <div class="grid grid-cols-4 gap-2 text-center text-[12px] font-medium">
+          <span class="text-[#0B1A4A]">Priyorite</span>
+          <span class="text-[#1A3BB5] font-semibold">Kandida</span>
+          <span class="text-[#5B6480]">Vote</span>
+          <span class="text-[#5B6480]">Rezilta</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-[28px] font-bold text-[#0B1A4A] tracking-[-0.015em]">Kandida yo</h1>
+          <p class="text-[15px] text-[#5B6480] mt-1">Konpare pwofil ak dosye piblik 19 kandida yo.</p>
+        </div>
+      </div>
+
+      <!-- Grid of candidate cards mockup in background -->
+      <div class="grid grid-cols-2 gap-4 opacity-70">
+        <!-- Card 1 (Wilson Jeudy) -->
+        <div class="bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,.05),0_4px_12px_rgba(11,26,74,.05)]">
+          <div class="flex items-center gap-3">
+            <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">WJ</div>
+            <div>
+              <div class="text-[17px] font-semibold text-[#0B1A4A]">Wilson Jeudy</div>
+              <span class="inline-block text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] rounded-full px-2 py-0.5 mt-0.5">VAR · Vision-Action-Réalisation</span>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,.05),0_4px_12px_rgba(11,26,74,.05)]">
+          <div class="flex items-center gap-3">
+            <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">MM</div>
+            <div>
+              <div class="text-[17px] font-semibold text-[#0B1A4A]">Michel Joseph Martelly</div>
+              <span class="inline-block text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] rounded-full px-2 py-0.5 mt-0.5">Debloke</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Desktop Footer Mockup -->
+    <footer class="mt-24 pb-12 text-center text-[13px] text-[#5B6480]">
+      Prezidan Pa M · Ayiti 2027 · Kijan sa mache
+    </footer>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SCRIM OVERLAY (rgba(11,18,48,.55)) -->
+  <!-- ======================================================== -->
+  <div class="fixed inset-0 bg-[#0B1230]/55 z-40 flex items-center justify-center p-6 backdrop-blur-[2px] transition-opacity duration-300">
+
+    <!-- ======================================================== -->
+    <!-- DESKTOP MODAL DIALOG: Candidate Profile (680px wide) -->
+    <!-- ======================================================== -->
+    <div 
+      class="reveal-modal relative w-full max-w-[680px] bg-white rounded-[24px] border border-[#E1E5F0] shadow-[0_20px_50px_rgba(11,18,48,0.28),0_4px_16px_rgba(11,26,74,0.08)] max-h-[85vh] flex flex-col overflow-hidden z-50 text-left"
+      role="dialog" 
+      aria-modal="true" 
+      aria-labelledby="candidate-name"
+    >
+      
+      <!-- Modal Header Bar (sticky top inside modal) -->
+      <div class="flex items-center justify-between px-7 pt-6 pb-2 shrink-0 bg-white">
+        <!-- Optional subtle pill indicator / badge -->
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EAEEFA] text-[#1A3BB5] text-[12px] font-medium rounded-full">
+          <span class="material-symbols-outlined text-[16px] text-[#1A3BB5]">person</span>
+          Pwofil kandida
+        </span>
+        <!-- 40px Circular Close Button -->
+        <button 
+          type="button" 
+          aria-label="Fèmen pwofil la" 
+          class="w-10 h-10 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] flex items-center justify-center text-[#0B1A4A] hover:bg-[#EAEEFA] hover:text-[#1A3BB5] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A3BB5]"
+        >
+          <span class="material-symbols-outlined text-[20px]">close</span>
+        </button>
+      </div>
+
+      <!-- Modal Body (Internally scrollable) -->
+      <div class="modal-scroll overflow-y-auto px-7 py-4 space-y-6 flex-1">
+
+        <!-- Identity Block (Left-aligned) -->
+        <div class="flex items-start gap-5 pt-1">
+          <!-- 64px Monogram Avatar « WJ » -->
+          <div class="w-16 h-16 rounded-full bg-[#0B1230] flex items-center justify-center text-white font-bold text-[22px] shrink-0 shadow-[0_0_0_2px_#ffffff,0_0_0_3px_#E1E5F0]">
+            WJ
+          </div>
+          <!-- Details -->
+          <div class="space-y-1.5">
+            <h2 id="candidate-name" class="text-[28px] font-bold text-[#0B1A4A] leading-[1.15] tracking-[-0.015em]">
+              Wilson Jeudy
+            </h2>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="inline-block text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] rounded-full px-2.5 py-0.5">
+                VAR · Vision-Action-Réalisation
+              </span>
+            </div>
+            <p class="text-[14px] text-[#5B6480] font-normal leading-normal">
+              Majistra Delmas depi 2006
+            </p>
+          </div>
+        </div>
+
+        <!-- Hairline Divider -->
+        <div class="w-full h-[1px] bg-[#E1E5F0] my-2"></div>
+
+        <!-- Section: Byografi -->
+        <div class="space-y-2.5">
+          <h3 class="text-[20px] font-bold text-[#0B1A4A] leading-[1.25] tracking-[-0.01em] border-l-[3px] border-[#1A3BB5] pl-3">
+            Byografi
+          </h3>
+          <p class="text-[16px] font-normal text-[#0B1A4A] leading-[1.6]">
+            Wilson Jeudy se majistra komin Delmas depi 2006. Li konn pou travay sou wout, kanal drenaj, mache piblik ak espas piblik nan komin nan.
+          </p>
+        </div>
+
+        <!-- Section: Sa dosye piblik la di -->
+        <div class="space-y-3">
+          <h3 class="text-[20px] font-bold text-[#0B1A4A] leading-[1.25] tracking-[-0.01em] border-l-[3px] border-[#1A3BB5] pl-3">
+            Sa dosye piblik la di
+          </h3>
+          <div class="space-y-2.5 pt-0.5">
+            <div class="flex items-start gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#1A3BB5] mt-2 shrink-0"></span>
+              <span class="text-[15px] font-normal text-[#0B1A4A] leading-relaxed">
+                Majistra Delmas, 2006 jiska jodi a
+              </span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#1A3BB5] mt-2 shrink-0"></span>
+              <span class="text-[15px] font-normal text-[#0B1A4A] leading-relaxed">
+                Rekonstriksyon wout ak kanal drenaj nan Delmas
+              </span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#1A3BB5] mt-2 shrink-0"></span>
+              <span class="text-[15px] font-normal text-[#0B1A4A] leading-relaxed">
+                Reyamenajman mache piblik ak plas piblik
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Priyorite li pale sou yo -->
+        <div class="space-y-2.5">
+          <h3 class="text-[20px] font-bold text-[#0B1A4A] leading-[1.25] tracking-[-0.01em] border-l-[3px] border-[#1A3BB5] pl-3">
+            Priyorite li pale sou yo
+          </h3>
+          
+          <!-- Tinted row card -->
+          <div class="bg-[#F3F5FA] border border-[#E1E5F0] rounded-[14px] p-3.5 flex items-start gap-3.5">
+            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 border border-[#E1E5F0] shadow-sm">
+              <span class="material-symbols-outlined text-[20px] text-[#1A3BB5]">construction</span>
+            </div>
+            <div class="space-y-0.5">
+              <div class="text-[16px] font-semibold text-[#0B1A4A]">
+                Wout ak enfrastrikti
+              </div>
+              <div class="text-[14px] font-normal text-[#5B6480] leading-snug">
+                Wout, drenaj ak mache piblik nan Delmas depi 2006
+              </div>
+            </div>
+          </div>
+
+          <!-- Non-italic quiet caption -->
+          <p class="text-[13px] text-[#5B6480] font-normal pt-1">
+            Pa gen dosye piblik sou lòt priyorite yo. Nou pa envante pozisyon.
+          </p>
+        </div>
+
+        <!-- Section: Sous -->
+        <div class="space-y-2">
+          <h3 class="text-[20px] font-bold text-[#0B1A4A] leading-[1.25] tracking-[-0.01em] border-l-[3px] border-[#1A3BB5] pl-3">
+            Sous
+          </h3>
+
+          <div class="divide-y divide-[#E1E5F0] border-t border-b border-[#E1E5F0] mt-2">
+            <!-- Row 1 -->
+            <a 
+              href="#" 
+              class="h-14 flex items-center justify-between group hover:bg-[#F3F5FA] -mx-2 px-2 rounded-lg transition-colors"
+            >
+              <div class="space-y-0.5">
+                <span class="text-[15px] font-medium text-[#1A3BB5] group-hover:underline">
+                  Haiti Policy House · Election tracker
+                </span>
+                <div class="text-[13px] text-[#5B6480] tabular-nums">
+                  30 okt 2026
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[20px] text-[#5B6480] group-hover:text-[#1A3BB5] transition-colors">
+                arrow_outward
+              </span>
+            </a>
+
+            <!-- Row 2 -->
+            <a 
+              href="#" 
+              class="h-14 flex items-center justify-between group hover:bg-[#F3F5FA] -mx-2 px-2 rounded-lg transition-colors"
+            >
+              <div class="space-y-0.5">
+                <span class="text-[15px] font-medium text-[#1A3BB5] group-hover:underline">
+                  CEP · Lis pwovizwa kandida yo
+                </span>
+                <div class="text-[13px] text-[#5B6480] tabular-nums">
+                  30 okt 2026
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[20px] text-[#5B6480] group-hover:text-[#1A3BB5] transition-colors">
+                arrow_outward
+              </span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Bottom Action Bar (Fixed at bottom of modal) -->
+      <div class="px-7 py-4 bg-white/95 backdrop-blur-[12px] border-t border-[#E1E5F0] shrink-0 flex items-center justify-between gap-4">
+        <!-- Note at left -->
+        <span class="text-[13px] font-normal text-[#5B6480] leading-snug">
+          Yon vòt pa moun · Ou ka chanje l nenpòt lè
+        </span>
+
+        <!-- Red Flag Vote pill button (auto width, right-aligned) -->
+        <button 
+          type="button" 
+          class="h-[52px] px-7 bg-[#D41E3C] hover:bg-[#BC1833] active:scale-[0.98] text-white font-bold text-[17px] rounded-full inline-flex items-center gap-2.5 transition-all shadow-[0_2px_8px_rgba(212,30,60,0.22)] focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-[22px] text-white">how_to_vote</span>
+          <span>Vote pou Wilson Jeudy</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

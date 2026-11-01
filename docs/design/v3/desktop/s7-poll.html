@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prezidan Pa M · Sondaj semèn nan · Òdinatè</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-optical-sizing: auto;
+      background-color: #F3F5FA;
+      color: #0B1A4A;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+    .num-tabular {
+      font-variant-numeric: tabular-nums;
+    }
+    @keyframes subtleFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .animate-fade-up {
+        animation: subtleFadeUp 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#F3F5FA] text-[#0B1A4A]">
+
+  <!-- Desktop Header -->
+  <header class="w-full bg-[#0B1230] h-16 sticky top-0 z-50 px-8 flex items-center border-b border-[#22305E]">
+    <div class="max-w-[1120px] w-full mx-auto flex items-center justify-between">
+      
+      <!-- Wordmark / Brand -->
+      <a href="#" class="flex items-center gap-2.5 text-white focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded-lg p-1">
+        <span class="material-symbols-outlined text-white text-[24px]">how_to_vote</span>
+        <span class="font-bold text-[18px] tracking-normal text-white">Prezidan Pa M</span>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav class="flex items-center gap-7">
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors duration-150 py-1">Akèy</a>
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors duration-150 py-1">Priyorite</a>
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors duration-150 py-1">Kandida</a>
+        <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors duration-150 py-1">Rezilta</a>
+        <a href="#" class="text-[15px] font-semibold text-white relative py-1">
+          Sondaj
+          <span class="absolute bottom-[-8px] left-0 right-0 h-[2px] bg-[#1A3BB5] rounded-full"></span>
+        </a>
+      </nav>
+
+      <!-- Language selector pill -->
+      <button type="button" class="h-8 px-3.5 flex items-center justify-center text-[13px] font-medium text-white border border-white/30 rounded-full hover:bg-white/10 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5]">
+        Kreyòl ▾
+      </button>
+
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="w-full max-w-[1120px] mx-auto px-8 pt-8 pb-24 flex-1 animate-fade-up">
+
+    <!-- Title Row: Week pill & Lead -->
+    <div class="mb-8">
+      <div class="inline-flex items-center gap-2 h-7 px-3 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-[13px] font-medium num-tabular">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#1A3BB5]"></span>
+        <span>Semèn 44 · 26 okt jiska 1 nov 2026</span>
+      </div>
+      <h1 class="text-[28px] font-bold leading-[1.15] tracking-[-0.015em] text-[#0B1A4A] mt-3">
+        Sondaj semèn nan
+      </h1>
+      <p class="text-[15px] text-[#5B6480] mt-1.5">
+        Chak semèn, yon nouvo kesyon. Rezilta yo piblik.
+      </p>
+    </div>
+
+    <!-- Desktop 2-Column Grid -->
+    <div class="grid grid-cols-12 gap-8 items-start mb-10">
+      
+      <!-- Left Column: Question Card & Voting (6/12) -->
+      <section class="col-span-12 lg:col-span-6 flex flex-col">
+        <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-6 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+          
+          <h2 class="text-[22px] font-bold leading-[1.2] tracking-[-0.01em] text-[#0B1A4A]">
+            Nan 100 premye jou yo, ki sa nouvo prezidan an ta dwe fè an premye?
+          </h2>
+
+          <!-- Options List -->
+          <div class="mt-5 space-y-2">
+            
+            <!-- Option 1: Unselected -->
+            <label class="flex items-center gap-3.5 min-h-[56px] px-4 py-3 rounded-[14px] bg-white border border-[#E1E5F0] cursor-pointer hover:border-[#7D93E8] transition-colors duration-150">
+              <span class="w-[22px] h-[22px] rounded-full border-2 border-[#E1E5F0] flex items-center justify-center shrink-0"></span>
+              <span class="text-[16px] font-medium text-[#0B1A4A] leading-snug">Retabli sekirite nan Pòtoprens</span>
+            </label>
+
+            <!-- Option 2: Selected -->
+            <label class="flex items-center gap-3.5 min-h-[56px] px-4 py-3 rounded-[14px] bg-[#EAEEFA] border-2 border-[#1A3BB5] cursor-pointer transition-colors duration-150">
+              <span class="w-[22px] h-[22px] rounded-full border-2 border-[#1A3BB5] flex items-center justify-center shrink-0 bg-[#EAEEFA]">
+                <span class="w-2.5 h-2.5 rounded-full bg-[#1A3BB5]"></span>
+              </span>
+              <span class="text-[16px] font-medium text-[#0B1A4A] leading-snug">Relouvri lekòl ki fèmen yo</span>
+            </label>
+
+            <!-- Option 3: Unselected -->
+            <label class="flex items-center gap-3.5 min-h-[56px] px-4 py-3 rounded-[14px] bg-white border border-[#E1E5F0] cursor-pointer hover:border-[#7D93E8] transition-colors duration-150">
+              <span class="w-[22px] h-[22px] rounded-full border-2 border-[#E1E5F0] flex items-center justify-center shrink-0"></span>
+              <span class="text-[16px] font-medium text-[#0B1A4A] leading-snug">Yon plan ijans pou kouran ak dlo</span>
+            </label>
+
+            <!-- Option 4: Unselected -->
+            <label class="flex items-center gap-3.5 min-h-[56px] px-4 py-3 rounded-[14px] bg-white border border-[#E1E5F0] cursor-pointer hover:border-[#7D93E8] transition-colors duration-150">
+              <span class="w-[22px] h-[22px] rounded-full border-2 border-[#E1E5F0] flex items-center justify-center shrink-0"></span>
+              <span class="text-[16px] font-medium text-[#0B1A4A] leading-snug">Yon gouvènman inite nasyonal</span>
+            </label>
+
+          </div>
+
+          <!-- Submit Button -->
+          <button type="button" class="mt-5 w-full h-12 rounded-full bg-[#1A3BB5] text-white text-[16px] font-semibold flex items-center justify-center gap-2 hover:bg-[#153199] active:scale-[0.99] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#7D93E8]">
+            <span class="material-symbols-outlined text-[22px]">check_circle</span>
+            <span>Voye repons mwen</span>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- Right Column: Results for Current Poll (6/12) -->
+      <section class="col-span-12 lg:col-span-6 flex flex-col">
+        <div class="flex items-center justify-between mb-3 px-1">
+          <h2 class="text-[20px] font-bold leading-[1.25] tracking-[-0.01em] text-[#0B1A4A]">
+            Rezilta pou kounye a
+          </h2>
+          <span class="text-[13px] text-[#5B6480] num-tabular font-normal">3 912 repons</span>
+        </div>
+
+        <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-6 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+          
+          <div class="space-y-4">
+            
+            <!-- Result Row 1 -->
+            <div>
+              <div class="flex justify-between items-center text-[15px] mb-1.5">
+                <span class="font-medium text-[#0B1A4A]">Retabli sekirite</span>
+                <span class="font-bold text-[#0B1A4A] num-tabular">46 %</span>
+              </div>
+              <div class="h-2 w-full bg-[#E6EAF5] rounded-full overflow-hidden">
+                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 46%;"></div>
+              </div>
+            </div>
+
+            <!-- Result Row 2 with Chwa w pill -->
+            <div>
+              <div class="flex justify-between items-center text-[15px] mb-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="font-medium text-[#0B1A4A]">Relouvri lekòl yo</span>
+                  <span class="px-2 py-0.5 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-[13px] font-semibold">Chwa w</span>
+                </div>
+                <span class="font-bold text-[#0B1A4A] num-tabular">24 %</span>
+              </div>
+              <div class="h-2 w-full bg-[#E6EAF5] rounded-full overflow-hidden">
+                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 24%;"></div>
+              </div>
+            </div>
+
+            <!-- Result Row 3 -->
+            <div>
+              <div class="flex justify-between items-center text-[15px] mb-1.5">
+                <span class="font-medium text-[#0B1A4A]">Kouran ak dlo</span>
+                <span class="font-bold text-[#0B1A4A] num-tabular">18 %</span>
+              </div>
+              <div class="h-2 w-full bg-[#E6EAF5] rounded-full overflow-hidden">
+                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 18%;"></div>
+              </div>
+            </div>
+
+            <!-- Result Row 4 -->
+            <div>
+              <div class="flex justify-between items-center text-[15px] mb-1.5">
+                <span class="font-medium text-[#0B1A4A]">Gouvènman inite</span>
+                <span class="font-bold text-[#0B1A4A] num-tabular">12 %</span>
+              </div>
+              <div class="h-2 w-full bg-[#E6EAF5] rounded-full overflow-hidden">
+                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 12%;"></div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Divider & Disclaimer -->
+          <div class="mt-6 pt-4 border-t border-[#E1E5F0] flex items-start gap-2.5">
+            <span class="material-symbols-outlined text-[18px] text-[#5B6480] shrink-0 mt-0.5">info</span>
+            <p class="text-[13px] text-[#5B6480] leading-relaxed">
+              Sondaj sa a reprezante vwa moun ki patisipe yo sou platfòm nan. Li pa yon sondaj syantifik ofisyèl.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Section: Semèn pase yo -->
+    <section class="mt-10">
+      <div class="mb-4">
+        <h2 class="text-[20px] font-bold leading-[1.25] tracking-[-0.01em] text-[#0B1A4A]">
+          Semèn pase yo
+        </h2>
+      </div>
+
+      <!-- Two Cards Side-by-Side -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        
+        <!-- Past Poll Card 1: Semèn 43 -->
+        <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+          <div class="text-[13px] text-[#5B6480] num-tabular mb-1">Semèn 43</div>
+          <div class="text-[16px] font-semibold text-[#0B1A4A] mb-3">Ki pi gwo pwoblèm nan zòn ou an?</div>
+          <div class="flex items-center justify-between pt-2 border-t border-[#E1E5F0]">
+            <div class="flex items-center gap-1.5 text-[#1A3BB5]">
+              <span class="material-symbols-outlined text-[16px]">check</span>
+              <span class="text-[14px] font-semibold num-tabular">Sekirite · 58 %</span>
+            </div>
+            <span class="text-[13px] text-[#5B6480] num-tabular">4 210 vòt</span>
+          </div>
+        </div>
+
+        <!-- Past Poll Card 2: Semèn 42 -->
+        <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+          <div class="text-[13px] text-[#5B6480] num-tabular mb-1">Semèn 42</div>
+          <div class="text-[16px] font-semibold text-[#0B1A4A] mb-3">Èske w ap enskri pou vote?</div>
+          <div class="flex items-center justify-between pt-2 border-t border-[#E1E5F0]">
+            <div class="flex items-center gap-1.5 text-[#1A3BB5]">
+              <span class="material-symbols-outlined text-[16px]">check</span>
+              <span class="text-[14px] font-semibold num-tabular">Wi, deja enskri · 41 %</span>
+            </div>
+            <span class="text-[13px] text-[#5B6480] num-tabular">3 845 vòt</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Share Row (Right-aligned on desktop as requested in layout instructions) -->
+      <div class="mt-6 flex justify-end items-center gap-3">
+        <button type="button" class="h-12 px-6 rounded-full bg-[#1A3BB5] text-white text-[15px] font-semibold flex items-center gap-2 hover:bg-[#153199] active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#7D93E8]">
+          <span class="material-symbols-outlined text-[20px]">share</span>
+          <span>Pataje</span>
+        </button>
+        <button type="button" class="h-12 px-6 rounded-full border border-[#1A3BB5] text-[#1A3BB5] text-[15px] font-semibold flex items-center gap-2 bg-transparent hover:bg-[#EAEEFA] active:scale-[0.98] transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#7D93E8]">
+          <span class="material-symbols-outlined text-[20px]">link</span>
+          <span>Kopye lyen</span>
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Desktop Footer -->
+  <footer class="w-full mt-auto py-8 text-center border-t border-[#E1E5F0]/60">
+    <p class="text-[13px] text-[#5B6480]">
+      Prezidan Pa M · Ayiti 2027 · Kijan sa mache
+    </p>
+  </footer>
+
+</body>
+</html>

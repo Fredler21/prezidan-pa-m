@@ -1,9 +1,10 @@
-import { h, clear } from '../lib/dom';
+import { h, svg, clear } from '../lib/dom';
 import { ICON } from '../lib/icons';
 import { MAX_PICKS } from '../data/priorities';
 import { S, fmt, l } from '../i18n';
 import { state, togglePick } from '../state';
 import { content } from '../content';
+import { go } from '../router';
 import { renderBottom } from './nav';
 import { toast } from './toast';
 import { footer, note, priorityIcon, well } from './common';
@@ -17,16 +18,29 @@ export function renderStart(main: HTMLElement): void {
   const reveal = !state.revealed;
   const priorities = content().priorities;
 
-  const hero = h('section', { class: reveal ? 'hero reveal' : 'hero', html: LACE });
-  hero.append(h('div', { class: 'wrap' }, h('h1', null, s.hero.title), h('p', null, s.hero.sub)));
+  const next = () => { if (state.picks.length === 0) toast(s.hero.mustPick); else go('match'); };
+  const ctaButton = () => h('button', { class: 'btn btn-primary', type: 'button', onclick: next }, s.hero.cta, svg(ICON.arrowRight));
 
-  const count = h('span', { class: 'count' });
+  // Desktop only: a side card in the hero carries the counter, a hint and the call to action.
+  const counts = [h('span', { class: 'count' }), h('span', { class: 'count' })];
+  const sideHint = h('p', { class: 'caption', style: 'margin:0 0 16px' });
+  const side = h('div', { class: 'card hero-side desk-only' },
+    h('div', { class: 'sec-row', style: 'margin-bottom:8px' }, h('h2', null, s.hero.gridHeading), counts[1]),
+    sideHint,
+    ctaButton());
+  side.querySelector('.btn')?.classList.add('btn-block');
+
+  const hero = h('section', { class: reveal ? 'hero reveal' : 'hero', html: LACE });
+  hero.append(h('div', { class: 'wrap hero-grid' }, h('div', { class: 'hero-text' }, h('h1', null, s.hero.title), h('p', null, s.hero.sub)), side));
+
   const grid = h('div', { class: 'grid', role: 'group', 'aria-label': s.hero.gridHeading });
   const tiles = new Map<string, HTMLButtonElement>();
 
   const sync = () => {
-    count.textContent = fmt(s.hero.picked, { n: state.picks.length });
-    const full = state.picks.length >= MAX_PICKS;
+    const n = state.picks.length;
+    for (const el of counts) el.textContent = fmt(s.hero.picked, { n });
+    sideHint.textContent = n >= MAX_PICKS ? s.hero.hintFull : n === MAX_PICKS - 1 ? s.hero.hintOneMore : s.hero.hintTwoMore;
+    const full = n >= MAX_PICKS;
     for (const p of priorities) {
       const btn = tiles.get(p.id);
       if (!btn) continue;
@@ -54,8 +68,9 @@ export function renderStart(main: HTMLElement): void {
   });
 
   const body = h('section', { class: reveal ? 'wrap reveal' : 'wrap' },
-    h('div', { class: 'sec-row', style: 'margin-top:24px' }, h('h2', null, s.hero.gridHeading), count),
+    h('div', { class: 'sec-row', style: 'margin-top:24px' }, h('h2', null, s.hero.gridHeading), counts[0]),
     grid,
+    h('div', { class: 'grid-cta desk-only' }, ctaButton()),
     h('div', { class: 'gap-24' }, note(s.hero.note, ICON.info)),
     footer(),
   );

@@ -51,29 +51,37 @@ export function renderHome(main: HTMLElement): () => void {
   const n = c.candidates.length;
   let alive = true;
 
-  const hero = h('section', { class: 'hero hero-home', html: LACE });
-  hero.append(h('div', { class: 'wrap' },
-    h('h1', null, s.title),
-    h('p', null, fmt(s.sub, { n })),
-    h('a', { class: 'btn btn-primary btn-block hero-cta', href: '#start' }, s.cta, svg(ICON.arrowRight)),
-    h('a', { class: 'hero-link', href: '#results' }, s.seeResults, svg(ICON.outward))));
-
   const firstRound = c.dates.find((d) => d.date === FIRST_ROUND)?.date ?? FIRST_ROUND;
   const days = daysUntil(firstRound);
-  const countdown = h('div', { class: 'card countdown' }, well(ICON.calendar),
-    h('div', null,
-      h('b', { class: 'num' }, fmt(s.daysLeft, { n: fmtNumber(Math.abs(days)) })),
-      h('span', null, days >= 0 ? s.beforeFirstRound : s.afterFirstRound),
-      h('small', { class: 'num' }, fmtDate(firstRound))));
 
-  const votesEl = h('b', { class: 'num' }, '·');
-  const answersEl = h('b', { class: 'num' }, '·');
-  const stats = h('div', { class: 'stats3' },
-    h('div', { class: 'stat-tile' }, votesEl, h('span', null, s.participants)),
+  // Two sets of live-number elements: tiles on phones, an inline row inside the hero card on desktop.
+  const votesEls = [h('b', { class: 'num' }, '·'), h('b', { class: 'num' }, '·')];
+  const answersEls = [h('b', { class: 'num' }, '·'), h('b', { class: 'num' }, '·')];
+  const statRow = (cls: string, i: number) => h('div', { class: cls },
+    h('div', { class: 'stat-tile' }, votesEls[i], h('span', null, s.participants)),
     h('div', { class: 'stat-tile' }, h('b', { class: 'num' }, fmtNumber(n)), h('span', null, s.candidates)),
-    h('div', { class: 'stat-tile' }, answersEl, h('span', null, s.pollAnswers)));
+    h('div', { class: 'stat-tile' }, answersEls[i], h('span', null, s.pollAnswers)));
 
-  const how = h('section', { class: 'section' }, h('h2', null, s.how),
+  const panel = h('div', { class: 'hero-panel' },
+    h('div', { class: 'card countdown-card' },
+      h('div', { class: 'countdown' }, well(ICON.calendar),
+        h('div', null,
+          h('b', { class: 'num' }, fmt(s.daysLeft, { n: fmtNumber(Math.abs(days)) })),
+          h('span', null, days >= 0 ? s.beforeFirstRound : s.afterFirstRound),
+          h('small', { class: 'num' }, fmtDate(firstRound)))),
+      statRow('stats-inline desk-only', 1)));
+
+  const hero = h('section', { class: 'hero hero-home', html: LACE });
+  hero.append(h('div', { class: 'wrap hero-grid' },
+    h('div', { class: 'hero-text' },
+      h('h1', null, s.title),
+      h('p', null, fmt(s.sub, { n })),
+      h('div', { class: 'hero-actions' },
+        h('a', { class: 'btn btn-primary hero-cta', href: '#start' }, s.cta, svg(ICON.arrowRight)),
+        h('a', { class: 'hero-link', href: '#results' }, s.seeResults, svg(ICON.outward)))),
+    panel));
+
+  const how = h('section', { class: 'section how' }, h('h2', null, s.how),
     h('div', { class: 'card' }, h('ul', { class: 'steps rows' },
       h('li', null, well(ICON.sliders), h('span', null, s.how1)),
       h('li', null, well(ICON.people), h('span', null, s.how2)),
@@ -83,7 +91,7 @@ export function renderHome(main: HTMLElement): () => void {
   const entry = (href: string, icon: string, title: string, sub: Node | string) =>
     h('a', { class: 'card explore', href }, well(icon), h('span', { class: 'explore-text' }, h('strong', null, title), typeof sub === 'string' ? h('span', null, sub) : sub), svg(ICON.chevronRight, 'ico chev'));
   const explore = h('section', { class: 'section' }, h('h2', null, s.explore),
-    h('div', { class: 'stack' },
+    h('div', { class: 'stack explore-grid' },
       entry('#candidates', ICON.people, s.candidatesCard, fmt(s.candidatesSub, { n })),
       entry('#poll', ICON.poll, s.pollCard, pollSub),
       entry('#results', ICON.ballot, s.resultsCard, s.resultsSub),
@@ -91,18 +99,19 @@ export function renderHome(main: HTMLElement): () => void {
 
   const today = new Date().toISOString().slice(0, 10);
   const upcoming = c.dates.filter((d) => d.date >= today).slice(0, 3);
-  const dates = upcoming.length ? h('section', { class: 'section' }, h('h2', null, s.nextDates),
+  const dates = upcoming.length ? h('section', { class: 'section main-col' }, h('h2', null, s.nextDates),
     h('div', { class: 'card' },
       h('ul', { class: 'timeline' }, ...upcoming.map((d) => h('li', null, h('b', null, fmtDate(d.date)), h('span', null, l(d.label))))),
       h('hr', { class: 'hr' }),
-      h('a', { class: 'link-btn', href: '#about' }, s.allDates, svg(ICON.arrowRight)))) : null;
+      h('a', { class: 'link-btn', href: '#about' }, s.allDates, svg(ICON.arrowRight)))) : h('div', { class: 'main-col' });
+  const bottom = h('div', { class: 'layout-2 wide-side' }, dates, h('aside', { class: 'side-col section' }, note(s.note)));
 
-  main.append(hero, h('div', { class: 'wrap' }, countdown, stats, how, explore, dates, h('div', { class: 'gap-24' }, note(s.note)), footer()));
+  main.append(hero, h('div', { class: 'wrap home-body' }, statRow('stats3 mobile-only', 0), how, explore, bottom, footer()));
 
   void loadStats().then((st) => {
     if (!alive) return;
-    votesEl.textContent = st.votes === null ? '·' : fmtNumber(st.votes);
-    answersEl.textContent = st.pollAnswers === null ? '·' : fmtNumber(st.pollAnswers);
+    for (const el of votesEls) el.textContent = st.votes === null ? '·' : fmtNumber(st.votes);
+    for (const el of answersEls) el.textContent = st.pollAnswers === null ? '·' : fmtNumber(st.pollAnswers);
     if (st.pollQuestion) pollSub.textContent = l(st.pollQuestion);
   });
   return () => { alive = false; };

@@ -27,10 +27,8 @@ export function renderVote(main: HTMLElement, preset: string | null): void {
   page.append(already);
 
   const search = h('input', { class: 'input', type: 'search', placeholder: s.search, 'aria-label': s.search, oninput: (e: Event) => { filter = (e.target as HTMLInputElement).value.trim().toLowerCase(); expanded = true; renderList(); } });
-  page.append(h('div', { class: 'search' }, svg(ICON.search), search));
-
   const list = h('div', { class: 'card pick-list', role: 'radiogroup', 'aria-label': s.heading });
-  page.append(list);
+  const col = h('div', { class: 'main-col' }, h('div', { class: 'search' }, svg(ICON.search), search), list);
 
   const renderList = () => {
     clear(list);
@@ -60,18 +58,25 @@ export function renderVote(main: HTMLElement, preset: string | null): void {
   dept.value = state.myVote?.department ?? 'na';
   if (state.myVote) { reason.value = state.myVote.reason; counter.textContent = `${reason.value.length} / ${REASON_MAX}`; }
 
-  page.append(
+  // Two submit buttons share one handler: the phone's bottom bar and the desktop sidebar.
+  const submits: HTMLButtonElement[] = [];
+  const submitButton = () => {
+    const b = h('button', { class: 'btn btn-vote btn-block', type: 'button' }, svg(ICON.ballot), state.myVote ? s.update : s.submit);
+    b.addEventListener('click', () => void onSubmit());
+    submits.push(b);
+    return b;
+  };
+
+  const aside = h('aside', { class: 'side-col' },
     h('div', { class: 'card', style: 'margin-top:24px' }, h('label', { class: 'field-label', for: 'reason' }, s.why, h('span', { class: 'optional' }, s.optional), counter), reason),
     h('div', { class: 'card', style: 'margin-top:12px' }, h('label', { class: 'field-label', for: 'dept' }, s.department, h('span', { class: 'optional' }, s.optional)), dept, h('p', { class: 'hint' }, s.departmentHint)),
     h('div', { style: 'margin-top:12px' }, note(s.privacy, ICON.lock)),
-    h('div', { id: 'recaptcha' }),
-    footer(),
-  );
+    h('div', { class: 'desk-only', style: 'margin-top:16px' }, submitButton()));
 
-  const submit = h('button', { class: 'btn btn-vote btn-block', type: 'button' }, svg(ICON.ballot), state.myVote ? s.update : s.submit);
-  submit.addEventListener('click', () => void onSubmit());
+  page.append(h('div', { class: 'layout-2 wide-side' }, col, aside), h('div', { id: 'recaptcha' }), footer());
+
   const bottom = document.getElementById('bottom');
-  if (bottom) { clear(bottom); bottom.append(h('div', { class: 'bar-row' }, submit)); }
+  if (bottom) { clear(bottom); bottom.append(h('div', { class: 'bar-row' }, submitButton())); }
 
   const syncAlready = () => {
     clear(already);
@@ -87,7 +92,7 @@ export function renderVote(main: HTMLElement, preset: string | null): void {
     const candidate = candidateById(selected);
     if (!candidate) { toast(s.selectFirst); return; }
     const vote: Vote = { candidate: candidate.id, reason: cleanReason(reason.value), department: dept.value as DepartmentId, priorities: state.picks.slice(0, 3), lang: getLang() };
-    submit.disabled = true;
+    submits.forEach((b) => { b.disabled = true; });
     try {
       const storage = await getStorage();
       try { await storage.ready(); }
@@ -104,7 +109,7 @@ export function renderVote(main: HTMLElement, preset: string | null): void {
       console.error(e);
       const code = String((e as { code?: string }).code ?? '');
       toast(code.includes('auth') || code.includes('operation-not-allowed') || code.includes('permission') ? s.errorAuth : s.errorSave, 5000);
-    } finally { submit.disabled = false; }
+    } finally { submits.forEach((b) => { b.disabled = false; }); }
   }
 }
 

@@ -27,13 +27,13 @@ export function renderPoll(main: HTMLElement): () => void {
     if (!alive) return;
     if (!poll) { body.append(h('p', { class: 'lead', style: 'margin-top:0' }, s.sub), h('div', { style: 'margin-top:16px' }, note(s.none))); return; }
     const p = poll;
-    body.append(h('span', { class: 'week' }, fmt(s.week, { w: p.week })), h('p', { class: 'lead' }, s.sub));
+    body.append(h('span', { class: 'week' }, fmt(s.week, { w: p.week })), h('h1', { class: 'page-title desk-only', style: 'margin-top:12px' }, s.title), h('p', { class: 'lead' }, s.sub));
 
     let mine = await storage.getMyPollAnswer(p.id);
     let selected = mine;
     const options = h('div', { role: 'radiogroup', 'aria-label': l(p.question) });
     const submit = h('button', { class: 'btn btn-primary btn-block', type: 'button', style: 'margin-top:16px' }, svg(ICON.check), mine ? s.update : s.submit);
-    const results = h('div');
+    const results = h('aside', { class: 'side-col' });
 
     const drawOptions = () => {
       clear(options);
@@ -49,7 +49,8 @@ export function renderPoll(main: HTMLElement): () => void {
       finally { submit.disabled = false; }
     });
 
-    body.append(h('div', { class: 'card roomy', style: 'margin-top:16px' }, h('h2', { class: 'question' }, l(p.question)), options, submit), results);
+    const question = h('div', { class: 'main-col' }, h('div', { class: 'card roomy', style: 'margin-top:16px' }, h('h2', { class: 'question' }, l(p.question)), options, submit));
+    body.append(h('div', { class: 'layout-2 wide-side' }, question, results));
 
     const showResults = () => {
       if (results.childElementCount) return;
@@ -82,7 +83,7 @@ export function renderPoll(main: HTMLElement): () => void {
     try { past = await storage.getPastPolls(5); } catch (e) { console.warn(e); }
     if (!alive || !past.length) return;
     const sec = h('section', { class: 'section' }, h('h2', null, s.past));
-    const stack = h('div', { class: 'stack' });
+    const stack = h('div', { class: 'stack cards-2' });
     for (const q of past) stack.append(pastCard(q));
     sec.append(stack);
     body.append(sec);

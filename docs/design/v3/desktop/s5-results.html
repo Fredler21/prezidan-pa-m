@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ht" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prezidan Pa M · Rezilta · Òdinatè</title>
+  
+  <!-- Google Fonts: Bricolage Grotesque -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            nightIndigo: '#0B1230',
+            ultramarine: '#1A3BB5',
+            ultramarineTint: '#EAEEFA',
+            lighterRing: '#7D93E8',
+            flagRed: '#D41E3C',
+            pageBg: '#F3F5FA',
+            cardBg: '#FFFFFF',
+            ink: '#0B1A4A',
+            mutedInk: '#5B6480',
+            hairline: '#E1E5F0',
+            barTrack: '#E6EAF5',
+          },
+          fontFamily: {
+            sans: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html, body {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-optical-sizing: auto;
+      background-color: #F3F5FA;
+      color: #0B1A4A;
+      margin: 0;
+      padding: 0;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+    }
+
+    @keyframes fadeUpReveal {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-up {
+      animation: fadeUpReveal 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-up {
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-[#F3F5FA] text-[#0B1A4A]">
+
+  <!-- Desktop Header (64px, Night Indigo) -->
+  <header class="w-full bg-[#0B1230] h-16 sticky top-0 z-50 shadow-sm border-b border-[#E1E5F0]/10">
+    <div class="max-w-[1120px] mx-auto h-full px-8 flex items-center justify-between">
+      <!-- Left: Wordmark with how_to_vote icon -->
+      <a href="#" class="flex items-center gap-2 text-white hover:opacity-95 transition-opacity focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded-lg p-1 -ml-1">
+        <span class="material-symbols-outlined text-white text-[24px]">how_to_vote</span>
+        <span class="text-[18px] font-bold tracking-tight text-white">Prezidan Pa M</span>
+      </a>
+
+      <!-- Center-Right: Horizontal Navigation -->
+      <div class="flex items-center gap-8">
+        <nav class="flex items-center gap-7">
+          <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors py-1 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded">Akèy</a>
+          <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors py-1 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded">Priyorite</a>
+          <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors py-1 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded">Kandida</a>
+          <a href="#" class="relative text-[15px] font-semibold text-white py-1 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded">
+            Rezilta
+            <span class="absolute left-0 right-0 -bottom-2.5 h-[2px] bg-[#1A3BB5] rounded-full"></span>
+          </a>
+          <a href="#" class="text-[15px] font-medium text-[#B9C4E6] hover:text-white transition-colors py-1 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded">Sondaj</a>
+        </nav>
+
+        <!-- Right: Language Pill -->
+        <div class="h-8 px-3.5 rounded-full border border-white/30 bg-transparent flex items-center justify-center text-white text-[13px] font-medium select-none cursor-pointer hover:bg-white/10 transition-colors">
+          Kreyòl ▾
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Rail (Centered directly under header) -->
+  <section class="w-full bg-[#F3F5FA] pt-6 pb-2">
+    <div class="max-w-[1120px] mx-auto px-8">
+      <div class="max-w-[720px] mx-auto">
+        <!-- 4 Equal Segments -->
+        <div class="grid grid-cols-4 gap-1">
+          <!-- Segment 1: Priyorite (Completed) -->
+          <div class="h-[3px] bg-[#1A3BB5] rounded-full"></div>
+          <!-- Segment 2: Kandida (Completed) -->
+          <div class="h-[3px] bg-[#1A3BB5] rounded-full"></div>
+          <!-- Segment 3: Vote (Completed) -->
+          <div class="h-[3px] bg-[#1A3BB5] rounded-full"></div>
+          <!-- Segment 4: Rezilta (Current) -->
+          <div class="h-[3px] bg-[#1A3BB5] rounded-full"></div>
+        </div>
+
+        <!-- Segment Labels -->
+        <div class="grid grid-cols-4 gap-1 mt-2 text-center">
+          <span class="text-[12px] font-medium text-[#0B1A4A]">Priyorite</span>
+          <span class="text-[12px] font-medium text-[#0B1A4A]">Kandida</span>
+          <span class="text-[12px] font-medium text-[#0B1A4A]">Vote</span>
+          <span class="text-[12px] font-semibold text-[#1A3BB5]">Rezilta</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout (Desktop 2 Columns: 7/12 & 5/12) -->
+  <main class="flex-1 w-full max-w-[1120px] mx-auto px-8 pt-6 pb-16 animate-fade-up">
+    <div class="grid grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT COLUMN (7 / 12) -->
+      <div class="col-span-7 flex flex-col">
+
+        <!-- Stat Card -->
+        <section class="bg-white rounded-[16px] border border-[#E1E5F0] p-5 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] mb-8">
+          <div class="flex items-baseline gap-2.5">
+            <span class="text-[56px] font-extrabold tracking-[-0.03em] leading-none text-[#0B1A4A] tabular-nums">12 384</span>
+            <span class="text-[16px] font-normal text-[#5B6480]">moun patisipe</span>
+          </div>
+
+          <div class="mt-1 text-[13px] font-normal text-[#5B6480] tabular-nums">
+            Dènye mizajou: jodi a, 14:05
+          </div>
+
+          <div class="my-4 border-t border-[#E1E5F0]"></div>
+
+          <div class="flex items-start gap-2.5">
+            <span class="material-symbols-outlined text-[20px] text-[#5B6480] flex-shrink-0 mt-0.5">info</span>
+            <p class="text-[14px] font-normal text-[#5B6480] leading-snug m-0">
+              Sa a se yon vòt pèp la. Se pa yon sondaj syantifik ni yon prediksyon rezilta eleksyon an.
+            </p>
+          </div>
+        </section>
+
+        <!-- Section Heading: Kandida yo, dapre vòt yo -->
+        <h2 class="text-[20px] font-bold tracking-[-0.01em] leading-[1.25] text-[#0B1A4A] mb-3">
+          Kandida yo, dapre vòt yo
+        </h2>
+
+        <!-- Candidate Result Cards List (12px between cards) -->
+        <div class="flex flex-col gap-3">
+
+          <!-- 1. Wilson Jeudy (User Choice) -->
+          <article class="relative bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] overflow-hidden">
+            <!-- 3px Ultramarine Left Rail inside card -->
+            <div class="absolute left-0 top-0 bottom-0 w-[3px] bg-[#1A3BB5]"></div>
+
+            <div class="pl-2">
+              <div class="flex items-center justify-between">
+                <!-- Avatar & Name Info -->
+                <div class="flex items-center gap-3.5">
+                  <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                    WJ
+                  </div>
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-2">
+                      <span class="text-[17px] font-semibold text-[#0B1A4A]">Wilson Jeudy</span>
+                      <!-- Quiet Pill: Chwa w -->
+                      <span class="inline-flex items-center gap-1 bg-[#EAEEFA] text-[#1A3BB5] text-[13px] font-semibold px-2.5 py-0.5 rounded-full">
+                        <span class="material-symbols-outlined text-[14px] text-[#1A3BB5]">check</span>
+                        <span>Chwa w</span>
+                      </span>
+                    </div>
+                    <div class="mt-1">
+                      <span class="inline-block bg-[#F3F5FA] text-[#5B6480] text-[12px] font-medium px-2 py-0.5 rounded-full border border-[#E1E5F0]">
+                        VAR
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Percentage -->
+                <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+                  23 %
+                </div>
+              </div>
+
+              <!-- Bar Track & Fill -->
+              <div class="mt-3.5 w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 23%;"></div>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2. Jean Ernest Muscadin -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3.5">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  JM
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-semibold text-[#0B1A4A]">Jean Ernest Muscadin</span>
+                  <div class="mt-1">
+                    <span class="inline-block bg-[#F3F5FA] text-[#5B6480] text-[12px] font-medium px-2 py-0.5 rounded-full border border-[#E1E5F0]">
+                      FCN
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+                19 %
+              </div>
+            </div>
+            <div class="mt-3.5 w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+              <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 19%;"></div>
+            </div>
+          </article>
+
+          <!-- 3. Michel Joseph Martelly -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3.5">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  MM
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-semibold text-[#0B1A4A]">Michel Joseph Martelly</span>
+                  <div class="mt-1">
+                    <span class="inline-block bg-[#F3F5FA] text-[#5B6480] text-[12px] font-medium px-2 py-0.5 rounded-full border border-[#E1E5F0]">
+                      Debloke
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+                17 %
+              </div>
+            </div>
+            <div class="mt-3.5 w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+              <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 17%;"></div>
+            </div>
+          </article>
+
+          <!-- 4. Claude Joseph -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3.5">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  CJ
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-semibold text-[#0B1A4A]">Claude Joseph</span>
+                  <div class="mt-1">
+                    <span class="inline-block bg-[#F3F5FA] text-[#5B6480] text-[12px] font-medium px-2 py-0.5 rounded-full border border-[#E1E5F0]">
+                      EDE
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+                11 %
+              </div>
+            </div>
+            <div class="mt-3.5 w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+              <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 11%;"></div>
+            </div>
+          </article>
+
+          <!-- 5. Jocelerme Privert -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3.5">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  JP
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-semibold text-[#0B1A4A]">Jocelerme Privert</span>
+                  <div class="mt-1">
+                    <span class="inline-block bg-[#F3F5FA] text-[#5B6480] text-[12px] font-medium px-2 py-0.5 rounded-full border border-[#E1E5F0]">
+                      Ayiti Transfòme
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+                8 %
+              </div>
+            </div>
+            <div class="mt-3.5 w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+              <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 8%;"></div>
+            </div>
+          </article>
+
+          <!-- 6. Gary Bodeau -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3.5">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  GB
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-semibold text-[#0B1A4A]">Gary Bodeau</span>
+                  <div class="mt-1">
+                    <span class="inline-block bg-[#F3F5FA] text-[#5B6480] text-[12px] font-medium px-2 py-0.5 rounded-full border border-[#E1E5F0]">
+                      Rekonsilye
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+                6 %
+              </div>
+            </div>
+            <div class="mt-3.5 w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+              <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 6%;"></div>
+            </div>
+          </article>
+
+          <!-- 7. Lòt kandida -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3.5">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] flex items-center justify-center text-white text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  LK
+                </div>
+                <div class="flex flex-col">
+                  <span class="text-[17px] font-semibold text-[#0B1A4A]">Lòt kandida</span>
+                  <div class="mt-1">
+                    <span class="inline-block bg-[#F3F5FA] text-[#5B6480] text-[12px] font-medium px-2 py-0.5 rounded-full border border-[#E1E5F0]">
+                      Platfòm divès
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+                16 %
+              </div>
+            </div>
+            <div class="mt-3.5 w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+              <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 16%;"></div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Link under rows: Wè tout 19 kandida yo -->
+        <div class="mt-4 pt-1">
+          <a href="#" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#1A3BB5] hover:underline focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded py-1">
+            <span>Wè tout 19 kandida yo</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN (5 / 12) - Sticky on Desktop -->
+      <div class="col-span-5 flex flex-col sticky top-24">
+
+        <!-- Section Heading: Dènye rezon yo -->
+        <h2 class="text-[20px] font-bold tracking-[-0.01em] leading-[1.25] text-[#0B1A4A] mb-3">
+          Dènye rezon yo
+        </h2>
+
+        <!-- Three Quote Cards (12px apart) -->
+        <div class="flex flex-col gap-3">
+
+          <!-- Quote 1 -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <p class="text-[16px] font-medium leading-[1.5] text-[#0B1A4A] m-0">
+              « Mwen vle wout ak dlo nan zòn mwen an. »
+            </p>
+            <div class="mt-2 text-[13px] font-normal text-[#5B6480]">
+              Anonim · Lwès · 2 min
+            </div>
+          </article>
+
+          <!-- Quote 2 -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <p class="text-[16px] font-medium leading-[1.5] text-[#0B1A4A] m-0">
+              « Sekirite anvan tout bagay, san sa pa gen lekòl. »
+            </p>
+            <div class="mt-2 text-[13px] font-normal text-[#5B6480]">
+              Anonim · Latibonit · 14 min
+            </div>
+          </article>
+
+          <!-- Quote 3 -->
+          <article class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+            <p class="text-[16px] font-medium leading-[1.5] text-[#0B1A4A] m-0">
+              « Yon moun ki gen eksperyans nan administrasyon. »
+            </p>
+            <div class="mt-2 text-[13px] font-normal text-[#5B6480]">
+              Anonim · Nò · 42 min
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Share Row (WhatsApp pill + Link outline pill) -->
+        <div class="mt-6 flex items-center gap-3">
+          <!-- WhatsApp Primary Pill -->
+          <button type="button" class="flex-1 h-12 rounded-full bg-[#1A3BB5] hover:bg-[#153096] text-white text-[15px] font-semibold flex items-center justify-center gap-2 px-5 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1A3BB5] active:scale-[0.98]">
+            <span class="material-symbols-outlined text-[20px]">share</span>
+            <span>Pataje sou WhatsApp</span>
+          </button>
+
+          <!-- Copy Link Outline Pill -->
+          <button type="button" class="flex-1 h-12 rounded-full border border-[#1A3BB5] bg-transparent hover:bg-[#EAEEFA]/50 text-[#1A3BB5] text-[15px] font-semibold flex items-center justify-center gap-2 px-5 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1A3BB5] active:scale-[0.98]">
+            <span class="material-symbols-outlined text-[20px]">link</span>
+            <span>Kopye lyen</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer (48px above, centered line) -->
+  <footer class="w-full mt-auto py-8 border-t border-[#E1E5F0]">
+    <div class="max-w-[1120px] mx-auto px-8 text-center">
+      <p class="text-[13px] font-normal text-[#5B6480] m-0">
+        Prezidan Pa M · Ayiti 2027 · Kijan sa mache
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
