@@ -36,7 +36,7 @@ export function renderAbout(main: HTMLElement): void {
     h('section', { class: 'card roomy' }, h('h2', null, s.photos), h('p', { class: 'caption', style: 'margin:-4px 0 12px' }, s.photosNote),
       h('ul', { class: 'dots' }, ...credited.map((x) => h('li', { style: 'font-size:14px' }, `${x.name}: ${x.photoCredit}`))),
       h('h3', { style: 'font-size:15px;font-weight:600;margin-top:16px' }, s.haitiPhotos),
-      h('ul', { class: 'dots' }, h('li', { style: 'font-size:14px' }, im.flagCredit), h('li', { style: 'font-size:14px' }, `${im.citadelle}: ${im.citadelleCredit}`))),
+      h('ul', { class: 'dots' }, h('li', { style: 'font-size:14px' }, im.flagCredit), h('li', { style: 'font-size:14px' }, `${im.citadelle}: ${im.citadelleCredit}`), h('li', { style: 'font-size:14px' }, `${im.bassin}: ${im.bassinCredit}`), h('li', { style: 'font-size:14px' }, im.mapCredit))),
   );
 
   page.append(

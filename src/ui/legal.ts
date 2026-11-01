@@ -40,8 +40,8 @@ export function renderLegal(main: HTMLElement, page: LegalPage): void {
   if (page === 'aboutUs') {
     const im = S().images;
     wrap.append(h('figure', { class: 'band legal-band' },
-      h('img', { src: IMG.citadelle.src640, srcset: `${IMG.citadelle.src640} 640w, ${IMG.citadelle.src1200} 1200w`, sizes: '(min-width: 1024px) 760px, 100vw', width: 1200, height: 800, alt: im.citadelle, loading: 'lazy', decoding: 'async' }),
-      h('figcaption', null, h('strong', null, im.citadelle), h('span', null, im.citadelleCredit))));
+      h('img', { src: IMG.bassin.src640, srcset: `${IMG.bassin.src640} 640w, ${IMG.bassin.src1200} 1200w`, sizes: '(min-width: 1024px) 760px, 100vw', width: 1200, height: 800, alt: im.bassin, loading: 'lazy', decoding: 'async' }),
+      h('figcaption', null, h('strong', null, im.bassin), h('span', null, im.bassinCredit))));
   }
   const body = h('article', { class: 'card roomy legal-body' });
   for (const s of doc.sections) {

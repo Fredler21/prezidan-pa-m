@@ -12,6 +12,7 @@ import { pct } from '../lib/util';
 import { state } from '../state';
 import { note, footer, well, avatar } from './common';
 import { openProfile } from './profile';
+import { attachTilt } from '../lib/tilt';
 
 // Faint wrought-iron lace, inline (no image request), masked to fade before the bottom.
 const LACE = '<svg class="hero-lace" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="lace2" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M0 28A28 28 0 0 0 28 0M28 0A28 28 0 0 0 56 28M56 28A28 28 0 0 0 28 56M28 56A28 28 0 0 0 0 28" fill="none" stroke="#fff" stroke-width="1"/><circle cx="28" cy="28" r="6" fill="none" stroke="#fff" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#lace2)"/></svg>';
@@ -160,14 +161,17 @@ export function renderHome(main: HTMLElement): () => void {
     h('div', { class: 'stat-tile' }, h('b', { class: 'num' }, fmtNumber(n)), h('span', null, s.candidates)),
     h('div', { class: 'stat-tile' }, answersEls[i], h('span', null, s.pollAnswers)));
 
-  const panel = h('div', { class: 'hero-panel' },
-    h('div', { class: 'card countdown-card' },
-      h('div', { class: 'countdown' }, well(ICON.calendar),
-        h('div', null,
-          h('b', { class: 'num' }, fmt(s.daysLeft, { n: fmtNumber(Math.abs(days)) })),
-          h('span', null, days >= 0 ? s.beforeFirstRound : s.afterFirstRound),
-          h('small', { class: 'num' }, fmtDate(firstRound)))),
-      statRow('stats-inline desk-only', 1)));
+  const countdown = h('div', { class: 'card countdown-card' },
+    h('div', { class: 'countdown' }, well(ICON.calendar),
+      h('div', null,
+        h('b', { class: 'num' }, fmt(s.daysLeft, { n: fmtNumber(Math.abs(days)) })),
+        h('span', null, days >= 0 ? s.beforeFirstRound : s.afterFirstRound),
+        h('small', { class: 'num' }, fmtDate(firstRound)))),
+    statRow('stats-inline desk-only', 1));
+  // The 3D map (src/ui/haiti3d.ts) is its own chunk, mounted after first paint; the glow is CSS so nothing jumps.
+  const map = h('div', { class: 'map3d', 'aria-hidden': 'true' }, h('div', { class: 'map3d-glow' }));
+  const panel = h('div', { class: 'hero-panel' }, map, countdown);
+  cleanups.push(attachTilt(countdown, 5));
 
   const hero = h('section', { class: 'hero hero-home', html: LACE });
   hero.append(h('div', { class: 'wrap hero-grid' },
@@ -214,7 +218,7 @@ export function renderHome(main: HTMLElement): () => void {
     list.classList.toggle('enter', first);
     ranked.forEach(({ x, n: votes }, i) => {
       let row = rows.get(x.id);
-      if (!row) { row = topRow(x, i); rows.set(x.id, row); }
+      if (!row) { row = topRow(x, i); rows.set(x.id, row); cleanups.push(attachTilt(row.el, 3)); }
       const p = pct(votes, res.total);
       row.el.style.setProperty('--i', String(i));
       row.el.classList.toggle('mine', x.id === mine);
@@ -262,6 +266,7 @@ export function renderHome(main: HTMLElement): () => void {
       entry('#poll', ICON.poll, s.pollCard, pollSub),
       entry('#results', ICON.ballot, s.resultsCard, s.resultsSub),
       entry('#about', ICON.info, s.aboutCard, s.aboutSub)));
+  for (const el of explore.querySelectorAll<HTMLElement>('.explore')) cleanups.push(attachTilt(el, 4));
 
   // Photo band: the Citadelle (public domain). Wide crop on desktop, 3:2 aerial on phones; lazy.
   const band = h('figure', { class: 'band' },
@@ -280,7 +285,8 @@ export function renderHome(main: HTMLElement): () => void {
   const bottom = h('div', { class: 'layout-2 wide-side' }, dates, h('aside', { class: 'side-col section' }, note(s.note)));
 
   main.append(hero, h('div', { class: 'wrap home-body' }, statRow('stats3 mobile-only', 0), strip, h('div', { class: 'home-top' }, top, explore), band, bottom, footer()));
-  cleanups.push(revealOnScroll([band, bottom]));
+  cleanups.push(revealOnScroll([band, bottom]), attachTilt(band, 3));
+  void import('./haiti3d').then((m) => { if (alive) cleanups.push(m.mountHaiti3D(map, { label: (id) => l(c.departments.find((d) => d.id === id)?.label) })); }).catch(() => { /* decorative only */ });
 
   void loadStats().then((st) => {
     if (!alive) return;

@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html lang="ht" class="h-full bg-[#F3F5FA]">
+<html lang="ht">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prezidan Pa M · Akèy</title>
-  <!-- Google Fonts Bricolage Grotesque exact valid link -->
+  
+  <!-- Bricolage Grotesque Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  
   <!-- Material Symbols Outlined -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -17,27 +20,26 @@
       theme: {
         extend: {
           colors: {
-            nightIndigo: '#0B1230',
-            ultramarine: '#1A3BB5',
-            tint: '#EAEEFA',
-            lighterRing: '#7D93E8',
-            flagRed: '#D41E3C',
-            pageBg: '#F3F5FA',
-            ink: '#0B1A4A',
-            mutedInk: '#5B6480',
-            hairline: '#E1E5F0',
-            barTrack: '#E6EAF5',
-          },
-          fontFamily: {
-            sans: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+            'night-indigo': '#0B1230',
+            'ultramarine': '#1A3BB5',
+            'ultramarine-tint': '#EAEEFA',
+            'lighter-ring': '#7D93E8',
+            'flag-red': '#D41E3C',
+            'page-bg': '#F3F5FA',
+            'ink': '#0B1A4A',
+            'muted-text': '#5B6480',
+            'hairline': '#E1E5F0',
+            'bar-track': '#E6EAF5',
+            'hero-sub': '#B9C4E6'
           }
         }
       }
     }
   </script>
+
   <style>
     html, body {
-      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-family: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
       font-optical-sizing: auto;
       background-color: #F3F5FA;
       color: #0B1A4A;
@@ -45,17 +47,29 @@
       padding: 0;
       -webkit-font-smoothing: antialiased;
     }
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      display: inline-block;
-      vertical-align: middle;
-      line-height: 1;
-    }
-    .tabular-nums {
+
+    .num-tabular {
       font-variant-numeric: tabular-nums;
     }
+
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: 300;
+      font-style: normal;
+      display: inline-block;
+      line-height: 1;
+      text-transform: none;
+      letter-spacing: normal;
+      word-wrap: normal;
+      white-space: nowrap;
+      direction: ltr;
+      font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Marquee animation */
     @keyframes marquee {
-      0% { transform: translateX(0%); }
+      0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
     .animate-marquee {
@@ -66,353 +80,512 @@
     .animate-marquee:hover {
       animation-play-state: paused;
     }
-    @keyframes pulseRing {
-      0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.4); opacity: 0.2; }
-      100% { transform: scale(0.95); opacity: 0.8; }
-    }
-    .pulse-ring {
-      animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up {
-      animation: fadeUp 400ms ease-out forwards;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .animate-marquee {
-        animation: none;
+
+    /* Fade up reveal */
+    @keyframes fadeUpReveal {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
       }
-      .pulse-ring {
-        animation: none;
-      }
-      .fade-up {
-        animation: none;
+      to {
         opacity: 1;
-        transform: none;
+        transform: translateY(0);
+      }
+    }
+    .reveal-on-load {
+      animation: fadeUpReveal 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-on-load {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .animate-marquee {
+        animation: none !important;
       }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-start bg-[#F3F5FA] text-[#0B1A4A]">
+<body class="min-h-screen bg-[#F3F5FA] flex justify-center pb-24 text-[#0B1A4A] selection:bg-[#EAEEFA] selection:text-[#1A3BB5]">
 
-  <!-- Mobile Container (390px simulated or full on mobile) -->
-  <div class="w-full max-w-[390px] min-h-screen bg-[#F3F5FA] relative flex flex-col shadow-2xl overflow-x-hidden pb-[96px] fade-up">
+  <!-- Mobile container 390px max-width -->
+  <div class="w-full max-w-[390px] min-h-screen bg-[#F3F5FA] relative flex flex-col shadow-2xl reveal-on-load">
 
-    <!-- Header: night indigo, 56px tall plus status bar spacing -->
-    <header class="w-full bg-[#0B1230] text-white sticky top-0 z-50 border-b border-[#E1E5F0]/15">
-      <div class="h-14 px-4 flex items-center justify-between">
-        <!-- Wordmark & Subtitle -->
-        <div class="flex flex-col">
-          <div class="flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-[#7D93E8] text-[20px]">how_to_vote</span>
-            <span class="text-[18px] font-bold tracking-tight text-white">Prezidan Pa M</span>
-          </div>
-          <span class="text-[11px] font-normal text-[#B9C4E6] tracking-tight">Ayiti 2027 · Vòt pèp la</span>
+    <!-- HEADER (night indigo, 56px + safe area) -->
+    <header class="sticky top-0 z-50 bg-[#0B1230] text-white border-b border-[#E1E5F0]/10 px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[22px] text-white">how_to_vote</span>
+        <span class="font-bold text-[17px] tracking-tight text-white">Prezidan Pa M</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <!-- Ayiti 2027 strip with mini flag -->
+        <div class="flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-[#B9C4E6]">
+          <svg class="w-4 h-2.5 rounded-[2px] shadow-sm flex-shrink-0" viewBox="0 0 20 12" fill="none">
+            <rect width="20" height="6" fill="#1A3BB5"/>
+            <rect y="6" width="20" height="6" fill="#D41E3C"/>
+            <rect x="7" y="3" width="6" height="6" rx="0.5" fill="#FFFFFF"/>
+            <rect x="8.5" y="4" width="3" height="4" fill="#0B1230" opacity="0.3"/>
+          </svg>
+          <span class="font-medium whitespace-nowrap hidden min-[360px]:inline">Ayiti 2027</span>
         </div>
 
-        <!-- Right Controls: Profile button & Language pill -->
-        <div class="flex items-center gap-2">
-          <!-- 36px round account button -->
-          <button type="button" aria-label="Kont itilizatè" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/15 active:scale-95 transition flex items-center justify-center text-white border border-white/15">
-            <span class="material-symbols-outlined text-[20px]">person</span>
-          </button>
-          
-          <!-- Language pill -->
-          <div class="h-8 px-3 rounded-full border border-white/30 bg-transparent flex items-center justify-center text-[13px] font-medium text-white cursor-pointer select-none hover:bg-white/5 transition">
-            Kreyòl ▾
-          </div>
-        </div>
+        <!-- Account button 36px -->
+        <button type="button" aria-label="Kont itilizatè" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/15 active:scale-95 flex items-center justify-center transition-colors">
+          <span class="material-symbols-outlined text-[20px] text-white">person</span>
+        </button>
+
+        <!-- Language pill -->
+        <button type="button" class="h-8 px-2.5 rounded-full border border-white/30 bg-transparent text-white text-[13px] font-medium flex items-center gap-1 hover:bg-white/10 active:scale-95 transition-all">
+          <span>Kreyòl</span>
+          <span class="text-[10px] leading-none opacity-80">▾</span>
+        </button>
       </div>
     </header>
 
-    <!-- HERO SECTION: Night Indigo with subtle lace texture and radial wash -->
-    <section class="relative w-full bg-[#0B1230] text-white pt-8 pb-12 px-4 overflow-hidden">
-      <!-- Background SVG texture (7% opacity, masked iron lace pattern) -->
-      <div class="absolute inset-0 pointer-events-none opacity-[0.07]" aria-hidden="true">
-        <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-          <defs>
-            <pattern id="haitian-iron-lace" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M24 0 C28 12 36 20 48 24 C36 28 28 36 24 48 C20 36 12 28 0 24 C12 20 20 12 24 0 Z" fill="none" stroke="#FFFFFF" stroke-width="1.2"/>
-              <circle cx="24" cy="24" r="7" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="0" cy="0" r="4" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="48" cy="0" r="4" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="0" cy="48" r="4" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="48" cy="48" r="4" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#haitian-iron-lace)" />
-        </svg>
-      </div>
+    <!-- HERO SECTION -->
+    <section class="relative bg-[#0B1230] text-white pt-6 pb-12 px-4 overflow-hidden">
+      <!-- Radial wash bottom right & faint wrought-iron lace texture -->
+      <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_bottom_right,_rgba(26,59,181,0.45),_transparent_70%)]"></div>
+      <div class="absolute inset-0 pointer-events-none opacity-[0.07]" style="background-image: url('data:image/svg+xml;utf8,<svg width=\"64\" height=\"64\" viewBox=\"0 0 64 64\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M32 0 C32 16 48 32 64 32 C48 32 32 48 32 64 C32 48 16 32 0 32 C16 32 32 16 32 0 Z\" fill=\"none\" stroke=\"white\" stroke-width=\"1.5\"/><circle cx=\"32\" cy=\"32\" r=\"20\" fill=\"none\" stroke=\"white\" stroke-width=\"1.5\"/></svg>'); background-size: 64px 64px;"></div>
 
-      <!-- Radial ultramarine wash at bottom right -->
-      <div class="absolute -right-20 -bottom-20 w-72 h-72 rounded-full bg-[#1A3BB5]/40 blur-3xl pointer-events-none"></div>
-
-      <!-- Hero Content -->
       <div class="relative z-10 flex flex-col">
-        <h1 class="text-[40px] font-extrabold leading-[1.05] tracking-[-0.02em] text-white mb-3">
+        <!-- Eyebrow with 40x24 rounded Haitian flag -->
+        <div class="flex items-center gap-2.5 mb-3">
+          <svg class="w-10 h-6 rounded-[4px] shadow-md flex-shrink-0" viewBox="0 0 40 24" fill="none">
+            <rect width="40" height="12" fill="#1A3BB5"/>
+            <rect y="12" width="40" height="12" fill="#D41E3C"/>
+            <rect x="14" y="6" width="12" height="12" rx="1" fill="#FFFFFF"/>
+            <path d="M20 7 L20 17 M16 12 L24 12" stroke="#0B1230" stroke-width="1.2" opacity="0.3"/>
+          </svg>
+          <span class="text-[13px] font-semibold tracking-wider text-[#B9C4E6]">ELEKSYON PREZIDANSYÈL · AYITI 2027</span>
+        </div>
+
+        <!-- Headline 40px weight 800 line-height 1.05 letter-spacing -0.02em -->
+        <h1 class="text-[38px] min-[375px]:text-[40px] font-extrabold leading-[1.05] tracking-[-0.02em] text-white mb-3">
           Ki moun ou ta vle kòm prezidan Ayiti?
         </h1>
-        <p class="text-[16px] font-normal leading-[1.5] text-[#B9C4E6] mb-6">
+
+        <!-- Lead 16px -->
+        <p class="text-[16px] leading-[1.5] text-[#B9C4E6] mb-6">
           Chwazi sa ou vle chanje, gade dosye piblik 19 kandida yo, epi bay vòt ou. Yon vòt pa moun, ou ka chanje l.
         </p>
 
         <!-- CTA Buttons -->
-        <div class="flex flex-col gap-3">
-          <!-- Primary Pill: Kòmanse -->
-          <a href="#" class="w-full h-12 rounded-full bg-[#1A3BB5] hover:bg-[#153099] active:scale-[0.98] transition flex items-center justify-center gap-2 text-[16px] font-semibold text-white px-5 shadow-sm">
+        <div class="flex flex-col gap-3 mb-4">
+          <a href="#" class="w-full h-12 bg-[#1A3BB5] hover:bg-[#16329B] text-white rounded-full font-semibold text-[16px] flex items-center justify-center gap-2 shadow-sm active:scale-[0.98] transition-all">
             <span>Kòmanse</span>
             <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
           </a>
 
-          <!-- Centered text link: Wè rezilta yo -->
-          <a href="#" class="text-center text-[15px] font-semibold text-[#7D93E8] hover:text-white py-1 transition flex items-center justify-center gap-1">
-            <span>Wè rezilta yo</span>
+          <a href="#" class="w-full text-center text-[#B9C4E6] hover:text-white font-semibold text-[15px] py-1 transition-colors">
+            Wè rezilta yo
           </a>
+        </div>
+
+        <!-- 3D Illustration: Extruded Low-poly map of Haiti departments floating in space (240px tall) -->
+        <div class="relative w-full h-[240px] flex items-center justify-center my-1 select-none pointer-events-none">
+          <!-- Soft ultramarine glow under map -->
+          <div class="absolute w-[280px] h-[100px] bg-[#1A3BB5]/40 rounded-full blur-2xl top-[100px] left-1/2 -translate-x-1/2"></div>
+          
+          <svg class="w-full h-full drop-shadow-[0_16px_28px_rgba(0,0,0,0.45)]" viewBox="0 0 360 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(10, 10)">
+              <!-- Grand'Anse / Sud-Ouest Slab -->
+              <polygon points="20,135 60,118 100,126 65,146 20,135" fill="#1A3BB5" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="20,135 65,146 65,158 20,147" fill="#0B1230" opacity="0.95" stroke="#B9C4E6" stroke-width="0.8"/>
+              <polygon points="65,146 100,126 100,138 65,158" fill="#132770" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Sud & Nippes -->
+              <polygon points="80,128 140,122 135,140 85,145 80,128" fill="#2044C9" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="85,145 135,140 135,152 85,157" fill="#0E173D" opacity="0.9" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Ouest / Pòtoprens / Lwès Slab -->
+              <polygon points="142,120 195,114 205,130 148,138 142,120" fill="#1A3BB5" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="148,138 205,130 205,144 148,152" fill="#0B1230" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Sidès (Sud-Est) -->
+              <polygon points="155,139 215,131 220,144 160,153 155,139" fill="#16329B" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="160,153 220,144 220,156 160,165" fill="#080C22" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Latibonit (Artibonite) -->
+              <polygon points="120,85 178,75 185,108 128,114 120,85" fill="#244CE0" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="128,114 185,108 185,122 128,128" fill="#0B1230" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Sant (Centre) -->
+              <polygon points="180,76 235,70 245,102 187,107 180,76" fill="#1A3BB5" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="187,107 245,102 245,116 187,121" fill="#0D1A4A" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Nòdwès (Nord-Ouest) -->
+              <polygon points="95,50 145,42 152,72 102,78 95,50" fill="#1836A8" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="102,78 152,72 152,85 102,91" fill="#0B1230" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Nò (Nord) -->
+              <polygon points="154,40 215,32 222,66 162,72 154,40" fill="#2852F0" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="162,72 222,66 222,80 162,86" fill="#0B1230" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Nòdès (Nord-Est) -->
+              <polygon points="218,31 270,25 278,58 225,65 218,31" fill="#1A3BB5" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="225,65 278,58 278,72 225,79" fill="#080C22" stroke="#B9C4E6" stroke-width="0.8"/>
+
+              <!-- Zile Latòti (Île de la Tortue) -->
+              <polygon points="110,24 165,18 160,28 105,34 110,24" fill="#2E5BF5" stroke="#B9C4E6" stroke-width="1" stroke-linejoin="round"/>
+              <polygon points="105,34 160,28 160,34 105,40" fill="#0B1230" stroke="#B9C4E6" stroke-width="0.6"/>
+
+              <!-- Zile Lagonav (La Gonâve) -->
+              <polygon points="85,98 128,88 122,104 80,112 85,98" fill="#1E40BD" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round"/>
+              <polygon points="80,112 122,104 122,114 80,122" fill="#0B1230" stroke="#B9C4E6" stroke-width="0.8"/>
+            </g>
+          </svg>
         </div>
       </div>
     </section>
 
-    <!-- OVERLAPPING COUNTDOWN & STAT CARD -->
-    <!-- -mt-6 creates the 24px overlap onto the hero -->
-    <div class="relative z-20 px-4 -mt-6 mb-6">
-      <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
-        
-        <!-- Countdown Row -->
+    <!-- COUNTDOWN & STATS CARD (Overlaps hero bottom by 24px) -->
+    <div class="px-4 -mt-6 relative z-20 mb-6">
+      <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-5 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_12px_32px_rgba(11,26,74,0.08)]">
+        <!-- Top countdown row -->
         <div class="flex items-center gap-3.5 pb-4 border-b border-[#E1E5F0]">
-          <!-- 44px icon well -->
-          <div class="w-11 h-11 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] shrink-0">
-            <span class="material-symbols-outlined text-[22px]">event</span>
+          <div class="w-11 h-11 rounded-full bg-[#EAEEFA] flex items-center justify-center flex-shrink-0 text-[#1A3BB5]">
+            <span class="material-symbols-outlined text-[24px]">event</span>
           </div>
-          <div class="flex flex-col">
-            <div class="flex items-baseline gap-1.5">
-              <span class="text-[28px] font-extrabold leading-none text-[#0B1A4A] tabular-nums tracking-[-0.015em]">259 jou</span>
-              <span class="text-[13px] font-normal text-[#5B6480]">anvan premye tou a</span>
+          <div>
+            <div class="text-[28px] font-extrabold leading-none tracking-tight text-[#0B1A4A] num-tabular">
+              259 jou
             </div>
-            <span class="text-[13px] font-medium text-[#1A3BB5] mt-0.5">18 jiyè 2027</span>
+            <div class="text-[13px] text-[#5B6480] mt-1 font-normal">
+              anvan premye tou a · <span class="font-medium text-[#0B1A4A]">18 jiyè 2027</span>
+            </div>
           </div>
         </div>
 
-        <!-- Three stat tiles in a row -->
-        <div class="grid grid-cols-3 gap-2 pt-3.5 text-center">
+        <!-- 3 Stat tiles in a row -->
+        <div class="grid grid-cols-3 gap-2 pt-4 text-center">
           <div class="flex flex-col items-center">
-            <span class="text-[20px] font-extrabold text-[#0B1A4A] tabular-nums leading-tight">12 384</span>
-            <span class="text-[12px] font-normal text-[#5B6480] leading-snug mt-0.5">moun patisipe</span>
+            <span class="text-[22px] min-[375px]:text-[24px] font-extrabold text-[#0B1A4A] leading-tight num-tabular">12 384</span>
+            <span class="text-[12px] text-[#5B6480] leading-tight mt-0.5">moun patisipe</span>
           </div>
           <div class="flex flex-col items-center border-x border-[#E1E5F0]">
-            <span class="text-[20px] font-extrabold text-[#0B1A4A] tabular-nums leading-tight">19</span>
-            <span class="text-[12px] font-normal text-[#5B6480] leading-snug mt-0.5">kandida anrejistre</span>
+            <span class="text-[22px] min-[375px]:text-[24px] font-extrabold text-[#0B1A4A] leading-tight num-tabular">19</span>
+            <span class="text-[12px] text-[#5B6480] leading-tight mt-0.5">kandida anrejistre</span>
           </div>
           <div class="flex flex-col items-center">
-            <span class="text-[20px] font-extrabold text-[#0B1A4A] tabular-nums leading-tight">3 912</span>
-            <span class="text-[12px] font-normal text-[#5B6480] leading-snug mt-0.5">repons sondaj</span>
+            <span class="text-[22px] min-[375px]:text-[24px] font-extrabold text-[#0B1A4A] leading-tight num-tabular">3 912</span>
+            <span class="text-[12px] text-[#5B6480] leading-tight mt-0.5">repons sondaj</span>
           </div>
         </div>
-
       </div>
     </div>
 
-    <!-- CANDIDATES STRIP (Full width, no card, slowly scrolling marquee) -->
-    <div class="w-full mb-8">
+    <!-- CANDIDATES STRIP (Full width marquee row, 56px avatars) -->
+    <section class="mb-8 overflow-hidden">
       <div class="px-4 mb-2.5">
-        <p class="text-[13px] font-normal text-[#5B6480]">
+        <p class="text-[13px] text-[#5B6480]">
           19 kandida · lòd o aza · peze yon kandida pou wè pwofil li
         </p>
       </div>
 
       <!-- Scrolling Marquee Row -->
-      <div class="w-full overflow-hidden py-1 border-y border-[#E1E5F0]/60 bg-white/50 backdrop-blur-sm">
-        <div class="animate-marquee flex items-center gap-3 pl-3">
-          <!-- Monograms sequence repeated twice for seamless loop -->
-          <!-- Monogram items (56px circular, night indigo, 2px white ring, 1px hairline) -->
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">MM</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">CJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JP</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">GB</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">WJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JM</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">MJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">RJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">GD</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">DD</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">DA</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">MD</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JG</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">RS</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JS</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">PT</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">LB</div>
+      <div class="w-full overflow-hidden py-1">
+        <div class="animate-marquee flex items-center gap-3 pl-4">
+          <!-- Item 1: WJ -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              WJ
+            </div>
+          </div>
+          <!-- Item 2: JM -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              JM
+            </div>
+          </div>
+          <!-- Item 3: MM -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              MM
+            </div>
+          </div>
+          <!-- Item 4: CJ -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              CJ
+            </div>
+          </div>
+          <!-- Item 5: JP -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              JP
+            </div>
+          </div>
+          <!-- Item 6: GB -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              GB
+            </div>
+          </div>
+          <!-- Item 7: MJ -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              MJ
+            </div>
+          </div>
+          <!-- Item 8: RJ -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              RJ
+            </div>
+          </div>
+          <!-- Item 9: GD -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              GD
+            </div>
+          </div>
+          <!-- Item 10: DA -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              DA
+            </div>
+          </div>
+          <!-- Item 11: MD -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              MD
+            </div>
+          </div>
+          <!-- Item 12: JG -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              JG
+            </div>
+          </div>
+          <!-- Item 13: RS -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              RS
+            </div>
+          </div>
+          <!-- Item 14: JS -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              JS
+            </div>
+          </div>
+          <!-- Item 15: PT -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              PT
+            </div>
+          </div>
+          <!-- Item 16: LB -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              LB
+            </div>
+          </div>
+          <!-- Item 17: EV -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              EV
+            </div>
+          </div>
+          <!-- Item 18: JL -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              JL
+            </div>
+          </div>
+          <!-- Item 19: MC -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              MC
+            </div>
+          </div>
 
-          <!-- Duplicate items for smooth continuous CSS animation loop -->
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">MM</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">CJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JP</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">GB</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">WJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JM</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">MJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">RJ</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">GD</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">DD</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">DA</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">MD</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JG</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">RS</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">JS</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">PT</div>
-          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] select-none">LB</div>
+          <!-- Duplicate Set for Seamless Infinite Scroll -->
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              WJ
+            </div>
+          </div>
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              JM
+            </div>
+          </div>
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              MM
+            </div>
+          </div>
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              CJ
+            </div>
+          </div>
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              JP
+            </div>
+          </div>
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              GB
+            </div>
+          </div>
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              MJ
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- SECTION: Top 5 kounye a -->
     <section class="px-4 mb-8">
-      <!-- Section Header -->
       <div class="flex items-center justify-between mb-1">
-        <h2 class="text-[20px] font-bold tracking-[-0.01em] text-[#0B1A4A]">Top 5 kounye a</h2>
-        <!-- Live indicator -->
+        <h2 class="text-[20px] font-bold tracking-tight text-[#0B1A4A]">
+          Top 5 kounye a
+        </h2>
+        <!-- Live indicator: 8px ultramarine dot with soft pulsing ring + "an dirèk" -->
         <div class="flex items-center gap-1.5">
-          <div class="relative flex items-center justify-center w-3 h-3">
-            <span class="absolute w-3 h-3 rounded-full bg-[#1A3BB5] pulse-ring"></span>
-            <span class="w-2 h-2 rounded-full bg-[#1A3BB5]"></span>
-          </div>
-          <span class="text-[13px] font-normal text-[#5B6480]">an dirèk</span>
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#1A3BB5] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#1A3BB5]"></span>
+          </span>
+          <span class="text-[13px] text-[#5B6480]">an dirèk</span>
         </div>
       </div>
-      <p class="text-[13px] font-normal text-[#5B6480] mb-3">
+
+      <p class="text-[13px] text-[#5B6480] mb-4">
         Dapre vòt pèp la · se pa yon sondaj syantifik
       </p>
 
-      <!-- 5 Candidate Cards (12px apart, white, 16px radius, hairline, two-layer shadow, no ranking numerals) -->
+      <!-- 5 Result Rows (cards white, 16px radius, hairline, layered shadow, 12px apart, NO ranking numerals) -->
       <div class="flex flex-col gap-3">
-
-        <!-- 1. Wilson Jeudy (23%) -->
+        <!-- Row 1: Wilson Jeudy 23% -->
         <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-3">
-              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
                 WJ
               </div>
-              <div class="flex flex-col items-start">
-                <span class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Wilson Jeudy</span>
-                <span class="inline-block px-2 py-0.5 mt-1 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+              <div>
+                <div class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Wilson Jeudy</div>
+                <div class="inline-block mt-0.5 text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] px-2 py-0.5 rounded-full">
                   VAR
-                </span>
+                </div>
               </div>
             </div>
-            <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+            <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
               23 %
             </div>
           </div>
-          <!-- 8px progress bar -->
-          <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+          <!-- 8px bar on #E6EAF5 track -->
+          <div class="w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
             <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 23%;"></div>
           </div>
         </div>
 
-        <!-- 2. Jean Ernest Muscadin (19%) -->
+        <!-- Row 2: Jean Ernest Muscadin 19% -->
         <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-3">
-              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
                 JM
               </div>
-              <div class="flex flex-col items-start">
-                <span class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Jean Ernest Muscadin</span>
-                <span class="inline-block px-2 py-0.5 mt-1 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+              <div>
+                <div class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Jean Ernest Muscadin</div>
+                <div class="inline-block mt-0.5 text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] px-2 py-0.5 rounded-full">
                   FCN
-                </span>
+                </div>
               </div>
             </div>
-            <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+            <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
               19 %
             </div>
           </div>
-          <!-- 8px progress bar -->
-          <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+          <div class="w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
             <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 19%;"></div>
           </div>
         </div>
 
-        <!-- 3. Michel Joseph Martelly (17%) -->
+        <!-- Row 3: Michel Joseph Martelly 17% -->
         <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-3">
-              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
                 MM
               </div>
-              <div class="flex flex-col items-start">
-                <span class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Michel Joseph Martelly</span>
-                <span class="inline-block px-2 py-0.5 mt-1 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+              <div>
+                <div class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Michel Joseph Martelly</div>
+                <div class="inline-block mt-0.5 text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] px-2 py-0.5 rounded-full">
                   Debloke
-                </span>
+                </div>
               </div>
             </div>
-            <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+            <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
               17 %
             </div>
           </div>
-          <!-- 8px progress bar -->
-          <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+          <div class="w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
             <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 17%;"></div>
           </div>
         </div>
 
-        <!-- 4. Claude Joseph (11%) -->
+        <!-- Row 4: Claude Joseph 11% -->
         <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-3">
-              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
                 CJ
               </div>
-              <div class="flex flex-col items-start">
-                <span class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Claude Joseph</span>
-                <span class="inline-block px-2 py-0.5 mt-1 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+              <div>
+                <div class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Claude Joseph</div>
+                <div class="inline-block mt-0.5 text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] px-2 py-0.5 rounded-full">
                   EDE
-                </span>
+                </div>
               </div>
             </div>
-            <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+            <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
               11 %
             </div>
           </div>
-          <!-- 8px progress bar -->
-          <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+          <div class="w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
             <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 11%;"></div>
           </div>
         </div>
 
-        <!-- 5. Jocelerme Privert (8%) -->
+        <!-- Row 5: Jocelerme Privert 8% -->
         <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
           <div class="flex items-center justify-between mb-3">
             <div class="flex items-center gap-3">
-              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shrink-0 shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+              <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
                 JP
               </div>
-              <div class="flex flex-col items-start">
-                <span class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Jocelerme Privert</span>
-                <span class="inline-block px-2 py-0.5 mt-1 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+              <div>
+                <div class="text-[17px] font-semibold text-[#0B1A4A] leading-snug">Jocelerme Privert</div>
+                <div class="inline-block mt-0.5 text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0] px-2 py-0.5 rounded-full">
                   Ayiti Transfòme
-                </span>
+                </div>
               </div>
             </div>
-            <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">
+            <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
               8 %
             </div>
           </div>
-          <!-- 8px progress bar -->
-          <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+          <div class="w-full h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
             <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 8%;"></div>
           </div>
         </div>
-
       </div>
 
-      <!-- Link: Wè tout rezilta yo -->
-      <div class="mt-4 text-center">
-        <a href="#" class="inline-flex items-center justify-center gap-1.5 text-[15px] font-semibold text-[#1A3BB5] hover:underline">
+      <!-- Link Wè tout rezilta yo -->
+      <div class="mt-4">
+        <a href="#" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#1A3BB5] hover:underline">
           <span>Wè tout rezilta yo</span>
           <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
         </a>
@@ -421,178 +594,189 @@
 
     <!-- SECTION: Eksplore -->
     <section class="px-4 mb-8">
-      <h2 class="text-[20px] font-bold tracking-[-0.01em] text-[#0B1A4A] mb-3">Eksplore</h2>
+      <h2 class="text-[20px] font-bold tracking-tight text-[#0B1A4A] mb-3">
+        Eksplore
+      </h2>
 
       <div class="flex flex-col gap-3">
-
         <!-- Card 1: Kandida yo -->
-        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition active:scale-[0.99]">
+        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] active:scale-[0.99] transition-transform">
           <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] shrink-0">
+            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
               <span class="material-symbols-outlined text-[22px]">groups</span>
             </div>
-            <div class="flex flex-col">
-              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">Kandida yo</span>
-              <span class="text-[14px] font-normal text-[#5B6480] leading-snug">19 kandida, lòd o aza, menm fòma pou tout moun</span>
+            <div>
+              <div class="text-[16px] font-semibold text-[#0B1A4A]">Kandida yo</div>
+              <div class="text-[14px] text-[#5B6480] leading-snug">19 kandida, lòd o aza, menm fòma pou tout moun</div>
             </div>
           </div>
-          <span class="material-symbols-outlined text-[#5B6480] text-[20px] shrink-0">chevron_right</span>
+          <span class="material-symbols-outlined text-[20px] text-[#5B6480] flex-shrink-0 ml-2">chevron_right</span>
         </a>
 
         <!-- Card 2: Sondaj semèn nan -->
-        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition active:scale-[0.99]">
+        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] active:scale-[0.99] transition-transform">
           <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] shrink-0">
+            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
               <span class="material-symbols-outlined text-[22px]">ballot</span>
             </div>
-            <div class="flex flex-col">
-              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">Sondaj semèn nan</span>
-              <span class="text-[14px] font-normal text-[#5B6480] leading-snug">Chak semèn, yon nouvo kesyon</span>
+            <div>
+              <div class="text-[16px] font-semibold text-[#0B1A4A]">Sondaj semèn nan</div>
+              <div class="text-[14px] text-[#5B6480] leading-snug">Chak semèn, yon nouvo kesyon</div>
             </div>
           </div>
-          <span class="material-symbols-outlined text-[#5B6480] text-[20px] shrink-0">chevron_right</span>
+          <span class="material-symbols-outlined text-[20px] text-[#5B6480] flex-shrink-0 ml-2">chevron_right</span>
         </a>
 
         <!-- Card 3: Rezilta an dirèk -->
-        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition active:scale-[0.99]">
+        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] active:scale-[0.99] transition-transform">
           <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] shrink-0">
+            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
               <span class="material-symbols-outlined text-[22px]">how_to_vote</span>
             </div>
-            <div class="flex flex-col">
-              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">Rezilta an dirèk</span>
-              <span class="text-[14px] font-normal text-[#5B6480] leading-snug">Vòt pèp la, mizajou chak minit</span>
+            <div>
+              <div class="text-[16px] font-semibold text-[#0B1A4A]">Rezilta an dirèk</div>
+              <div class="text-[14px] text-[#5B6480] leading-snug">Vòt pèp la, mizajou chak minit</div>
             </div>
           </div>
-          <span class="material-symbols-outlined text-[#5B6480] text-[20px] shrink-0">chevron_right</span>
+          <span class="material-symbols-outlined text-[20px] text-[#5B6480] flex-shrink-0 ml-2">chevron_right</span>
         </a>
 
         <!-- Card 4: Kijan sa mache -->
-        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition active:scale-[0.99]">
+        <a href="#" class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] active:scale-[0.99] transition-transform">
           <div class="flex items-center gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] shrink-0">
+            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
               <span class="material-symbols-outlined text-[22px]">info</span>
             </div>
-            <div class="flex flex-col">
-              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">Kijan sa mache</span>
-              <span class="text-[14px] font-normal text-[#5B6480] leading-snug">Metòd, règ netralite, dat enpòtan</span>
+            <div>
+              <div class="text-[16px] font-semibold text-[#0B1A4A]">Kijan sa mache</div>
+              <div class="text-[14px] text-[#5B6480] leading-snug">Metòd, règ netralite, dat enpòtan</div>
             </div>
           </div>
-          <span class="material-symbols-outlined text-[#5B6480] text-[20px] shrink-0">chevron_right</span>
+          <span class="material-symbols-outlined text-[20px] text-[#5B6480] flex-shrink-0 ml-2">chevron_right</span>
         </a>
-
       </div>
     </section>
 
-    <!-- SECTION: Dat k ap vini -->
+    <!-- PHOTO CARD: Sitadèl Laferyè, Milot (200px tall, 24px radius, deep shadow) -->
+    <div class="px-4 mb-8">
+      <div class="relative w-full h-[200px] rounded-[24px] overflow-hidden border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_12px_32px_rgba(11,26,74,0.08)] bg-[#0B1230]">
+        <!-- Citadelle photo from DataStore -->
+        <img src="https://lh3.googleusercontent.com/aida/AEtjO1WvmTqLkfI8RuD-YO9tfF03l9KloI2ChQsaHKEzrSgsWAy79NKEwAPAzc01gUPOjz46Kvkj9dEzjiePB0ClDQjoyjc0SayBQt12KmRoGeuHNn14LSXAw4sEeqcTI6KhJQoyYNcmIvPxyoZX-rilvhnYat1tfmwtMojc7Y7Y-D1_nSksCsuds11FciVwDIqFSx1aXiS_odCTLufGpUEUJfU8CrdJ9U5nZLf-dCKTYPmOuIUdp0dM9dsFq5FD" alt="Sitadèl Laferyè nan Milot" class="w-full h-full object-cover object-center">
+        
+        <!-- Dark indigo gradient over bottom third -->
+        <div class="absolute inset-0 bg-gradient-to-t from-[#0B1230] via-[#0B1230]/40 to-transparent"></div>
+
+        <!-- Caption & Credit -->
+        <div class="absolute bottom-4 left-4 right-4 flex items-end justify-between">
+          <div>
+            <div class="text-[15px] font-bold text-white leading-tight">Sitadèl Laferyè, Milot</div>
+            <div class="text-[12px] text-[#B9C4E6] mt-0.5">Foto: Alex Proimos, CC BY 2.0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION: Dat k ap vini (in a white card with timeline) -->
     <section class="px-4 mb-6">
-      <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-5 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
-        <h3 class="text-[17px] font-bold text-[#0B1A4A] mb-4">Dat k ap vini</h3>
+      <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-5 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_12px_32px_rgba(11,26,74,0.08)]">
+        <h2 class="text-[20px] font-bold tracking-tight text-[#0B1A4A] mb-4">
+          Dat k ap vini
+        </h2>
 
-        <!-- Timeline List -->
+        <!-- Timeline items -->
         <div class="relative pl-6 space-y-5 before:content-[''] before:absolute before:left-[4px] before:top-2 before:bottom-2 before:w-[2px] before:bg-[#E1E5F0]">
-          
-          <!-- Event 1 -->
+          <!-- Item 1 -->
           <div class="relative">
-            <span class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white ring-2 ring-[#1A3BB5]"></span>
-            <div class="flex flex-col">
-              <span class="text-[15px] font-semibold text-[#0B1A4A] tabular-nums">15 novanm 2026</span>
-              <span class="text-[14px] font-normal text-[#5B6480]">Fèmti enskripsyon kandida an liy</span>
-            </div>
+            <div class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#1A3BB5]"></div>
+            <div class="text-[15px] font-semibold text-[#0B1A4A] num-tabular">15 novanm 2026</div>
+            <div class="text-[14px] text-[#5B6480]">Fèmti enskripsyon kandida an liy</div>
           </div>
 
-          <!-- Event 2 -->
+          <!-- Item 2 -->
           <div class="relative">
-            <span class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white ring-2 ring-[#1A3BB5]"></span>
-            <div class="flex flex-col">
-              <span class="text-[15px] font-semibold text-[#0B1A4A] tabular-nums">15 desanm 2026</span>
-              <span class="text-[14px] font-normal text-[#5B6480]">Lis preliminè kandida yo</span>
-            </div>
+            <div class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#1A3BB5]"></div>
+            <div class="text-[15px] font-semibold text-[#0B1A4A] num-tabular">15 desanm 2026</div>
+            <div class="text-[14px] text-[#5B6480]">Lis preliminè kandida yo</div>
           </div>
 
-          <!-- Event 3 -->
+          <!-- Item 3 -->
           <div class="relative">
-            <span class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white ring-2 ring-[#1A3BB5]"></span>
-            <div class="flex flex-col">
-              <span class="text-[15px] font-semibold text-[#0B1A4A] tabular-nums">11 janvye 2027</span>
-              <span class="text-[14px] font-normal text-[#5B6480]">Lis final kandida yo</span>
-            </div>
+            <div class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#1A3BB5]"></div>
+            <div class="text-[15px] font-semibold text-[#0B1A4A] num-tabular">11 janvye 2027</div>
+            <div class="text-[14px] text-[#5B6480]">Lis final kandida yo</div>
           </div>
-
         </div>
 
-        <!-- Footer link inside timeline card -->
-        <div class="mt-5 pt-3.5 border-t border-[#E1E5F0]">
-          <a href="#" class="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[#1A3BB5] hover:underline">
+        <div class="mt-5 pt-3 border-t border-[#E1E5F0]">
+          <a href="#" class="inline-flex items-center gap-1 text-[15px] font-semibold text-[#1A3BB5] hover:underline">
             <span>Tout dat yo</span>
-            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- NOTE CARD: Inisyativ Sivik Endepandan -->
+    <!-- NOTE CARD (Civic independence disclaimer) -->
     <div class="px-4 mb-8">
       <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-start gap-3 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
-        <span class="material-symbols-outlined text-[20px] text-[#5B6480] shrink-0 mt-0.5">info</span>
-        <p class="text-[13px] font-normal text-[#5B6480] leading-relaxed">
+        <span class="material-symbols-outlined text-[20px] text-[#5B6480] flex-shrink-0 mt-0.5">info</span>
+        <p class="text-[13px] leading-relaxed text-[#5B6480]">
           Prezidan Pa M se yon inisyativ sivik endepandan. Nou pa sipòte okenn kandida ni pati. Rezilta yo se yon vòt pèp la, se pa yon sondaj syantifik.
         </p>
       </div>
     </div>
 
-    <!-- FOOTER: Simple and Clean -->
-    <footer class="w-full px-4 text-center mb-8">
-      <p class="text-[13px] font-medium text-[#0B1A4A] mb-2.5">
+    <!-- FOOTER -->
+    <footer class="px-4 py-8 text-center border-t border-[#E1E5F0]/60 bg-white/40">
+      <div class="text-[14px] font-semibold text-[#0B1A4A] mb-2">
         Prezidan Pa M · Ayiti 2027
-      </p>
-      <div class="flex items-center justify-center flex-wrap gap-x-4 gap-y-1.5 text-[12px] font-normal text-[#5B6480]">
-        <a href="#" class="hover:text-[#1A3BB5] transition">Sou nou</a>
-        <span class="text-[#E1E5F0]">·</span>
-        <a href="#" class="hover:text-[#1A3BB5] transition">Kijan sa mache</a>
-        <span class="text-[#E1E5F0]">·</span>
-        <a href="#" class="hover:text-[#1A3BB5] transition">Konfidansyalite</a>
-        <span class="text-[#E1E5F0]">·</span>
-        <a href="#" class="hover:text-[#1A3BB5] transition">Kondisyon itilizasyon</a>
+      </div>
+      <div class="flex items-center justify-center flex-wrap gap-x-4 gap-y-1 text-[13px] text-[#5B6480]">
+        <a href="#" class="hover:text-[#1A3BB5] transition-colors">Sou nou</a>
+        <span>·</span>
+        <a href="#" class="hover:text-[#1A3BB5] transition-colors">Kijan sa mache</a>
+        <span>·</span>
+        <a href="#" class="hover:text-[#1A3BB5] transition-colors">Konfidansyalite</a>
+        <span>·</span>
+        <a href="#" class="hover:text-[#1A3BB5] transition-colors">Kondisyon itilizasyon</a>
       </div>
     </footer>
 
-    <!-- BOTTOM NAVIGATION (Fixed, 64px tall plus safe area, rgba blur surface) -->
-    <!-- Order: Akèy (active), Priyorite, Kandida, Rezilta, Sondaj -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-[390px] mx-auto h-16 bg-white/92 backdrop-blur-md border-t border-[#E1E5F0] z-50 flex items-center justify-around px-2 pb-safe" style="background-color: rgba(255, 255, 255, 0.92);">
-      
-      <!-- Tab 1: Akèy (Active) -->
-      <a href="#" class="relative flex flex-col items-center justify-center w-16 py-1 text-[#1A3BB5]">
-        <!-- 20px by 3px ultramarine pill indicator centered above icon -->
-        <span class="absolute -top-1 w-5 h-[3px] bg-[#1A3BB5] rounded-full"></span>
-        <span class="material-symbols-outlined text-[24px]">home</span>
-        <span class="text-[12px] font-semibold mt-0.5">Akèy</span>
-      </a>
+    <!-- BOTTOM NAVIGATION (5 Tabs: Akèy [active], Priyorite, Kandida, Rezilta, Sondaj) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+      <div class="w-full max-w-[390px] h-16 bg-white/92 backdrop-blur-md border-t border-[#E1E5F0] px-2 flex items-center justify-around shadow-[0_-1px_3px_rgba(11,26,74,0.05)] pointer-events-auto">
+        <!-- Tab 1: Akèy (ACTIVE) -->
+        <a href="#" class="flex flex-col items-center justify-center relative py-1 text-[#1A3BB5]">
+          <!-- Active Pill Indicator (20px by 3px) -->
+          <div class="absolute -top-1 w-5 h-[3px] bg-[#1A3BB5] rounded-full"></div>
+          <span class="material-symbols-outlined text-[24px]">home</span>
+          <span class="text-[12px] font-semibold mt-0.5">Akèy</span>
+        </a>
 
-      <!-- Tab 2: Priyorite -->
-      <a href="#" class="flex flex-col items-center justify-center w-16 py-1 text-[#5B6480] hover:text-[#1A3BB5] transition">
-        <span class="material-symbols-outlined text-[24px]">tune</span>
-        <span class="text-[12px] font-medium mt-0.5">Priyorite</span>
-      </a>
+        <!-- Tab 2: Priyorite -->
+        <a href="#" class="flex flex-col items-center justify-center py-1 text-[#5B6480] hover:text-[#1A3BB5] transition-colors">
+          <span class="material-symbols-outlined text-[24px]">tune</span>
+          <span class="text-[12px] font-medium mt-0.5">Priyorite</span>
+        </a>
 
-      <!-- Tab 3: Kandida -->
-      <a href="#" class="flex flex-col items-center justify-center w-16 py-1 text-[#5B6480] hover:text-[#1A3BB5] transition">
-        <span class="material-symbols-outlined text-[24px]">groups</span>
-        <span class="text-[12px] font-medium mt-0.5">Kandida</span>
-      </a>
+        <!-- Tab 3: Kandida -->
+        <a href="#" class="flex flex-col items-center justify-center py-1 text-[#5B6480] hover:text-[#1A3BB5] transition-colors">
+          <span class="material-symbols-outlined text-[24px]">groups</span>
+          <span class="text-[12px] font-medium mt-0.5">Kandida</span>
+        </a>
 
-      <!-- Tab 4: Rezilta -->
-      <a href="#" class="flex flex-col items-center justify-center w-16 py-1 text-[#5B6480] hover:text-[#1A3BB5] transition">
-        <span class="material-symbols-outlined text-[24px]">how_to_vote</span>
-        <span class="text-[12px] font-medium mt-0.5">Rezilta</span>
-      </a>
+        <!-- Tab 4: Rezilta -->
+        <a href="#" class="flex flex-col items-center justify-center py-1 text-[#5B6480] hover:text-[#1A3BB5] transition-colors">
+          <span class="material-symbols-outlined text-[24px]">how_to_vote</span>
+          <span class="text-[12px] font-medium mt-0.5">Rezilta</span>
+        </a>
 
-      <!-- Tab 5: Sondaj -->
-      <a href="#" class="flex flex-col items-center justify-center w-16 py-1 text-[#5B6480] hover:text-[#1A3BB5] transition">
-        <span class="material-symbols-outlined text-[24px]">ballot</span>
-        <span class="text-[12px] font-medium mt-0.5">Sondaj</span>
-      </a>
-
+        <!-- Tab 5: Sondaj -->
+        <a href="#" class="flex flex-col items-center justify-center py-1 text-[#5B6480] hover:text-[#1A3BB5] transition-colors">
+          <span class="material-symbols-outlined text-[24px]">ballot</span>
+          <span class="text-[12px] font-medium mt-0.5">Sondaj</span>
+        </a>
+      </div>
     </nav>
 
   </div>

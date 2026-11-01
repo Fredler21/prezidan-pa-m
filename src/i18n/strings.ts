@@ -186,7 +186,10 @@ const ht = {
   images: {
     flagAlt: 'Drapo Ayiti',
     citadelle: 'Sitadèl Laferyè, Milot',
-    citadelleCredit: 'Foto: SPC Gibran Torres, Lame Etazini, domèn piblik (Wikimedia Commons)',
+    citadelleCredit: 'Foto: Alex Proimos, CC BY 2.0 (Wikimedia Commons)',
+    bassin: 'Basen Ble, Jakmèl',
+    bassinCredit: 'Foto: Intellect’Art, CC BY-SA 4.0 (Wikimedia Commons)',
+    mapCredit: 'Kat depatman yo: geoBoundaries, CC BY 4.0',
     flagCredit: 'Drapo Ayiti: Wikimedia Commons, domèn piblik',
   },
 
@@ -460,7 +463,10 @@ const fr: Strings = {
   images: {
     flagAlt: 'Drapeau d’Haïti',
     citadelle: 'Citadelle Laferrière, Milot',
-    citadelleCredit: 'Photo : SPC Gibran Torres, armée des États-Unis, domaine public (Wikimedia Commons)',
+    citadelleCredit: 'Photo : Alex Proimos, CC BY 2.0 (Wikimedia Commons)',
+    bassin: 'Bassin Bleu, Jacmel',
+    bassinCredit: 'Photo : Intellect’Art, CC BY-SA 4.0 (Wikimedia Commons)',
+    mapCredit: 'Carte des départements : geoBoundaries, CC BY 4.0',
     flagCredit: 'Drapeau d’Haïti : Wikimedia Commons, domaine public',
   },
 
@@ -732,7 +738,10 @@ const en: Strings = {
   images: {
     flagAlt: 'Flag of Haiti',
     citadelle: 'Citadelle Laferrière, Milot',
-    citadelleCredit: 'Photo: SPC Gibran Torres, United States Army, public domain (Wikimedia Commons)',
+    citadelleCredit: 'Photo: Alex Proimos, CC BY 2.0 (Wikimedia Commons)',
+    bassin: 'Bassin Bleu, Jacmel',
+    bassinCredit: 'Photo: Intellect’Art, CC BY-SA 4.0 (Wikimedia Commons)',
+    mapCredit: 'Department map: geoBoundaries, CC BY 4.0',
     flagCredit: 'Flag of Haiti: Wikimedia Commons, public domain',
   },
 
