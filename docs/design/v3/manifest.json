@@ -1,0 +1,64 @@
+{
+  "project": "projects/16900759932870491329",
+  "designSystem": "assets/8547351849386836628",
+  "regeneratedAt": "2026-11-01",
+  "note": "Current screens in the Stitch project. Regenerated from the premium prompts (docs/design/DESIGN-V2.md) after the earlier screens were deleted; s4 and s6 are one edit later. Older screens still in the project carry an em dash in their title and can be deleted.",
+  "screens": [
+    {
+      "key": "s1-start",
+      "id": "626fd272539b49fc8219e28dcf931302",
+      "name": "projects/16900759932870491329/screens/626fd272539b49fc8219e28dcf931302",
+      "stitchTitle": "Prezidan Pa M · Kisa w ta vle chanje an Ayiti?",
+      "png": "s1-start.png",
+      "html": "s1-start.html"
+    },
+    {
+      "key": "s2-match",
+      "id": "abf2a1787d324e6e93bcb86335e99435",
+      "name": "projects/16900759932870491329/screens/abf2a1787d324e6e93bcb86335e99435",
+      "stitchTitle": "Match — Kandida yo · Prezidan Pa M",
+      "png": "s2-match.png",
+      "html": "s2-match.html"
+    },
+    {
+      "key": "s3-profile",
+      "id": "e7f44f0a8de2475aa6e929acc543d78e",
+      "name": "projects/16900759932870491329/screens/e7f44f0a8de2475aa6e929acc543d78e",
+      "stitchTitle": "Prezidan Pa M · Pwofil kandida",
+      "png": "s3-profile.png",
+      "html": "s3-profile.html"
+    },
+    {
+      "key": "s4-vote",
+      "id": "15c9befed97145739e78d10be8fba851",
+      "name": "projects/16900759932870491329/screens/15c9befed97145739e78d10be8fba851",
+      "stitchTitle": "Prezidan Pa M · Vote",
+      "png": "s4-vote.png",
+      "html": "s4-vote.html"
+    },
+    {
+      "key": "s5-results",
+      "id": "4d6b23b3e1c447cbb30342f334217b46",
+      "name": "projects/16900759932870491329/screens/4d6b23b3e1c447cbb30342f334217b46",
+      "stitchTitle": "Rezilta · Prezidan Pa M",
+      "png": "s5-results.png",
+      "html": "s5-results.html"
+    },
+    {
+      "key": "s6-about",
+      "id": "2ea836a29be048329483148f189a6f69",
+      "name": "projects/16900759932870491329/screens/2ea836a29be048329483148f189a6f69",
+      "stitchTitle": "Prezidan Pa M · Kijan sa mache",
+      "png": "s6-about.png",
+      "html": "s6-about.html"
+    },
+    {
+      "key": "s7-poll",
+      "id": "ac52a4ad032842e4b29575500384bd35",
+      "name": "projects/16900759932870491329/screens/ac52a4ad032842e4b29575500384bd35",
+      "stitchTitle": "Sondaj semèn nan · Prezidan Pa M",
+      "png": "s7-poll.png",
+      "html": "s7-poll.html"
+    }
+  ]
+}

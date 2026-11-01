@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#0B1230]" lang="ht"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Prezidan Pa M · Sondaj semèn nan</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "night-indigo": "#0B1230",
+            "ultramarine": "#1A3BB5",
+            "ultramarine-tint": "#EAEEFA",
+            "flag-red": "#D41E3C",
+            "cool-white": "#F3F5FA",
+            "ink": "#0B1A4A",
+            "muted-ink": "#5B6480",
+            "hairline": "#E1E5F0",
+            "bar-track": "#E6EAF5",
+            "lighter-ring": "#7D93E8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "1rem",
+            "xl": "1.5rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            headline: ["Bricolage Grotesque", "system-ui", "sans-serif"],
+            display: ["Bricolage Grotesque", "system-ui", "sans-serif"],
+            body: ["Bricolage Grotesque", "system-ui", "sans-serif"],
+            label: ["Bricolage Grotesque", "system-ui", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    html, body {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-optical-sizing: auto;
+      text-transform: none !important;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-1 {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal-on-load {
+        animation: revealUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes revealUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 12px);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="min-h-full bg-[#0B1230] text-[#0B1A4A] flex justify-center selection:bg-[#EAEEFA] selection:text-[#1A3BB5]">
+<!-- Mobile Viewport Shell (390px width centered) -->
+<div class="w-full max-w-[390px] min-h-screen bg-[#F3F5FA] relative flex flex-col shadow-2xl">
+<!-- TopAppBar -->
+<header class="bg-[#0B1230] h-14 w-full flex items-center justify-between px-4 sticky top-0 z-40 border-b border-[#E1E5F0]/20">
+<h1 class="text-white text-[18px] font-bold tracking-tight">Sondaj semèn nan</h1>
+<button aria-label="Chanje lang" class="h-8 px-3 rounded-full border border-white/30 text-white text-[13px] font-medium flex items-center gap-1.5 hover:bg-white/10 active:scale-95 transition-all" type="button">
+<span>Kreyòl</span>
+<span class="text-[10px] leading-none opacity-80">▾</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-4 pt-5 pb-24 reveal-on-load">
+<!-- Quiet metadata pill -->
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-[13px] font-medium tabular-nums">
+<span aria-hidden="true" class="w-1.5 h-1.5 rounded-full bg-[#1A3BB5] flex-shrink-0"></span>
+<span>Semèn 44 · 26 okt jiska 1 nov 2026</span>
+</div>
+<!-- Lead text -->
+<p class="text-[15px] text-[#5B6480] mt-3 leading-relaxed">
+        Chak semèn, yon nouvo kesyon. Rezilta yo piblik.
+      </p>
+<!-- Active Question Card -->
+<section aria-labelledby="poll-question-title" class="bg-white rounded-2xl border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,.05),0_4px_12px_rgba(11,26,74,.05)] p-5 mt-4">
+<h2 class="text-[22px] font-bold text-[#0B1A4A] leading-snug tracking-[-0.01em]" id="poll-question-title">
+          Nan 100 premye jou yo, ki sa nouvo prezidan an ta dwe fè an premye?
+        </h2>
+<!-- Option Rows -->
+<fieldset class="mt-5 space-y-2">
+<legend class="sr-only">Chwazi yon opsyon pou sondaj la</legend>
+<!-- Option 1 -->
+<label class="min-h-[56px] rounded-[14px] border border-[#E1E5F0] bg-white flex items-center px-4 py-3.5 gap-3.5 cursor-pointer hover:border-[#7D93E8] transition-colors active:scale-[0.99]">
+<input class="sr-only" name="weekly_poll" type="radio" value="sekirite"/>
+<span aria-hidden="true" class="w-[22px] h-[22px] rounded-full border-2 border-[#E1E5F0] flex items-center justify-center flex-shrink-0"></span>
+<span class="text-[16px] font-medium text-[#0B1A4A]">Retabli sekirite nan Pòtoprens</span>
+</label>
+<!-- Option 2 (Selected State) -->
+<label class="min-h-[56px] rounded-[14px] border-2 border-[#1A3BB5] bg-[#EAEEFA] flex items-center px-4 py-3.5 gap-3.5 cursor-pointer active:scale-[0.99] transition-all">
+<input checked="" class="sr-only" name="weekly_poll" type="radio" value="lekol"/>
+<span aria-hidden="true" class="w-[22px] h-[22px] rounded-full border-2 border-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+<span class="w-2.5 h-2.5 rounded-full bg-[#1A3BB5]"></span>
+</span>
+<span class="text-[16px] font-medium text-[#0B1A4A]">Relouvri lekòl ki fèmen yo</span>
+</label>
+<!-- Option 3 -->
+<label class="min-h-[56px] rounded-[14px] border border-[#E1E5F0] bg-white flex items-center px-4 py-3.5 gap-3.5 cursor-pointer hover:border-[#7D93E8] transition-colors active:scale-[0.99]">
+<input class="sr-only" name="weekly_poll" type="radio" value="kouran_dlo"/>
+<span aria-hidden="true" class="w-[22px] h-[22px] rounded-full border-2 border-[#E1E5F0] flex items-center justify-center flex-shrink-0"></span>
+<span class="text-[16px] font-medium text-[#0B1A4A]">Yon plan ijans pou kouran ak dlo</span>
+</label>
+<!-- Option 4 -->
+<label class="min-h-[56px] rounded-[14px] border border-[#E1E5F0] bg-white flex items-center px-4 py-3.5 gap-3.5 cursor-pointer hover:border-[#7D93E8] transition-colors active:scale-[0.99]">
+<input class="sr-only" name="weekly_poll" type="radio" value="inite"/>
+<span aria-hidden="true" class="w-[22px] h-[22px] rounded-full border-2 border-[#E1E5F0] flex items-center justify-center flex-shrink-0"></span>
+<span class="text-[16px] font-medium text-[#0B1A4A]">Yon gouvènman inite nasyonal</span>
+</label>
+</fieldset>
+<!-- Submit Button (Primary Ultramarine, NOT RED) -->
+<button class="h-12 w-full mt-5 rounded-full bg-[#1A3BB5] text-white font-semibold text-base flex items-center justify-center gap-2 hover:bg-[#153096] active:scale-[0.98] transition-all shadow-[0_1px_2px_rgba(11,26,74,.1)]" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="check_circle">check_circle</span>
+<span>Voye repons mwen</span>
+</button>
+</section>
+<!-- Results for Now Section -->
+<section aria-labelledby="results-title" class="mt-8">
+<div class="flex items-baseline justify-between">
+<h2 class="text-[20px] font-bold text-[#0B1A4A] tracking-[-0.01em]" id="results-title">Rezilta pou kounye a</h2>
+<span class="text-[13px] text-[#5B6480] tabular-nums font-medium">3 912 repons</span>
+</div>
+<div class="bg-white rounded-2xl border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,.05),0_4px_12px_rgba(11,26,74,.05)] p-5 mt-3 space-y-4">
+<!-- Row 1 -->
+<div>
+<div class="flex justify-between items-center text-[15px] mb-2">
+<span class="font-medium text-[#0B1A4A]">Retabli sekirite</span>
+<span class="font-bold text-[#0B1A4A] tabular-nums">46 %</span>
+</div>
+<div class="h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="46" class="h-full bg-[#1A3BB5] rounded-full w-[46%]" role="progressbar"></div>
+</div>
+</div>
+<!-- Row 2 (With Selected Badge) -->
+<div>
+<div class="flex justify-between items-center text-[15px] mb-2">
+<div class="flex items-center">
+<span class="font-medium text-[#0B1A4A]">Relouvri lekòl yo</span>
+<span class="text-[13px] font-semibold text-[#1A3BB5] bg-[#EAEEFA] px-2 py-0.5 rounded-full ml-2">Chwa w</span>
+</div>
+<span class="font-bold text-[#0B1A4A] tabular-nums">24 %</span>
+</div>
+<div class="h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="24" class="h-full bg-[#1A3BB5] rounded-full w-[24%]" role="progressbar"></div>
+</div>
+</div>
+<!-- Row 3 -->
+<div>
+<div class="flex justify-between items-center text-[15px] mb-2">
+<span class="font-medium text-[#0B1A4A]">Kouran ak dlo</span>
+<span class="font-bold text-[#0B1A4A] tabular-nums">18 %</span>
+</div>
+<div class="h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="18" class="h-full bg-[#1A3BB5] rounded-full w-[18%]" role="progressbar"></div>
+</div>
+</div>
+<!-- Row 4 -->
+<div>
+<div class="flex justify-between items-center text-[15px] mb-2">
+<span class="font-medium text-[#0B1A4A]">Gouvènman inite</span>
+<span class="font-bold text-[#0B1A4A] tabular-nums">12 %</span>
+</div>
+<div class="h-2 bg-[#E6EAF5] rounded-full overflow-hidden">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="12" class="h-full bg-[#1A3BB5] rounded-full w-[12%]" role="progressbar"></div>
+</div>
+</div>
+<!-- Hairline and Civic Disclaimer -->
+<div class="border-t border-[#E1E5F0] pt-4 mt-2 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-[#5B6480] flex-shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="text-[13px] text-[#5B6480] leading-relaxed">
+              Sondaj sa a reprezante vwa moun ki patisipe yo sou platfòm nan. Li pa yon sondaj syantifik ofisyèl.
+            </p>
+</div>
+</div>
+</section>
+<!-- Past Weeks Section -->
+<section aria-labelledby="past-weeks-title" class="mt-8">
+<h2 class="text-[20px] font-bold text-[#0B1A4A] tracking-[-0.01em]" id="past-weeks-title">Semèn pase yo</h2>
+<div class="mt-3 space-y-3">
+<!-- Card 1 -->
+<article class="bg-white rounded-2xl border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,.05),0_4px_12px_rgba(11,26,74,.05)] p-4">
+<span class="text-[13px] text-[#5B6480] font-medium tabular-nums">Semèn 43</span>
+<h3 class="text-[16px] font-semibold text-[#0B1A4A] mt-1 leading-snug">Ki pi gwo pwoblèm nan zòn ou an?</h3>
+<div class="flex items-center justify-between mt-2.5 pt-2 border-t border-[#E1E5F0]/60">
+<div class="flex items-center gap-1.5 text-[#1A3BB5] font-semibold text-[14px] tabular-nums">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+<span>Sekirite · 58 %</span>
+</div>
+<span class="text-[13px] text-[#5B6480] tabular-nums">4 210 vòt</span>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white rounded-2xl border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,.05),0_4px_12px_rgba(11,26,74,.05)] p-4">
+<span class="text-[13px] text-[#5B6480] font-medium tabular-nums">Semèn 42</span>
+<h3 class="text-[16px] font-semibold text-[#0B1A4A] mt-1 leading-snug">Èske w ap enskri pou vote?</h3>
+<div class="flex items-center justify-between mt-2.5 pt-2 border-t border-[#E1E5F0]/60">
+<div class="flex items-center gap-1.5 text-[#1A3BB5] font-semibold text-[14px] tabular-nums">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+<span>Wi, deja enskri · 41 %</span>
+</div>
+<span class="text-[13px] text-[#5B6480] tabular-nums">3 845 vòt</span>
+</div>
+</article>
+</div>
+</section>
+<!-- Share Action Row -->
+<section aria-label="Aksyon pataj" class="mt-6 flex items-center gap-3">
+<button class="h-12 flex-1 rounded-full bg-[#1A3BB5] text-white font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-[#153096] active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[19px]" data-icon="share">share</span>
+<span>Pataje</span>
+</button>
+<button class="h-12 flex-1 rounded-full border border-[#1A3BB5] text-[#1A3BB5] bg-white font-semibold text-[15px] flex items-center justify-center gap-2 hover:bg-[#EAEEFA] active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[19px]" data-icon="link">link</span>
+<span>Kopye lyen</span>
+</button>
+</section>
+</main>
+<!-- Bottom Navigation Shell (Fixed Bottom, Safe Area Respectful) -->
+<nav aria-label="Navigasyon prensipal" class="fixed bottom-0 left-0 right-0 max-w-[390px] mx-auto h-16 pb-safe bg-white/95 backdrop-blur-md border-t border-[#E1E5F0] flex items-center justify-around z-50 shadow-[0_-1px_3px_rgba(11,26,74,0.05)]">
+<!-- 1. Priyorite -->
+<a class="flex flex-col items-center justify-center py-1 text-[#5B6480] hover:text-[#1A3BB5] active:scale-95 transition-all w-16" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="tune">tune</span>
+<span class="text-[12px] font-medium mt-0.5">Priyorite</span>
+</a>
+<!-- 2. Kandida -->
+<a class="flex flex-col items-center justify-center py-1 text-[#5B6480] hover:text-[#1A3BB5] active:scale-95 transition-all w-16" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="groups">groups</span>
+<span class="text-[12px] font-medium mt-0.5">Kandida</span>
+</a>
+<!-- 3. Rezilta -->
+<a class="flex flex-col items-center justify-center py-1 text-[#5B6480] hover:text-[#1A3BB5] active:scale-95 transition-all w-16" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="how_to_vote">how_to_vote</span>
+<span class="text-[12px] font-medium mt-0.5">Rezilta</span>
+</a>
+<!-- 4. Sondaj (ACTIVE TAB) -->
+<a aria-current="page" class="relative flex flex-col items-center justify-center py-1 text-[#1A3BB5] active:scale-95 transition-all w-16" href="#">
+<!-- Active Indicator Pill -->
+<span aria-hidden="true" class="w-5 h-[3px] rounded-full bg-[#1A3BB5] absolute -top-1"></span>
+<span class="material-symbols-outlined text-[24px] text-[#1A3BB5]" data-icon="ballot">ballot</span>
+<span class="text-[12px] font-semibold text-[#1A3BB5] mt-0.5">Sondaj</span>
+</a>
+</nav>
+</div>
+</body></html>
