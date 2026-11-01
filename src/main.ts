@@ -16,7 +16,9 @@ import { renderAbout } from './ui/about';
 import { renderPoll } from './ui/poll';
 import { renderAdmin } from './ui/admin';
 import { toast } from './ui/toast';
+import { initAccount } from './account';
 
+initAccount();
 let cleanup: (() => void) | null = null;
 let current: Location = parseHash();
 

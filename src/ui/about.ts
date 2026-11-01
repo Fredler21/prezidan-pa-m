@@ -2,7 +2,7 @@ import { h, clear } from '../lib/dom';
 import { ICON } from '../lib/icons';
 import { S, fmt, fmtDate, l } from '../i18n';
 import { content } from '../content';
-import { sourceList, demoBadge, note, well } from './common';
+import { demoBadge, note, well } from './common';
 
 export const REPO_URL = 'https://github.com/Fredler21/prezidan-pa-m';
 
@@ -32,7 +32,6 @@ export function renderAbout(main: HTMLElement): void {
       h('ul', { class: 'timeline' }, ...c.dates.map((d) => h('li', null, h('b', null, fmtDate(d.date)), h('span', null, l(d.label))))),
       h('hr', { class: 'hr' }),
       note(s.datesNote, ICON.info, false)),
-    h('section', { class: 'card roomy' }, h('h2', null, s.sources), sourceList(c.sources)),
     h('section', { class: 'card roomy' }, h('h2', null, s.photos), h('p', { class: 'caption', style: 'margin:-4px 0 12px' }, s.photosNote),
       h('ul', { class: 'dots' }, ...credited.map((x) => h('li', { style: 'font-size:14px' }, `${x.name}: ${x.photoCredit}`)))),
   );

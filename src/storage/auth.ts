@@ -1,7 +1,9 @@
 import { initializeApp, getApps, type FirebaseApp } from 'firebase/app';
 import {
   getAuth, signInAnonymously, onAuthStateChanged, signInWithPhoneNumber, RecaptchaVerifier,
-  GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, type Auth, type ConfirmationResult, type User,
+  GoogleAuthProvider, EmailAuthProvider, signInWithPopup, linkWithPopup, linkWithCredential, signInWithCredential,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail,
+  signOut as fbSignOut, type Auth, type ConfirmationResult, type User, type AuthError,
 } from 'firebase/auth';
 import { firebaseConfig } from '../firebase-config';
 
@@ -52,6 +54,41 @@ export async function confirmPhoneCode(code: string): Promise<User> {
   pending = null;
   return cred.user;
 }
+
+/**
+ * Account sign-in with Google. An anonymous session is upgraded in place (same uid, so the
+ * vote and picks stay); when that Google account already exists, we sign into it instead and
+ * report `switched: true` so the caller can carry the anonymous vote over.
+ */
+export async function connectGoogle(): Promise<{ user: User; switched: boolean }> {
+  const a = auth();
+  const provider = new GoogleAuthProvider();
+  const cur = a.currentUser;
+  if (cur && cur.isAnonymous) {
+    try { return { user: (await linkWithPopup(cur, provider)).user, switched: false }; }
+    catch (e) {
+      if ((e as AuthError).code === 'auth/credential-already-in-use') {
+        const cred = GoogleAuthProvider.credentialFromError(e as AuthError);
+        if (cred) return { user: (await signInWithCredential(a, cred)).user, switched: true };
+      }
+      throw e;
+    }
+  }
+  return { user: (await signInWithPopup(a, provider)).user, switched: Boolean(cur) };
+}
+
+/** Email + password: 'up' creates the account (upgrading an anonymous session in place), 'in' signs into an existing one. */
+export async function connectEmail(mode: 'in' | 'up', email: string, password: string): Promise<{ user: User; switched: boolean }> {
+  const a = auth();
+  const cur = a.currentUser;
+  if (mode === 'up') {
+    if (cur && cur.isAnonymous) return { user: (await linkWithCredential(cur, EmailAuthProvider.credential(email, password))).user, switched: false };
+    return { user: (await createUserWithEmailAndPassword(a, email, password)).user, switched: Boolean(cur) };
+  }
+  return { user: (await signInWithEmailAndPassword(a, email, password)).user, switched: Boolean(cur) };
+}
+
+export function resetPassword(email: string): Promise<void> { return sendPasswordResetEmail(auth(), email); }
 
 export async function signInAdmin(): Promise<User> {
   const cred = await signInWithPopup(auth(), new GoogleAuthProvider());

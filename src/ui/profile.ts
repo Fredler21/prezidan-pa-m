@@ -3,7 +3,7 @@ import { h, svg } from '../lib/dom';
 import { ICON } from '../lib/icons';
 import { S, fmt, l, getLang } from '../i18n';
 import { go, parseHash } from '../router';
-import { avatar, note, priorityIcon, priorityLabel, sourceList, well } from './common';
+import { avatar, note, priorityIcon, priorityLabel, well } from './common';
 
 let open: HTMLDialogElement | null = null;
 let opener: HTMLElement | null = null;
@@ -40,7 +40,6 @@ export function openProfile(c: Candidate): void {
     body.append(h('p', { class: 'caption' }, s.noOther));
   } else body.append(h('p', { class: 'caption', style: 'margin-top:0' }, s.notPublished));
 
-  body.append(h('h3', null, s.sources), sourceList(c.sources));
   if (c.photoCredit) body.append(h('p', { class: 'caption', style: 'margin-top:16px' }, `${s.photo}: ${c.photoCredit}`));
 
   const dlg = h('dialog', { class: 'sheet', 'aria-labelledby': 'sheet-title' },

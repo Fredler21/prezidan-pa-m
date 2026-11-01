@@ -117,6 +117,8 @@ export interface StorageAdapter {
   ready(): Promise<void>;
   getMyVote(): Promise<Vote | null>;
   saveVote(vote: Vote): Promise<void>;
+  /** Removes the current user's vote (used when an anonymous session is replaced by an account). */
+  deleteMyVote(): Promise<void>;
   /** Pushes aggregated results now and whenever they change. Returns unsubscribe. */
   subscribeVotes(callback: (results: Results) => void): () => void;
 

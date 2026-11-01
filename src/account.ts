@@ -1,0 +1,123 @@
+import type { PriorityId, Vote } from './types';
+import { LANGS } from './types';
+import { state, onState, setPicks, setMyVote } from './state';
+import { getLang } from './i18n';
+import { getStorage, STORAGE_MODE } from './storage';
+
+/*
+ * Accounts are optional: voting works anonymously. Signing in (Google, or email + password)
+ * saves the visitor's progress, their priorities and their vote, under users/{uid} and
+ * votes/{uid}, so it follows them across devices.
+ *
+ * A small flag in localStorage ('ppm.account') lets the header show the signed-in state on
+ * every page without loading the Firebase SDK; the SDK itself loads only when needed.
+ */
+
+export interface Account { name: string; email: string; photo: string | null }
+const KEY = 'ppm.account';
+const listeners = new Set<(a: Account | null) => void>();
+
+export function getAccount(): Account | null {
+  try {
+    const raw = localStorage.getItem(KEY);
+    return raw ? (JSON.parse(raw) as Account) : null;
+  } catch { return null; }
+}
+
+function setAccount(a: Account | null): void {
+  try { if (a) localStorage.setItem(KEY, JSON.stringify(a)); else localStorage.removeItem(KEY); } catch { /* ignore */ }
+  for (const fn of listeners) fn(a);
+}
+
+export function onAccountChange(fn: (a: Account | null) => void): () => void {
+  listeners.add(fn);
+  return () => { listeners.delete(fn); };
+}
+
+type FirebaseUser = { uid: string; isAnonymous: boolean; displayName: string | null; email: string | null; photoURL: string | null };
+
+function toAccount(u: FirebaseUser): Account {
+  return { name: u.displayName || (u.email ? u.email.split('@')[0] ?? '' : ''), email: u.email ?? '', photo: u.photoURL };
+}
+
+async function progressDoc(uid: string): Promise<{ picks: PriorityId[] } | null> {
+  const { getFirestore, doc, getDoc } = await import('firebase/firestore');
+  const { app } = await import('./storage/auth');
+  const snap = await getDoc(doc(getFirestore(app()), 'users', uid));
+  if (!snap.exists()) return null;
+  const d = snap.data();
+  return { picks: Array.isArray(d.picks) ? (d.picks as PriorityId[]).slice(0, 3) : [] };
+}
+
+let saveTimer: number | undefined;
+/** Writes the current picks and language under users/{uid} for signed-in accounts (debounced). */
+export function saveProgress(): void {
+  if (STORAGE_MODE !== 'firebase' || !getAccount()) return;
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = window.setTimeout(async () => {
+    try {
+      const { getFirestore, doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+      const { app, currentUid } = await import('./storage/auth');
+      const uid = await currentUid();
+      if (!uid) return;
+      const lang = getLang();
+      await setDoc(doc(getFirestore(app()), 'users', uid), { picks: state.picks.slice(0, 3), lang: LANGS.includes(lang) ? lang : 'ht', updatedAt: serverTimestamp() });
+    } catch (e) { console.warn('progress save failed', e); }
+  }, 800);
+}
+
+/** After a sign-in: adopt the saved picks and vote from the account when this device has none. */
+async function adoptFromCloud(uid: string): Promise<void> {
+  try {
+    const saved = await progressDoc(uid);
+    if (saved && saved.picks.length && state.picks.length === 0) setPicks(saved.picks);
+    const st = await getStorage();
+    const v = await st.getMyVote();
+    setMyVote(v);
+  } catch (e) { console.warn('progress load failed', e); }
+}
+
+/**
+ * Connects an account. When the anonymous session cannot be upgraded in place (the account
+ * already exists), the anonymous vote is carried over: deleted before the switch, written
+ * again after it unless the account already has one.
+ */
+export async function connect(method: { kind: 'google' } | { kind: 'email'; mode: 'in' | 'up'; email: string; password: string }): Promise<Account> {
+  const auth = await import('./storage/auth');
+  const st = await getStorage();
+  const prevVote: Vote | null = await st.getMyVote().catch(() => null);
+  const prevUid = await auth.currentUid();
+  const anonymous = prevUid !== null && (await auth.ensureUser()).isAnonymous;
+  // Email sign-in into an existing account always switches; delete the anonymous vote first so it is not counted twice.
+  const willSwitch = anonymous && method.kind === 'email' && method.mode === 'in';
+  if (willSwitch && prevVote) await st.deleteMyVote().catch(() => undefined);
+
+  let result: { user: FirebaseUser; switched: boolean };
+  try {
+    result = method.kind === 'google' ? await auth.connectGoogle() : await auth.connectEmail(method.mode, method.email, method.password);
+  } catch (e) {
+    if (willSwitch && prevVote) await st.saveVote(prevVote).catch(() => undefined); // put it back
+    throw e;
+  }
+  if (result.switched && prevVote) {
+    const existing = await st.getMyVote().catch(() => null);
+    if (!existing) await st.saveVote(prevVote).catch(() => undefined);
+  }
+  const account = toAccount(result.user);
+  setAccount(account);
+  await adoptFromCloud(result.user.uid);
+  saveProgress();
+  return account;
+}
+
+export async function disconnect(): Promise<void> {
+  const auth = await import('./storage/auth');
+  await auth.signOut();
+  setAccount(null);
+  setMyVote(null);
+}
+
+/** Keeps the saved progress current while signed in. Call once at startup. */
+export function initAccount(): void {
+  onState(() => saveProgress());
+}

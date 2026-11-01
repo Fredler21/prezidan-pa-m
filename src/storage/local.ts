@@ -72,6 +72,12 @@ export function createLocalStorage(): StorageAdapter {
       write(K.votes, all);
       voteListeners.forEach((f) => f());
     },
+    async deleteMyVote() {
+      const all = votes();
+      delete all[me];
+      write(K.votes, all);
+      voteListeners.forEach((f) => f());
+    },
     subscribeVotes(cb) {
       const fire = () => cb(aggregate());
       voteListeners.add(fire);

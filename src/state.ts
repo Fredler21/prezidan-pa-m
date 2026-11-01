@@ -31,5 +31,12 @@ export function togglePick(id: PriorityId): boolean {
 
 export function setMyVote(v: Vote | null): void { state.myVote = v; emit(); }
 
+/** Replaces the picks (used when adopting progress saved under an account). */
+export function setPicks(picks: PriorityId[]): void {
+  state.picks = picks.slice(0, MAX_PICKS);
+  try { localStorage.setItem(KEY, JSON.stringify(state.picks)); } catch { /* ignore */ }
+  emit();
+}
+
 export function onState(fn: () => void): () => void { listeners.add(fn); return () => listeners.delete(fn); }
 function emit(): void { for (const fn of listeners) fn(); }

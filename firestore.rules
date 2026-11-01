@@ -80,6 +80,16 @@ service cloud.firestore {
       allow delete: if isOwner(uid);
     }
 
+    // ---- saved progress (signed-in accounts only) -------------------------
+    match /users/{uid} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['picks', 'lang', 'updatedAt'])
+        && validPriorities(request.resource.data.get('picks', []))
+        && validLang(request.resource.data.get('lang', 'ht'))
+        && request.resource.data.updatedAt == request.time;
+    }
+
     // ---- weekly polls ----------------------------------------------------
     match /polls/{pollId} {
       allow read: if true;

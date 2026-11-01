@@ -1,5 +1,5 @@
 import {
-  getFirestore, doc, getDoc, setDoc, serverTimestamp, onSnapshot, collection, query, where, orderBy, limit,
+  getFirestore, doc, getDoc, setDoc, deleteDoc, serverTimestamp, onSnapshot, collection, query, where, orderBy, limit,
   getDocs, getCountFromServer, type Firestore, type DocumentData, type Timestamp,
 } from 'firebase/firestore';
 import type { Poll, PollResults, Results, StorageAdapter, Vote, DepartmentId } from '../types';
@@ -81,6 +81,11 @@ export function createFirebaseStorage(): StorageAdapter {
       };
       if (!existing.exists()) data.createdAt = serverTimestamp();
       await setDoc(ref, data, { merge: true });
+    },
+
+    async deleteMyVote() {
+      const uid = await currentUid();
+      if (uid) await deleteDoc(doc(db(), 'votes', uid));
     },
 
     subscribeVotes(cb) {

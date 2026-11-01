@@ -4,11 +4,13 @@ import { ICON } from '../lib/icons';
 import { S, getLang, setLang } from '../i18n';
 import { LANG_NAMES } from '../i18n/strings';
 import type { Route } from '../router';
+import { accountButton } from './account';
 
+/** Right side of the header: the account button and the language pill. */
 function langPill(): HTMLElement {
   const sel = h('select', { 'aria-label': S().langLabel, onchange: (e: Event) => setLang((e.target as HTMLSelectElement).value as Lang) },
     ...LANGS.map((code) => { const o = h('option', { value: code }, LANG_NAMES[code]); if (code === getLang()) o.selected = true; return o; }));
-  return h('div', { class: 'lang' }, sel);
+  return h('div', { class: 'hdr-right' }, accountButton(), h('div', { class: 'lang' }, sel));
 }
 
 /** Desktop navigation (hidden on phones, where the bottom tabs take over). */

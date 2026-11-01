@@ -67,6 +67,14 @@
       "stitchTitle": "Sondaj semèn nan · Prezidan Pa M",
       "png": "s7-poll.png",
       "html": "s7-poll.html"
+    },
+    {
+      "key": "s9-account",
+      "id": "42c4414366c444a2ae1afc9036dc8d34",
+      "name": "projects/16900759932870491329/screens/42c4414366c444a2ae1afc9036dc8d34",
+      "stitchTitle": "Prezidan Pa M · Kont ou",
+      "png": "s9-account.png",
+      "html": "s9-account.html"
     }
   ],
   "desktop": [
@@ -133,6 +141,14 @@
       "stitchTitle": "Prezidan Pa M · Sondaj semèn nan · Òdinatè",
       "png": "desktop/s7-poll.png",
       "html": "desktop/s7-poll.html"
+    },
+    {
+      "key": "s9-account",
+      "id": "c250c48ab10f481995e22ff7ad8c7aef",
+      "name": "projects/16900759932870491329/screens/c250c48ab10f481995e22ff7ad8c7aef",
+      "stitchTitle": "Prezidan Pa M · Kont ou · Òdinatè",
+      "png": "desktop/s9-account.png",
+      "html": "desktop/s9-account.html"
     }
   ]
 }
