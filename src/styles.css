@@ -34,17 +34,7 @@
   --font: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #070B1F; --card: #0F1636; --ink: #EAF0FF; --muted: #9AA6C8; --hairline: #22305E; --track: #1B2650;
-    --ultra-text: #5B7CFF; --ultra-tint: #16214D; --ultra-ring: #5B7CFF; --handle: #2B3A6B;
-    --chrome: rgba(15, 22, 54, .92); --scrim: rgba(0, 0, 0, .6); --avatar: #1A2457;
-    --avatar-ring: 0 0 0 2px #0F1636, 0 0 0 3px #22305E;
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, .4), 0 4px 12px rgba(0, 0, 0, .35);
-    --shadow-chrome: 0 -2px 12px rgba(0, 0, 0, .3);
-    color-scheme: dark;
-  }
-}
+/* The design is light. Dark tokens apply only on explicit request (?theme=dark sets data-theme). */
 :root[data-theme="dark"] {
   --bg: #070B1F; --card: #0F1636; --ink: #EAF0FF; --muted: #9AA6C8; --hairline: #22305E; --track: #1B2650;
   --ultra-text: #5B7CFF; --ultra-tint: #16214D; --ultra-ring: #5B7CFF; --handle: #2B3A6B;
