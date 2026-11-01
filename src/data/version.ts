@@ -6,4 +6,4 @@
  * newer deploy is never overridden by stale Firestore data. Publishing from the bundle writes
  * meta/content.version = CONTENT_VERSION.
  */
-export const CONTENT_VERSION = 2026103001;
+export const CONTENT_VERSION = 2026110101;

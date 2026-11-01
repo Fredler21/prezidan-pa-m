@@ -5,6 +5,9 @@ import { S, getLang, setLang } from '../i18n';
 import { LANG_NAMES } from '../i18n/strings';
 import type { Route } from '../router';
 import { accountButton } from './account';
+import { IMG } from '../data/images';
+
+const flag = () => h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' });
 
 /** Right side of the header: the account button and the language pill. */
 function langPill(): HTMLElement {
@@ -39,10 +42,10 @@ export function renderHeader(route: Route): void {
 
   if (route === 'home' || route === 'start') {
     const wm = wordmark();
-    wm.append(h('span', { class: 'strip-inline desk-only' }, s.tagline));
+    wm.append(h('span', { class: 'strip-inline desk-only' }, flag(), s.tagline));
     el.append(
       h('div', { class: 'wrap hdr-row' }, h('div', { class: 'hdr-left' }, wm), topNav(route), langPill()),
-      h('div', { class: 'strip mobile-only' }, s.tagline),
+      h('div', { class: 'strip mobile-only' }, flag(), s.tagline),
     );
     return;
   }

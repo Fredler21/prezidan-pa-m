@@ -155,3 +155,20 @@ export async function listCollection(cfg: RestConfig, collection: string): Promi
   }
   return { ok: true, value: out };
 }
+
+/**
+ * Like getDocument, via POST :batchGet: a document that does not exist answers 200 with
+ * { missing }, so probing an optional document (stats/presidential) logs no 404 in the console.
+ */
+export async function getDocumentQuiet(cfg: RestConfig, path: string): Promise<RestResult<Decoded | null>> {
+  const name = `projects/${cfg.projectId}/databases/(default)/documents/${path}`;
+  const r = await postJson(`${documentsUrl(cfg.projectId)}:batchGet?${keyParam(cfg)}`, { documents: [name] }, cfg.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+  if (!r.ok) return r;
+  const rows = Array.isArray(r.value) ? r.value : [];
+  for (const row of rows) {
+    if (!isObj(row)) continue;
+    if (isObj(row.found)) return { ok: true, value: decodeFields(row.found.fields) };
+    if (typeof row.missing === 'string') return { ok: true, value: null };
+  }
+  return { ok: true, value: null };
+}

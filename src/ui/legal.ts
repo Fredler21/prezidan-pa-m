@@ -3,6 +3,7 @@ import { S, fmt, fmtDate, getLang } from '../i18n';
 import { LEGAL, type LegalDoc } from '../data/legal';
 import { CONTACT_EMAIL, LEGAL_UPDATED } from '../data/site';
 import { footer } from './common';
+import { IMG } from '../data/images';
 
 export type LegalPage = 'aboutUs' | 'privacy' | 'terms';
 
@@ -36,6 +37,12 @@ export function renderLegal(main: HTMLElement, page: LegalPage): void {
     h('p', { class: 'lead' }, fill(doc.intro)),
     h('nav', { class: 'legal-tabs', 'aria-label': nav.aboutUs }, ...links.map((x) => h('a', { class: 'chip', href: `#${x.route}`, 'aria-current': x.page === page ? 'page' : undefined }, x.label))),
   );
+  if (page === 'aboutUs') {
+    const im = S().images;
+    wrap.append(h('figure', { class: 'band legal-band' },
+      h('img', { src: IMG.citadelle.src640, srcset: `${IMG.citadelle.src640} 640w, ${IMG.citadelle.src1200} 1200w`, sizes: '(min-width: 1024px) 760px, 100vw', width: 1200, height: 800, alt: im.citadelle, loading: 'lazy', decoding: 'async' }),
+      h('figcaption', null, h('strong', null, im.citadelle), h('span', null, im.citadelleCredit))));
+  }
   const body = h('article', { class: 'card roomy legal-body' });
   for (const s of doc.sections) {
     body.append(h('h2', null, s.h));

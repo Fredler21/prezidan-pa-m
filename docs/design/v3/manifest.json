@@ -2,12 +2,12 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted.",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-01 v4: no « Kijan sa mache » section, candidates strip, live Top 5, photo band; the previous home screens (ids 363ac104… and the earlier desktop one) can be deleted in Stitch.",
   "screens": [
     {
       "key": "s0-home",
-      "id": "363ac10487e8429e9b7358757882d4b9",
-      "name": "projects/16900759932870491329/screens/363ac10487e8429e9b7358757882d4b9",
+      "id": "f5f327f369074f2081eb6865bb1681c7",
+      "name": "projects/16900759932870491329/screens/f5f327f369074f2081eb6865bb1681c7",
       "stitchTitle": "Prezidan Pa M · Akèy",
       "png": "s0-home.png",
       "html": "s0-home.html"
@@ -80,8 +80,8 @@
   "desktop": [
     {
       "key": "s0-home",
-      "id": "f933345ae79e4281a6fc77e1326fd97a",
-      "name": "projects/16900759932870491329/screens/f933345ae79e4281a6fc77e1326fd97a",
+      "id": "73dcc88dd0bf4b5eaf4d7df919f2cc2a",
+      "name": "projects/16900759932870491329/screens/73dcc88dd0bf4b5eaf4d7df919f2cc2a",
       "stitchTitle": "Prezidan Pa M · Akèy · Òdinatè",
       "png": "desktop/s0-home.png",
       "html": "desktop/s0-home.html"
