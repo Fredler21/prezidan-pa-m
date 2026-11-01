@@ -460,3 +460,4 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 .pw-wrap .eye .ico { width: 20px; height: 20px; }
 .sheet-body.auth { padding-bottom: 24px; }
 @media (min-width: 720px) { dialog.sheet.narrow { width: 480px; } }
+.sheet .auth-title { border-left: 0; padding-left: 0; }
