@@ -9,3 +9,8 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+.vercel/
+dist-local/
+
+.vercel
+.env*
