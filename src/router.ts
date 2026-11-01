@@ -1,14 +1,18 @@
-export type Route = 'home' | 'start' | 'match' | 'candidates' | 'vote' | 'results' | 'about' | 'poll' | 'admin';
-const ROUTES: readonly Route[] = ['home', 'start', 'match', 'candidates', 'vote', 'results', 'about', 'poll', 'admin'];
+export type Route = 'home' | 'start' | 'match' | 'candidates' | 'vote' | 'results' | 'about' | 'poll' | 'admin' | 'about-us' | 'privacy' | 'terms';
+const ROUTES: readonly Route[] = ['home', 'start', 'match', 'candidates', 'vote', 'results', 'about', 'poll', 'admin', 'about-us', 'privacy', 'terms'];
+/** Pages that also answer at a clean path (hosting rewrites them to the app): /about-us, /privacy, /terms. */
+const PATH_ROUTES: readonly Route[] = ['about-us', 'privacy', 'terms'];
 
 export interface Location { route: Route; param: string | null }
 
-/** Empty or unknown hash opens the home page; #start is the priorities step. */
+/** Empty or unknown hash opens the home page (or the clean-path page when the URL is one); #start is the priorities step. */
 export function parseHash(hash = location.hash): Location {
   const raw = hash.replace(/^#\/?/, '');
   const [first = '', param] = raw.split('/');
-  const route = (ROUTES as readonly string[]).includes(first) ? (first as Route) : 'home';
-  return { route, param: param ? decodeURIComponent(param) : null };
+  if ((ROUTES as readonly string[]).includes(first)) return { route: first as Route, param: param ? decodeURIComponent(param) : null };
+  const path = location.pathname.replace(/^\/|\/$/g, '');
+  if ((PATH_ROUTES as readonly string[]).includes(path)) return { route: path as Route, param: null };
+  return { route: 'home', param: null };
 }
 
 export function go(route: Route, param?: string): void {

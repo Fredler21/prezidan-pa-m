@@ -102,9 +102,13 @@ export function demoBadge(): HTMLElement | null {
 }
 
 export function footer(): HTMLElement {
+  const s = S();
   const f = h('div', { class: 'foot' });
   const demo = demoBadge();
   if (demo) f.append(demo, h('br'));
-  f.append(`${S().appName} · Ayiti 2027 · `, h('a', { href: '#about' }, S().nav.about));
+  f.append(h('span', { class: 'foot-brand' }, `${s.appName} · Ayiti 2027`),
+    h('nav', { class: 'foot-links', 'aria-label': s.nav.aboutUs },
+      h('a', { href: '#about-us' }, s.nav.aboutUs), h('a', { href: '#about' }, s.nav.about),
+      h('a', { href: '#privacy' }, s.nav.privacy), h('a', { href: '#terms' }, s.nav.terms)));
   return f;
 }

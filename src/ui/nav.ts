@@ -33,7 +33,7 @@ export function renderBottom(route: Route): void {
     chrome = 'bar';
   } else if (route === 'vote') {
     chrome = 'bar'; // the vote view mounts its own bar into #bottom
-  } else if (route === 'about') {
+  } else if (route === 'about' || route === 'about-us' || route === 'privacy' || route === 'terms') {
     chrome = 'none';
   } else {
     const tabs: { route: Route; label: string; icon: string; active: Route[] }[] = [

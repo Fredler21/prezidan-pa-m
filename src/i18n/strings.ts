@@ -16,7 +16,7 @@ const ht = {
   navLabel: 'Navigasyon prensipal',
   actionsLabel: 'Aksyon',
 
-  nav: { home: 'Akèy', priorities: 'Priyorite', candidates: 'Kandida', poll: 'Sondaj', results: 'Rezilta', about: 'Kijan sa mache' },
+  nav: { home: 'Akèy', priorities: 'Priyorite', candidates: 'Kandida', poll: 'Sondaj', results: 'Rezilta', about: 'Kijan sa mache', aboutUs: 'Sou nou', privacy: 'Konfidansyalite', terms: 'Kondisyon itilizasyon' },
 
   home: {
     title: 'Ki moun ou ta vle kòm prezidan Ayiti?',
@@ -277,7 +277,7 @@ const fr: Strings = {
   navLabel: 'Navigation principale',
   actionsLabel: 'Actions',
 
-  nav: { home: 'Accueil', priorities: 'Priorités', candidates: 'Candidats', poll: 'Sondage', results: 'Résultats', about: 'Comment ça marche' },
+  nav: { home: 'Accueil', priorities: 'Priorités', candidates: 'Candidats', poll: 'Sondage', results: 'Résultats', about: 'Comment ça marche', aboutUs: 'À propos', privacy: 'Confidentialité', terms: 'Conditions d’utilisation' },
 
   home: {
     title: 'Qui voudriez-vous comme président d’Haïti ?',
@@ -536,7 +536,7 @@ const en: Strings = {
   navLabel: 'Main navigation',
   actionsLabel: 'Actions',
 
-  nav: { home: 'Home', priorities: 'Priorities', candidates: 'Candidates', poll: 'Poll', results: 'Results', about: 'How it works' },
+  nav: { home: 'Home', priorities: 'Priorities', candidates: 'Candidates', poll: 'Poll', results: 'Results', about: 'How it works', aboutUs: 'About us', privacy: 'Privacy', terms: 'Terms of use' },
 
   home: {
     title: 'Who would you want as president of Haiti?',

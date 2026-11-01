@@ -461,3 +461,18 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 .sheet-body.auth { padding-bottom: 24px; }
 @media (min-width: 720px) { dialog.sheet.narrow { width: 480px; } }
 .sheet .auth-title { border-left: 0; padding-left: 0; }
+
+/* ---- about us, privacy, terms ---- */
+.legal-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.legal-tabs .chip { text-decoration: none; }
+.legal-tabs .chip[aria-current="page"] { background: var(--ultra); color: #fff; }
+.legal-body { margin-top: 20px; }
+.legal-body h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; margin: 24px 0 8px; }
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p { font-size: 16px; line-height: 1.6; }
+.legal-body p + p { margin-top: 10px; }
+.legal-body .dots { margin-top: 6px; }
+.legal-body .dots li { font-size: 16px; line-height: 1.55; }
+.foot-brand { display: block; }
+.foot-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 8px; }
+@media (min-width: 1024px) { .legal-body { max-width: 760px; } }

@@ -15,6 +15,7 @@ import { renderResults } from './ui/results';
 import { renderAbout } from './ui/about';
 import { renderPoll } from './ui/poll';
 import { renderAdmin } from './ui/admin';
+import { renderLegal } from './ui/legal';
 import { toast } from './ui/toast';
 import { initAccount } from './account';
 
@@ -50,10 +51,14 @@ function render(loc: Location): void {
     case 'about': renderAbout(main); break;
     case 'poll': cleanup = renderPoll(main); break;
     case 'admin': renderAdmin(main); break;
+    case 'about-us': renderLegal(main, 'aboutUs'); break;
+    case 'privacy': renderLegal(main, 'privacy'); break;
+    case 'terms': renderLegal(main, 'terms'); break;
   }
   window.scrollTo({ top: 0 });
   const nav = S().nav as Record<string, string>;
-  document.title = loc.route === 'home' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[loc.route === 'match' || loc.route === 'vote' ? 'candidates' : loc.route === 'admin' ? 'poll' : loc.route === 'start' ? 'priorities' : loc.route] ?? ''}`;
+  const navKey: Record<string, string> = { match: 'candidates', vote: 'candidates', admin: 'poll', start: 'priorities', 'about-us': 'aboutUs' };
+  document.title = loc.route === 'home' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[navKey[loc.route] ?? loc.route] ?? ''}`;
 }
 
 onRoute(render);

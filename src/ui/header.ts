@@ -56,7 +56,7 @@ export function renderHeader(route: Route): void {
     return;
   }
 
-  const titles: Partial<Record<Route, string>> = { match: s.match.title, candidates: s.match.allTitle, vote: s.vote.title, about: s.about.title };
+  const titles: Partial<Record<Route, string>> = { match: s.match.title, candidates: s.match.allTitle, vote: s.vote.title, about: s.about.title, 'about-us': s.nav.aboutUs, privacy: s.nav.privacy, terms: s.nav.terms };
   const title = titles[route] ?? s.appName;
   const back = route === 'vote' ? '#match' : route === 'match' ? '#start' : '#home';
   el.append(h('div', { class: 'wrap hdr-row' },
