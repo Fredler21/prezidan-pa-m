@@ -58,15 +58,15 @@
   "rewrites": [
     {
       "source": "/about-us",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/privacy",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/terms",
-      "destination": "/index.html"
+      "destination": "/"
     }
   ]
 }
