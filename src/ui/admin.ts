@@ -1,23 +1,24 @@
 import { h, clear } from '../lib/dom';
-import { S } from '../i18n';
-import { LANGS, type Lang, type L10n } from '../types';
+import { S, fmt } from '../i18n';
+import type { Lang, L10n } from '../types';
 import { isoWeek } from '../lib/util';
 import { STORAGE_MODE } from '../storage';
+import { BUNDLED, content, refreshContent, toDocs } from '../content';
 import { note } from './common';
 import { toast } from './toast';
 
 const ADMIN_EMAILS = ['pierrelouisfredler@gmail.com', 'fredler.pierre-louis@edlight.org'];
 
-/** #admin, post the weekly poll. Google sign-in; Firestore rules enforce the admin allowlist. */
+/** #admin: publish the candidate content to Firestore and post the weekly poll. Firestore rules enforce the allowlist. */
 export function renderAdmin(main: HTMLElement): void {
   clear(main);
   const s = S().admin;
   const page = h('div', { class: 'wrap page' });
   main.append(page);
-  page.append(h('h1', null, s.title));
+  page.append(h('h1', { class: 'page-title' }, s.title));
   if (STORAGE_MODE !== 'firebase') { page.append(h('div', { style: 'margin-top:12px' }, note(S().demoMode))); return; }
 
-  const box = h('div', { style: 'margin-top:14px' });
+  const box = h('div', { style: 'margin-top:16px' });
   page.append(box);
 
   void (async () => {
@@ -25,12 +26,46 @@ export function renderAdmin(main: HTMLElement): void {
     const fs = await import('firebase/firestore');
     const db = fs.getFirestore(auth.app());
 
-    const draw = (email: string | null) => {
-      clear(box);
-      if (!email) { box.append(h('button', { class: 'btn btn-primary', type: 'button', onclick: () => auth.signInAdmin().then((u) => draw(u.email)).catch((e) => { console.error(e); toast(s.error); }) }, s.signIn)); return; }
-      if (!ADMIN_EMAILS.includes(email)) { box.append(note(`${s.notAdmin} (${email})`), h('button', { class: 'btn-text', type: 'button', onclick: () => auth.signOut().then(() => draw(null)) }, s.signOut)); return; }
+    const contentCard = (email: string): HTMLElement => {
+      const state = h('p', { class: 'caption num' });
+      const showState = () => {
+        const c = content();
+        state.textContent = fmt(s.contentState, { source: c.source === 'firestore' ? s.sourceFirestore : s.sourceBundled, v: c.version });
+      };
+      showState();
+      const publish = h('button', { class: 'btn btn-primary btn-block', type: 'button', style: 'margin-top:16px' }, s.publishContent);
+      const refresh = h('button', { class: 'btn btn-outline btn-block', type: 'button', style: 'margin-top:10px' }, s.refresh);
 
-      const field = (label: string, el: HTMLElement) => h('div', { class: 'field' }, h('label', null, label), el);
+      publish.addEventListener('click', async () => {
+        publish.disabled = true;
+        try {
+          // One batch (max 500 writes): 19 candidates + 12 priorities + 12 departments + meta.
+          const docs = toDocs(BUNDLED);
+          const batch = fs.writeBatch(db);
+          let n = 0;
+          const put = (path: string, data: object, stamp: 'updatedAt' | 'publishedAt') => {
+            batch.set(fs.doc(db, path), { ...data, [stamp]: fs.serverTimestamp() });
+            n++;
+          };
+          for (const [id, d] of Object.entries(docs.candidates)) put(`candidates/${id}`, d, 'updatedAt');
+          for (const [id, d] of Object.entries(docs.priorities)) put(`priorities/${id}`, d, 'updatedAt');
+          for (const [id, d] of Object.entries(docs.departments)) put(`departments/${id}`, d, 'updatedAt');
+          batch.set(fs.doc(db, 'meta/content'), { ...docs.meta.content, publishedAt: fs.serverTimestamp(), publishedBy: email });
+          n++;
+          await batch.commit();
+          toast(fmt(s.contentPublished, { n }), 4000);
+          await refreshContent();
+          showState();
+        } catch (e) { console.error(e); toast(s.error, 5000); }
+        finally { publish.disabled = false; }
+      });
+      refresh.addEventListener('click', async () => { refresh.disabled = true; await refreshContent(); showState(); refresh.disabled = false; });
+
+      return h('div', { class: 'card roomy' }, h('h2', null, s.contentTitle), h('p', { class: 'caption', style: 'margin-top:0' }, s.contentSub), state, publish, refresh);
+    };
+
+    const pollCard = (email: string): HTMLElement => {
+      const field = (label: string, el: HTMLElement) => h('div', { style: 'margin-top:14px' }, h('label', { class: 'field-label' }, label), el);
       const l10nInputs = (): Record<Lang, HTMLInputElement> => ({ ht: h('input', { class: 'input', placeholder: 'Kreyòl' }), fr: h('input', { class: 'input', placeholder: 'Français', style: 'margin-top:6px' }), en: h('input', { class: 'input', placeholder: 'English', style: 'margin-top:6px' }) });
       const read = (r: Record<Lang, HTMLInputElement>): L10n => ({ ht: r.ht.value.trim(), fr: r.fr.value.trim() || r.ht.value.trim(), en: r.en.value.trim() || r.ht.value.trim() });
 
@@ -38,7 +73,7 @@ export function renderAdmin(main: HTMLElement): void {
       const q = l10nInputs();
       const opts: Record<Lang, HTMLInputElement>[] = [];
       const optBox = h('div');
-      const addOpt = () => { const r = l10nInputs(); opts.push(r); optBox.append(field(`${s.option.replace('{n}', String(opts.length))}`, h('div', null, r.ht, r.fr, r.en))); };
+      const addOpt = () => { const r = l10nInputs(); opts.push(r); optBox.append(field(fmt(s.option, { n: opts.length }), h('div', null, r.ht, r.fr, r.en))); };
       addOpt(); addOpt(); addOpt(); addOpt();
       const starts = h('input', { class: 'input', type: 'date' });
       const ends = h('input', { class: 'input', type: 'date' });
@@ -64,15 +99,20 @@ export function renderAdmin(main: HTMLElement): void {
       });
       closeBtn.addEventListener('click', async () => { try { await closeActive(); toast(s.closed); } catch (e) { console.error(e); toast(s.error); } });
 
-      box.append(h('p', { class: 'muted small' }, email), h('div', { class: 'card', style: 'margin-top:10px' }, h('h2', null, s.newPoll),
+      return h('div', { class: 'card roomy', style: 'margin-top:12px' }, h('h2', null, s.newPoll),
         field(s.week, week), field(s.question, h('div', null, q.ht, q.fr, q.en)), optBox,
-        h('button', { class: 'btn-text', type: 'button', onclick: addOpt }, `+ ${s.addOption}`),
-        field(s.starts, starts), field(s.ends, ends), publish, closeBtn),
-        h('button', { class: 'btn-text', type: 'button', style: 'margin-top:10px', onclick: () => auth.signOut().then(() => draw(null)) }, s.signOut));
+        h('button', { class: 'link-btn', type: 'button', onclick: addOpt }, `+ ${s.addOption}`),
+        field(s.starts, starts), field(s.ends, ends), publish, closeBtn);
+    };
+
+    const draw = (email: string | null) => {
+      clear(box);
+      if (!email) { box.append(h('button', { class: 'btn btn-primary', type: 'button', onclick: () => auth.signInAdmin().then((u) => draw(u.email)).catch((e) => { console.error(e); toast(s.error); }) }, s.signIn)); return; }
+      if (!ADMIN_EMAILS.includes(email)) { box.append(note(`${s.notAdmin} (${email})`), h('button', { class: 'link-btn', type: 'button', onclick: () => auth.signOut().then(() => draw(null)) }, s.signOut)); return; }
+      box.append(h('p', { class: 'caption', style: 'margin:0 0 12px' }, email), contentCard(email), pollCard(email),
+        h('button', { class: 'link-btn', type: 'button', style: 'margin-top:12px', onclick: () => auth.signOut().then(() => draw(null)) }, s.signOut));
     };
 
     auth.onUser((u) => draw(u && !u.isAnonymous ? u.email : null));
   })();
 }
-
-void LANGS;

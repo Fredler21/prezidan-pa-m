@@ -12,6 +12,9 @@ const ht = {
   offline: 'Ou pa konekte. Rezilta yo ka pa ajou.',
   demoMode: 'Mòd demo · vòt yo rete sou telefòn sa a sèlman',
   liveMode: 'An dirèk · done yo sou Firebase',
+  railLabel: 'Etap yo',
+  navLabel: 'Navigasyon prensipal',
+  actionsLabel: 'Aksyon',
 
   nav: { priorities: 'Priyorite', candidates: 'Kandida', poll: 'Sondaj', results: 'Rezilta', about: 'Kijan sa mache' },
 
@@ -27,6 +30,8 @@ const ht = {
     cta: 'Wè kandida yo',
     note: 'Prezidan Pa M se yon inisyativ sivik endepandan. Klasman an se pa yon rekòmandasyon. Se yon vòt pèp la ki baze sèlman sou dosye piblik kandida yo.',
     mustPick: 'Chwazi omwen yon priyorite anvan.',
+    fullToast: 'Ou gen 3 priyorite deja. Retire youn pou chanje.',
+    tileRanked: '{label}, priyorite {n}',
   },
 
   match: {
@@ -44,6 +49,8 @@ const ht = {
     allSub: 'Lis pwovizwa CEP a. Lòd la chanje chak fwa ou louvri paj la.',
     voteNow: 'Vote kounye a',
     pickFirst: 'Chwazi priyorite w yo anvan pou wè kandida ki matche.',
+    readyTitle: 'Pare pou vote?',
+    readySub: 'Yon vòt pa moun',
   },
 
   profile: {
@@ -135,7 +142,7 @@ const ht = {
     datesNote: 'Dat sa yo deja chanje plizyè fwa. Tcheke CEP pou dènye vèsyon an.',
     sources: 'Sous',
     photos: 'Foto kandida yo',
-    photosNote: 'Nou itilize sèlman foto ki gen lisans lib (Wikimedia Commons, gouvènman). Kandida ki pa gen foto lib gen yon monogram.',
+    photosNote: 'Foto yo soti nan Wikimedia Commons, nan pati yo oswa nan laprès (Le Nouvelliste, Vant Bèf Info, Juno7); sous chak foto ekri anba li. Kandida ki pa gen foto verifye gen yon monogram. Si ou gen dwa sou yon foto epi ou vle nou retire l, ekri nou sou GitHub.',
     lastUpdated: 'Dènye mizajou: {d}',
     language: 'Lang lan chwazi otomatikman dapre zòn ou; ou ka chanje l nan tèt paj la.',
     code: 'Kòd sous la louvri sou GitHub.',
@@ -175,6 +182,14 @@ const ht = {
     closeActive: 'Fèmen sondaj aktif la',
     closed: 'Sondaj la fèmen.',
     error: 'Erè. Tcheke chan yo epi eseye ankò.',
+    contentTitle: 'Done kandida yo nan Firebase',
+    contentSub: 'Pibliye non, byografi, dosye, priyorite, dat ak sous yo nan Firestore. Apre sa, ou ka korije yo dirèkteman nan konsòl Firebase la.',
+    contentState: 'Sit la ap itilize: {source} · vèsyon {v}',
+    sourceBundled: 'done ki nan kòd la',
+    sourceFirestore: 'Firestore',
+    publishContent: 'Pibliye done yo',
+    contentPublished: '{n} dokiman pibliye nan Firestore.',
+    refresh: 'Rafrechi',
   },
 };
 
@@ -190,6 +205,9 @@ const fr: Strings = {
   offline: 'Vous êtes hors ligne. Les résultats peuvent ne pas être à jour.',
   demoMode: 'Mode démo · les votes restent sur cet appareil',
   liveMode: 'En direct · données sur Firebase',
+  railLabel: 'Étapes',
+  navLabel: 'Navigation principale',
+  actionsLabel: 'Actions',
 
   nav: { priorities: 'Priorités', candidates: 'Candidats', poll: 'Sondage', results: 'Résultats', about: 'Comment ça marche' },
 
@@ -205,6 +223,8 @@ const fr: Strings = {
     cta: 'Voir les candidats',
     note: 'Prezidan Pa M est une initiative citoyenne indépendante. Le classement n’est pas une recommandation. C’est un vote populaire fondé uniquement sur le dossier public des candidats.',
     mustPick: 'Choisissez d’abord au moins une priorité.',
+    fullToast: 'Vous avez déjà 3 priorités. Retirez-en une pour changer.',
+    tileRanked: '{label}, priorité {n}',
   },
 
   match: {
@@ -222,6 +242,8 @@ const fr: Strings = {
     allSub: 'Liste provisoire du CEP. L’ordre change à chaque ouverture de la page.',
     voteNow: 'Voter maintenant',
     pickFirst: 'Choisissez d’abord vos priorités pour voir les candidats correspondants.',
+    readyTitle: 'Prêt à voter ?',
+    readySub: 'Un vote par personne',
   },
 
   profile: {
@@ -313,7 +335,7 @@ const fr: Strings = {
     datesNote: 'Ces dates ont déjà changé plusieurs fois. Vérifiez la dernière version auprès du CEP.',
     sources: 'Sources',
     photos: 'Photos des candidats',
-    photosNote: 'Nous n’utilisons que des photos sous licence libre (Wikimedia Commons, gouvernement). Les candidats sans photo libre ont un monogramme.',
+    photosNote: 'Les photos proviennent de Wikimedia Commons, des partis ou de la presse (Le Nouvelliste, Vant Bèf Info, Juno7) ; la source de chaque photo est indiquée. Les candidats sans photo vérifiée ont un monogramme. Si vous détenez les droits d’une photo et souhaitez son retrait, écrivez-nous sur GitHub.',
     lastUpdated: 'Dernière mise à jour : {d}',
     language: 'La langue est choisie automatiquement selon votre région ; vous pouvez la changer en haut de page.',
     code: 'Le code source est ouvert sur GitHub.',
@@ -353,6 +375,14 @@ const fr: Strings = {
     closeActive: 'Clore le sondage actif',
     closed: 'Sondage clos.',
     error: 'Erreur. Vérifiez les champs et réessayez.',
+    contentTitle: 'Données des candidats dans Firebase',
+    contentSub: 'Publiez noms, biographies, dossiers, priorités, dates et sources dans Firestore. Ensuite, vous pourrez les corriger directement dans la console Firebase.',
+    contentState: 'Le site utilise : {source} · version {v}',
+    sourceBundled: 'les données du code',
+    sourceFirestore: 'Firestore',
+    publishContent: 'Publier les données',
+    contentPublished: '{n} documents publiés dans Firestore.',
+    refresh: 'Actualiser',
   },
 };
 
@@ -366,6 +396,9 @@ const en: Strings = {
   offline: 'You are offline. Results may be out of date.',
   demoMode: 'Demo mode · votes stay on this device only',
   liveMode: 'Live · data on Firebase',
+  railLabel: 'Steps',
+  navLabel: 'Main navigation',
+  actionsLabel: 'Actions',
 
   nav: { priorities: 'Priorities', candidates: 'Candidates', poll: 'Poll', results: 'Results', about: 'How it works' },
 
@@ -381,6 +414,8 @@ const en: Strings = {
     cta: 'See the candidates',
     note: 'Prezidan Pa M is an independent civic initiative. The ranking is not a recommendation. It is a people’s vote based only on the candidates’ public record.',
     mustPick: 'Pick at least one priority first.',
+    fullToast: 'You already have 3 priorities. Remove one to change.',
+    tileRanked: '{label}, priority {n}',
   },
 
   match: {
@@ -398,6 +433,8 @@ const en: Strings = {
     allSub: 'CEP provisional list. The order changes every time you open the page.',
     voteNow: 'Vote now',
     pickFirst: 'Pick your priorities first to see matching candidates.',
+    readyTitle: 'Ready to vote?',
+    readySub: 'One vote per person',
   },
 
   profile: {
@@ -489,7 +526,7 @@ const en: Strings = {
     datesNote: 'These dates have already changed several times. Check the CEP for the latest version.',
     sources: 'Sources',
     photos: 'Candidate photos',
-    photosNote: 'We only use freely licensed photos (Wikimedia Commons, government). Candidates without a free photo get a monogram.',
+    photosNote: 'Photos come from Wikimedia Commons, the parties or the press (Le Nouvelliste, Vant Bèf Info, Juno7); each photo’s source is listed. Candidates without a verified photo get a monogram. If you hold the rights to a photo and want it removed, write to us on GitHub.',
     lastUpdated: 'Last updated: {d}',
     language: 'The language is chosen automatically from your region; you can change it at the top of the page.',
     code: 'The source code is open on GitHub.',
@@ -529,6 +566,14 @@ const en: Strings = {
     closeActive: 'Close the active poll',
     closed: 'Poll closed.',
     error: 'Error. Check the fields and try again.',
+    contentTitle: 'Candidate data in Firebase',
+    contentSub: 'Publish names, biographies, records, priorities, dates and sources to Firestore. After that you can correct them directly in the Firebase console.',
+    contentState: 'The site is using: {source} · version {v}',
+    sourceBundled: 'the data in the code',
+    sourceFirestore: 'Firestore',
+    publishContent: 'Publish the data',
+    contentPublished: '{n} documents published to Firestore.',
+    refresh: 'Refresh',
   },
 };
 

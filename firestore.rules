@@ -27,13 +27,16 @@ service cloud.firestore {
     }
 
     // CEP registry, Oct 30 2026 (19 registrants) — keep in sync with src/data/candidates.ts
+    // A candidate added later in the console (candidates/{id}, active) can receive votes too.
     function validCandidate(id) {
       return id in [
         'martelly', 'claude-joseph', 'privert', 'bodeau', 'jeudy', 'muscadin',
         'maxo-joseph', 'ricardo-jean-pierre', 'wilner-joseph', 'mourra',
         'dorfeuille', 'deronneth', 'adrien', 'durocher', 'gue', 'st-fort',
         'salomon', 'tardieu', 'barrau'
-      ];
+      ] || (id is string && id.matches('^[a-z0-9][a-z0-9_-]{0,63}$')
+            && exists(/databases/$(database)/documents/candidates/$(id))
+            && get(/databases/$(database)/documents/candidates/$(id)).data.active == true);
     }
     function validDepartment(d) {
       return d in [
@@ -99,6 +102,22 @@ service cloud.firestore {
       allow write: if false; // Cloud Functions only (admin SDK bypasses rules)
     }
     match /meta/{doc} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ---- editable content (published from #admin, editable in the console) ----
+    // The app validates every document before rendering (src/content/schema.ts), so a bad
+    // edit drops that one document instead of breaking the site.
+    match /candidates/{id} {
+      allow read: if true;
+      allow write: if isAdmin() && id.matches('^[a-z0-9][a-z0-9_-]{0,63}$');
+    }
+    match /priorities/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    match /departments/{id} {
       allow read: if true;
       allow write: if isAdmin();
     }

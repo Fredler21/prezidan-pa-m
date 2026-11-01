@@ -246,6 +246,8 @@ export const CANDIDATES: readonly Candidate[] = [
     party: 'FCN',
     partyFull: 'Fòs Chanjman Nasyonal',
     role: { ht: 'Komisè Gouvènman Miragwàn (Nip) depi 2020', fr: 'Commissaire du gouvernement de Miragoâne (Nippes) depuis 2020', en: 'Government commissioner of Miragoâne (Nippes) since 2020' },
+    photo: 'muscadin.jpg',
+    photoCredit: 'Juno7 (13/09/2026), copyright Juno7',
     status: {
       ht: 'Yon rapò laprès (29 oktòb 2026) di BED Lwès I deklare kandidati li pa resevab pou dokiman ki manke. N ap verifye ak CEP.',
       fr: 'Un article de presse (29 octobre 2026) indique que le BED Ouest I a déclaré sa candidature irrecevable pour pièces manquantes. En cours de vérification auprès du CEP.',
@@ -272,6 +274,8 @@ export const CANDIDATES: readonly Candidate[] = [
     name: 'Maxo Joseph',
     party: 'RCH',
     partyFull: 'Réveil des Citoyens Haïtiens',
+    photo: 'maxo-joseph.jpg',
+    photoCredit: 'Le Nouvelliste (24/09/2026), copyright Le Nouvelliste',
     role: { ht: 'Pastè; kandida prezidan 2015-2016', fr: 'Pasteur ; candidat à la présidentielle 2015-2016', en: 'Pastor; presidential candidate 2015-2016' },
     bio: {
       ht: 'Maxo Joseph se yon pastè ki te deja kandida prezidan nan sik 2015-2016 la (anba Rendez-vous). RCH lanse an 2023 epi dirijan li yo dekri l kòm sant. Pwogram li pou 2027 poko pibliye.',
@@ -288,6 +292,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'wilner-joseph', name: 'Wilner Joseph', party: 'Viktwa', partyFull: 'Viktwa (regwoupman)',
+    photo: 'wilner-joseph.jpg', photoCredit: 'Le Nouvelliste (29/09/2026), copyright Le Nouvelliste',
     role: { ht: 'Ansyen Sekretè Deta Popilasyon, 2020-2021', fr: 'Ancien secrétaire d’État à la Population, 2020-2021', en: 'Former secretary of state for population, 2020-2021' },
     bio: {
       ht: 'Wilner Joseph te Sekretè Deta Popilasyon (2020-2021) epi li te kandida depite nan 3yèm sikonskripsyon Pòtoprens an 2015 (Vérité). Viktwa se yon kowalisyon ki di li gen 52 pati manm. Pwogram li poko pibliye.',
@@ -299,6 +304,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'mourra', name: 'Munir Joseph Mourra', party: 'MPH', partyFull: 'Mobilisation pour le Progrès d’Haïti',
+    photo: 'mourra.jpg', photoCredit: 'Le Nouvelliste (19/10/2026), copyright Le Nouvelliste',
     role: { ht: 'Prezidan MPH', fr: 'Président du MPH', en: 'President of MPH' },
     bio: {
       ht: 'Munir Joseph Mourra prezide MPH, yon pati Samir Mourra fonde an 2004 ki te patisipe nan lejislatif 2006 yo epi prezante Jacques Édouard Alexis pou prezidan an 2010. Pati a mete aksan sou relans ekonomik ak refòm enstitisyonèl; pwogram pèsonèl kandida a poko pibliye.',
@@ -310,6 +316,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'dorfeuille', name: 'Gandhy Dorfeuille', party: 'ANF', partyFull: 'Ansanm Nou Fò',
+    photo: 'dorfeuille.jpg', photoCredit: 'Vant Bèf Info (21/10/2025), copyright Vant Bèf Info',
     role: { ht: 'Ansyen depite Sen-Lwi-di-Sid/Kavayon', fr: 'Ancien député de Saint-Louis-du-Sud/Cavaillon', en: 'Former deputy for Saint-Louis-du-Sud/Cavaillon' },
     bio: {
       ht: 'Gandhy Dorfeuille te depite Sen-Lwi-di-Sid/Kavayon pandan de lejislati (dènye afilyasyon li nan Palman an: PHTK) epi li vin prezidan ANF an out 2025. ANF te patisipe nan eleksyon 2010-2011 yo ak Leslie Voltaire kòm kandida prezidan. Pwogram li poko pibliye.',
@@ -321,6 +328,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'deronneth', name: 'Déus Déronneth', party: 'DVNH', partyFull: 'Les Démocrates Visionnaires pour la Nouvelle Haïti',
+    photo: 'deronneth.jpg', photoCredit: 'Le Nouvelliste (13/10/2026), copyright Le Nouvelliste',
     role: { ht: 'Ekonomis; ansyen depite Marigo', fr: 'Économiste ; ancien député de Marigot', en: 'Economist; former deputy for Marigot' },
     bio: {
       ht: 'Déus Déronneth (CEP: « Deronneth, Deus ») se yon ekonomis, pwofesè inivèsite ak ekriven, ansyen depite Marigo (anba yon lòt afilyasyon) ak ansyen kad administrasyon fiskal la. Dapre Haiti Policy House, pwogram li mete aksan sou desantralizasyon ak devlopman rejyonal.',
@@ -344,6 +352,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'durocher', name: 'Moïse Durocher', party: 'Sol Ayiti', partyFull: 'Solidarité pou Ayiti Respire (regwoupman)',
+    photo: 'durocher.jpg', photoCredit: 'Vant Bèf Info (24/09/2026), copyright Vant Bèf Info',
     role: { ht: 'Pwofesè inivèsite; ansyen kad administratif Palè Nasyonal', fr: 'Enseignant universitaire ; ancien cadre administratif du Palais national', en: 'University lecturer; former National Palace administrative official' },
     bio: {
       ht: 'Moïse Durocher, pwofesè inivèsite ak ansyen kad administratif Palè Nasyonal, te chwazi an septanm 2026 pa regwoupman Sol Ayiti (11 pati). Pwogram li poko pibliye.',
@@ -370,6 +379,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'st-fort', name: 'René St-Fort', party: 'PRN', partyFull: 'Parti Réformiste National',
+    photo: 'st-fort.jpg', photoCredit: 'Vant Bèf Info (12/08/2026), copyright Vant Bèf Info',
     role: { ht: 'Avoka; lidè PRN', fr: 'Avocat ; dirigeant du PRN', en: 'Lawyer; PRN leader' },
     bio: {
       ht: 'René St-Fort (CEP: « St Fort, René ») se yon avoka ki dirije PRN; li te depoze kandidati pou prezidansyèl 2010 la anba PRN. Pwogram li poko pibliye.',
@@ -381,6 +391,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'salomon', name: 'Jean-Marie Junior Salomon', party: 'OPL', partyFull: 'Organisation du Peuple en Lutte',
+    photo: 'salomon.jpg', photoCredit: 'Foto ofisyèl OPL, via Satellite509 (26/10/2026)',
     role: { ht: 'Avoka; ansyen senatè Sid (2015)', fr: 'Avocat ; ancien sénateur du Sud (2015)', en: 'Lawyer; former senator for the South (2015)' },
     bio: {
       ht: 'Jean-Marie Junior Salomon, avoka, te eli premye senatè depatman Sid nan lejislatif 2015 yo; li anrejistre anba OPL an oktòb 2026 (18yèm kandida). Li di sekirite se premye priyorite (mezi fò kont gang ame, retabli otorite Leta pou deplase yo tounen), jistis ak reparasyon pou viktim yo, yon « revolisyon agrikòl » pou tè abandone yo, ak yon wòl espesyal pou fanm. Li vle reyinifye kouran OPL yo.',
@@ -397,6 +408,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'tardieu', name: 'Philippe Gérard Jerry Tardieu', party: 'EAPH', partyFull: 'En Avant pour Haïti (regwoupman)',
+    photo: 'tardieu.jpg', photoCredit: 'Hugue-Robert Marsan, 2014, CC BY-SA 4.0 (Wikimedia Commons)',
     role: { ht: 'Antreprenè; ansyen depite Petyonvil, 2016-2020', fr: 'Entrepreneur ; ancien député de Pétion-Ville, 2016-2020', en: 'Businessman; former deputy for Pétion-Ville, 2016-2020' },
     bio: {
       ht: 'Jerry Tardieu, antreprenè, te depite Petyonvil (2016-2020) epi li dirije En Avant pour Haïti. Nan fen manda CPT a, li pibliye yon lèt ouvè ki mande yon « dyalòg repibliken » pou peryòd apre CPT a ak kondisyon pou eleksyon kredib. Li anrejistre nan CEP an oktòb 2026; pwogram konplè li poko pibliye.',
@@ -411,6 +423,7 @@ export const CANDIDATES: readonly Candidate[] = [
   },
   {
     id: 'barrau', name: 'Lucien Olivier Barrau', party: 'MTH', partyFull: 'Mouvement Travailliste Haïtien',
+    photo: 'barrau.jpg', photoCredit: 'Le Nouvelliste (27/10/2026), copyright Le Nouvelliste',
     bio: limited('MTH'), record: none, tags: [], sources: [CEP, { label: 'HaitiLibre: Zapping, 27 oct 2026 (19e candidat)', url: 'https://www.haitilibre.com/article-48768-haiti-actualite-zapping.html', date: '2026-10-30' }],
   },
 ];

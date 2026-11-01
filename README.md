@@ -58,6 +58,17 @@ Still needed in the console (one-time, Spark plan is enough):
 
 Deploy: `npm run deploy` (builds, then deploys Hosting + Firestore rules and indexes).
 
+## Candidate data in Firestore
+
+Candidates, priorities, departments, key dates and sources live in two places:
+
+- **In the code** (`src/data/*`): the bundled fallback the site always works from, offline included.
+- **In Firestore** (`candidates/{id}`, `priorities/{id}`, `departments/{id}`, `meta/content`): editable without a deploy.
+
+The site paints with the bundled data, then fetches Firestore over REST after the first paint (no SDK on the landing page), caches it in the browser, and switches to it when `meta/content.version` is at least `CONTENT_VERSION` in `src/data/version.ts`. Every document is validated before use; an invalid one is dropped, never rendered.
+
+To load the data into Firestore the first time: open `/#admin`, sign in with an allow-listed Google account, press **Pibliye done yo**. It writes all 19 candidates, 12 priorities, 12 departments and `meta/content` in one batch. After that, edit any field in the Firebase console (keep the `{ ht, fr, en }` shape, no dashes) and it is live on the next visit. After changing `src/data/*` in code: bump `CONTENT_VERSION`, deploy, publish again.
+
 ## Weekly poll
 
 Open `https://prezidan-pa-m.web.app/#admin`, sign in with an allow-listed Google account, fill the

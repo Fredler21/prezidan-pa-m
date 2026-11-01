@@ -1,14 +1,13 @@
-import type { Candidate, DepartmentId, Vote } from '../types';
+import type { DepartmentId, Vote } from '../types';
 import { h, svg, clear } from '../lib/dom';
 import { ICON } from '../lib/icons';
 import { S, fmt, l, getLang } from '../i18n';
-import { DEPARTMENTS } from '../data/departments';
-import { CANDIDATE_BY_ID } from '../data/candidates';
 import { cleanReason, REASON_MAX } from '../lib/util';
 import { state, setMyVote } from '../state';
 import { getStorage } from '../storage';
+import { content, candidateById, candidatesShuffled } from '../content';
 import { go } from '../router';
-import { CANDIDATES_SHUFFLED, candidateCard, note, footer } from './common';
+import { avatar, note, footer, rail } from './common';
 import { toast } from './toast';
 
 const INITIAL_ROWS = 7;
@@ -16,62 +15,77 @@ const INITIAL_ROWS = 7;
 export function renderVote(main: HTMLElement, preset: string | null): void {
   clear(main);
   const s = S().vote;
-  const page = h('div', { class: 'wrap page' });
+  const page = h('div', { class: 'wrap' }, rail('vote'));
   main.append(page);
 
-  let selected: string | null = preset && CANDIDATE_BY_ID.has(preset) ? preset : state.myVote?.candidate ?? null;
+  let selected: string | null = preset && candidateById(preset) ? preset : state.myVote?.candidate ?? null;
   let expanded = Boolean(preset);
   let filter = '';
 
-  page.append(h('h1', null, s.heading), h('p', { class: 'lead' }, s.sub));
-  const already = h('div', { style: 'margin-top:12px' });
+  page.append(h('h1', { class: 'page-title', style: 'margin-top:8px' }, s.heading), h('p', { class: 'lead' }, s.sub));
+  const already = h('div');
   page.append(already);
 
   const search = h('input', { class: 'input', type: 'search', placeholder: s.search, 'aria-label': s.search, oninput: (e: Event) => { filter = (e.target as HTMLInputElement).value.trim().toLowerCase(); expanded = true; renderList(); } });
   page.append(h('div', { class: 'search' }, svg(ICON.search), search));
 
-  const list = h('div', { class: 'stack', role: 'radiogroup', 'aria-label': s.heading });
+  const list = h('div', { class: 'card pick-list', role: 'radiogroup', 'aria-label': s.heading });
   page.append(list);
 
   const renderList = () => {
     clear(list);
-    const matches = CANDIDATES_SHUFFLED.filter((c) => !filter || `${c.name} ${c.party} ${c.partyFull}`.toLowerCase().includes(filter));
-    const shown = expanded ? matches : matches.slice(0, INITIAL_ROWS);
-    for (const c of shown) list.append(candidateCard(c, { radio: true, selected: selected === c.id, onClick: () => { selected = c.id; renderList(); } }));
+    const matches = candidatesShuffled().filter((c) => !filter || `${c.name} ${c.party} ${c.partyFull}`.toLowerCase().includes(filter));
+    // The current choice always stays visible, so collapsing never hides it.
+    let shown = expanded ? matches : matches.slice(0, INITIAL_ROWS);
+    if (!expanded && selected && !shown.some((c) => c.id === selected)) {
+      const sel = matches.find((c) => c.id === selected);
+      if (sel) shown = [sel, ...shown.slice(0, INITIAL_ROWS - 1)];
+    }
+    for (const c of shown) {
+      const input = h('input', { class: 'sr', type: 'radio', name: 'kandida', value: c.id });
+      input.checked = selected === c.id;
+      input.addEventListener('change', () => { selected = c.id; });
+      list.append(h('label', { class: 'pick' }, avatar(c),
+        h('span', { class: 'cand-name' }, h('strong', null, c.name), h('span', { class: 'party' }, c.party)),
+        input, h('span', { class: 'radio', 'aria-hidden': 'true' })));
+    }
     if (!expanded && matches.length > shown.length) {
-      list.append(h('button', { class: 'more', type: 'button', onclick: () => { expanded = true; renderList(); } }, fmt(s.more, { n: matches.length - shown.length })));
+      list.append(h('button', { class: 'more', type: 'button', onclick: () => { expanded = true; renderList(); } }, fmt(s.more, { n: matches.length - shown.length }), svg(ICON.expand)));
     }
   };
 
   const counter = h('span', { class: 'cnt' }, `0 / ${REASON_MAX}`);
   const reason = h('textarea', { class: 'textarea', maxlength: REASON_MAX, placeholder: s.reasonPlaceholder, id: 'reason', oninput: () => { counter.textContent = `${reason.value.length} / ${REASON_MAX}`; } });
-  const dept = h('select', { class: 'select', id: 'dept' }, ...DEPARTMENTS.map((d) => h('option', { value: d.id }, l(d.label))));
+  const dept = h('select', { class: 'select', id: 'dept' }, ...content().departments.map((d) => h('option', { value: d.id }, l(d.label))));
   dept.value = state.myVote?.department ?? 'na';
   if (state.myVote) { reason.value = state.myVote.reason; counter.textContent = `${reason.value.length} / ${REASON_MAX}`; }
 
-  const submit = h('button', { class: 'btn btn-vote btn-block', type: 'button' }, state.myVote ? s.update : s.submit);
-  submit.addEventListener('click', () => void onSubmit());
-
   page.append(
-    h('div', { class: 'card field', style: 'margin-top:18px' }, h('label', { for: 'reason' }, s.why, h('span', { class: 'optional' }, s.optional), counter), reason),
-    h('div', { class: 'card field' }, h('label', { for: 'dept' }, s.department, h('span', { class: 'optional' }, s.optional)), dept, h('p', { class: 'hint' }, s.departmentHint)),
-    h('div', { style: 'margin-top:14px' }, note(s.privacy, ICON.lock)),
-    h('div', { style: 'margin-top:18px' }, submit),
+    h('div', { class: 'card', style: 'margin-top:24px' }, h('label', { class: 'field-label', for: 'reason' }, s.why, h('span', { class: 'optional' }, s.optional), counter), reason),
+    h('div', { class: 'card', style: 'margin-top:12px' }, h('label', { class: 'field-label', for: 'dept' }, s.department, h('span', { class: 'optional' }, s.optional)), dept, h('p', { class: 'hint' }, s.departmentHint)),
+    h('div', { style: 'margin-top:12px' }, note(s.privacy, ICON.lock)),
     h('div', { id: 'recaptcha' }),
     footer(),
   );
 
+  const submit = h('button', { class: 'btn btn-vote btn-block', type: 'button' }, svg(ICON.ballot), state.myVote ? s.update : s.submit);
+  submit.addEventListener('click', () => void onSubmit());
+  const bottom = document.getElementById('bottom');
+  if (bottom) { clear(bottom); bottom.append(h('div', { class: 'bar-row' }, submit)); }
+
   const syncAlready = () => {
     clear(already);
     const v = state.myVote;
-    if (v) { const c = CANDIDATE_BY_ID.get(v.candidate); if (c) already.append(note(fmt(s.already, { name: c.name }), ICON.check)); }
+    const c = v ? candidateById(v.candidate) : undefined;
+    if (c) already.append(h('div', { style: 'margin-top:16px' }, note(fmt(s.already, { name: c.name }), ICON.check)));
   };
   syncAlready();
   renderList();
 
   async function onSubmit(): Promise<void> {
     if (!selected) { toast(s.selectFirst); return; }
-    const candidate = CANDIDATE_BY_ID.get(selected) as Candidate;
+    const candidate = candidateById(selected);
+    if (!candidate) { toast(s.selectFirst); return; }
     const vote: Vote = { candidate: candidate.id, reason: cleanReason(reason.value), department: dept.value as DepartmentId, priorities: state.picks.slice(0, 3), lang: getLang() };
     submit.disabled = true;
     try {
@@ -114,8 +128,8 @@ async function phoneDialog(): Promise<boolean> {
       finally { btn.disabled = false; }
     });
     const dlg = h('dialog', { class: 'sheet', 'aria-label': s.title },
-      h('button', { class: 'iconbtn close', type: 'button', 'aria-label': S().close, html: ICON.close, onclick: () => dlg.close() }),
-      h('div', { class: 'sheet-body' }, h('div', { class: 'handle' }), h('h3', null, s.title), h('p', { class: 'muted' }, s.sub), h('div', { class: 'field' }, phone, code, err, btn)));
+      h('button', { class: 'sheet-close', type: 'button', 'aria-label': S().close, onclick: () => dlg.close() }, svg(ICON.close)),
+      h('div', { class: 'sheet-body' }, h('div', { class: 'handle' }), h('h3', null, s.title), h('p', { class: 'lead' }, s.sub), h('div', { style: 'margin-top:16px' }, phone, code, err, btn)));
     dlg.addEventListener('close', () => { dlg.remove(); resolve(done); });
     document.body.append(dlg);
     dlg.showModal();

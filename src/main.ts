@@ -3,7 +3,7 @@ import { onLangChange, S } from './i18n';
 import { parseHash, onRoute, type Location } from './router';
 import { state, setMyVote, onState } from './state';
 import { getStorage, STORAGE_MODE } from './storage';
-import { CANDIDATE_BY_ID } from './data/candidates';
+import { candidateById, refreshContent, onContentChange } from './content';
 import { renderHeader } from './ui/header';
 import { renderBottom } from './ui/nav';
 import { renderStart } from './ui/start';
@@ -30,12 +30,14 @@ function render(loc: Location): void {
   closeProfile();
   current = loc;
   renderHeader(loc.route);
+  // Chrome first: the Vote view mounts its own bar into #bottom and must not be cleared after.
+  renderBottom(loc.route);
   switch (loc.route) {
     case 'start': renderStart(main); break;
     case 'match': renderMatch(main, false); break;
     case 'candidates': {
       renderMatch(main, true);
-      const c = loc.param ? CANDIDATE_BY_ID.get(loc.param) : undefined;
+      const c = loc.param ? candidateById(loc.param) : undefined;
       if (c) openProfile(c);
       break;
     }
@@ -45,9 +47,9 @@ function render(loc: Location): void {
     case 'poll': cleanup = renderPoll(main); break;
     case 'admin': renderAdmin(main); break;
   }
-  renderBottom(loc.route);
   window.scrollTo({ top: 0 });
-  document.title = loc.route === 'start' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${S().nav[loc.route === 'match' || loc.route === 'vote' ? 'candidates' : loc.route === 'admin' ? 'poll' : loc.route] ?? ''}`;
+  const nav = S().nav as Record<string, string>;
+  document.title = loc.route === 'start' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[loc.route === 'match' || loc.route === 'vote' ? 'candidates' : loc.route === 'admin' ? 'poll' : loc.route] ?? ''}`;
 }
 
 onRoute(render);
@@ -56,6 +58,18 @@ onState(() => { if (current.route === 'start') renderBottom('start'); });
 window.addEventListener('offline', () => toast(S().offline, 4000));
 
 render(current);
+
+// Firestore content (candidates, priorities, dates) is fetched after the first paint and only
+// re-renders read-only pages, so a refresh never closes an open profile or wipes a half-typed vote.
+const REFRESHABLE = new Set(['start', 'match', 'candidates', 'results', 'about']);
+onContentChange(() => {
+  if (REFRESHABLE.has(current.route) && !document.querySelector('dialog[open]')) render(current);
+});
+const idle = (fn: () => void): void => {
+  if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(fn, { timeout: 3000 });
+  else setTimeout(fn, 1200);
+};
+if (navigator.onLine) idle(() => { void refreshContent(); });
 
 // Load the visitor's existing vote in the background. In Firebase mode this is deferred
 // until a page that needs the SDK is opened, so the landing page stays light.

@@ -3,7 +3,7 @@ import {
   getDocs, getCountFromServer, type Firestore, type DocumentData, type Timestamp,
 } from 'firebase/firestore';
 import type { Poll, PollResults, Results, StorageAdapter, Vote, DepartmentId } from '../types';
-import { CANDIDATES } from '../data/candidates';
+import { content } from '../content';
 import { cleanReason } from '../lib/util';
 import { app, ensureUser, currentUid } from './auth';
 
@@ -35,9 +35,9 @@ function toPoll(id: string, d: DocumentData): Poll {
 }
 
 export function createFirebaseStorage(): StorageAdapter {
-  const ids = CANDIDATES.map((c) => c.id);
-
   async function countResults(): Promise<Results> {
+    // Read the ids per refresh so candidates published to Firestore later are counted too.
+    const ids = content().candidates.map((c) => c.id);
     const votes = collection(db(), 'votes');
     const [totalSnap, ...perCandidate] = await Promise.all([
       getCountFromServer(votes),
