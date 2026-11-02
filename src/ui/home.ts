@@ -179,7 +179,7 @@ export function renderHome(main: HTMLElement): () => void {
   const goTo = (i: number) => window.scrollTo({ top: scene.offsetTop + i * chapterPx, behavior: reducedMotion() ? 'auto' : 'smooth' });
 
   const deskCountdown = h('div', { class: 'card countdown-card desk-only' }, countdownRow(), statRow('stats-inline', 1));
-  const heroBlock = h('div', { class: 'scene-hero' },
+  const heroBlock = h('div', { class: 'scene-hero intro' },
     h('p', { class: 'eyebrow' }, h('img', { class: 'flag', src: IMG.flag.src, srcset: IMG.flag.srcset, sizes: '40px', width: 40, height: 24, alt: im.flagAlt, decoding: 'async' }), s.eyebrow),
     h('h1', null, s.title),
     h('p', { class: 'lead-text' }, fmt(s.sub, { n })),
@@ -189,6 +189,7 @@ export function renderHome(main: HTMLElement): () => void {
     h('button', { class: 'scene-hint desk-only', type: 'button', onclick: () => goTo(1) }, j.explore, svg(ICON.expand)),
     deskCountdown);
   cleanups.push(attachTilt(deskCountdown, 5));
+  Array.from(heroBlock.children).forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i))); // staggered entrance
 
   const fact = (value: string, label: string) => h('div', { class: 'fact' }, h('b', { class: 'num' }, value), h('span', null, label));
   const chapterEls = tour.map((d, i) => {

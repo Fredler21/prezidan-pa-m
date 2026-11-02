@@ -634,3 +634,7 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
   .scene-dots button[aria-current="true"] { width: 6px; height: 22px; }
   .home-body { padding-top: 0; }
 }
+
+/* ---- hero entrance: lines arrive one after another while the map dollies in ---- */
+.scene-hero.intro > * { animation: heroUp .9s var(--ease-out) both; animation-delay: calc(.35s + var(--i, 0) * 120ms); }
+@keyframes heroUp { from { opacity: 0; transform: translateY(22px); } }
