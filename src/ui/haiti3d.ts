@@ -5,11 +5,14 @@ import { toMap } from '../data/haiti-proj';
 
 /*
  * The 3D map of Haiti behind the home page: the ten departments extruded from
- * src/data/haiti-geo.ts, drawn with plain WebGL (no library, about 10 KB with earcut).
+ * src/data/haiti-geo.ts, drawn with plain WebGL (no library, about 12 KB with earcut).
+ * Rendering: key and fill lights, a rim light toward the camera, occlusion at the base of the
+ * walls, depth fog toward the page's indigo, a contact shadow on the floor and a faint floor
+ * reflection; hairline outlines on the top edges only.
  * The page drives it: setView() moves the camera to a department (the home page tour),
- * focuses it (the others dim) and drops a pin on its chef-lieu. On its own it sways gently,
- * tilts toward the pointer, and lifts and names the department under the cursor.
- * Without WebGL it falls back to a flat SVG map; with reduced motion nothing sways and
+ * focuses it (the others dim) and drops a pin on its chef-lieu. On its own it drifts very
+ * slowly, tilts toward the pointer, and lifts and names the department under the cursor.
+ * Without WebGL it falls back to a flat SVG map; with reduced motion nothing drifts and
  * camera moves snap instead of gliding.
  */
 
@@ -58,6 +61,7 @@ function mul3(a: M3, b: M3): M3 {
   return r;
 }
 function applyT3(m: M3, v: V3): V3 { return [m[0] * v[0] + m[3] * v[1] + m[6] * v[2], m[1] * v[0] + m[4] * v[1] + m[7] * v[2], m[2] * v[0] + m[5] * v[1] + m[8] * v[2]]; }
+const colMajor = (m: M3) => [m[0], m[3], m[6], m[1], m[4], m[7], m[2], m[5], m[8]];
 
 /** Column-major 4x4 (WebGL layout). */
 function perspective(aspect: number, near: number, far: number): Float32Array {
@@ -90,34 +94,47 @@ function project(mvp: Float32Array, p: V3): [number, number] | null {
   return [(v[0] ?? 0) / w, (v[1] ?? 0) / w];
 }
 
+// Shaders. Uniforms shared by a vertex and a fragment shader carry the same precision, or linking fails.
 const VS = `
 attribute vec3 a_pos; attribute vec3 a_nrm; attribute vec2 a_meta; // meta: department index, 1 = top face
 uniform mat4 u_mvp; uniform mat3 u_rot; uniform float u_t;
-uniform mediump float u_hover; uniform mediump float u_focus; // mediump: same as the fragment shader, or linking fails
-varying vec3 v_nrm; varying vec2 v_meta; varying float v_rise;
+uniform mediump float u_mirror; uniform mediump float u_hover; uniform mediump float u_focus;
+varying vec3 v_nrm; varying vec2 v_meta; varying float v_rise; varying float v_h; varying float v_w;
 void main() {
   float r = clamp((u_t - a_meta.x * 0.07) / 0.9, 0.0, 1.0); r = 1.0 - pow(1.0 - r, 3.0);
   float lift = max(step(abs(a_meta.x - u_hover), 0.5), step(abs(a_meta.x - u_focus), 0.5));
-  vec3 p = a_pos; p.z = p.z * r + lift * 0.04 * r;
-  gl_Position = u_mvp * vec4(p, 1.0);
+  vec3 p = a_pos; p.z = p.z * r + lift * 0.045 * r;
+  v_h = clamp(p.z / ${H.toFixed(3)}, 0.0, 1.0);
+  if (u_mirror > 0.5) p.z = -p.z - 0.03;
+  vec4 clip = u_mvp * vec4(p, 1.0);
+  gl_Position = clip; v_w = clip.w;
   v_nrm = u_rot * a_nrm; v_meta = a_meta; v_rise = r;
 }`;
 const FS = `
 precision mediump float;
-varying vec3 v_nrm; varying vec2 v_meta; varying float v_rise;
-uniform vec3 u_light; uniform float u_hover; uniform float u_focus;
+varying vec3 v_nrm; varying vec2 v_meta; varying float v_rise; varying float v_h; varying float v_w;
+uniform vec3 u_light; uniform vec3 u_view; uniform float u_hover; uniform float u_focus; uniform float u_mirror;
 void main() {
-  float d = max(dot(normalize(v_nrm), u_light), 0.0);
-  vec3 top = vec3(0.22, 0.38, 0.92); vec3 side = vec3(0.16, 0.26, 0.66);
+  vec3 n = normalize(v_nrm);
+  float key = max(dot(n, u_light), 0.0);
+  float fill = max(dot(n, vec3(0.65, 0.35, 0.3)), 0.0) * 0.22;
+  vec3 top = vec3(0.17, 0.31, 0.86); vec3 side = vec3(0.075, 0.125, 0.40);
   vec3 base = mix(side, top, v_meta.y);
-  base *= 0.88 + 0.2 * fract(sin(v_meta.x * 12.9898) * 43758.5453);
+  base *= 0.93 + 0.12 * fract(sin(v_meta.x * 12.9898) * 43758.5453);
   float hov = step(abs(v_meta.x - u_hover), 0.5);
   float isF = step(abs(v_meta.x - u_focus), 0.5);
   float focusing = step(0.0, u_focus);
-  base = mix(base, vec3(0.5, 0.63, 1.0), max(hov, isF) * 0.5);
-  vec3 col = base * (0.45 + 0.7 * d) + vec3(0.1, 0.12, 0.18) * pow(d, 6.0);
-  col *= mix(1.0, mix(0.42, 1.08, isF), focusing);
-  gl_FragColor = vec4(col * v_rise, v_rise);
+  base = mix(base, vec3(0.5, 0.64, 1.0), max(hov, isF) * 0.45);
+  float ao = mix(0.5, 1.0, smoothstep(0.0, 1.0, v_h));          // darker toward the base of the walls
+  vec3 v = normalize(u_view);
+  float rim = pow(1.0 - max(dot(n, v), 0.0), 3.0) * 0.3;         // light catching the edges facing away
+  vec3 hv = normalize(u_light + v);
+  float spec = pow(max(dot(n, hv), 0.0), 48.0) * 0.28;
+  vec3 col = base * (0.4 + 0.62 * key + fill) * mix(ao, 1.0, v_meta.y) + rim * vec3(0.55, 0.66, 1.0) + spec;
+  col *= mix(1.0, mix(0.36, 1.1, isF), focusing);
+  col = mix(col, vec3(0.043, 0.07, 0.19), smoothstep(2.4, 7.0, v_w) * 0.55);  // depth fog toward the page
+  float a = v_rise * mix(1.0, 0.085 * (1.0 - v_h * 0.6), u_mirror);  // the reflection fades with height
+  gl_FragColor = vec4(col * a, a);
 }`;
 const LVS = `
 attribute vec3 a_pos; attribute float a_dept;
@@ -126,15 +143,21 @@ varying float v_a;
 void main() {
   float r = clamp((u_t - a_dept * 0.07) / 0.9, 0.0, 1.0); r = 1.0 - pow(1.0 - r, 3.0);
   float lift = max(step(abs(a_dept - u_hover), 0.5), step(abs(a_dept - u_focus), 0.5));
-  float top = step(0.01, a_pos.z);
-  vec3 p = a_pos; p.z = p.z * r + lift * 0.04 * r + 0.002 * top - 0.001 * (1.0 - top);
+  vec3 p = a_pos; p.z = p.z * r + lift * 0.045 * r + 0.002;
   gl_Position = u_mvp * vec4(p, 1.0);
-  float dim = mix(1.0, mix(0.45, 1.0, lift), step(0.0, u_focus));
-  v_a = r * (0.55 + 0.45 * lift) * mix(0.3, 1.0, top) * dim;
+  float dim = mix(1.0, mix(0.35, 1.0, lift), step(0.0, u_focus));
+  v_a = r * mix(0.32, 0.9, lift) * dim;
 }`;
 const LFS = `
 precision mediump float; varying float v_a;
-void main() { gl_FragColor = vec4(0.73, 0.78, 0.93, 1.0) * v_a; }`;
+void main() { gl_FragColor = vec4(0.66, 0.74, 1.0, 1.0) * v_a; }`;
+// Floor: a soft contact shadow under the map.
+const GVS = `
+attribute vec2 a_pos; uniform mat4 u_mvp; uniform vec2 u_c; uniform vec2 u_r; varying vec2 v_uv;
+void main() { v_uv = a_pos; gl_Position = u_mvp * vec4(u_c + a_pos * u_r, -0.012, 1.0); }`;
+const GFS = `
+precision mediump float; varying vec2 v_uv; uniform float u_a;
+void main() { float d = length(v_uv); float a = (1.0 - smoothstep(0.25, 1.0, d)) * u_a; gl_FragColor = vec4(0.0, 0.0, 0.02, 1.0) * a; }`;
 
 function compile(gl: WebGLRenderingContext, vs: string, fs: string): WebGLProgram | null {
   const mk = (type: number, src: string) => {
@@ -152,7 +175,7 @@ function compile(gl: WebGLRenderingContext, vs: string, fs: string): WebGLProgra
 
 interface Mesh { tri: Float32Array; triCount: number; line: Float32Array; lineCount: number }
 
-/** Extrudes every polygon: top and bottom caps (earcut) plus one quad per edge; outlines at the top and the base. */
+/** Extrudes every polygon: top and bottom caps (earcut) plus one quad per edge; outlines on the top edges. */
 function buildMesh(): Mesh {
   const tri: number[] = [], line: number[] = [];
   const push = (p: V3, n: V3, dept: number, top: number) => { tri.push(p[0], p[1], p[2], n[0], n[1], n[2], dept, top); };
@@ -175,7 +198,7 @@ function buildMesh(): Mesh {
           const nrm = norm([y2 - y1, -(x2 - x1), 0]);
           push([x1, y1, 0], nrm, di, 0); push([x2, y2, 0], nrm, di, 0); push([x2, y2, H], nrm, di, 0);
           push([x1, y1, 0], nrm, di, 0); push([x2, y2, H], nrm, di, 0); push([x1, y1, H], nrm, di, 0);
-          line.push(x1, y1, H, di, x2, y2, H, di, x1, y1, 0, di, x2, y2, 0, di);
+          line.push(x1, y1, H, di, x2, y2, H, di);
         }
       }
     }
@@ -207,6 +230,15 @@ function frames(): Frame[] {
     if (a !== 0) { cx /= 3 * a; cy /= 3 * a; } else { cx = (minx + maxx) / 2; cy = (miny + maxy) / 2; }
     return { cx, cy, w: maxx - minx, h: maxy - miny };
   });
+}
+/** Bounding box of the whole country, for the floor shadow. */
+function bounds(): { cx: number; cy: number; rx: number; ry: number } {
+  let minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity;
+  for (const dep of HAITI_GEO) for (const rings of dep.polys) for (const ring of rings) for (let i = 0; i < ring.length; i += 2) {
+    const x = ring[i] ?? 0, y = ring[i + 1] ?? 0;
+    minx = Math.min(minx, x); maxx = Math.max(maxx, x); miny = Math.min(miny, y); maxy = Math.max(maxy, y);
+  }
+  return { cx: (minx + maxx) / 2, cy: (miny + maxy) / 2, rx: (maxx - minx) * 0.72, ry: (maxy - miny) * 0.8 };
 }
 
 function inRing(ring: number[], x: number, y: number): boolean {
@@ -254,18 +286,22 @@ export function mountHaiti3D(host: HTMLElement, opts: Haiti3DOptions): Haiti3D {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const canvas = document.createElement('canvas');
   const gl = canvas.getContext('webgl', { alpha: true, antialias: true, premultipliedAlpha: true, powerPreference: 'low-power' });
-  const prog = gl && compile(gl, VS, FS), lprog = gl && compile(gl, LVS, LFS);
-  if (!gl || !prog || !lprog) { host.append(svgFallback()); return { ...NOOP, destroy: () => { host.querySelector('.map-flat')?.remove(); } }; }
+  const prog = gl && compile(gl, VS, FS), lprog = gl && compile(gl, LVS, LFS), gprog = gl && compile(gl, GVS, GFS);
+  if (!gl || !prog || !lprog || !gprog) { host.append(svgFallback()); return { ...NOOP, destroy: () => { host.querySelector('.map-flat')?.remove(); } }; }
 
   const mesh = buildMesh();
   const FR = frames();
-  const vbo = gl.createBuffer(), lbo = gl.createBuffer();
+  const BB = bounds();
+  const vbo = gl.createBuffer(), lbo = gl.createBuffer(), gbo = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo); gl.bufferData(gl.ARRAY_BUFFER, mesh.tri, gl.STATIC_DRAW);
   gl.bindBuffer(gl.ARRAY_BUFFER, lbo); gl.bufferData(gl.ARRAY_BUFFER, mesh.line, gl.STATIC_DRAW);
+  gl.bindBuffer(gl.ARRAY_BUFFER, gbo); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
   const A = { pos: gl.getAttribLocation(prog, 'a_pos'), nrm: gl.getAttribLocation(prog, 'a_nrm'), meta: gl.getAttribLocation(prog, 'a_meta') };
-  const U = { mvp: gl.getUniformLocation(prog, 'u_mvp'), rot: gl.getUniformLocation(prog, 'u_rot'), t: gl.getUniformLocation(prog, 'u_t'), hover: gl.getUniformLocation(prog, 'u_hover'), focus: gl.getUniformLocation(prog, 'u_focus'), light: gl.getUniformLocation(prog, 'u_light') };
+  const U = { mvp: gl.getUniformLocation(prog, 'u_mvp'), rot: gl.getUniformLocation(prog, 'u_rot'), t: gl.getUniformLocation(prog, 'u_t'), mirror: gl.getUniformLocation(prog, 'u_mirror'), hover: gl.getUniformLocation(prog, 'u_hover'), focus: gl.getUniformLocation(prog, 'u_focus'), light: gl.getUniformLocation(prog, 'u_light'), view: gl.getUniformLocation(prog, 'u_view') };
   const LA = { pos: gl.getAttribLocation(lprog, 'a_pos'), dept: gl.getAttribLocation(lprog, 'a_dept') };
   const LU = { mvp: gl.getUniformLocation(lprog, 'u_mvp'), t: gl.getUniformLocation(lprog, 'u_t'), hover: gl.getUniformLocation(lprog, 'u_hover'), focus: gl.getUniformLocation(lprog, 'u_focus') };
+  const GA = { pos: gl.getAttribLocation(gprog, 'a_pos') };
+  const GU = { mvp: gl.getUniformLocation(gprog, 'u_mvp'), c: gl.getUniformLocation(gprog, 'u_c'), r: gl.getUniformLocation(gprog, 'u_r'), a: gl.getUniformLocation(gprog, 'u_a') };
   gl.enable(gl.DEPTH_TEST); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA); gl.clearColor(0, 0, 0, 0);
 
   const label = document.createElement('div');
@@ -300,23 +336,7 @@ export function mountHaiti3D(host: HTMLElement, opts: Haiti3DOptions): Haiti3D {
   const t0 = performance.now();
   const fit = () => Math.min(1, aspect / 1.3); // narrower hosts pull the camera back a little
 
-  const draw = (now: number) => {
-    const t = (now - t0) / 1000;
-    const k = reduced ? 1 : 0.085;
-    tx += (px - tx) * 0.08; ty += (py - ty) * 0.08;
-    cur.cx += (target.cx - cur.cx) * k; cur.cy += (target.cy - cur.cy) * k; cur.zoom += (target.zoom - cur.zoom) * k;
-    const sway = reduced ? 0 : (Math.sin(t * 0.35) * 0.16) / cur.zoom;
-    const bob = reduced ? 0 : Math.sin(t * 0.9) * 0.02;
-    rot = mul3(rotZ(sway + tx * 0.28), mul3(rotX(-ty * 0.22), rotY(tx * 0.12)));
-    const d = 1 / (cur.zoom * fit());
-    eye = [EYE[0] * d, EYE[1] * d, EYE[2] * d];
-    trans = [-cur.cx, -cur.cy, bob];
-    // Rotate about the focused point, then slide it to the origin the camera looks at.
-    const tr = applyT3([rot[0], rot[3], rot[6], rot[1], rot[4], rot[7], rot[2], rot[5], rot[8]], trans); // rot * trans
-    const mvp = mul4(proj, mul4(lookAt(eye, CENTER, [0, 0, 1]), model4(rot, tr)));
-    const rise = reduced ? 10 : t;
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+  const drawMesh = (mvp: Float32Array, rise: number, mirror: number) => {
     gl.useProgram(prog);
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
     gl.enableVertexAttribArray(A.pos); gl.vertexAttribPointer(A.pos, 3, gl.FLOAT, false, 32, 0);
@@ -324,9 +344,41 @@ export function mountHaiti3D(host: HTMLElement, opts: Haiti3DOptions): Haiti3D {
     gl.enableVertexAttribArray(A.meta); gl.vertexAttribPointer(A.meta, 2, gl.FLOAT, false, 32, 24);
     // WebGL 1 refuses transpose=true, so hand the row-major rotation over as column-major by hand.
     gl.uniformMatrix4fv(U.mvp, false, mvp);
-    gl.uniformMatrix3fv(U.rot, false, [rot[0], rot[3], rot[6], rot[1], rot[4], rot[7], rot[2], rot[5], rot[8]]);
-    gl.uniform1f(U.t, rise); gl.uniform1f(U.hover, hover); gl.uniform1f(U.focus, focus); gl.uniform3fv(U.light, LIGHT);
+    gl.uniformMatrix3fv(U.rot, false, colMajor(rot));
+    gl.uniform1f(U.t, rise); gl.uniform1f(U.mirror, mirror); gl.uniform1f(U.hover, hover); gl.uniform1f(U.focus, focus);
+    gl.uniform3fv(U.light, LIGHT); gl.uniform3fv(U.view, norm(eye));
     gl.drawArrays(gl.TRIANGLES, 0, mesh.triCount);
+  };
+
+  const draw = (now: number) => {
+    const t = (now - t0) / 1000;
+    const k = reduced ? 1 : 0.085;
+    tx += (px - tx) * 0.08; ty += (py - ty) * 0.08;
+    cur.cx += (target.cx - cur.cx) * k; cur.cy += (target.cy - cur.cy) * k; cur.zoom += (target.zoom - cur.zoom) * k;
+    const drift = reduced ? 0 : (Math.sin(t * 0.22) * 0.07) / cur.zoom;
+    const bob = reduced ? 0 : Math.sin(t * 0.7) * 0.01;
+    rot = mul3(rotZ(drift + tx * 0.22), mul3(rotX(-ty * 0.18), rotY(tx * 0.1)));
+    const d = 1 / (cur.zoom * fit());
+    eye = [EYE[0] * d, EYE[1] * d, EYE[2] * d];
+    trans = [-cur.cx, -cur.cy, bob];
+    // Rotate about the focused point, then slide it to the origin the camera looks at.
+    const tr = applyT3([rot[0], rot[3], rot[6], rot[1], rot[4], rot[7], rot[2], rot[5], rot[8]], trans); // rot * trans
+    const mvp = mul4(proj, mul4(lookAt(eye, CENTER, [0, 0, 1]), model4(rot, tr)));
+    const rise = reduced ? 10 : t;
+    const riseAll = Math.min(1, rise / 1.4);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    // 1. floor shadow, 2. reflection (below the floor, faint), 3. the map, 4. top outlines
+    gl.depthMask(false);
+    gl.useProgram(gprog);
+    gl.bindBuffer(gl.ARRAY_BUFFER, gbo);
+    gl.enableVertexAttribArray(GA.pos); gl.vertexAttribPointer(GA.pos, 2, gl.FLOAT, false, 8, 0);
+    gl.uniformMatrix4fv(GU.mvp, false, mvp);
+    gl.uniform2f(GU.c, BB.cx, BB.cy); gl.uniform2f(GU.r, BB.rx, BB.ry); gl.uniform1f(GU.a, 0.55 * riseAll);
+    gl.drawArrays(gl.TRIANGLES, 0, 6);
+    drawMesh(mvp, rise, 1);
+    gl.depthMask(true);
+    drawMesh(mvp, rise, 0);
 
     gl.useProgram(lprog);
     gl.bindBuffer(gl.ARRAY_BUFFER, lbo);
@@ -338,7 +390,7 @@ export function mountHaiti3D(host: HTMLElement, opts: Haiti3DOptions): Haiti3D {
     // The pin follows its place on the map.
     if (pin && focus >= 0) {
       const [mx, my] = toMap(pin[0], pin[1]);
-      const ndc = project(mvp, [mx, my, H + 0.05]);
+      const ndc = project(mvp, [mx, my, H + 0.06]);
       if (ndc) {
         pinEl.style.transform = `translate(${((ndc[0] + 1) / 2) * w}px, ${((1 - ndc[1]) / 2) * hgt}px)`;
         pinEl.classList.add('on');

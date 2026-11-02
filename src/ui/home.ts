@@ -195,7 +195,7 @@ export function renderHome(main: HTMLElement): () => void {
     const name = deptName(d.id);
     const sub = lang === 'ht' && name && name.fr !== name.ht ? name.fr : null;
     return h('div', { class: 'chapter', 'aria-hidden': 'true' },
-      h('p', { class: 'chapter-kicker' }, fmt(j.kicker, { i: i + 1, n: N })),
+      h('p', { class: 'chapter-kicker' }, h('span', { class: 'num' }, fmt(j.kicker, { i: i + 1, n: N })), h('span', { class: 'kick-line', 'aria-hidden': 'true' }, h('i', { style: `width:${((i + 1) / N) * 100}%` }))),
       h('h2', null, l(name), sub ? h('small', null, sub) : null),
       h('div', { class: 'facts' },
         fact(l(d.capital), j.capital),
