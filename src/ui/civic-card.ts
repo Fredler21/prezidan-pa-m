@@ -45,9 +45,12 @@ function waves(y0: number, gap: number, lines: number, amp: number, freq: number
   });
 }
 const SEAL = { cx: 872, cy: 512, r: 60 };
+/** ID photo slot, right side, under the flag and above the seal (card units). */
+const PHOTO = { x: 724, y: 124, w: 220, h: 286, r: 18 };
+const PHOTO_CX = PHOTO.x + PHOTO.w / 2, PHOTO_CY = PHOTO.y + PHOTO.h / 2;
 const ART = {
-  outer: rosette(770, 250, 170, 46, 10, 16),
-  inner: rosette(770, 250, 92, 24, 10, 10),
+  outer: rosette(PHOTO_CX, PHOTO_CY, 170, 46, 10, 16),
+  inner: rosette(PHOTO_CX, PHOTO_CY, 92, 24, 10, 10),
   waves: waves(560, 6, 9, 9, 0.018),
   seal: rosette(SEAL.cx, SEAL.cy, 36, 7, 14, 6, 120),
 };
@@ -70,7 +73,37 @@ function artSvg(ringText: string): string {
 }
 
 // ---- model ----
-interface Model { name: string; picks: PriorityId[]; voted: boolean; firstRound: string }
+interface Model { name: string; photo: string | null; picks: PriorityId[]; voted: boolean; firstRound: string }
+
+// The photo is cropped to the slot on the device, re-encoded as a small JPEG and kept in localStorage.
+const PHOTO_KEY = 'ppm.card.photo';
+const PHOTO_PX = { w: 360, h: 468 };
+const PHOTO_MAX_BYTES = 30 * 1024 * 1024;
+function readPhoto(): string | null {
+  try { const v = localStorage.getItem(PHOTO_KEY); return v && v.startsWith('data:image/jpeg') ? v : null; } catch { return null; }
+}
+function writePhoto(v: string | null): void {
+  try { if (v) localStorage.setItem(PHOTO_KEY, v); else localStorage.removeItem(PHOTO_KEY); } catch { /* full or off: the photo stays for this visit only */ }
+}
+/** Centre crop to the slot's 0.77 ratio, a little above centre so faces stay in frame. */
+async function processPhoto(file: File): Promise<string> {
+  if (!file.type.startsWith('image/') || file.size > PHOTO_MAX_BYTES) throw new Error('not an image');
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await loadImage(url);
+    const ratio = PHOTO_PX.w / PHOTO_PX.h;
+    let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
+    if (!sw || !sh) throw new Error('empty image');
+    if (sw / sh > ratio) { const w = sh * ratio; sx = (sw - w) / 2; sw = w; } else { const hh = sw / ratio; sy = (sh - hh) * 0.35; sh = hh; }
+    const c = document.createElement('canvas');
+    c.width = PHOTO_PX.w; c.height = PHOTO_PX.h;
+    const ctx = c.getContext('2d');
+    if (!ctx) throw new Error('no canvas');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, PHOTO_PX.w, PHOTO_PX.h);
+    return c.toDataURL('image/jpeg', 0.86);
+  } finally { URL.revokeObjectURL(url); }
+}
 
 function cleanName(v: string): string {
   return v.replace(/[\u0000-\u001f<>]/g, '').replace(/\s+/g, ' ').slice(0, NAME_MAX);
@@ -103,9 +136,10 @@ async function renderPng(m: Model): Promise<Blob> {
   const ctx = canvas.getContext('2d') as Ctx | null;
   if (!ctx) throw new Error('no canvas');
   try { await document.fonts.load(`700 48px ${FONT}`); await document.fonts.load(`500 20px ${FONT}`); } catch { /* fallback font */ }
-  const [flag, brand, ...icons] = await Promise.all([
+  const [flag, brand, photo, ...icons] = await Promise.all([
     loadImage(IMG.flag.srcset.split(', ')[1]?.split(' ')[0] ?? IMG.flag.src).catch(() => null),
     iconImage(ICON.brand).catch(() => null),
+    m.photo ? loadImage(m.photo).catch(() => null) : Promise.resolve(null),
     ...m.picks.map((p) => iconImage(priorityIcon(p)).catch(() => null)),
   ]);
   ctx.scale(scale, scale);
@@ -149,31 +183,47 @@ async function renderPng(m: Model): Promise<Blob> {
   ctx.fillStyle = '#fff'; ctx.font = `700 26px ${FONT}`; ctx.letterSpacing = '4px'; ctx.fillText(S().appName.toUpperCase(), 100, 80);
   ctx.letterSpacing = '0px'; ctx.font = `500 17px ${FONT}`; ctx.fillStyle = 'rgba(214,222,246,.85)'; ctx.fillText(S().tagline, 100, 108);
   if (flag) { ctx.save(); rr(ctx, 874, 54, 70, 42, 6); ctx.clip(); ctx.drawImage(flag, 874, 54, 70, 42); ctx.restore(); rr(ctx, 874, 54, 70, 42, 6); ctx.strokeStyle = 'rgba(255,255,255,.4)'; ctx.lineWidth = 1; ctx.stroke(); }
-  // name
+  // ID photo (only when there is one; otherwise the rosette fills the space)
+  if (photo) {
+    const { x: px, y: py, w: pw, h: ph, r: pr } = PHOTO;
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 10;
+    rr(ctx, px, py, pw, ph, pr); ctx.fillStyle = '#0B1230'; ctx.fill(); ctx.restore();
+    ctx.save(); rr(ctx, px, py, pw, ph, pr); ctx.clip(); ctx.drawImage(photo, px, py, pw, ph);
+    const sheen = ctx.createLinearGradient(px, py, px + pw, py + ph);
+    sheen.addColorStop(0, 'rgba(127,211,255,0)'); sheen.addColorStop(0.45, 'rgba(127,211,255,.12)'); sheen.addColorStop(0.55, 'rgba(255,227,163,.1)'); sheen.addColorStop(1, 'rgba(255,227,163,0)');
+    ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = sheen; ctx.fillRect(px, py, pw, ph); ctx.globalCompositeOperation = 'source-over';
+    ctx.restore();
+    rr(ctx, px, py, pw, ph, pr); ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2; ctx.stroke();
+  }
+  // name (shrinks to stay clear of the photo)
+  const textMax = PHOTO.x - 56 - 28;
   const label = (t: string, x: number, y: number) => { ctx.fillStyle = 'rgba(190,201,236,.9)'; ctx.font = `700 14px ${FONT}`; ctx.letterSpacing = '4px'; ctx.fillText(t.toUpperCase(), x, y); ctx.letterSpacing = '0px'; };
-  label(s.onCard, 56, 226);
+  label(s.onCard, 56, 212);
   const nameText = m.name || s.defaultName;
-  const ng = ctx.createLinearGradient(0, 240, 0, 296);
+  ctx.font = `700 50px ${FONT}`;
+  const nameSize = Math.max(30, Math.min(50, Math.floor((50 * textMax) / Math.max(1, ctx.measureText(nameText).width))));
+  const ng = ctx.createLinearGradient(0, 226, 0, 282);
   ng.addColorStop(0, '#FFFFFF'); ng.addColorStop(1, '#C9D3F2');
-  ctx.font = `700 50px ${FONT}`; ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillText(nameText, 56, 292);
-  ctx.fillStyle = ng; ctx.fillText(nameText, 56, 290);
-  // priorities
-  label(s.priorities, 56, 350);
+  ctx.font = `700 ${nameSize}px ${FONT}`; ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillText(nameText, 56, 278, textMax);
+  ctx.fillStyle = ng; ctx.fillText(nameText, 56, 276, textMax);
+  // priorities, wrapping onto a second row before the photo
+  label(s.priorities, 56, 334);
   ctx.font = `600 20px ${FONT}`;
-  let x = 56;
+  let x = 56, y = 350;
   const chips = m.picks.length ? m.picks.map((p, i) => ({ text: priorityLabel(p), icon: icons[i] ?? null })) : [{ text: s.pickPrompt, icon: null }];
   for (const c of chips) {
     const w = ctx.measureText(c.text).width + (c.icon ? 74 : 40);
-    rr(ctx, x, 368, w, 50, 25); ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 1; ctx.stroke();
-    if (c.icon) ctx.drawImage(c.icon, x + 16, 381, 24, 24);
-    ctx.fillStyle = '#fff'; ctx.fillText(c.text, x + (c.icon ? 50 : 20), 400);
+    if (x > 56 && x + w > 56 + textMax) { x = 56; y += 60; }
+    rr(ctx, x, y, w, 50, 25); ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fill(); ctx.strokeStyle = 'rgba(255,255,255,.22)'; ctx.lineWidth = 1; ctx.stroke();
+    if (c.icon) ctx.drawImage(c.icon, x + 16, y + 13, 24, 24);
+    ctx.fillStyle = '#fff'; ctx.fillText(c.text, x + (c.icon ? 50 : 20), y + 32);
     x += w + 10;
   }
   // bottom row
-  label(s.vote, 56, 500); label(s.firstRound, 330, 500);
+  label(s.vote, 56, 510); label(s.firstRound, 330, 510);
   ctx.fillStyle = '#fff'; ctx.font = `600 24px ${FONT}`;
-  ctx.fillText(m.voted ? `✓ ${s.voted}` : s.notVoted, 56, 536);
-  ctx.fillText(m.firstRound, 330, 536);
+  ctx.fillText(m.voted ? `✓ ${s.voted}` : s.notVoted, 56, 546);
+  ctx.fillText(m.firstRound, 330, 546);
   // microprint
   ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.font = `600 11px ${FONT}`; ctx.letterSpacing = '2px';
   ctx.fillText(`${s.micro.repeat(6)}`, 0, 612); ctx.letterSpacing = '0px';
@@ -187,11 +237,27 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hover = window.matchMedia('(hover: hover)').matches;
   let name = readName();
+  let photo = readPhoto();
+  let photoRev = 0;
   let blob: Blob | null = null;
   let blobFor = '';
   let alive = true;
-  const model = (): Model => ({ name, picks: state.picks.slice(), voted: !!state.myVote, firstRound: fmtDate(firstRoundIso) });
-  const key = (m: Model) => JSON.stringify(m);
+  const model = (): Model => ({ name, photo, picks: state.picks.slice(), voted: !!state.myVote, firstRound: fmtDate(firstRoundIso) });
+  const key = (m: Model) => JSON.stringify({ ...m, photo: m.photo ? photoRev : null });
+
+  // photo picker: the card's frame and the buttons open the same hidden input
+  const file = h('input', { type: 'file', accept: 'image/*', class: 'sr', tabindex: -1, 'aria-hidden': 'true' });
+  const pick = () => { file.value = ''; file.click(); };
+  file.addEventListener('change', () => {
+    const f = file.files?.[0];
+    if (!f) return;
+    void processPhoto(f).then((data) => { if (!alive) return; photo = data; photoRev++; writePhoto(data); paint(); })
+      .catch((e) => { console.warn('photo', e); toast(s.photoError, 4000); });
+  });
+  const removePhoto = () => { photo = null; photoRev++; writePhoto(null); paint(); };
+  const photoImg = h('img', { alt: '', decoding: 'async' });
+  const photoEmpty = h('span', { class: 'cc-photo-empty' }, svg(ICON.photo), h('span', null, s.photoSlot));
+  const photoBtn = h('button', { class: 'cc-photo', type: 'button', 'aria-label': s.photoAdd, onclick: pick }, photoImg, photoEmpty);
 
   // card face
   const nameEl = h('strong', { class: 'cc-name' });
@@ -208,8 +274,8 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
       h('div', null, h('span', { class: 'cc-label' }, s.vote), voteEl),
       h('div', null, h('span', { class: 'cc-label' }, s.firstRound), h('b', { class: 'num' }, fmtDate(firstRoundIso)))),
     h('div', { class: 'cc-micro', 'aria-hidden': 'true' }, s.micro.repeat(8)));
-  const card = h('div', { class: 'ccard', role: 'img', 'aria-label': s.alt, html: artSvg(s.ring.repeat(2)) });
-  card.append(h('div', { class: 'cc-holo', 'aria-hidden': 'true' }), h('div', { class: 'cc-glare', 'aria-hidden': 'true' }), face);
+  const card = h('div', { class: 'ccard', role: 'group', 'aria-label': s.alt, html: artSvg(s.ring.repeat(2)) });
+  card.append(h('div', { class: 'cc-holo', 'aria-hidden': 'true' }), h('div', { class: 'cc-glare', 'aria-hidden': 'true' }), face, photoBtn);
   const stage = h('div', { class: 'cc-stage' }, card);
 
   const paint = () => {
@@ -222,6 +288,12 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
     voteEl.replaceChildren(...(m.voted ? [svg(ICON.check), s.voted] : [s.notVoted]));
     voteEl.className = m.voted ? 'ok' : '';
     choose.hidden = m.picks.length > 0;
+    photoBtn.classList.toggle('has', !!m.photo);
+    photoBtn.setAttribute('aria-label', m.photo ? s.photoChange : s.photoAdd);
+    if (m.photo) photoImg.src = m.photo; else photoImg.removeAttribute('src');
+    photoEmpty.hidden = !!m.photo;
+    photoAddBtn.replaceChildren(svg(ICON.photo), m.photo ? s.photoChange : s.photoAdd);
+    photoRemoveBtn.hidden = !m.photo;
     schedule();
   };
 
@@ -263,8 +335,11 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
     } catch (e) { console.warn('download failed', e); toast(S().offline); }
   };
   const choose = h('a', { class: 'cc-choose', href: '#start' }, s.choose, svg(ICON.arrowRight));
+  const photoAddBtn = h('button', { class: 'btn cc-btn-ghost cc-photo-btn', type: 'button', onclick: pick });
+  const photoRemoveBtn = h('button', { class: 'cc-text-btn', type: 'button', onclick: removePhoto }, s.photoRemove);
   const controls = h('div', { class: 'cc-controls' },
     h('label', { class: 'cc-field', for: 'cc-name' }, h('span', null, s.nameLabel), input),
+    h('div', { class: 'cc-photo-row' }, photoAddBtn, photoRemoveBtn, file),
     h('div', { class: 'cc-actions' },
       h('button', { class: 'btn btn-primary', type: 'button', onclick: () => void share() }, svg(ICON.share), s.share),
       h('button', { class: 'btn cc-btn-ghost', type: 'button', onclick: () => void download() }, svg(ICON.download), s.download)),

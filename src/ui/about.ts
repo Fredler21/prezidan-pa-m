@@ -4,8 +4,6 @@ import { S, fmt, fmtDate, l } from '../i18n';
 import { content } from '../content';
 import { demoBadge, note, well } from './common';
 
-export { REPO_URL } from '../data/site';
-import { REPO_URL } from '../data/site';
 
 export function renderAbout(main: HTMLElement): void {
   clear(main);
@@ -45,6 +43,5 @@ export function renderAbout(main: HTMLElement): void {
     h('section', { class: 'card roomy', style: 'margin-top:24px;text-align:center' },
       h('p', { style: 'font-weight:600' }, fmt(s.lastUpdated, { d: fmtDate(c.contentUpdated) })),
       demoBadge(),
-      h('p', { class: 'caption' }, s.language),
-      h('p', { style: 'margin-top:10px' }, h('a', { class: 'link-btn', href: REPO_URL, target: '_blank', rel: 'noopener noreferrer' }, s.code))));
+      h('p', { class: 'caption' }, s.language)));
 }

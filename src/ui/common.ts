@@ -6,7 +6,7 @@ import { S, fmt, l, fmtDate } from '../i18n';
 import { STORAGE_MODE } from '../storage';
 import { content } from '../content';
 import type { Route } from '../router';
-import { CONTACT_EMAIL, REPO_URL } from '../data/site';
+import { CONTACT_EMAIL } from '../data/site';
 import { IMG } from '../data/images';
 
 export function priorityLabel(id: PriorityId): string {
@@ -108,7 +108,7 @@ export function footer(): HTMLElement {
   const s = S();
   const f = s.foot;
   const col = (title: string, ...links: HTMLElement[]) => h('div', { class: 'foot-col' }, h('h3', null, title), ...links);
-  const a = (href: string, label: string, external = false) => h('a', external ? { href, target: '_blank', rel: 'noopener noreferrer' } : { href }, label);
+  const a = (href: string, label: string) => h('a', { href }, label);
   const base = h('div', { class: 'foot-base' }, h('span', null, fmt(f.rights, { y: new Date().getFullYear() })), h('span', null, s.tagline));
   const demo = demoBadge();
   if (demo) base.prepend(demo);
@@ -120,6 +120,6 @@ export function footer(): HTMLElement {
       h('nav', { class: 'foot-cols', 'aria-label': s.nav.aboutUs },
         col(f.platform, a('#start', s.nav.priorities), a('#candidates', s.nav.candidates), a('#results', s.nav.results), a('#poll', s.nav.poll)),
         col(f.info, a('#about-us', s.nav.aboutUs), a('#about', s.nav.about), a('#privacy', s.nav.privacy), a('#terms', s.nav.terms)),
-        col(f.contact, a(`mailto:${CONTACT_EMAIL}`, CONTACT_EMAIL), a(REPO_URL, f.code, true)))),
+        col(f.contact, a(`mailto:${CONTACT_EMAIL}`, CONTACT_EMAIL)))),
     base);
 }
