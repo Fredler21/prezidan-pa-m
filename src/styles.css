@@ -747,3 +747,6 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 .cc-photo-btn .ico { width: 18px; height: 18px; }
 .cc-text-btn { min-height: 44px; color: var(--on-indigo-muted); font-size: 14px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 @media (hover: hover) { .cc-text-btn:hover { color: #fff; } }
+.btn-google.is-loading { opacity: .6; cursor: progress; }
+.btn-google.is-loading .ico { animation: pulseIco 1.2s ease-in-out infinite; }
+@keyframes pulseIco { 50% { opacity: .35; } }

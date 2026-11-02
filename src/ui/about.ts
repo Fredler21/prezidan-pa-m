@@ -8,7 +8,6 @@ import { demoBadge, note, well } from './common';
 export function renderAbout(main: HTMLElement): void {
   clear(main);
   const s = S().about;
-  const im = S().images;
   const c = content();
   const page = h('div', { class: 'wrap page' });
   main.append(page);
@@ -25,17 +24,12 @@ export function renderAbout(main: HTMLElement): void {
       h('ul', { class: 'dots' }, ...[s.n1, s.n2, s.n3, s.n4, s.n5].map((t) => h('li', null, t)))),
   );
 
-  const credited = c.candidates.filter((x) => x.photo && x.photoCredit);
   const right = h('div', { class: 'col' },
     h('section', { class: 'card roomy' }, h('h2', null, s.dates),
       h('p', { class: 'caption', style: 'margin:-6px 0 16px' }, fmt(s.datesSub, { d: fmtDate(c.datesUpdated) })),
       h('ul', { class: 'timeline' }, ...c.dates.map((d) => h('li', null, h('b', null, fmtDate(d.date)), h('span', null, l(d.label))))),
       h('hr', { class: 'hr' }),
       note(s.datesNote, ICON.info, false)),
-    h('section', { class: 'card roomy' }, h('h2', null, s.photos), h('p', { class: 'caption', style: 'margin:-4px 0 12px' }, s.photosNote),
-      h('ul', { class: 'dots' }, ...credited.map((x) => h('li', { style: 'font-size:14px' }, `${x.name}: ${x.photoCredit}`))),
-      h('h3', { style: 'font-size:15px;font-weight:600;margin-top:16px' }, s.haitiPhotos),
-      h('ul', { class: 'dots' }, h('li', { style: 'font-size:14px' }, im.flagCredit), h('li', { style: 'font-size:14px' }, `${im.citadelle}: ${im.citadelleCredit}`), h('li', { style: 'font-size:14px' }, `${im.bassin}: ${im.bassinCredit}`))),
   );
 
   page.append(

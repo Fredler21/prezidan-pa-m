@@ -33,6 +33,9 @@ export async function ensureUser(): Promise<User> {
   return cred.user;
 }
 
+/** Resolves once Firebase Auth knows whether a session is restored (so currentUser is reliable). */
+export async function authReady(): Promise<void> { await auth().authStateReady(); }
+
 export async function currentUid(): Promise<string | null> {
   const u = await currentUser();
   return u ? u.uid : null;
@@ -58,9 +61,11 @@ export async function confirmPhoneCode(code: string): Promise<User> {
 /**
  * Account sign-in with Google. An anonymous session is upgraded in place (same uid, so the
  * vote and picks stay); when that Google account already exists, we sign into it instead and
- * report `switched: true` so the caller can carry the anonymous vote over.
+ * report `switched: true` so the caller can carry the anonymous vote over. `beforeSwitch` runs
+ * just before that switch (the anonymous session is still active), e.g. to remove its vote.
+ * Call it straight from the tap: the popup must open within the user gesture.
  */
-export async function connectGoogle(): Promise<{ user: User; switched: boolean }> {
+export async function connectGoogle(beforeSwitch?: () => Promise<void>): Promise<{ user: User; switched: boolean }> {
   const a = auth();
   const provider = new GoogleAuthProvider();
   const cur = a.currentUser;
@@ -69,7 +74,7 @@ export async function connectGoogle(): Promise<{ user: User; switched: boolean }
     catch (e) {
       if ((e as AuthError).code === 'auth/credential-already-in-use') {
         const cred = GoogleAuthProvider.credentialFromError(e as AuthError);
-        if (cred) return { user: (await signInWithCredential(a, cred)).user, switched: true };
+        if (cred) { if (beforeSwitch) await beforeSwitch(); return { user: (await signInWithCredential(a, cred)).user, switched: true }; }
       }
       throw e;
     }

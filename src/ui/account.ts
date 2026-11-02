@@ -2,7 +2,7 @@ import { h, svg } from '../lib/dom';
 import { ICON } from '../lib/icons';
 import { S, fmt } from '../i18n';
 import { STORAGE_MODE } from '../storage';
-import { getAccount, onAccountChange, connect, disconnect, type Account } from '../account';
+import { getAccount, onAccountChange, connect, disconnect, type Account, prepareConnect, isConnectReady } from '../account';
 import { note } from './common';
 import { toast } from './toast';
 
@@ -27,7 +27,10 @@ function errorMessage(e: unknown): string {
   if (code.includes('invalid-credential') || code.includes('wrong-password') || code.includes('user-not-found') || code.includes('invalid-email')) return s.errInvalid;
   if (code.includes('email-already-in-use') || code.includes('credential-already-in-use')) return s.errInUse;
   if (code.includes('weak-password')) return s.errWeak;
-  if (code.includes('operation-not-allowed') || code.includes('unauthorized-domain')) return s.errNotEnabled;
+  if (code.includes('unauthorized-domain')) return s.errDomain;
+  if (code.includes('operation-not-allowed')) return s.errNotEnabled;
+  if (code.includes('popup-blocked')) return s.errPopup;
+  if (code.includes('network-request-failed')) return S().offline;
   if (code.includes('popup-closed') || code.includes('cancelled')) return s.errCancelled;
   return s.errGeneric;
 }
@@ -73,6 +76,11 @@ export function openAccountSheet(): void {
     const busy = (on: boolean) => { submit.disabled = on; google.disabled = on; };
 
     const google = h('button', { class: 'btn btn-google btn-block', type: 'button' }, svg(ICON.google), s.google);
+    // Until Firebase Auth has loaded, a tap could not open the Google window in time: wait for it.
+    if (!isConnectReady()) {
+      google.disabled = true; google.classList.add('is-loading'); google.setAttribute('aria-busy', 'true');
+      void prepareConnect().catch((e) => console.warn('auth preload failed', e)).finally(() => { google.disabled = false; google.classList.remove('is-loading'); google.removeAttribute('aria-busy'); });
+    }
     google.addEventListener('click', async () => {
       busy(true);
       try { await connect({ kind: 'google' }); toast(s.connected); render(); }

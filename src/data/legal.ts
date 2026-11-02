@@ -118,8 +118,8 @@ const ht: LegalSet = {
         'Dosye yo pa konplè: yon kandida ka gen aksyon nou poko dokimante. Sa nou ekri a se pa yon jijman sou moun nan, se yon rezime sous piblik ak dat yo.',
       ] },
       { h: 'Pwopriyete entelektyèl', p: [
-        'Tèks ak desen sit la se pou Prezidan Pa M. Foto kandida yo rete pwopriyete moun ki gen dwa sou yo; kredi yo parèt nan paj « Kijan sa mache ». Si ou gen dwa sou yon foto epi ou vle nou retire l, ekri nou.',
-        'Foto peyi a (drapo Ayiti, Sitadèl Laferyè, Basen Ble) soti nan Wikimedia Commons ak lisans lib; kredi yo parèt sou menm paj la. Ou ka pataje lyen sit la ak rezilta yo lib, ak yon mansyon « Prezidan Pa M ».',
+        'Tèks ak desen sit la se pou Prezidan Pa M. Foto kandida yo rete pwopriyete moun ki gen dwa sou yo; kredi chak foto parèt sou pwofil kandida a. Si ou gen dwa sou yon foto epi ou vle nou retire l, ekri nou.',
+        'Foto peyi a (drapo Ayiti, Sitadèl Laferyè, Basen Ble) soti nan Wikimedia Commons ak lisans lib; kredi yo parèt anba chak foto. Ou ka pataje lyen sit la ak rezilta yo lib, ak yon mansyon « Prezidan Pa M ».',
       ] },
       { h: 'Disponiblite ak responsablite', p: [
         'Sèvis la bay « jan li ye a ». Li ka chanje oswa sispann nenpòt lè. Nan limit lalwa pèmèt, nou pa responsab pou domaj ki soti nan itilizasyon sit la.',
@@ -240,8 +240,8 @@ const fr: LegalSet = {
         'Les dossiers ne sont pas exhaustifs : un candidat peut avoir des actions que nous n’avons pas encore documentées. Ce que nous écrivons n’est pas un jugement sur la personne, mais un résumé de sources publiques, avec leurs dates.',
       ] },
       { h: 'Propriété intellectuelle', p: [
-        'Les textes et le design du site appartiennent à Prezidan Pa M. Les photos des candidats restent la propriété de leurs ayants droit ; les crédits figurent sur la page « Comment ça marche ». Si vous détenez les droits d’une photo et souhaitez son retrait, écrivez-nous.',
-        'Les images du pays (drapeau d’Haïti, Citadelle Laferrière, Bassin Bleu) proviennent de Wikimedia Commons sous licence libre ; les crédits figurent sur la même page. Vous pouvez partager librement le lien du site et les résultats, avec la mention « Prezidan Pa M ».',
+        'Les textes et le design du site appartiennent à Prezidan Pa M. Les photos des candidats restent la propriété de leurs ayants droit ; le crédit de chaque photo figure sur le profil du candidat. Si vous détenez les droits d’une photo et souhaitez son retrait, écrivez-nous.',
+        'Les images du pays (drapeau d’Haïti, Citadelle Laferrière, Bassin Bleu) proviennent de Wikimedia Commons sous licence libre ; les crédits figurent sous chaque photo. Vous pouvez partager librement le lien du site et les résultats, avec la mention « Prezidan Pa M ».',
       ] },
       { h: 'Disponibilité et responsabilité', p: [
         'Le service est fourni « tel quel ». Il peut changer ou s’arrêter à tout moment. Dans la limite permise par la loi, nous ne sommes pas responsables des dommages liés à l’utilisation du site.',
@@ -362,8 +362,8 @@ const en: LegalSet = {
         'The records are not exhaustive: a candidate may have actions we have not documented yet. What we write is not a judgement of the person but a summary of public sources, with their dates.',
       ] },
       { h: 'Intellectual property', p: [
-        'The site’s text and design belong to Prezidan Pa M. Candidate photos remain the property of their rights holders; credits appear on the “How it works” page. If you hold the rights to a photo and want it removed, write to us.',
-        'Pictures of the country (the flag of Haiti, the Citadelle Laferrière, Bassin Bleu) come from Wikimedia Commons under free licences; credits appear on the same page. You may freely share the site’s link and the results, with a mention of “Prezidan Pa M”.',
+        'The site’s text and design belong to Prezidan Pa M. Candidate photos remain the property of their rights holders; each photo’s credit appears on the candidate’s profile. If you hold the rights to a photo and want it removed, write to us.',
+        'Pictures of the country (the flag of Haiti, the Citadelle Laferrière, Bassin Bleu) come from Wikimedia Commons under free licences; credits appear under each photo. You may freely share the site’s link and the results, with a mention of “Prezidan Pa M”.',
       ] },
       { h: 'Availability and liability', p: [
         'The service is provided “as is”. It may change or stop at any time. To the extent the law allows, we are not liable for damages arising from the use of the site.',

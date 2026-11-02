@@ -1,4 +1,4 @@
-import type { PriorityId, Vote } from './types';
+import type { PriorityId, StorageAdapter, Vote } from './types';
 import { LANGS } from './types';
 import { state, onState, setPicks, setMyVote } from './state';
 import { getLang } from './i18n';
@@ -77,12 +77,54 @@ async function adoptFromCloud(uid: string): Promise<void> {
   } catch (e) { console.warn('progress load failed', e); }
 }
 
+type AuthModule = typeof import('./storage/auth');
+interface Prepared { auth: AuthModule; st: StorageAdapter; prevVote: Vote | null }
+let prepared: Prepared | null = null;
+let preparing: Promise<Prepared> | null = null;
+
+/**
+ * Loads Firebase Auth, the session and the visitor's current vote before the Google tap. The
+ * Google popup has to open inside the tap; when this loading happened after the tap, slow
+ * connections outlasted the gesture and browsers blocked the popup (auth/popup-blocked).
+ */
+export function prepareConnect(): Promise<Prepared> {
+  preparing ??= (async () => {
+    const auth = await import('./storage/auth');
+    await auth.authReady();
+    const st = await getStorage();
+    const prevVote = await st.getMyVote().catch(() => null);
+    prepared = { auth, st, prevVote };
+    return prepared;
+  })();
+  preparing.catch(() => { preparing = null; });
+  return preparing;
+}
+
+/** True once prepareConnect() has finished: a Google tap now opens its window immediately. */
+export function isConnectReady(): boolean { return prepared !== null; }
+
+/** Google: the popup opens synchronously when prepareConnect() has finished (the sheet starts it). */
+async function connectWithGoogle(): Promise<{ user: FirebaseUser; switched: boolean; prevVote: Vote | null; st: StorageAdapter }> {
+  const run = (p: Prepared) => p.auth.connectGoogle(async () => { if (p.prevVote) await p.st.deleteMyVote().catch(() => undefined); })
+    .then((r) => ({ ...r, prevVote: p.prevVote, st: p.st }));
+  const p = prepared;
+  return p ? run(p) : prepareConnect().then(run);
+}
+
 /**
  * Connects an account. When the anonymous session cannot be upgraded in place (the account
  * already exists), the anonymous vote is carried over: deleted before the switch, written
  * again after it unless the account already has one.
  */
 export async function connect(method: { kind: 'google' } | { kind: 'email'; mode: 'in' | 'up'; email: string; password: string }): Promise<Account> {
+  if (method.kind === 'google') {
+    const r = await connectWithGoogle();
+    if (r.switched && r.prevVote) {
+      const existing = await r.st.getMyVote().catch(() => null);
+      if (!existing) await r.st.saveVote(r.prevVote).catch(() => undefined);
+    }
+    return finishConnect(r.user);
+  }
   const auth = await import('./storage/auth');
   const st = await getStorage();
   const prevVote: Vote | null = await st.getMyVote().catch(() => null);
@@ -94,7 +136,7 @@ export async function connect(method: { kind: 'google' } | { kind: 'email'; mode
 
   let result: { user: FirebaseUser; switched: boolean };
   try {
-    result = method.kind === 'google' ? await auth.connectGoogle() : await auth.connectEmail(method.mode, method.email, method.password);
+    result = await auth.connectEmail(method.mode, method.email, method.password);
   } catch (e) {
     if (willSwitch && prevVote) await st.saveVote(prevVote).catch(() => undefined); // put it back
     throw e;
@@ -103,9 +145,14 @@ export async function connect(method: { kind: 'google' } | { kind: 'email'; mode
     const existing = await st.getMyVote().catch(() => null);
     if (!existing) await st.saveVote(prevVote).catch(() => undefined);
   }
-  const account = toAccount(result.user);
+  return finishConnect(result.user);
+}
+
+async function finishConnect(user: FirebaseUser): Promise<Account> {
+  prepared = null; preparing = null; // the session changed: prepare again next time
+  const account = toAccount(user);
   setAccount(account);
-  await adoptFromCloud(result.user.uid);
+  await adoptFromCloud(user.uid);
   saveProgress();
   return account;
 }
@@ -113,6 +160,7 @@ export async function connect(method: { kind: 'google' } | { kind: 'email'; mode
 export async function disconnect(): Promise<void> {
   const auth = await import('./storage/auth');
   await auth.signOut();
+  prepared = null; preparing = null;
   setAccount(null);
   setMyVote(null);
 }
