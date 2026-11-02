@@ -172,3 +172,36 @@ export async function getDocumentQuiet(cfg: RestConfig, path: string): Promise<R
   }
   return { ok: true, value: null };
 }
+
+/** Server-side count with several equality filters combined with AND (needs a composite index for 2+ fields). */
+export async function countWhere(cfg: RestConfig, collection: string, filters: { field: string; equals: string }[]): Promise<RestResult<number>> {
+  const eq = (f: { field: string; equals: string }) => ({ fieldFilter: { field: { fieldPath: f.field }, op: 'EQUAL', value: { stringValue: f.equals } } });
+  const structuredQuery: Obj = { from: [{ collectionId: collection }] };
+  const first = filters[0];
+  if (filters.length === 1 && first) structuredQuery.where = eq(first);
+  else if (filters.length > 1) structuredQuery.where = { compositeFilter: { op: 'AND', filters: filters.map(eq) } };
+  const r = await postJson(`${documentsUrl(cfg.projectId)}:runAggregationQuery?${keyParam(cfg)}`, { structuredAggregationQuery: { aggregations: [{ alias: 'n', count: {} }], structuredQuery } }, cfg.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+  if (!r.ok) return r;
+  const rows = Array.isArray(r.value) ? r.value : [];
+  for (const row of rows) {
+    if (!isObj(row) || !isObj(row.result)) continue;
+    const fields = isObj(row.result.aggregateFields) ? row.result.aggregateFields : {};
+    const n = decodeValue(fields.n);
+    return { ok: true, value: typeof n === 'number' && Number.isFinite(n) ? n : 0 };
+  }
+  return { ok: true, value: 0 };
+}
+
+/** Newest documents of a collection by a timestamp field, only the listed fields (1 read per document). */
+export async function recentDocs(cfg: RestConfig, collection: string, orderByField: string, limit: number, fields: string[]): Promise<RestResult<{ id: string; data: Decoded }[]>> {
+  const body = { structuredQuery: { from: [{ collectionId: collection }], select: { fields: fields.map((f) => ({ fieldPath: f })) }, orderBy: [{ field: { fieldPath: orderByField }, direction: 'DESCENDING' }], limit } };
+  const r = await postJson(`${documentsUrl(cfg.projectId)}:runQuery?${keyParam(cfg)}`, body, cfg.timeoutMs ?? DEFAULT_TIMEOUT_MS);
+  if (!r.ok) return r;
+  const rows = Array.isArray(r.value) ? r.value : [];
+  const out: { id: string; data: Decoded }[] = [];
+  for (const row of rows) {
+    if (!isObj(row) || !isObj(row.document)) continue;
+    out.push({ id: docId(row.document.name), data: decodeFields(row.document.fields) });
+  }
+  return { ok: true, value: out };
+}

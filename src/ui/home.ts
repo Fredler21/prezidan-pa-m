@@ -1,10 +1,10 @@
-import type { Candidate, DepartmentId, L10n } from '../types';
+import type { Candidate, DepartmentId, L10n, StorageAdapter } from '../types';
 import { h, svg, clear } from '../lib/dom';
 import { ICON } from '../lib/icons';
-import { S, fmt, fmtDate, fmtNumber, l, getLang } from '../i18n';
+import { S, fmt, fmtDate, fmtNumber, l, getLang, timeAgo } from '../i18n';
 import { content, candidatesShuffled } from '../content';
 import { firebaseConfig } from '../firebase-config';
-import { countDocuments, findActive, getDocumentQuiet, type RestConfig } from '../content/firestore-rest';
+import { countDocuments, countWhere, findActive, getDocumentQuiet, recentDocs, type RestConfig } from '../content/firestore-rest';
 import { STORAGE_MODE, getStorage } from '../storage';
 import { FIRST_ROUND } from '../data/dates';
 import { IMG } from '../data/images';
@@ -14,6 +14,7 @@ import { state } from '../state';
 import { note, footer, well, avatar } from './common';
 import { openProfile } from './profile';
 import { attachTilt } from '../lib/tilt';
+import { toast } from './toast';
 import type { Haiti3D } from './haiti3d';
 
 // Faint wrought-iron lace, inline (no image request), masked to fade before the bottom.
@@ -22,15 +23,17 @@ const LACE = '<svg class="hero-lace" aria-hidden="true" xmlns="http://www.w3.org
 const REST: RestConfig = { projectId: firebaseConfig.projectId, apiKey: firebaseConfig.apiKey, timeoutMs: 6000 };
 const TOP = 5;
 const TOP_CACHE = 'ppm.top.v1';
-const TOP_TTL_MS = 5 * 60_000;
 const REFRESH_MS = 60_000;
-/** The whole country, framed for the hero: pushed left of the text column on desktop, smaller in the top half on phones. */
-const homeView = () => (window.innerWidth >= 1024 ? { cx: 0.12, cy: 0.04, zoom: 0.86 } : { cx: 0, cy: 0, zoom: 0.8 });
+const FEED_SIZE = 5;
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+const isL10n = (v: unknown): v is L10n => isRecord(v) && typeof v.ht === 'string';
 
-interface HomeStats { votes: number | null; pollAnswers: number | null; pollQuestion: L10n | null }
+interface HomeStats { votes: number | null; pollAnswers: number | null }
 interface Counts { counts: Record<string, number>; total: number; at: number }
+interface PollOpt { id: string; label: L10n }
+interface PollInfo { id: string; question: L10n; options: PollOpt[]; counts: Record<string, number>; total: number }
+interface FeedItem { department: string; at: number }
 
 /** Live numbers without the Firebase SDK: REST count() queries in Firebase mode, the local adapter in demo mode. */
 async function loadStats(): Promise<HomeStats> {
@@ -38,27 +41,24 @@ async function loadStats(): Promise<HomeStats> {
     const st = await getStorage();
     const poll = await st.getActivePoll();
     const votes = await new Promise<number>((resolve) => { const off = st.subscribeVotes((r) => { off(); resolve(r.total); }); });
-    let answers: number | null = null;
+    let answers = 0;
     if (poll) answers = await new Promise<number>((resolve) => { const off = st.subscribePollResults(poll.id, (r) => { off(); resolve(r.total); }); });
-    return { votes, pollAnswers: answers ?? 0, pollQuestion: poll ? poll.question : null };
+    return { votes, pollAnswers: answers };
   }
   const [votes, poll] = await Promise.all([countDocuments(REST, 'votes'), findActive(REST, 'polls', 'active', 'startsAt')]);
   let answers: number | null = 0; // no active poll means no answers
-  let question: L10n | null = null;
   if (poll.ok && poll.value) {
-    const q = poll.value.data.question;
-    if (q && typeof q === 'object') question = q as L10n;
     const c = await countDocuments(REST, 'pollVotes', { field: 'pollId', equals: poll.value.id });
     answers = c.ok ? c.value : null;
   }
-  return { votes: votes.ok ? votes.value : null, pollAnswers: answers, pollQuestion: question };
+  return { votes: votes.ok ? votes.value : null, pollAnswers: answers };
 }
 
 const sum = (counts: Record<string, number>) => Object.values(counts).reduce((a, b) => a + b, 0);
 
 /**
- * Votes per candidate for the Top 5, still without the SDK. A stats/presidential document
- * (maintained by Functions when they run) costs one read; otherwise one count() per candidate.
+ * Votes per candidate for the Top 5 and the board, still without the SDK. A stats/presidential
+ * document (maintained by Functions when they run) costs one read; otherwise one count() per candidate.
  */
 async function loadCounts(ids: readonly string[]): Promise<Counts | null> {
   if (STORAGE_MODE === 'local') {
@@ -80,6 +80,39 @@ async function loadCounts(ids: readonly string[]): Promise<Counts | null> {
   return { counts, total: sum(counts), at: Date.now() };
 }
 
+/** The active weekly poll with per-option counts (one count() per option). */
+async function loadPoll(): Promise<PollInfo | null> {
+  if (STORAGE_MODE === 'local') {
+    const st = await getStorage();
+    const p = await st.getActivePoll();
+    if (!p) return null;
+    const r = await new Promise<{ total: number; counts: Record<string, number> }>((resolve) => { const off = st.subscribePollResults(p.id, (x) => { off(); resolve(x); }); });
+    return { id: p.id, question: p.question, options: p.options, counts: r.counts, total: r.total };
+  }
+  const r = await findActive(REST, 'polls', 'active', 'startsAt');
+  if (!r.ok || !r.value) return null;
+  const pollId = r.value.id;
+  const d = r.value.data;
+  if (!isL10n(d.question) || !Array.isArray(d.options)) return null;
+  const options: PollOpt[] = [];
+  for (const o of d.options) if (isRecord(o) && typeof o.id === 'string' && isL10n(o.label)) options.push({ id: o.id, label: o.label });
+  const cs = await Promise.all(options.map((o) => countWhere(REST, 'pollVotes', [{ field: 'pollId', equals: pollId }, { field: 'option', equals: o.id }])));
+  const counts: Record<string, number> = {};
+  options.forEach((o, i) => { const c = cs[i]; counts[o.id] = c && c.ok ? c.value : 0; });
+  return { id: pollId, question: d.question, options, counts, total: sum(counts) };
+}
+
+/** The newest votes, by department only (no names, no identifiers). */
+async function loadFeed(): Promise<FeedItem[]> {
+  if (STORAGE_MODE === 'local') {
+    const st = await getStorage();
+    return new Promise((resolve) => { const off = st.subscribeVotes((r) => { off(); resolve(r.reasons.slice(0, FEED_SIZE).map((x) => ({ department: x.department, at: x.at }))); }); });
+  }
+  const r = await recentDocs(REST, 'votes', 'updatedAt', FEED_SIZE, ['department', 'updatedAt']);
+  if (!r.ok) return [];
+  return r.value.map((x) => ({ department: typeof x.data.department === 'string' ? x.data.department : 'na', at: typeof x.data.updatedAt === 'string' ? Date.parse(x.data.updatedAt) : Date.now() }));
+}
+
 function readTopCache(): Counts | null {
   try {
     const raw = localStorage.getItem(TOP_CACHE);
@@ -94,21 +127,25 @@ function readTopCache(): Counts | null {
 function writeTopCache(c: Counts): void {
   try { localStorage.setItem(TOP_CACHE, JSON.stringify(c)); } catch { /* storage disabled or full */ }
 }
+const pollKey = (id: string) => `ppm.poll.${id}`;
+function readMyAnswer(id: string): string | null { try { return localStorage.getItem(pollKey(id)); } catch { return null; } }
+function writeMyAnswer(id: string, option: string): void { try { localStorage.setItem(pollKey(id), option); } catch { /* ignore */ } }
 
-/** Counts a percentage up (or down) in place; instant when the visitor prefers reduced motion. */
-function tween(el: HTMLElement, from: number, to: number, ms: number): () => void {
-  if (reducedMotion() || from === to) { el.textContent = `${to} %`; return () => {}; }
+/** Counts a number up (or down) in place; instant when the visitor prefers reduced motion. */
+function tween(el: HTMLElement, from: number, to: number, ms: number, format: (n: number) => string): () => void {
+  if (reducedMotion() || from === to) { el.textContent = format(to); return () => {}; }
   const start = performance.now();
   let raf = 0;
   const step = (now: number) => {
     const t = Math.min(1, (now - start) / ms);
     const eased = 1 - Math.pow(1 - t, 3);
-    el.textContent = `${Math.round(from + (to - from) * eased)} %`;
+    el.textContent = format(Math.round(from + (to - from) * eased));
     if (t < 1) raf = requestAnimationFrame(step);
   };
   raf = requestAnimationFrame(step);
   return () => cancelAnimationFrame(raf);
 }
+const asPct = (n: number) => `${n} %`;
 
 function daysUntil(iso: string): number {
   const target = new Date(`${iso}T00:00:00`);
@@ -129,11 +166,19 @@ function topRow(c: Candidate, i: number): TopRow {
   return { el, pctEl, barEl, bar, value: 0, stop: () => {} };
 }
 
+/** Compact row for the hero board: identical for every candidate. */
+function boardRow(c: Candidate, p: number, mine: boolean): HTMLElement {
+  return h('button', { class: mine ? 'brow mine' : 'brow', type: 'button', 'aria-haspopup': 'dialog', onclick: () => openProfile(c) },
+    avatar(c), h('span', { class: 'bname' }, c.name, h('small', null, c.party)), h('span', { class: 'bpct num' }, asPct(p)),
+    h('span', { class: 'bbar', role: 'img', 'aria-label': `${c.name}: ${p} %` }, h('i', { style: `width:${p}%` })));
+}
+
 function skeletonRow(i: number): HTMLElement {
   return h('div', { class: 'cand skel', style: `--i:${i}`, 'aria-hidden': 'true' },
     h('div', { class: 'cand-row' }, h('span', { class: 'sk-av' }), h('span', { class: 'cand-name' }, h('span', { class: 'sk-line w60' }), h('span', { class: 'sk-line w30' })), h('span', { class: 'sk-pct' })),
     h('div', { class: 'bar thick' }));
 }
+const skeletonLines = (n: number) => h('div', { class: 'board-skel', 'aria-hidden': 'true' }, ...Array.from({ length: n }, () => h('span', { class: 'sk-line' })));
 
 /** Reveals sections as they scroll into view (no-op without IntersectionObserver or with reduced motion). */
 function revealOnScroll(els: HTMLElement[]): () => void {
@@ -145,9 +190,12 @@ function revealOnScroll(els: HTMLElement[]): () => void {
   return () => io.disconnect();
 }
 
+const stagger = (parent: HTMLElement) => Array.from(parent.children).forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i)));
+
 export function renderHome(main: HTMLElement): () => void {
   clear(main);
   const s = S().home;
+  const b = S().board;
   const j = S().journey;
   const im = S().images;
   const c = content();
@@ -159,6 +207,7 @@ export function renderHome(main: HTMLElement): () => void {
   const firstRound = c.dates.find((d) => d.date === FIRST_ROUND)?.date ?? FIRST_ROUND;
   const days = daysUntil(firstRound);
   const deptName = (id: DepartmentId): L10n | undefined => c.departments.find((d) => d.id === id)?.label;
+  const deptLabel = (id: string) => { const d = c.departments.find((x) => x.id === id); return d && d.id !== 'na' ? l(d.label) : b.someone; };
 
   // Two sets of live-number elements: tiles on phones, an inline row inside the hero card on desktop.
   const votesEls = [h('b', { class: 'num' }, '·'), h('b', { class: 'num' }, '·')];
@@ -173,24 +222,199 @@ export function renderHome(main: HTMLElement): () => void {
       h('span', null, days >= 0 ? s.beforeFirstRound : s.afterFirstRound),
       h('small', { class: 'num' }, fmtDate(firstRound))));
 
-  // ---- The scene: the 3D map pinned behind the hero, then one chapter per department as the page scrolls ----
-  const tour = TOUR.map((id) => DEPARTMENT_FACTS.find((d) => d.id === id)).filter((d): d is DepartmentFacts => !!d);
-  const N = tour.length;
-  const goTo = (i: number) => window.scrollTo({ top: scene.offsetTop + i * chapterPx, behavior: reducedMotion() ? 'auto' : 'smooth' });
-
+  // ---- Hero: the question on the left, the live board of the voters on the right ----
   const deskCountdown = h('div', { class: 'card countdown-card desk-only' }, countdownRow(), statRow('stats-inline', 1));
-  const heroBlock = h('div', { class: 'scene-hero intro' },
+  cleanups.push(attachTilt(deskCountdown, 5));
+  const heroText = h('div', { class: 'hero-text intro' },
     h('p', { class: 'eyebrow' }, h('img', { class: 'flag', src: IMG.flag.src, srcset: IMG.flag.srcset, sizes: '40px', width: 40, height: 24, alt: im.flagAlt, decoding: 'async' }), s.eyebrow),
     h('h1', null, s.title),
-    h('p', { class: 'lead-text' }, fmt(s.sub, { n })),
+    h('p', null, fmt(s.sub, { n })),
     h('div', { class: 'hero-actions' },
       h('a', { class: 'btn btn-primary hero-cta', href: '#start' }, s.cta, svg(ICON.arrowRight)),
       h('a', { class: 'hero-link', href: '#results' }, s.seeResults, svg(ICON.outward))),
-    h('button', { class: 'scene-hint desk-only', type: 'button', onclick: () => goTo(1) }, j.explore, svg(ICON.expand)),
     deskCountdown);
-  cleanups.push(attachTilt(deskCountdown, 5));
-  Array.from(heroBlock.children).forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i))); // staggered entrance
+  stagger(heroText);
 
+  // Board 1: the people's vote (participants, top 3)
+  const live = h('span', { class: 'live' }, h('i', { 'aria-hidden': 'true' }), s.live);
+  const bigNum = h('b', { class: 'board-num num' }, '·');
+  const top3 = h('div', { class: 'board-top' }, skeletonLines(3));
+  const boardVote = h('article', { class: 'board' },
+    h('div', { class: 'board-head' }, h('span', { class: 'board-kicker' }, b.title), live),
+    h('div', { class: 'board-stat' }, bigNum, h('span', null, s.participants)),
+    h('p', { class: 'board-sub' }, b.top3),
+    top3,
+    h('a', { class: 'board-link', href: '#results' }, s.seeAllResults, svg(ICON.arrowRight)));
+
+  // Board 2: the weekly poll, answerable in place; percentages only after answering (no nudging)
+  const pollMeta = h('span', { class: 'board-meta num' });
+  const pollBody = h('div', { class: 'board-poll-body' }, skeletonLines(3));
+  const boardPoll = h('article', { class: 'board board-poll' },
+    h('div', { class: 'board-head' }, h('span', { class: 'board-kicker' }, s.pollCard), pollMeta),
+    pollBody,
+    h('a', { class: 'board-link', href: '#poll' }, b.allPolls, svg(ICON.arrowRight)));
+
+  // Board 3: the latest votes, by department only
+  const feed = h('ul', { class: 'feed' }, skeletonLines(3));
+  const boardFeed = h('article', { class: 'board board-feed' },
+    h('div', { class: 'board-head' }, h('span', { class: 'board-kicker' }, b.recent)),
+    feed);
+
+  const boardCol = h('aside', { class: 'board-col intro', 'aria-label': b.title }, boardVote, boardPoll, boardFeed);
+  stagger(boardCol);
+  for (const el of [boardVote, boardPoll, boardFeed]) cleanups.push(attachTilt(el, 3));
+
+  const hero = h('section', { class: 'hero hero-home', html: LACE });
+  hero.append(h('div', { class: 'wrap hero-grid' }, heroText, boardCol));
+
+  // Poll interaction
+  let poll: PollInfo | null = null;
+  let myAnswer: string | null = null;
+  let storage: StorageAdapter | null = null;
+  const drawPoll = () => {
+    clear(pollBody);
+    if (!poll) {
+      pollMeta.textContent = '';
+      pollBody.append(h('p', { class: 'board-q' }, b.noPoll), h('p', { class: 'board-empty' }, b.noPollSub));
+      return;
+    }
+    const p = poll;
+    pollMeta.textContent = fmt(S().poll.answers, { n: fmtNumber(p.total) });
+    const show = myAnswer !== null;
+    const opts = h('div', { class: 'popts', role: 'radiogroup', 'aria-label': l(p.question) });
+    for (const o of p.options) {
+      const mine = myAnswer === o.id;
+      const pc = pct(p.counts[o.id] ?? 0, p.total);
+      opts.append(h('button', { class: show ? 'popt show' : 'popt', type: 'button', role: 'radio', 'aria-checked': String(mine), 'aria-pressed': String(mine), onclick: () => void answer(o.id) },
+        h('i', { class: 'fill', style: `width:${show ? pc : 0}%` }),
+        h('span', { class: 'lbl' }, mine ? svg(ICON.check) : null, l(o.label)),
+        h('span', { class: 'pct num' }, asPct(pc))));
+    }
+    pollBody.append(h('p', { class: 'board-q' }, l(p.question)), opts, h('p', { class: 'board-empty' }, show ? b.voted : b.answerHint));
+  };
+  const answer = async (optionId: string) => {
+    if (!poll || optionId === myAnswer) return;
+    const p = poll;
+    try {
+      storage ??= await getStorage();
+      await storage.ready();
+      await storage.savePollAnswer(p.id, optionId);
+      if (myAnswer) p.counts[myAnswer] = Math.max(0, (p.counts[myAnswer] ?? 1) - 1); else p.total += 1;
+      p.counts[optionId] = (p.counts[optionId] ?? 0) + 1;
+      myAnswer = optionId;
+      writeMyAnswer(p.id, optionId);
+      drawPoll();
+      toast(S().poll.saved);
+    } catch (e) { console.error(e); toast(S().vote.errorSave, 5000); }
+  };
+
+  // Feed
+  const drawFeed = (items: FeedItem[]) => {
+    clear(feed);
+    if (!items.length) { feed.append(h('li', { class: 'board-empty' }, b.noRecent)); return; }
+    items.forEach((it, i) => feed.append(h('li', { style: `--i:${i}` }, h('span', { class: 'dep' }, deptLabel(it.department)), h('span', null, b.justVoted), h('span', { class: 'when' }, timeAgo(it.at)))));
+  };
+
+  // ---- Candidates strip: every candidate, random order, one slow loop; pauses on hover or focus ----
+  const order = candidatesShuffled();
+  const half = (clone: boolean) => h('div', { class: 'marquee-half', 'aria-hidden': clone ? 'true' : undefined },
+    ...order.map((x) => h('button', { class: 'strip-av', type: 'button', 'aria-label': x.name, title: x.name, tabindex: clone ? -1 : undefined, 'aria-haspopup': 'dialog', onclick: () => openProfile(x) }, avatar(x))));
+  const strip = h('section', { class: 'section strip-sec', 'aria-label': s.stripLabel },
+    h('p', { class: 'caption' }, fmt(s.stripCaption, { n })),
+    h('div', { class: 'marquee' }, h('div', { class: 'marquee-track' }, half(false), half(true))));
+
+  // ---- Top 5 by votes: skeleton first, cached numbers next, live numbers when they arrive ----
+  const liveTop = h('span', { class: 'live' }, h('i', { 'aria-hidden': 'true' }), s.live);
+  const list = h('div', { class: 'stack top-list' }, ...Array.from({ length: TOP }, (_, i) => skeletonRow(i)));
+  const topLink = h('p', { class: 'top-link' }, h('a', { class: 'link-btn', href: '#results' }, s.seeAllResults, svg(ICON.arrowRight)));
+  const top = h('section', { class: 'section top-sec main-col' },
+    h('div', { class: 'top-head' }, h('h2', null, s.top), liveTop),
+    h('p', { class: 'top-sub' }, s.topSub),
+    list, topLink);
+
+  const rows = new Map<string, TopRow>();
+  let drawn = 0;
+  let bigShown = 0;
+  let stopBig = () => {};
+  const draw = (res: Counts) => {
+    const first = drawn++ === 0;
+    const mine = state.myVote?.candidate ?? null;
+    const ranked = order.map((x) => ({ x, n: res.counts[x.id] ?? 0 })).sort((a, b2) => b2.n - a.n);
+    // the board
+    stopBig(); stopBig = tween(bigNum, bigShown, res.total, 1100, fmtNumber); bigShown = res.total;
+    clear(top3);
+    if (res.total === 0) top3.append(h('p', { class: 'board-empty' }, s.noVotesYet));
+    else for (const { x, n: v } of ranked.slice(0, 3)) top3.append(boardRow(x, pct(v, res.total), x.id === mine));
+    // the Top 5
+    clear(list);
+    if (res.total === 0) {
+      list.append(h('div', { class: 'card empty-top' }, note(s.noVotesYet, ICON.ballot, false),
+        h('a', { class: 'btn btn-primary', href: '#start' }, s.firstVote, svg(ICON.arrowRight))));
+      topLink.hidden = true;
+      return;
+    }
+    topLink.hidden = false;
+    list.classList.toggle('enter', first);
+    ranked.slice(0, TOP).forEach(({ x, n: votes }, i) => {
+      let row = rows.get(x.id);
+      if (!row) { row = topRow(x, i); rows.set(x.id, row); cleanups.push(attachTilt(row.el, 3)); }
+      const p = pct(votes, res.total);
+      row.el.style.setProperty('--i', String(i));
+      row.el.classList.toggle('mine', x.id === mine);
+      row.barEl.className = p ? 'on' : '';
+      row.barEl.style.width = `${p}%`;
+      row.bar.setAttribute('aria-label', `${x.name}: ${p} %`);
+      row.stop();
+      row.stop = tween(row.pctEl, first ? 0 : row.value, p, first ? 900 + i * 90 : 600, asPct);
+      row.value = p;
+      list.append(row.el);
+    });
+  };
+
+  const ids = c.candidates.map((x) => x.id);
+  const cached = readTopCache();
+  let lastAt = 0;
+  const refresh = async () => {
+    if (!alive) return;
+    const [r, f] = await Promise.all([loadCounts(ids), loadFeed().catch(() => [] as FeedItem[])]);
+    if (!alive) return;
+    if (r) { lastAt = r.at; writeTopCache(r); draw(r); live.classList.add('on'); liveTop.classList.add('on'); }
+    else if (drawn === 0) { clear(list); list.append(note(S().offline)); topLink.hidden = true; clear(top3); top3.append(h('p', { class: 'board-empty' }, S().offline)); }
+    drawFeed(f);
+  };
+  const startLive = () => {
+    if (cached) { lastAt = cached.at; draw(cached); }
+    void refresh();
+    const timer = window.setInterval(refresh, REFRESH_MS);
+    const onVisible = () => { if (document.visibilityState === 'visible' && Date.now() - lastAt > 30_000) void refresh(); };
+    document.addEventListener('visibilitychange', onVisible);
+    cleanups.push(() => { clearInterval(timer); document.removeEventListener('visibilitychange', onVisible); });
+    void loadPoll().then((p) => { if (!alive) return; poll = p; myAnswer = p ? readMyAnswer(p.id) : null; drawPoll(); }).catch(() => { if (alive) { poll = null; drawPoll(); } });
+  };
+  // The live reads wait for the first paint (they are not needed for layout).
+  if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(() => { if (alive) startLive(); }, { timeout: 1200 });
+  else window.setTimeout(() => { if (alive) startLive(); }, 300);
+
+  const pollSub = h('span', null, s.pollSubNone);
+  const entry = (href: string, icon: string, title: string, sub: Node | string) =>
+    h('a', { class: 'card explore', href }, well(icon), h('span', { class: 'explore-text' }, h('strong', null, title), typeof sub === 'string' ? h('span', null, sub) : sub), svg(ICON.chevronRight, 'ico chev'));
+  const explore = h('aside', { class: 'section side-col' }, h('h2', null, s.explore),
+    h('div', { class: 'stack explore-grid' },
+      entry('#candidates', ICON.people, s.candidatesCard, fmt(s.candidatesSub, { n })),
+      entry('#poll', ICON.poll, s.pollCard, pollSub),
+      entry('#results', ICON.ballot, s.resultsCard, s.resultsSub),
+      entry('#about', ICON.info, s.aboutCard, s.aboutSub)));
+  for (const el of explore.querySelectorAll<HTMLElement>('.explore')) cleanups.push(attachTilt(el, 4));
+
+  // ---- The tour: the 3D map pinned, one chapter per department as the page scrolls ----
+  const tour = TOUR.map((id) => DEPARTMENT_FACTS.find((d) => d.id === id)).filter((d): d is DepartmentFacts => !!d);
+  const N = tour.length;
+  const goTo = (i: number) => window.scrollTo({ top: scene.offsetTop + i * chapterPx, behavior: reducedMotion() ? 'auto' : 'smooth' });
+  const introBlock = h('div', { class: 'scene-intro' },
+    h('p', { class: 'chapter-kicker' }, h('span', null, j.tourLabel)),
+    h('h2', null, j.explore),
+    h('p', { class: 'lead-text' }, j.lead),
+    h('button', { class: 'scene-hint', type: 'button', onclick: () => goTo(1) }, j.explore, svg(ICON.expand)));
   const fact = (value: string, label: string) => h('div', { class: 'fact' }, h('b', { class: 'num' }, value), h('span', null, label));
   const chapterEls = tour.map((d, i) => {
     const name = deptName(d.id);
@@ -209,15 +433,14 @@ export function renderHome(main: HTMLElement): () => void {
       const d = tour[i - 1];
       return h('button', { type: 'button', 'aria-label': d ? l(deptName(d.id)) : j.toHero, 'aria-current': i === 0 ? 'true' : 'false', onclick: () => goTo(i) });
     }));
-
   const mapHost = h('div', { class: 'map3d scene-map', 'aria-hidden': 'true' }, h('div', { class: 'map3d-glow' }));
-  const sticky = h('div', { class: 'scene-sticky', html: LACE });
-  sticky.append(mapHost, h('div', { class: 'scene-shade', 'aria-hidden': 'true' }), h('div', { class: 'wrap scene-ui' }, heroBlock, ...chapterEls), dots);
-  const scene = h('section', { class: 'scene' }, sticky);
+  const sticky = h('div', { class: 'scene-sticky' });
+  sticky.append(mapHost, h('div', { class: 'scene-shade', 'aria-hidden': 'true' }), h('div', { class: 'wrap scene-ui' }, introBlock, ...chapterEls), dots);
+  const scene = h('section', { class: 'scene', 'aria-label': j.tourLabel }, sticky);
 
-  // Scroll drives everything: p counts chapters (0 = hero, k = chapter k centred).
   let map: Haiti3D | null = null;
   let chapterPx = 400, active = -2, lastP = -1;
+  const homeView = () => (window.innerWidth >= 1024 ? { cx: 0.12, cy: 0.04, zoom: 0.86 } : { cx: 0, cy: 0, zoom: 0.8 });
   const measure = () => {
     const vh = sticky.clientHeight;
     chapterPx = Math.round(vh * (window.innerWidth >= 1024 ? 0.42 : 0.55));
@@ -234,22 +457,22 @@ export function renderHome(main: HTMLElement): () => void {
     const p = Math.min(N, Math.max(0, -scene.getBoundingClientRect().top / chapterPx));
     if (p === lastP) return;
     lastP = p;
-    const heroOp = Math.max(0, Math.min(1, 1 - p * 1.8));
-    heroBlock.style.opacity = String(heroOp);
-    heroBlock.style.pointerEvents = heroOp < 0.3 ? 'none' : '';
-    heroBlock.setAttribute('aria-hidden', heroOp < 0.3 ? 'true' : 'false');
+    const introOp = Math.max(0, Math.min(1, 1 - p * 1.8));
+    introBlock.style.opacity = String(introOp);
+    introBlock.style.pointerEvents = introOp < 0.3 ? 'none' : '';
+    introBlock.setAttribute('aria-hidden', introOp < 0.3 ? 'true' : 'false');
     const idx = p < 0.5 ? -1 : Math.min(N - 1, Math.round(p) - 1);
     if (idx !== active) {
       active = idx;
       chapterEls.forEach((el, i) => { el.classList.toggle('on', i === idx); el.setAttribute('aria-hidden', i === idx ? 'false' : 'true'); });
-      Array.from(dots.children).forEach((b, i) => b.setAttribute('aria-current', i === idx + 1 ? 'true' : 'false'));
+      Array.from(dots.children).forEach((el, i) => el.setAttribute('aria-current', i === idx + 1 ? 'true' : 'false'));
       const d = idx >= 0 ? tour[idx] : undefined;
       map?.setView({ focus: d ? d.id : null, pin: d ? d.capitalLonLat : null, pinText: d ? l(d.capital) : '' });
     }
     if (map) {
       const k = Math.floor(p), f = p - k, sm = f * f * (3 - 2 * f);
-      const a = keyAt(k), b = keyAt(k + 1);
-      map.setView({ cx: a.cx + (b.cx - a.cx) * sm, cy: a.cy + (b.cy - a.cy) * sm, zoom: a.zoom + (b.zoom - a.zoom) * sm });
+      const a = keyAt(k), b2 = keyAt(k + 1);
+      map.setView({ cx: a.cx + (b2.cx - a.cx) * sm, cy: a.cy + (b2.cy - a.cy) * sm, zoom: a.zoom + (b2.zoom - a.zoom) * sm });
     }
   };
   let ticking = false;
@@ -258,90 +481,6 @@ export function renderHome(main: HTMLElement): () => void {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onResize);
   cleanups.push(() => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize); });
-
-  // Candidates strip: every candidate, random order, one slow loop; pauses on hover or focus.
-  const order = candidatesShuffled();
-  const half = (clone: boolean) => h('div', { class: 'marquee-half', 'aria-hidden': clone ? 'true' : undefined },
-    ...order.map((x) => h('button', { class: 'strip-av', type: 'button', 'aria-label': x.name, title: x.name, tabindex: clone ? -1 : undefined, 'aria-haspopup': 'dialog', onclick: () => openProfile(x) }, avatar(x))));
-  const strip = h('section', { class: 'section strip-sec', 'aria-label': s.stripLabel },
-    h('p', { class: 'caption' }, fmt(s.stripCaption, { n })),
-    h('div', { class: 'marquee' }, h('div', { class: 'marquee-track' }, half(false), half(true))));
-
-  // Top 5 by votes: skeleton first, cached numbers next, live numbers when they arrive.
-  const live = h('span', { class: 'live' }, h('i', { 'aria-hidden': 'true' }), s.live);
-  const list = h('div', { class: 'stack top-list' }, ...Array.from({ length: TOP }, (_, i) => skeletonRow(i)));
-  const topLink = h('p', { class: 'top-link' }, h('a', { class: 'link-btn', href: '#results' }, s.seeAllResults, svg(ICON.arrowRight)));
-  const top = h('section', { class: 'section top-sec main-col' },
-    h('div', { class: 'top-head' }, h('h2', null, s.top), live),
-    h('p', { class: 'top-sub' }, s.topSub),
-    list, topLink);
-
-  const rows = new Map<string, TopRow>();
-  let drawn = 0;
-  const draw = (res: Counts) => {
-    const first = drawn++ === 0;
-    clear(list);
-    if (res.total === 0) {
-      list.append(h('div', { class: 'card empty-top' }, note(s.noVotesYet, ICON.ballot, false),
-        h('a', { class: 'btn btn-primary', href: '#start' }, s.firstVote, svg(ICON.arrowRight))));
-      topLink.hidden = true;
-      return;
-    }
-    topLink.hidden = false;
-    const mine = state.myVote?.candidate ?? null;
-    const ranked = order.map((x) => ({ x, n: res.counts[x.id] ?? 0 })).sort((a, b) => b.n - a.n).slice(0, TOP);
-    list.classList.toggle('enter', first);
-    ranked.forEach(({ x, n: votes }, i) => {
-      let row = rows.get(x.id);
-      if (!row) { row = topRow(x, i); rows.set(x.id, row); cleanups.push(attachTilt(row.el, 3)); }
-      const p = pct(votes, res.total);
-      row.el.style.setProperty('--i', String(i));
-      row.el.classList.toggle('mine', x.id === mine);
-      row.barEl.className = p ? 'on' : '';
-      row.barEl.style.width = `${p}%`;
-      row.bar.setAttribute('aria-label', `${x.name}: ${p} %`);
-      row.stop();
-      row.stop = tween(row.pctEl, first ? 0 : row.value, p, first ? 900 + i * 90 : 600);
-      row.value = p;
-      list.append(row.el);
-    });
-  };
-
-  const ids = c.candidates.map((x) => x.id);
-  const cached = readTopCache();
-  let lastAt = 0;
-  const refresh = async () => {
-    if (!alive) return;
-    const r = await loadCounts(ids);
-    if (!alive) return;
-    if (r) { lastAt = r.at; writeTopCache(r); draw(r); live.classList.add('on'); }
-    else if (drawn === 0) { clear(list); list.append(note(S().offline)); topLink.hidden = true; }
-  };
-  const startTop = () => {
-    if (cached) { lastAt = cached.at; draw(cached); }
-    if (!cached || Date.now() - cached.at > TOP_TTL_MS) void refresh(); else live.classList.add('on');
-    const timer = window.setInterval(refresh, REFRESH_MS);
-    const onVisible = () => { if (document.visibilityState === 'visible' && Date.now() - lastAt > 30_000) void refresh(); };
-    document.addEventListener('visibilitychange', onVisible);
-    cleanups.push(() => { clearInterval(timer); document.removeEventListener('visibilitychange', onVisible); });
-  };
-  // Start counting only once the section is near the viewport (saves reads on bounces).
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => { if (entries.some((e) => e.isIntersecting)) { io.disconnect(); startTop(); } }, { rootMargin: '400px 0px' });
-    io.observe(top);
-    cleanups.push(() => io.disconnect());
-  } else startTop();
-
-  const pollSub = h('span', null, s.pollSubNone);
-  const entry = (href: string, icon: string, title: string, sub: Node | string) =>
-    h('a', { class: 'card explore', href }, well(icon), h('span', { class: 'explore-text' }, h('strong', null, title), typeof sub === 'string' ? h('span', null, sub) : sub), svg(ICON.chevronRight, 'ico chev'));
-  const explore = h('aside', { class: 'section side-col' }, h('h2', null, s.explore),
-    h('div', { class: 'stack explore-grid' },
-      entry('#candidates', ICON.people, s.candidatesCard, fmt(s.candidatesSub, { n })),
-      entry('#poll', ICON.poll, s.pollCard, pollSub),
-      entry('#results', ICON.ballot, s.resultsCard, s.resultsSub),
-      entry('#about', ICON.info, s.aboutCard, s.aboutSub)));
-  for (const el of explore.querySelectorAll<HTMLElement>('.explore')) cleanups.push(attachTilt(el, 4));
 
   // Photo card: the Citadelle (CC BY 2.0). Wide crop on desktop, 3:2 on phones; lazy.
   const band = h('figure', { class: 'band' },
@@ -360,23 +499,32 @@ export function renderHome(main: HTMLElement): () => void {
   const bottom = h('div', { class: 'layout-2 wide-side' }, dates, h('aside', { class: 'side-col section' }, note(s.note)));
 
   const mobileStats = h('div', { class: 'mobile-only stats-mobile' }, h('div', { class: 'card countdown-card' }, countdownRow()), statRow('stats3', 0));
-  main.append(scene, h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore), band, bottom, footer()));
+  main.append(
+    hero,
+    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore)),
+    scene,
+    h('div', { class: 'wrap home-body' }, band, bottom, footer()));
   cleanups.push(revealOnScroll([band, bottom]), attachTilt(band, 3));
   measure(); update();
 
-  // The 3D map is its own chunk; the scene works (hero, chapters, dots) before and without it.
-  void import('./haiti3d').then((m) => {
+  // The 3D map is its own chunk, mounted once the tour is near; the tour works (captions, dots) before and without it.
+  const mountMap = () => void import('./haiti3d').then((m) => {
     if (!alive) return;
     map = m.mountHaiti3D(mapHost, { label: (id) => l(deptName(id)) });
     cleanups.push(() => map?.destroy());
     lastP = -1; active = -2; update();
   }).catch(() => { /* decorative only */ });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); mountMap(); } }, { rootMargin: '600px 0px' });
+    io.observe(scene);
+    cleanups.push(() => io.disconnect());
+  } else mountMap();
 
   void loadStats().then((st) => {
     if (!alive) return;
     for (const el of votesEls) el.textContent = st.votes === null ? '·' : fmtNumber(st.votes);
     for (const el of answersEls) el.textContent = st.pollAnswers === null ? '·' : fmtNumber(st.pollAnswers);
-    if (st.pollQuestion) pollSub.textContent = l(st.pollQuestion);
+    if (st.votes !== null && bigShown === 0 && drawn === 0) { stopBig(); stopBig = tween(bigNum, 0, st.votes, 1100, fmtNumber); bigShown = st.votes; }
   });
-  return () => { alive = false; for (const f of cleanups) f(); for (const r of rows.values()) r.stop(); };
+  return () => { alive = false; stopBig(); for (const f of cleanups) f(); for (const r of rows.values()) r.stop(); };
 }

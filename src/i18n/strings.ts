@@ -183,6 +183,20 @@ const ht = {
     code: 'Kòd sous la louvri sou GitHub.',
   },
 
+  board: {
+    title: 'Vòt pèp la',
+    top3: 'Top 3 kounye a',
+    allPolls: 'Tout sondaj yo',
+    noPoll: 'Premye sondaj la ap vini byento.',
+    noPollSub: 'Chak semèn, yon nouvo kesyon pou tout moun. Rezilta yo parèt apre ou reponn.',
+    answerHint: 'Peze yon repons pou vote. Rezilta yo parèt apre.',
+    voted: 'Repons ou anrejistre. Ou ka chanje l.',
+    recent: 'Dènye vòt yo',
+    justVoted: 'fèk vote',
+    noRecent: 'Poko gen vòt. Se ou ki ka bay premye a.',
+    someone: 'Yon sitwayen',
+  },
+
   journey: {
     kicker: 'Depatman {i} sou {n}',
     capital: 'Chèf lye',
@@ -191,6 +205,7 @@ const ht = {
     area: 'Sipèfisi',
     explore: 'Dekouvri peyi a',
     tourLabel: 'Vwayaj nan 10 depatman yo',
+    lead: 'Glise anba pou vizite 10 depatman yo, youn apre lòt.',
     toHero: 'Akèy',
   },
 
@@ -471,6 +486,20 @@ const fr: Strings = {
     code: 'Le code source est ouvert sur GitHub.',
   },
 
+  board: {
+    title: 'Le vote du peuple',
+    top3: 'Top 3 en ce moment',
+    allPolls: 'Tous les sondages',
+    noPoll: 'Le premier sondage arrive bientôt.',
+    noPollSub: 'Chaque semaine, une nouvelle question pour tous. Les résultats apparaissent après votre réponse.',
+    answerHint: 'Touchez une réponse pour voter. Les résultats apparaissent ensuite.',
+    voted: 'Réponse enregistrée. Vous pouvez la changer.',
+    recent: 'Derniers votes',
+    justVoted: 'vient de voter',
+    noRecent: 'Aucun vote pour l’instant. Soyez la première personne à voter.',
+    someone: 'Un citoyen',
+  },
+
   journey: {
     kicker: 'Département {i} sur {n}',
     capital: 'Chef-lieu',
@@ -479,6 +508,7 @@ const fr: Strings = {
     area: 'Superficie',
     explore: 'Découvrir le pays',
     tourLabel: 'Voyage dans les 10 départements',
+    lead: 'Faites défiler pour visiter les 10 départements, un à un.',
     toHero: 'Accueil',
   },
 
@@ -757,6 +787,20 @@ const en: Strings = {
     code: 'The source code is open on GitHub.',
   },
 
+  board: {
+    title: 'The people’s vote',
+    top3: 'Top 3 right now',
+    allPolls: 'All polls',
+    noPoll: 'The first poll is coming soon.',
+    noPollSub: 'Every week, a new question for everyone. Results appear after you answer.',
+    answerHint: 'Tap an answer to vote. Results appear afterwards.',
+    voted: 'Answer saved. You can change it.',
+    recent: 'Latest votes',
+    justVoted: 'just voted',
+    noRecent: 'No votes yet. Be the first to vote.',
+    someone: 'A citizen',
+  },
+
   journey: {
     kicker: 'Department {i} of {n}',
     capital: 'Chief town',
@@ -765,6 +809,7 @@ const en: Strings = {
     area: 'Area',
     explore: 'Discover the country',
     tourLabel: 'Tour of the 10 departments',
+    lead: 'Scroll to visit the 10 departments, one by one.',
     toHero: 'Home',
   },
 
