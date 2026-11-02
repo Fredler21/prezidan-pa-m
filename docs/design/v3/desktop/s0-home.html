@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<html lang="ht" class="h-full bg-[#F3F5FA]">
+<html lang="ht">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Prezidan Pa M · Akèy</title>
-  
-  <!-- Bricolage Grotesque (exact requested link) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
-  
-  <!-- Material Symbols Outlined -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-  
-  <!-- Tailwind CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -24,18 +18,17 @@
             ultramarine: '#1A3BB5',
             'ultramarine-tint': '#EAEEFA',
             'lighter-ring': '#7D93E8',
-            flagred: '#D41E3C',
-            pagebg: '#F3F5FA',
+            page: '#F3F5FA',
             ink: '#0B1A4A',
             muted: '#5B6480',
             hairline: '#E1E5F0',
-            track: '#E6EAF5'
+            track: '#E6EAF5',
+            subtle: '#B9C4E6'
           }
         }
       }
-    };
+    }
   </script>
-  
   <style>
     html, body {
       font-family: 'Bricolage Grotesque', system-ui, sans-serif;
@@ -45,853 +38,810 @@
       margin: 0;
       padding: 0;
     }
-    
-    .tabular-nums {
-      font-variant-numeric: tabular-nums;
-    }
-    
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      font-size: 24px;
-      line-height: 1;
       display: inline-block;
       vertical-align: middle;
+      line-height: 1;
     }
-
-    /* Subtle fade-up on load */
-    @keyframes subtleFadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .num-tabular {
+      font-variant-numeric: tabular-nums;
     }
-    
-    .animate-reveal {
-      animation: subtleFadeUp 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    .lace-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19zm0 1a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zm-10-1a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19zm0 1a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zm20-1a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19zm0 1a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19z' fill='%23B9C4E6' fill-opacity='0.07' fill-rule='evenodd'/%3E%3C/svg%3E");
     }
-
-    /* Continuous smooth slow marquee for candidate strip */
-    @keyframes marqueeScroll {
-      0% { transform: translateX(0); }
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
       100% { transform: translateX(-50%); }
     }
-    
-    .marquee-track {
+    .animate-marquee {
       display: flex;
       width: max-content;
-      animation: marqueeScroll 42s linear infinite;
+      animation: marquee 35s linear infinite;
     }
-    
-    .marquee-track:hover {
+    .animate-marquee:hover {
       animation-play-state: paused;
     }
-
-    /* Pulse animation for live dot */
-    @keyframes pulseRing {
+    @keyframes pulse-ring {
       0% { transform: scale(0.95); opacity: 0.8; }
-      50% { transform: scale(1.6); opacity: 0; }
-      100% { transform: scale(0.95); opacity: 0; }
+      50% { transform: scale(1.4); opacity: 0.2; }
+      100% { transform: scale(0.95); opacity: 0.8; }
     }
-    .pulse-ring {
-      animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    .pulse-indicator {
+      animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-
-    /* Respect prefers-reduced-motion */
+    .hero-reveal {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     @media (prefers-reduced-motion: reduce) {
-      .animate-reveal {
-        animation: none !important;
-      }
-      .marquee-track {
-        animation: none !important;
-        overflow-x: auto;
-      }
-      .pulse-ring {
-        animation: none !important;
-      }
+      .animate-marquee { animation: none; }
+      .pulse-indicator { animation: none; }
+      .hero-reveal { animation: none; }
     }
   </style>
 </head>
-<body class="min-h-full flex flex-col antialiased selection:bg-[#EAEEFA] selection:text-[#1A3BB5]">
+<body class="bg-page text-ink antialiased selection:bg-ultramarine selection:text-white">
 
-  <!-- HEADER (Night Indigo 56px + max-w-1120px) -->
-  <header class="w-full bg-[#0B1230] border-b border-[#E1E5F0]/10 sticky top-0 z-50">
-    <div class="max-w-[1120px] mx-auto px-8 h-14 flex items-center justify-between">
+  <!-- HEADER (56px tall, Night Indigo) -->
+  <header class="sticky top-0 z-50 w-full h-[56px] bg-[#0B1230] border-b border-[#E1E5F0]/10 px-8 flex items-center justify-between">
+    <div class="flex items-center gap-6">
+      <a href="#" class="flex items-center gap-2 text-white font-bold text-[18px] tracking-normal hover:opacity-90 transition-opacity">
+        <span class="material-symbols-outlined text-white text-[22px]">how_to_vote</span>
+        <span>Prezidan Pa M</span>
+      </a>
+
+      <!-- Haitian flag and subtitle -->
+      <div class="hidden md:flex items-center gap-2 pl-4 border-l border-white/15">
+        <svg class="w-5 h-3 rounded-[2px] shadow-sm flex-shrink-0" viewBox="0 0 600 360" fill="none">
+          <rect width="600" height="180" fill="#00209F"/>
+          <rect y="180" width="600" height="180" fill="#D21034"/>
+          <rect x="250" y="140" width="100" height="80" rx="4" fill="#FFFFFF"/>
+          <circle cx="300" cy="180" r="16" fill="#00209F"/>
+        </svg>
+        <span class="text-xs text-[#B9C4E6] font-medium">Ayiti 2027 · Vòt pèp la</span>
+      </div>
+    </div>
+
+    <!-- Navigation links (Desktop) -->
+    <nav class="hidden lg:flex items-center gap-1">
+      <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-semibold text-white bg-[#1A3BB5] transition-colors">Akèy</a>
+      <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white transition-colors">Priyorite</a>
+      <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white transition-colors">Kandida</a>
+      <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white transition-colors">Rezilta</a>
+      <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white transition-colors">Sondaj</a>
+    </nav>
+
+    <!-- Account & Language Pill -->
+    <div class="flex items-center gap-3">
+      <button type="button" aria-label="Kont itilizatè" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/15 text-white flex items-center justify-center transition-colors">
+        <span class="material-symbols-outlined text-[20px]">person</span>
+      </button>
+      <div class="h-8 px-3 rounded-full border border-white/30 text-white text-[13px] font-medium flex items-center gap-1 hover:border-white/50 cursor-pointer transition-colors">
+        <span>Kreyòl</span>
+        <span class="text-[10px] opacity-80">▾</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO (100vh / ~720px, Night Indigo + Lace Texture) -->
+  <section class="relative w-full min-h-[720px] bg-[#0B1230] text-white lace-bg overflow-hidden flex items-center border-b border-[#E1E5F0]/10">
+    <div class="max-w-[1120px] w-full mx-auto px-8 py-12 grid grid-cols-12 gap-8 items-center relative z-10 hero-reveal">
       
-      <!-- Left: Wordmark & Flag Tagline -->
-      <div class="flex items-center gap-6">
-        <a href="#" class="flex items-center gap-2.5 text-white hover:opacity-90 transition-opacity">
-          <span class="material-symbols-outlined text-[#7D93E8]">how_to_vote</span>
-          <span class="text-[18px] font-bold tracking-tight text-white">Prezidan Pa M</span>
-        </a>
-        
-        <div class="hidden md:flex items-center gap-2 pl-4 border-l border-white/15">
-          <!-- Haitian flag (20x12) -->
-          <svg class="w-5 h-3 rounded-[2px] shadow-sm flex-shrink-0" viewBox="0 0 20 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="20" height="6" fill="#00209F"/>
-            <rect y="6" width="20" height="6" fill="#D21034"/>
-            <rect x="7" y="3.5" width="6" height="5" rx="0.5" fill="#FFFFFF"/>
-            <circle cx="10" cy="6" r="1.2" fill="#007A3D"/>
+      <!-- Left 45% Content Column (cols 1 to 5) -->
+      <div class="col-span-12 lg:col-span-5 flex flex-col justify-center">
+        <!-- Eyebrow -->
+        <div class="flex items-center gap-3 mb-4">
+          <svg class="w-10 h-6 rounded-[4px] shadow-sm flex-shrink-0" viewBox="0 0 600 360" fill="none">
+            <rect width="600" height="180" fill="#00209F"/>
+            <rect y="180" width="600" height="180" fill="#D21034"/>
+            <rect x="240" y="130" width="120" height="100" rx="6" fill="#FFFFFF"/>
+            <circle cx="300" cy="180" r="20" fill="#00209F"/>
           </svg>
-          <span class="text-[13px] font-medium text-[#B9C4E6]">Ayiti 2027 · Vòt pèp la</span>
+          <span class="text-[12px] font-semibold tracking-wider text-[#B9C4E6]">ELEKSYON PREZIDANSYÈL · AYITI 2027</span>
         </div>
+
+        <!-- Display Headline -->
+        <h1 class="text-[52px] leading-[1.05] font-extrabold text-white tracking-[-0.02em] mb-4">
+          Ki moun ou ta vle kòm prezidan Ayiti?
+        </h1>
+
+        <!-- Lead Paragraph -->
+        <p class="text-[17px] leading-[1.5] text-[#B9C4E6] mb-6">
+          Chwazi sa ou vle chanje, gade dosye piblik 19 kandida yo, epi bay vòt ou. Yon vòt pa moun, ou ka chanje l.
+        </p>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4 mb-5">
+          <a href="#" class="h-12 px-6 rounded-full bg-[#1A3BB5] hover:bg-[#153199] text-white font-semibold text-[16px] flex items-center gap-2 transition-all">
+            <span>Kòmanse</span>
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </a>
+          <a href="#" class="text-[15px] font-semibold text-white hover:text-[#B9C4E6] flex items-center gap-1 transition-colors">
+            <span>Wè rezilta yo</span>
+          </a>
+        </div>
+
+        <!-- Muted Scroll Cue -->
+        <div class="flex items-center gap-1.5 text-[13px] text-[#B9C4E6]/80 mb-6">
+          <span>Dekouvri peyi a</span>
+          <span class="material-symbols-outlined text-[16px]">expand_more</span>
+        </div>
+
+        <!-- Countdown Card with stats -->
+        <div class="w-full bg-white text-[#0B1A4A] rounded-[16px] p-5 border border-[#E1E5F0] shadow-[0_4px_24px_rgba(11,26,74,0.18)]">
+          <!-- Countdown row -->
+          <div class="flex items-center gap-4 pb-4">
+            <div class="w-11 h-11 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-[24px]">event</span>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-2">
+                <span class="text-[28px] font-extrabold leading-none tracking-tight num-tabular">259 jou</span>
+                <span class="text-[13px] text-[#5B6480]">anvan premye tou a</span>
+              </div>
+              <p class="text-[13px] text-[#5B6480] mt-0.5">18 jiyè 2027</p>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="w-full h-px bg-[#E1E5F0] mb-4"></div>
+
+          <!-- Three stats -->
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <div class="text-[20px] font-extrabold text-[#0B1A4A] num-tabular">12 384</div>
+              <div class="text-[12px] text-[#5B6480] mt-0.5">moun patisipe</div>
+            </div>
+            <div class="border-x border-[#E1E5F0]">
+              <div class="text-[20px] font-extrabold text-[#0B1A4A] num-tabular">19</div>
+              <div class="text-[12px] text-[#5B6480] mt-0.5">kandida anrejistre</div>
+            </div>
+            <div>
+              <div class="text-[20px] font-extrabold text-[#0B1A4A] num-tabular">3 912</div>
+              <div class="text-[12px] text-[#5B6480] mt-0.5">repons sondaj</div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <!-- Center: 5 Nav links (Akèy is active) -->
-      <nav class="hidden lg:flex items-center gap-1">
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-semibold text-white bg-white/10 hover:bg-white/15 transition-colors">
-          Akèy
-        </a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white hover:bg-white/5 transition-colors">
-          Priyorite
-        </a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white hover:bg-white/5 transition-colors">
-          Kandida
-        </a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white hover:bg-white/5 transition-colors">
-          Rezilta
-        </a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-[#B9C4E6] hover:text-white hover:bg-white/5 transition-colors">
-          Sondaj
-        </a>
-      </nav>
+      <!-- Right 55% 3D Map of Haiti Illustration (cols 6 to 12) -->
+      <div class="col-span-12 lg:col-span-7 h-[580px] relative flex items-center justify-center">
+        <!-- Soft background ultramarine glow -->
+        <div class="absolute inset-0 bg-radial from-[#1A3BB5]/25 via-transparent to-transparent filter blur-3xl pointer-events-none"></div>
 
-      <!-- Right: Account button (person icon) & Language pill -->
-      <div class="flex items-center gap-3">
-        <button type="button" aria-label="Kont itilizatè" class="w-9 h-9 rounded-full bg-white/10 border border-white/15 flex items-center justify-center text-white hover:bg-white/20 transition-all">
-          <span class="material-symbols-outlined !text-[20px]">person</span>
-        </button>
-        
-        <div class="h-8 px-3 rounded-full border border-white/30 bg-transparent flex items-center justify-center text-[13px] font-medium text-white cursor-pointer hover:bg-white/10 transition-colors">
-          Kreyòl ▾
+        <!-- 3D Haiti Map Extruded Slabs SVG Illustration -->
+        <svg class="w-full h-full max-h-[560px] filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.45)]" viewBox="0 0 740 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="mapGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1A3BB5" stop-opacity="0.8"/>
+              <stop offset="100%" stop-color="#0B1230" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="slabTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#284ED8"/>
+              <stop offset="100%" stop-color="#1A3BB5"/>
+            </linearGradient>
+            <linearGradient id="sideDarkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#0E1E52"/>
+              <stop offset="100%" stop-color="#070D22"/>
+            </linearGradient>
+            <linearGradient id="fadeLeft" x1="0%" y1="50%" x2="35%" y2="50%">
+              <stop offset="0%" stop-color="#0B1230" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#0B1230" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Soft ambient shadow beneath -->
+          <ellipse cx="410" cy="360" rx="270" ry="85" fill="#000000" fill-opacity="0.4" filter="blur(24px)"/>
+
+          <!-- 10 Extruded Departments Low-Poly Slabs -->
+          
+          <!-- 1. Nòdwès (North-West) -->
+          <g transform="translate(140, 95)">
+            <path d="M40 70 L90 55 L130 75 L95 95 L40 70 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M40 70 L95 95 L95 118 L40 92 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M95 95 L130 75 L130 98 L95 118 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 2. Nò (North) -->
+          <g transform="translate(245, 105)">
+            <path d="M30 65 L95 50 L145 68 L100 88 L30 65 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M30 65 L100 88 L100 114 L30 90 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M100 88 L145 68 L145 92 L100 114 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 3. Nòdès (North-East) -->
+          <g transform="translate(365, 120)">
+            <path d="M25 60 L75 52 L110 70 L65 85 L25 60 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M25 60 L65 85 L65 110 L25 84 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M65 85 L110 70 L110 94 L65 110 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 4. Latibonit (Artibonite) -->
+          <g transform="translate(200, 160)">
+            <path d="M40 60 L120 40 L160 65 L80 95 L40 60 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M40 60 L80 95 L80 125 L40 90 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M80 95 L160 65 L160 98 L80 125 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 5. Sant (Center) -->
+          <g transform="translate(330, 180)">
+            <path d="M30 50 L105 45 L135 70 L65 85 L30 50 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M30 50 L65 85 L65 115 L30 80 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M65 85 L135 70 L135 98 L65 115 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 6. Grandans (Jérémie peninsula) -->
+          <g transform="translate(20, 240)">
+            <path d="M20 50 L85 45 L110 65 L45 75 L20 50 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M20 50 L45 75 L45 98 L20 74 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M45 75 L110 65 L110 88 L45 98 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 7. Nip (Nippes) -->
+          <g transform="translate(115, 255)">
+            <path d="M20 48 L75 42 L105 60 L50 72 L20 48 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M20 48 L50 72 L50 96 L20 72 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M50 72 L105 60 L105 84 L50 96 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 8. Sid (South / Les Cayes) -->
+          <g transform="translate(55, 290)">
+            <path d="M30 45 L110 40 L135 65 L60 78 L30 45 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M30 45 L60 78 L60 105 L30 72 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M60 78 L135 65 L135 92 L60 105 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- 9. Lwès (West / Port-au-Prince) -->
+          <g transform="translate(240, 240)">
+            <path d="M45 55 L135 40 L195 70 L95 95 L45 55 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.4"/>
+            <path d="M45 55 L95 95 L95 125 L45 85 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.9"/>
+            <path d="M95 95 L195 70 L195 102 L95 125 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.9"/>
+          </g>
+
+          <!-- 10. Sidès (South-East / Jacmel) -->
+          <g transform="translate(305, 305)">
+            <path d="M35 50 L115 45 L150 68 L70 80 L35 50 Z" fill="url(#slabTopGrad)" stroke="#B9C4E6" stroke-width="1.2"/>
+            <path d="M35 50 L70 80 L70 106 L35 76 Z" fill="url(#sideDarkGrad)" stroke="#B9C4E6" stroke-width="0.8"/>
+            <path d="M70 80 L150 68 L150 94 L70 106 Z" fill="#08102C" stroke="#B9C4E6" stroke-width="0.8"/>
+          </g>
+
+          <!-- Left side gradient overlay to fade smoothly into night indigo text column -->
+          <rect x="0" y="0" width="300" height="500" fill="url(#fadeLeft)"/>
+        </svg>
+
+        <!-- Right-edge vertical page indicator dots column (11 dots) -->
+        <div class="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5 pr-2 z-20">
+          <div class="w-2.5 h-2.5 rounded-full bg-white shadow-sm ring-2 ring-white/30"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
         </div>
       </div>
 
     </div>
-  </header>
+  </section>
 
-  <!-- MAIN WRAPPER -->
-  <main class="flex-grow animate-reveal">
-
-    <!-- HERO SECTION (Night indigo with iron lace SVG texture & ultramarine radial wash) -->
-    <section class="w-full bg-[#0B1230] relative overflow-hidden text-white border-b border-[#E1E5F0]/10">
+  <!-- SECOND SCREEN STATE (Shown right under hero as full-height block) -->
+  <section class="relative w-full min-h-[680px] bg-[#0B1230] text-white lace-bg overflow-hidden flex items-center border-b border-[#E1E5F0]/10">
+    <div class="max-w-[1120px] w-full mx-auto px-8 py-12 grid grid-cols-12 gap-8 items-center relative z-10">
       
-      <!-- Faint wrought-iron lace texture inline SVG (7% opacity, masked) -->
-      <div class="absolute inset-0 pointer-events-none opacity-[0.07]" aria-hidden="true">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="iron-lace" width="56" height="56" patternUnits="userSpaceOnUse">
-              <path d="M28 0 C34 14, 42 22, 56 28 C42 34, 34 42, 28 56 C22 42, 14 34, 0 28 C14 22, 22 14, 28 0 Z" fill="none" stroke="#FFFFFF" stroke-width="1.2"/>
-              <circle cx="28" cy="28" r="8" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="28" cy="28" r="18" fill="none" stroke="#FFFFFF" stroke-width="0.8" stroke-dasharray="2,3"/>
-              <circle cx="0" cy="0" r="6" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="56" cy="0" r="6" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="0" cy="56" r="6" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-              <circle cx="56" cy="56" r="6" fill="none" stroke="#FFFFFF" stroke-width="1"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#iron-lace)"/>
-        </svg>
-      </div>
-
-      <!-- Radial ultramarine wash bottom right -->
-      <div class="absolute -right-32 -bottom-32 w-[680px] h-[680px] bg-[#1A3BB5]/35 rounded-full blur-[140px] pointer-events-none"></div>
-
-      <!-- Hero Content Container -->
-      <div class="max-w-[1120px] mx-auto px-8 pt-12 pb-14 relative z-10">
-        <div class="grid grid-cols-12 gap-8 items-center">
-          
-          <!-- Left Column (7/12) -->
-          <div class="col-span-12 lg:col-span-7 flex flex-col justify-center">
-            
-            <!-- Eyebrow: Haitian Flag (40x24) + label -->
-            <div class="flex items-center gap-3 mb-5">
-              <svg class="w-10 h-6 rounded-[4px] shadow-sm flex-shrink-0" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="40" height="12" fill="#00209F"/>
-                <rect y="12" width="40" height="12" fill="#D21034"/>
-                <rect x="14" y="7" width="12" height="10" rx="1" fill="#FFFFFF"/>
-                <circle cx="20" cy="12" r="2.5" fill="#007A3D"/>
-              </svg>
-              <span class="text-[13px] font-semibold tracking-wider text-[#B9C4E6]">ELEKSYON PREZIDANSYÈL · AYITI 2027</span>
-            </div>
-
-            <!-- Display Headline: 56px weight 800 -->
-            <h1 class="text-[54px] lg:text-[56px] font-extrabold leading-[1.05] tracking-[-0.02em] text-white mb-6">
-              Ki moun ou ta vle kòm prezidan Ayiti?
-            </h1>
-
-            <!-- Lead Paragraph: 18px #B9C4E6 -->
-            <p class="text-[18px] leading-[1.5] text-[#B9C4E6] max-w-[560px] mb-8 font-normal">
-              Chwazi sa ou vle chanje, gade dosye piblik 19 kandida yo, epi bay vòt ou. Yon vòt pa moun, ou ka chanje l.
-            </p>
-
-            <!-- Actions Row: Primary Pill & Text Link -->
-            <div class="flex items-center gap-6">
-              <a href="#" class="h-12 px-6 rounded-full bg-[#1A3BB5] hover:bg-[#153096] text-white text-[16px] font-semibold flex items-center gap-2.5 transition-colors shadow-sm">
-                <span>Kòmanse</span>
-                <span class="material-symbols-outlined !text-[20px]">arrow_forward</span>
-              </a>
-
-              <a href="#" class="text-[15px] font-semibold text-[#B9C4E6] hover:text-white transition-colors flex items-center gap-1.5">
-                <span>Wè rezilta yo</span>
-                <span class="material-symbols-outlined !text-[18px]">arrow_forward</span>
-              </a>
-            </div>
-
-          </div>
-
-          <!-- Right Column (5/12): 3D Extruded Map of Haiti Illustration + Overlapping Stats Card -->
-          <div class="col-span-12 lg:col-span-5 flex flex-col items-center relative pt-4">
-            
-            <!-- 3D Extruded Haiti Low-Poly Map SVG (~360px tall) -->
-            <div class="relative w-full max-w-[420px] h-[280px] flex items-center justify-center">
-              
-              <!-- Soft ultramarine glow under the map -->
-              <div class="absolute inset-0 bg-[#1A3BB5]/30 rounded-full blur-[48px] transform scale-75 pointer-events-none"></div>
-
-              <!-- High-craft isometric 3D extruded map of Haiti with 10 departments -->
-              <svg class="w-full h-full relative z-10" viewBox="0 0 460 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="extrude-north" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#1A3BB5" />
-                    <stop offset="100%" stop-color="#0B1230" />
-                  </linearGradient>
-                  <linearGradient id="extrude-south" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#15329C" />
-                    <stop offset="100%" stop-color="#070B1D" />
-                  </linearGradient>
-                </defs>
-
-                <!-- Soft isometric drop shadow for map slabs -->
-                <ellipse cx="230" cy="235" rx="180" ry="25" fill="#070B1D" opacity="0.6" filter="blur(8px)"/>
-
-                <!-- Grand'Anse & Sud (Tiburon Peninsula) Extrusion & Top -->
-                <path d="M 60 178 L 160 162 L 180 185 L 130 208 L 45 198 Z" fill="#0B1538" />
-                <path d="M 45 198 L 130 208 L 130 220 L 45 210 Z" fill="url(#extrude-south)" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 130 208 L 180 185 L 180 197 L 130 220 Z" fill="#080F29" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 60 166 L 160 150 L 180 173 L 130 196 L 45 186 Z" fill="#1A3BB5" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round" />
-
-                <!-- Nippes & Ouest (Port-au-Prince corridor & Massif) -->
-                <path d="M 175 168 L 260 148 L 290 172 L 230 196 L 175 180 Z" fill="#09112E" />
-                <path d="M 175 180 L 230 196 L 230 208 L 175 192 Z" fill="url(#extrude-south)" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 230 196 L 290 172 L 290 184 L 230 208 Z" fill="#070D24" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 175 156 L 260 136 L 290 160 L 230 184 L 175 168 Z" fill="#1E42C9" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round" />
-
-                <!-- Île de la Gonâve (floating in the gulf) -->
-                <path d="M 180 125 L 225 115 L 240 128 L 195 138 Z" fill="#0B1333" />
-                <path d="M 195 138 L 240 128 L 240 135 L 195 145 Z" fill="#070C22" stroke="#B9C4E6" stroke-width="0.7" />
-                <path d="M 180 118 L 225 108 L 240 121 L 195 131 Z" fill="#2046D4" stroke="#B9C4E6" stroke-width="1" stroke-linejoin="round" />
-
-                <!-- Artibonite & Centre (Central plateau) -->
-                <path d="M 230 120 L 320 95 L 350 125 L 285 148 L 225 132 Z" fill="#0B1538" />
-                <path d="M 225 132 L 285 148 L 285 160 L 225 144 Z" fill="url(#extrude-north)" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 285 148 L 350 125 L 350 137 L 285 160 Z" fill="#080F2A" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 230 108 L 320 83 L 350 113 L 285 136 L 225 120 Z" fill="#1A3BB5" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round" />
-
-                <!-- Nord, Nord-Est & Nord-Ouest -->
-                <path d="M 210 75 L 300 48 L 360 62 L 340 92 L 240 98 Z" fill="#09112E" />
-                <path d="M 240 98 L 340 92 L 340 104 L 240 110 Z" fill="url(#extrude-north)" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 340 92 L 360 62 L 360 74 L 340 104 Z" fill="#060C21" stroke="#B9C4E6" stroke-width="0.75" />
-                <path d="M 210 63 L 300 36 L 360 50 L 340 80 L 240 86 Z" fill="#224ADB" stroke="#B9C4E6" stroke-width="1.2" stroke-linejoin="round" />
-
-                <!-- Île de la Tortue (floating off the northern coast) -->
-                <path d="M 245 42 L 295 28 L 310 35 L 260 49 Z" fill="#080F2A" />
-                <path d="M 260 49 L 310 35 L 310 40 L 260 54 Z" fill="#060B1E" stroke="#B9C4E6" stroke-width="0.6" />
-                <path d="M 245 37 L 295 23 L 310 30 L 260 44 Z" fill="#2850E8" stroke="#B9C4E6" stroke-width="0.9" stroke-linejoin="round" />
-              </svg>
-            </div>
-
-            <!-- Overlapping White Stats Card (-mt-8 to create intentional physical overlap) -->
-            <div class="w-full relative z-20 -mt-6 bg-white rounded-[16px] border border-[#E1E5F0] p-6 text-[#0B1A4A]"
-                 style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 12px 32px rgba(11,26,74,.12);">
-              
-              <!-- Countdown Row -->
-              <div class="flex items-center gap-4 pb-5 border-b border-[#E1E5F0]">
-                <div class="w-11 h-11 rounded-full bg-[#EAEEFA] flex items-center justify-center flex-shrink-0 text-[#1A3BB5]">
-                  <span class="material-symbols-outlined !text-[22px]">event</span>
-                </div>
-                <div class="flex-grow">
-                  <div class="flex items-baseline gap-2">
-                    <span class="text-[28px] font-extrabold leading-none tracking-tight text-[#0B1A4A] tabular-nums">259 jou</span>
-                  </div>
-                  <div class="text-[13px] text-[#5B6480] mt-1">
-                    anvan premye tou a · 18 jiyè 2027
-                  </div>
-                </div>
-              </div>
-
-              <!-- Three Stats in a row -->
-              <div class="grid grid-cols-3 gap-2 pt-4 text-center">
-                <div class="px-2">
-                  <div class="text-[22px] font-extrabold text-[#0B1A4A] tabular-nums leading-tight">12 384</div>
-                  <div class="text-[12px] text-[#5B6480] mt-0.5 leading-snug">moun patisipe</div>
-                </div>
-                <div class="px-2 border-x border-[#E1E5F0]">
-                  <div class="text-[22px] font-extrabold text-[#0B1A4A] tabular-nums leading-tight">19</div>
-                  <div class="text-[12px] text-[#5B6480] mt-0.5 leading-snug">kandida anrejistre</div>
-                </div>
-                <div class="px-2">
-                  <div class="text-[22px] font-extrabold text-[#0B1A4A] tabular-nums leading-tight">3 912</div>
-                  <div class="text-[12px] text-[#5B6480] mt-0.5 leading-snug">repons sondaj</div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-
+      <!-- Left 45% Content Column -->
+      <div class="col-span-12 lg:col-span-5 flex flex-col justify-center">
+        <!-- Kicker -->
+        <div class="text-[12px] font-semibold tracking-wider text-[#B9C4E6] mb-2 uppercase">
+          DEPATMAN 1 SOU 10
         </div>
-      </div>
-    </section>
 
-    <!-- CANDIDATES STRIP (Full width marquee right after the hero, no card container) -->
-    <section class="w-full bg-[#F3F5FA] py-8 border-b border-[#E1E5F0] overflow-hidden">
-      <div class="max-w-[1120px] mx-auto px-8 mb-3">
-        <p class="text-[13px] text-[#5B6480] font-normal">
-          19 kandida · lòd o aza · peze yon kandida pou wè pwofil li
+        <!-- Title -->
+        <h2 class="text-[60px] leading-[1] font-extrabold text-white tracking-[-0.02em] mb-1">
+          Lwès
+        </h2>
+        <div class="text-[18px] text-[#B9C4E6] font-medium mb-6">
+          Ouest
+        </div>
+
+        <!-- Three Glass Tiles in a row -->
+        <div class="grid grid-cols-3 gap-3 mb-4">
+          <!-- Tile 1 -->
+          <div class="bg-white/[0.07] border border-white/[0.14] rounded-[14px] p-3 backdrop-blur-sm">
+            <div class="text-[15px] font-bold text-white truncate">Pòtoprens</div>
+            <div class="text-[12px] text-[#B9C4E6] mt-0.5">Chèf lye</div>
+          </div>
+          <!-- Tile 2 -->
+          <div class="bg-white/[0.07] border border-white/[0.14] rounded-[14px] p-3 backdrop-blur-sm">
+            <div class="text-[15px] font-bold text-white num-tabular">4 029 705</div>
+            <div class="text-[12px] text-[#B9C4E6] mt-0.5">Moun</div>
+          </div>
+          <!-- Tile 3 -->
+          <div class="bg-white/[0.07] border border-white/[0.14] rounded-[14px] p-3 backdrop-blur-sm">
+            <div class="text-[15px] font-bold text-white num-tabular">4 983 km²</div>
+            <div class="text-[12px] text-[#B9C4E6] mt-0.5">Sipèfisi</div>
+          </div>
+        </div>
+
+        <!-- Source note -->
+        <p class="text-[11px] text-[#B9C4E6]/75">
+          Popilasyon: estimasyon IHSI 2015 · sipèfisi dapre Wikipedia
         </p>
       </div>
 
-      <!-- Infinite Marquee Track with 56px Avatars -->
-      <div class="relative w-full overflow-hidden">
-        <div class="marquee-track flex items-center gap-3 pl-8">
-          
-          <!-- Candidate Avatars Batch 1 -->
-          <div class="flex items-center gap-3">
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Wilson Jeudy">
-              WJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jean Ernest Muscadin">
-              JM
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Michel Joseph Martelly">
-              MM
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Claude Joseph">
-              CJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jocelerme Privert">
-              JP
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Gary Bodeau">
-              GB
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Maxo Joseph">
-              MJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Ricardo Jean-Pierre">
-              RJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Wilner Joseph">
-              WJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Gandhy Dorfeuille">
-              GD
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="David Alexis">
-              DA
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Moïse Jean-Charles">
-              MD
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jean-Charles Moïse">
-              JG
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Reginald Boulos">
-              RS
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jerry Tardieu">
-              JS
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Patrice Dumont">
-              PT
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Lilas Desquiron">
-              LB
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Edmonde Supplice Beauzile">
-              EV
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Steven Benoît">
-              SM
-            </a>
-          </div>
-
-          <!-- Candidate Avatars Batch 2 (Duplicate for continuous loop) -->
-          <div class="flex items-center gap-3">
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Wilson Jeudy">
-              WJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jean Ernest Muscadin">
-              JM
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Michel Joseph Martelly">
-              MM
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Claude Joseph">
-              CJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jocelerme Privert">
-              JP
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Gary Bodeau">
-              GB
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Maxo Joseph">
-              MJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Ricardo Jean-Pierre">
-              RJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Wilner Joseph">
-              WJ
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Gandhy Dorfeuille">
-              GD
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="David Alexis">
-              DA
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Moïse Jean-Charles">
-              MD
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jean-Charles Moïse">
-              JG
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Reginald Boulos">
-              RS
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Jerry Tardieu">
-              JS
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Patrice Dumont">
-              PT
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Lilas Desquiron">
-              LB
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Edmonde Supplice Beauzile">
-              EV
-            </a>
-            <a href="#" class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] hover:scale-105 transition-transform" title="Steven Benoît">
-              SM
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTENT SECTION: TWO COLUMNS (Left 7/12: Top 5 kounye a; Right 5/12: Eksplore) -->
-    <section class="max-w-[1120px] mx-auto px-8 pt-10 pb-12">
-      <div class="grid grid-cols-12 gap-8 items-start">
-        
-        <!-- LEFT COLUMN (7/12): Top 5 kounye a -->
-        <div class="col-span-12 lg:col-span-7">
-          
-          <!-- Section Heading + Live Indicator -->
-          <div class="flex items-center justify-between mb-1">
-            <div class="flex items-center gap-3">
-              <h2 class="text-[20px] font-bold tracking-tight text-[#0B1A4A]">Top 5 kounye a</h2>
-              
-              <!-- 8px ultramarine live dot with pulsing ring -->
-              <div class="flex items-center gap-1.5">
-                <div class="relative flex items-center justify-center w-3 h-3">
-                  <span class="pulse-ring absolute w-3 h-3 rounded-full bg-[#1A3BB5]"></span>
-                  <span class="relative w-2 h-2 rounded-full bg-[#1A3BB5]"></span>
-                </div>
-                <span class="text-[13px] font-medium text-[#5B6480]">an dirèk</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Caption -->
-          <p class="text-[13px] text-[#5B6480] mb-6">
-            Dapre vòt pèp la · se pa yon sondaj syantifik
-          </p>
-
-          <!-- Five Result Rows (Cards with lifted soft shadow & 12px gap) -->
-          <div class="flex flex-col gap-3">
-            
-            <!-- Row 1: Wilson Jeudy 23% -->
-            <div class="w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex flex-col gap-3"
-                 style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 24px rgba(11,26,74,.06);">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                  <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
-                    WJ
-                  </div>
-                  <div>
-                    <div class="text-[17px] font-semibold text-[#0B1A4A]">Wilson Jeudy</div>
-                    <div class="mt-1">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0]">
-                        VAR
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">23 %</div>
-              </div>
-              <!-- Bar -->
-              <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
-                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 23%;"></div>
-              </div>
-            </div>
-
-            <!-- Row 2: Jean Ernest Muscadin 19% -->
-            <div class="w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex flex-col gap-3"
-                 style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 24px rgba(11,26,74,.06);">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                  <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
-                    JM
-                  </div>
-                  <div>
-                    <div class="text-[17px] font-semibold text-[#0B1A4A]">Jean Ernest Muscadin</div>
-                    <div class="mt-1">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0]">
-                        FCN
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">19 %</div>
-              </div>
-              <!-- Bar -->
-              <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
-                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 19%;"></div>
-              </div>
-            </div>
-
-            <!-- Row 3: Michel Joseph Martelly 17% -->
-            <div class="w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex flex-col gap-3"
-                 style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 24px rgba(11,26,74,.06);">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                  <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
-                    MM
-                  </div>
-                  <div>
-                    <div class="text-[17px] font-semibold text-[#0B1A4A]">Michel Joseph Martelly</div>
-                    <div class="mt-1">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0]">
-                        Debloke
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">17 %</div>
-              </div>
-              <!-- Bar -->
-              <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
-                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 17%;"></div>
-              </div>
-            </div>
-
-            <!-- Row 4: Claude Joseph 11% -->
-            <div class="w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex flex-col gap-3"
-                 style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 24px rgba(11,26,74,.06);">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                  <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
-                    CJ
-                  </div>
-                  <div>
-                    <div class="text-[17px] font-semibold text-[#0B1A4A]">Claude Joseph</div>
-                    <div class="mt-1">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0]">
-                        EDE
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">11 %</div>
-              </div>
-              <!-- Bar -->
-              <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
-                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 11%;"></div>
-              </div>
-            </div>
-
-            <!-- Row 5: Jocelerme Privert 8% -->
-            <div class="w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex flex-col gap-3"
-                 style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 24px rgba(11,26,74,.06);">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3.5">
-                  <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center text-[17px] font-bold shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
-                    JP
-                  </div>
-                  <div>
-                    <div class="text-[17px] font-semibold text-[#0B1A4A]">Jocelerme Privert</div>
-                    <div class="mt-1">
-                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-medium text-[#5B6480] bg-[#F3F5FA] border border-[#E1E5F0]">
-                        Ayiti Transfòme
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="text-[20px] font-bold text-[#0B1A4A] tabular-nums">8 %</div>
-              </div>
-              <!-- Bar -->
-              <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
-                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 8%;"></div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom Text Link: Wè tout rezilta yo -->
-          <div class="mt-5">
-            <a href="#" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#1A3BB5] hover:underline">
-              <span>Wè tout rezilta yo</span>
-              <span class="material-symbols-outlined !text-[18px]">arrow_forward</span>
-            </a>
-          </div>
-
-        </div>
-
-        <!-- RIGHT COLUMN (5/12): Eksplore Cards Stacked -->
-        <div class="col-span-12 lg:col-span-5">
-          
-          <h2 class="text-[20px] font-bold tracking-tight text-[#0B1A4A] mb-1">Eksplore</h2>
-          <p class="text-[13px] text-[#5B6480] mb-6">Aksè rapid sou fonksyonalite kle yo</p>
-
-          <div class="flex flex-col gap-3">
-            
-            <!-- Card 1: Kandida yo -->
-            <a href="#" class="group w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between hover:border-[#7D93E8] transition-all"
-               style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 20px rgba(11,26,74,.05);">
-              <div class="flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] flex-shrink-0 group-hover:scale-105 transition-transform">
-                  <span class="material-symbols-outlined !text-[20px]">groups</span>
-                </div>
-                <div>
-                  <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Kandida yo</div>
-                  <div class="text-[14px] text-[#5B6480]">19 kandida, lòd o aza, menm fòma pou tout moun</div>
-                </div>
-              </div>
-              <span class="material-symbols-outlined text-[#5B6480] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
-            </a>
-
-            <!-- Card 2: Sondaj semèn nan -->
-            <a href="#" class="group w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between hover:border-[#7D93E8] transition-all"
-               style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 20px rgba(11,26,74,.05);">
-              <div class="flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] flex-shrink-0 group-hover:scale-105 transition-transform">
-                  <span class="material-symbols-outlined !text-[20px]">ballot</span>
-                </div>
-                <div>
-                  <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Sondaj semèn nan</div>
-                  <div class="text-[14px] text-[#5B6480]">Chak semèn, yon nouvo kesyon</div>
-                </div>
-              </div>
-              <span class="material-symbols-outlined text-[#5B6480] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
-            </a>
-
-            <!-- Card 3: Rezilta an dirèk -->
-            <a href="#" class="group w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between hover:border-[#7D93E8] transition-all"
-               style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 20px rgba(11,26,74,.05);">
-              <div class="flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] flex-shrink-0 group-hover:scale-105 transition-transform">
-                  <span class="material-symbols-outlined !text-[20px]">how_to_vote</span>
-                </div>
-                <div>
-                  <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Rezilta an dirèk</div>
-                  <div class="text-[14px] text-[#5B6480]">Vòt pèp la, mizajou chak minit</div>
-                </div>
-              </div>
-              <span class="material-symbols-outlined text-[#5B6480] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
-            </a>
-
-            <!-- Card 4: Kijan sa mache -->
-            <a href="#" class="group w-full bg-white rounded-[16px] border border-[#E1E5F0] p-4 flex items-center justify-between hover:border-[#7D93E8] transition-all"
-               style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 8px 20px rgba(11,26,74,.05);">
-              <div class="flex items-center gap-3.5">
-                <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] flex-shrink-0 group-hover:scale-105 transition-transform">
-                  <span class="material-symbols-outlined !text-[20px]">info</span>
-                </div>
-                <div>
-                  <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Kijan sa mache</div>
-                  <div class="text-[14px] text-[#5B6480]">Metòd, règ netralite, dat enpòtan</div>
-                </div>
-              </div>
-              <span class="material-symbols-outlined text-[#5B6480] group-hover:translate-x-0.5 transition-transform">chevron_right</span>
-            </a>
-
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- PHOTO CARD (Full width max-w-1120px, 24px radius, deep soft shadow, 260px tall) -->
-    <section class="max-w-[1120px] mx-auto px-8 pb-12">
-      <div class="relative w-full h-[260px] rounded-[24px] overflow-hidden border border-[#E1E5F0] bg-[#0B1230]"
-           style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 16px 36px rgba(11,26,74,.09);">
-        
-        <!-- High-fidelity custom illustrated visual of Citadelle Laferrière standing on Bonnet à l'Évêque mountain -->
-        <svg class="w-full h-full object-cover" viewBox="0 0 1120 260" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Right 55% Zoomed 3D Map focused on Lwès -->
+      <div class="col-span-12 lg:col-span-7 h-[540px] relative flex items-center justify-center">
+        <svg class="w-full h-full max-h-[520px] filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.55)]" viewBox="0 0 740 500" fill="none">
           <defs>
-            <linearGradient id="sky-grad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#14214D"/>
-              <stop offset="60%" stop-color="#243B82"/>
-              <stop offset="100%" stop-color="#4663B5"/>
+            <linearGradient id="lwesTop" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#3B66FF"/>
+              <stop offset="100%" stop-color="#1A3BB5"/>
             </linearGradient>
-            <linearGradient id="fortress-stone" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#3A4668"/>
-              <stop offset="50%" stop-color="#222C46"/>
-              <stop offset="100%" stop-color="#11182B"/>
-            </linearGradient>
-            <linearGradient id="prow-stone" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#4E5D87"/>
-              <stop offset="100%" stop-color="#2A3554"/>
-            </linearGradient>
-            <linearGradient id="mountain-deep" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#1D4336"/>
-              <stop offset="100%" stop-color="#0E231C"/>
+            <linearGradient id="lwesSide" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#1A2D73"/>
+              <stop offset="100%" stop-color="#0E173D"/>
             </linearGradient>
           </defs>
 
-          <!-- Sky with soft atmospheric clouds -->
-          <rect width="1120" height="260" fill="url(#sky-grad)"/>
-          <path d="M 0 90 Q 280 40 560 85 T 1120 60 L 1120 260 L 0 260 Z" fill="#2E437C" opacity="0.4"/>
-          <path d="M 0 130 Q 340 70 700 115 T 1120 95 L 1120 260 L 0 260 Z" fill="#203362" opacity="0.6"/>
+          <!-- Dimmed base departments -->
+          <g opacity="0.32" filter="blur(1px)">
+            <!-- Nòdwès -->
+            <path d="M180 165 L230 150 L270 170 L235 190 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Nò -->
+            <path d="M275 170 L340 155 L390 173 L345 193 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Nòdès -->
+            <path d="M390 180 L440 172 L475 190 L430 205 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Latibonit -->
+            <path d="M240 220 L320 200 L360 225 L280 255 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Sant -->
+            <path d="M360 230 L435 225 L465 250 L395 265 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Grandans -->
+            <path d="M40 290 L105 285 L130 305 L65 315 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Nip -->
+            <path d="M135 303 L190 297 L220 315 L165 327 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Sid -->
+            <path d="M85 335 L165 330 L190 355 L115 368 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+            <!-- Sidès -->
+            <path d="M340 355 L420 350 L455 373 L375 385 Z" fill="#142562" stroke="#687AA8" stroke-width="0.8"/>
+          </g>
 
-          <!-- Distant mountains of Northern Haiti -->
-          <path d="M 0 160 Q 200 110 420 145 T 840 120 T 1120 150 L 1120 260 L 0 260 Z" fill="#182B4E"/>
+          <!-- Highlighted, Zoomed, Elevated "Lwès" Slab -->
+          <g transform="translate(0, -18)">
+            <!-- Glow under Lwès -->
+            <ellipse cx="320" cy="305" rx="140" ry="60" fill="#1A3BB5" fill-opacity="0.45" filter="blur(28px)"/>
 
-          <!-- High peak mountain ridge (Bonnet à l'Évêque) -->
-          <path d="M 120 260 L 380 140 L 760 155 L 1050 260 Z" fill="url(#mountain-deep)"/>
+            <!-- Elevated Slab -->
+            <path d="M210 280 L350 250 L440 295 L300 340 L210 280 Z" fill="url(#lwesTop)" stroke="#FFFFFF" stroke-width="2"/>
+            <path d="M210 280 L300 340 L300 380 L210 320 Z" fill="url(#lwesSide)" stroke="#B9C4E6" stroke-width="1"/>
+            <path d="M300 340 L440 295 L440 335 L300 380 Z" fill="#0A112C" stroke="#B9C4E6" stroke-width="1"/>
 
-          <!-- The Citadelle fortress silhouette & massive stone prow -->
-          <!-- Main battery curtain wall -->
-          <path d="M 440 150 L 440 95 L 680 102 L 680 155 Z" fill="url(#fortress-stone)"/>
-          
-          <!-- Towering angled prow (l'Éperon) pointing left -->
-          <path d="M 440 95 L 360 115 L 440 152 Z" fill="url(#prow-stone)"/>
-          <path d="M 440 95 L 530 82 L 530 148 L 440 152 Z" fill="#323E5C"/>
-
-          <!-- Watchtower / sentry bartizan (Guerite) on the apex -->
-          <rect x="355" y="105" width="10" height="15" rx="2" fill="#4E5D87"/>
-          <path d="M 353 105 L 360 98 L 367 105 Z" fill="#6273A3"/>
-
-          <!-- Battlements, loopholes & embrasures row -->
-          <rect x="450" y="102" width="12" height="6" fill="#0B1220"/>
-          <rect x="475" y="102" width="12" height="6" fill="#0B1220"/>
-          <rect x="500" y="102" width="12" height="6" fill="#0B1220"/>
-          <rect x="545" y="108" width="10" height="5" fill="#0B1220"/>
-          <rect x="570" y="108" width="10" height="5" fill="#0B1220"/>
-          <rect x="595" y="108" width="10" height="5" fill="#0B1220"/>
-          <rect x="620" y="108" width="10" height="5" fill="#0B1220"/>
-          <rect x="645" y="108" width="10" height="5" fill="#0B1220"/>
-
-          <!-- Cannon ports on lower gallery -->
-          <circle cx="460" cy="125" r="3.5" fill="#090E1A"/>
-          <circle cx="490" cy="125" r="3.5" fill="#090E1A"/>
-          <circle cx="560" cy="130" r="3.5" fill="#090E1A"/>
-          <circle cx="590" cy="130" r="3.5" fill="#090E1A"/>
-          <circle cx="620" cy="130" r="3.5" fill="#090E1A"/>
-          <circle cx="650" cy="130" r="3.5" fill="#090E1A"/>
-
-          <!-- Lush mountain foreground wrapping the base -->
-          <path d="M 0 220 Q 300 170 580 190 T 1120 180 L 1120 260 L 0 260 Z" fill="#133328" opacity="0.95"/>
-          <path d="M 0 240 Q 420 195 800 220 T 1120 210 L 1120 260 L 0 260 Z" fill="#0D241C"/>
+            <!-- White Glowing Dot with Pill Label: Pòtoprens -->
+            <g transform="translate(325, 290)">
+              <circle cx="0" cy="0" r="14" fill="#FFFFFF" fill-opacity="0.25" class="pulse-indicator"/>
+              <circle cx="0" cy="0" r="5" fill="#FFFFFF" stroke="#1A3BB5" stroke-width="2"/>
+              <!-- Pill Label -->
+              <rect x="12" y="-12" width="86" height="24" rx="12" fill="#FFFFFF" filter="drop-shadow(0 2px 8px rgba(0,0,0,0.3))"/>
+              <text x="55" y="4" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="12" font-weight="700" fill="#0B1A4A">Pòtoprens</text>
+            </g>
+          </g>
         </svg>
 
-        <!-- Dark indigo gradient overlay on the bottom third -->
-        <div class="absolute inset-0 bg-gradient-to-t from-[#0B1230] via-[#0B1230]/50 to-transparent"></div>
+        <!-- Right-edge vertical dots indicator (2nd dot active) -->
+        <div class="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2.5 pr-2 z-20">
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2.5 h-2.5 rounded-full bg-white shadow-sm ring-2 ring-white/30"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+          <div class="w-2 h-2 rounded-full bg-white/25"></div>
+        </div>
+      </div>
 
-        <!-- Captions inside the photo card -->
-        <div class="absolute bottom-6 left-6 right-6 flex items-end justify-between z-10">
-          <div>
-            <div class="text-[18px] font-bold text-white tracking-tight">Sitadèl Laferyè, Milot</div>
-            <div class="text-[13px] text-[#B9C4E6] mt-0.5">Senbòl libète ak fòs pèp Ayisyen an</div>
-          </div>
-          <div class="text-[12px] text-[#B9C4E6] font-medium bg-[#0B1230]/70 px-3.5 py-1 rounded-full backdrop-blur-sm border border-white/15">
-            Foto: Alex Proimos, CC BY 2.0
-          </div>
+    </div>
+  </section>
+
+  <!-- CANDIDATES STRIP (Full width marquee row) -->
+  <section class="w-full bg-white border-b border-[#E1E5F0] py-6 overflow-hidden">
+    <div class="max-w-[1120px] mx-auto px-8 mb-3">
+      <div class="text-[13px] text-[#5B6480]">
+        19 kandida · lòd o aza · peze yon kandida pou wè pwofil li
+      </div>
+    </div>
+
+    <!-- Scrolling Marquee of 19 Candidates -->
+    <div class="w-full overflow-hidden flex">
+      <div class="animate-marquee flex items-center gap-3 pl-4">
+        <!-- 19 Avatars (Set 1) -->
+        <div class="flex items-center gap-3">
+          <!-- MM -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Michel Joseph Martelly">MM</div>
+          <!-- CJ -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Claude Joseph">CJ</div>
+          <!-- JP -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Jocelerme Privert">JP</div>
+          <!-- GB -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Gary Bodeau">GB</div>
+          <!-- WJ -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Wilson Jeudy">WJ</div>
+          <!-- JM -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Jean Ernest Muscadin">JM</div>
+          <!-- MJ -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Maxo Joseph">MJ</div>
+          <!-- RJ -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Ricardo Jean-Pierre">RJ</div>
+          <!-- WJ2 -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Wilner Joseph">WJ</div>
+          <!-- GD -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Gandhy Dorfeuille">GD</div>
+          <!-- DA -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Dieudonné André">DA</div>
+          <!-- MD -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Mario Délice">MD</div>
+          <!-- JG -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Jean Gabriel">JG</div>
+          <!-- RS -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Ronald Saint-Preux">RS</div>
+          <!-- JS -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Jacques Sauveur">JS</div>
+          <!-- PT -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Patrick Théodore">PT</div>
+          <!-- LB -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Laurent Bernard">LB</div>
+          <!-- EV -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Edgard Vital">EV</div>
+          <!-- KC -->
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform" title="Kettly Charles">KC</div>
         </div>
 
+        <!-- 19 Avatars (Set 2 for infinite loop) -->
+        <div class="flex items-center gap-3">
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">MM</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">CJ</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">JP</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">GB</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">WJ</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">JM</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">MJ</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">RJ</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">WJ</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">GD</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">DA</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">MD</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">JG</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">RS</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">JS</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">PT</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">LB</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">EV</div>
+          <div class="w-14 h-14 rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0 cursor-pointer hover:scale-105 transition-transform">KC</div>
+        </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- SECTION: DAT K AP VINI (Two columns: Timeline card 7/12 & Civic note card 5/12) -->
-    <section class="max-w-[1120px] mx-auto px-8 pb-16">
-      <div class="grid grid-cols-12 gap-8 items-stretch">
-        
-        <!-- Left Column (7/12): Timeline Card -->
-        <div class="col-span-12 lg:col-span-7 bg-white rounded-[16px] border border-[#E1E5F0] p-6 flex flex-col justify-between"
-             style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 12px 32px rgba(11,26,74,.06);">
-          <div>
-            <h2 class="text-[20px] font-bold tracking-tight text-[#0B1A4A] mb-5">Dat k ap vini</h2>
-            
-            <!-- Timeline of 3 dates -->
-            <div class="relative pl-6 space-y-6 before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-[2px] before:bg-[#E1E5F0]">
-              
-              <!-- 15 novanm 2026 -->
-              <div class="relative">
-                <span class="absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#1A3BB5]"></span>
-                <div class="text-[15px] font-semibold text-[#0B1A4A]">15 novanm 2026</div>
-                <div class="text-[14px] text-[#5B6480] mt-0.5">Fèmti enskripsyon kandida an liy</div>
+  <!-- MAIN TWO-COLUMN CONTENT AREA (Top 5 & Eksplore) -->
+  <main class="max-w-[1120px] w-full mx-auto px-8 pt-10 pb-8">
+    <div class="grid grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT 7/12 COLUMN: TOP 5 KOUNYE A -->
+      <section class="col-span-12 lg:col-span-7">
+        <!-- Section Header -->
+        <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center gap-2.5">
+            <h2 class="text-[20px] font-bold text-[#0B1A4A] tracking-[-0.01em]">Top 5 kounye a</h2>
+            <!-- Live Indicator -->
+            <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#EAEEFA]">
+              <span class="w-2 h-2 rounded-full bg-[#1A3BB5] relative flex items-center justify-center">
+                <span class="w-2 h-2 rounded-full bg-[#1A3BB5] pulse-indicator absolute inset-0"></span>
+              </span>
+              <span class="text-[12px] font-medium text-[#1A3BB5]">an dirèk</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-[13px] text-[#5B6480] mb-5">Dapre vòt pèp la · se pa yon sondaj syantifik</p>
+
+        <!-- 5 Result Rows (White cards, 16px radius, hairline, 12px apart, no ranking numerals) -->
+        <div class="flex flex-col gap-3">
+
+          <!-- 1. Wilson Jeudy -->
+          <div class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition-colors">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  WJ
+                </div>
+                <div>
+                  <div class="text-[17px] font-semibold text-[#0B1A4A]">Wilson Jeudy</div>
+                  <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+                    VAR
+                  </div>
+                </div>
               </div>
-
-              <!-- 15 desanm 2026 -->
-              <div class="relative">
-                <span class="absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#1A3BB5]"></span>
-                <div class="text-[15px] font-semibold text-[#0B1A4A]">15 desanm 2026</div>
-                <div class="text-[14px] text-[#5B6480] mt-0.5">Lis preliminè kandida yo</div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
+                23 %
               </div>
-
-              <!-- 11 janvye 2027 -->
-              <div class="relative">
-                <span class="absolute -left-6 top-1.5 w-2.5 h-2.5 rounded-full bg-white border-2 border-[#1A3BB5]"></span>
-                <div class="text-[15px] font-semibold text-[#0B1A4A]">11 janvye 2027</div>
-                <div class="text-[14px] text-[#5B6480] mt-0.5">Lis final kandida yo</div>
-              </div>
-
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+              <div class="h-full rounded-full bg-[#1A3BB5]" style="width: 23%;"></div>
             </div>
           </div>
 
-          <!-- Link: Tout dat yo -->
-          <div class="mt-6 pt-4 border-t border-[#E1E5F0]">
-            <a href="#" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#1A3BB5] hover:underline">
-              <span>Tout dat yo</span>
-              <span class="material-symbols-outlined !text-[18px]">arrow_forward</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- Right Column (5/12): Note Card -->
-        <div class="col-span-12 lg:col-span-5 bg-white rounded-[16px] border border-[#E1E5F0] p-6 flex flex-col justify-center"
-             style="box-shadow: 0 1px 2px rgba(11,26,74,.05), 0 12px 32px rgba(11,26,74,.06);">
-          <div class="flex items-start gap-3.5">
-            <div class="w-10 h-10 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5] flex-shrink-0 mt-0.5">
-              <span class="material-symbols-outlined !text-[20px]">info</span>
+          <!-- 2. Jean Ernest Muscadin -->
+          <div class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition-colors">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  JM
+                </div>
+                <div>
+                  <div class="text-[17px] font-semibold text-[#0B1A4A]">Jean Ernest Muscadin</div>
+                  <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+                    FCN
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
+                19 %
+              </div>
             </div>
-            <p class="text-[14px] leading-relaxed text-[#5B6480]">
-              Prezidan Pa M se yon inisyativ sivik endepandan. Nou pa sipòte okenn kandida ni pati. Rezilta yo se yon vòt pèp la, se pa yon sondaj syantifik.
-            </p>
+            <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+              <div class="h-full rounded-full bg-[#1A3BB5]" style="width: 19%;"></div>
+            </div>
           </div>
+
+          <!-- 3. Michel Joseph Martelly -->
+          <div class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition-colors">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  MM
+                </div>
+                <div>
+                  <div class="text-[17px] font-semibold text-[#0B1A4A]">Michel Joseph Martelly</div>
+                  <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+                    Debloke
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
+                17 %
+              </div>
+            </div>
+            <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+              <div class="h-full rounded-full bg-[#1A3BB5]" style="width: 17%;"></div>
+            </div>
+          </div>
+
+          <!-- 4. Claude Joseph -->
+          <div class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition-colors">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  CJ
+                </div>
+                <div>
+                  <div class="text-[17px] font-semibold text-[#0B1A4A]">Claude Joseph</div>
+                  <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+                    EDE
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
+                11 %
+              </div>
+            </div>
+            <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+              <div class="h-full rounded-full bg-[#1A3BB5]" style="width: 11%;"></div>
+            </div>
+          </div>
+
+          <!-- 5. Jocelerme Privert -->
+          <div class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 transition-colors">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-3">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white flex items-center justify-center font-bold text-[17px] shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0] flex-shrink-0">
+                  JP
+                </div>
+                <div>
+                  <div class="text-[17px] font-semibold text-[#0B1A4A]">Jocelerme Privert</div>
+                  <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+                    Ayiti Transfòme
+                  </div>
+                </div>
+              </div>
+              <div class="text-[20px] font-bold text-[#0B1A4A] num-tabular">
+                8 %
+              </div>
+            </div>
+            <div class="w-full h-2 rounded-full bg-[#E6EAF5] overflow-hidden">
+              <div class="h-full rounded-full bg-[#1A3BB5]" style="width: 8%;"></div>
+            </div>
+          </div>
+
         </div>
 
-      </div>
-    </section>
+        <!-- Text link below list -->
+        <div class="mt-4">
+          <a href="#" class="inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#1A3BB5] hover:underline">
+            <span>Wè tout rezilta yo</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </a>
+        </div>
+      </section>
 
+      <!-- RIGHT 5/12 COLUMN: EKSPLORE -->
+      <section class="col-span-12 lg:col-span-5">
+        <h2 class="text-[20px] font-bold text-[#0B1A4A] tracking-[-0.01em] mb-1">Eksplore</h2>
+        <p class="text-[13px] text-[#5B6480] mb-5">Aksè rapid sou fonksyonalite kle yo</p>
+
+        <!-- Four Stacked Cards -->
+        <div class="flex flex-col gap-3">
+
+          <!-- 1. Kandida yo -->
+          <a href="#" class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 flex items-center justify-between group transition-all">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-[22px]">groups</span>
+              </div>
+              <div>
+                <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Kandida yo</div>
+                <div class="text-[13px] text-[#5B6480] line-clamp-1">19 kandida, lòd o aza, menm fòma pou tout moun</div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-[#5B6480] text-[20px] group-hover:text-[#1A3BB5] group-hover:translate-x-0.5 transition-all">chevron_right</span>
+          </a>
+
+          <!-- 2. Sondaj semèn nan -->
+          <a href="#" class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 flex items-center justify-between group transition-all">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-[22px]">ballot</span>
+              </div>
+              <div>
+                <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Sondaj semèn nan</div>
+                <div class="text-[13px] text-[#5B6480] line-clamp-1">Chak semèn, yon nouvo kesyon</div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-[#5B6480] text-[20px] group-hover:text-[#1A3BB5] group-hover:translate-x-0.5 transition-all">chevron_right</span>
+          </a>
+
+          <!-- 3. Rezilta an dirèk -->
+          <a href="#" class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 flex items-center justify-between group transition-all">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-[22px]">how_to_vote</span>
+              </div>
+              <div>
+                <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Rezilta an dirèk</div>
+                <div class="text-[13px] text-[#5B6480] line-clamp-1">Vòt pèp la, mizajou chak minit</div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-[#5B6480] text-[20px] group-hover:text-[#1A3BB5] group-hover:translate-x-0.5 transition-all">chevron_right</span>
+          </a>
+
+          <!-- 4. Kijan sa mache -->
+          <a href="#" class="w-full bg-white rounded-[16px] p-4 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] hover:border-[#1A3BB5]/40 flex items-center justify-between group transition-all">
+            <div class="flex items-center gap-3.5">
+              <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+                <span class="material-symbols-outlined text-[22px]">info</span>
+              </div>
+              <div>
+                <div class="text-[16px] font-semibold text-[#0B1A4A] group-hover:text-[#1A3BB5] transition-colors">Kijan sa mache</div>
+                <div class="text-[13px] text-[#5B6480] line-clamp-1">Metòd, règ netralite, dat enpòtan</div>
+              </div>
+            </div>
+            <span class="material-symbols-outlined text-[#5B6480] text-[20px] group-hover:text-[#1A3BB5] group-hover:translate-x-0.5 transition-all">chevron_right</span>
+          </a>
+
+        </div>
+      </section>
+
+    </div>
   </main>
 
-  <!-- FOOTER (Night indigo background, max-w-1120px) -->
-  <footer class="w-full bg-[#0B1230] border-t border-white/10 py-10 text-center text-white">
-    <div class="max-w-[1120px] mx-auto px-8 flex flex-col items-center gap-4">
-      <div class="text-[16px] font-bold tracking-tight text-white">
+  <!-- PHOTO CARD (Citadelle Laferrière, 300px tall, full width within 1120px container) -->
+  <section class="max-w-[1120px] w-full mx-auto px-8 my-6">
+    <div class="w-full h-[300px] rounded-[24px] overflow-hidden relative border border-[#E1E5F0] shadow-[0_4px_24px_rgba(11,26,74,0.08)]">
+      <!-- Image Asset -->
+      <img src="https://lh3.googleusercontent.com/aida/AEtjO1WvmTqLkfI8RuD-YO9tfF03l9KloI2ChQsaHKEzrSgsWAy79NKEwAPAzc01gUPOjz46Kvkj9dEzjiePB0ClDQjoyjc0SayBQt12KmRoGeuHNn14LSXAw4sEeqcTI6KhJQoyYNcmIvPxyoZX-rilvhnYat1tfmwtMojc7Y7Y-D1_nSksCsuds11FciVwDIqFSx1aXiS_odCTLufGpUEUJfU8CrdJ9U5nZLf-dCKTYPmOuIUdp0dM9dsFq5FD" alt="Sitadèl Laferyè, Milot" class="w-full h-full object-cover">
+      
+      <!-- Dark indigo gradient over the bottom third -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#0B1230] via-[#0B1230]/40 to-transparent"></div>
+
+      <!-- Caption & credit -->
+      <div class="absolute bottom-0 left-0 right-0 p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-1 z-10">
+        <div>
+          <h3 class="text-[15px] font-bold text-white tracking-normal">Sitadèl Laferyè, Milot</h3>
+          <p class="text-[12px] text-[#B9C4E6] mt-0.5">Senbòl libète ak fòs pèp Ayisyen an</p>
+        </div>
+        <div class="text-[12px] text-[#B9C4E6]">
+          Foto: Alex Proimos, CC BY 2.0
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATES & CIVIC NOTE SECTION (Two columns: 7/12 left, 5/12 right) -->
+  <section class="max-w-[1120px] w-full mx-auto px-8 py-6 mb-12">
+    <div class="grid grid-cols-12 gap-8 items-stretch">
+
+      <!-- LEFT 7/12: DAT K AP VINI -->
+      <div class="col-span-12 lg:col-span-7 bg-white rounded-[16px] p-6 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] flex flex-col justify-between">
+        <div>
+          <h3 class="text-[18px] font-bold text-[#0B1A4A] mb-5 tracking-[-0.01em]">Dat k ap vini</h3>
+          
+          <!-- Timeline list -->
+          <div class="relative pl-6 space-y-6">
+            <!-- Timeline vertical hairline -->
+            <div class="absolute left-[7px] top-2 bottom-2 w-[2px] bg-[#E1E5F0]"></div>
+
+            <!-- Date 1 -->
+            <div class="relative">
+              <div class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white ring-2 ring-[#1A3BB5]"></div>
+              <div class="text-[15px] font-semibold text-[#0B1A4A]">15 novanm 2026</div>
+              <div class="text-[14px] text-[#5B6480]">Fèmti enskripsyon kandida an liy</div>
+            </div>
+
+            <!-- Date 2 -->
+            <div class="relative">
+              <div class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white ring-2 ring-[#1A3BB5]"></div>
+              <div class="text-[15px] font-semibold text-[#0B1A4A]">15 desanm 2026</div>
+              <div class="text-[14px] text-[#5B6480]">Lis preliminè kandida yo</div>
+            </div>
+
+            <!-- Date 3 -->
+            <div class="relative">
+              <div class="absolute -left-[24px] top-1.5 w-2.5 h-2.5 rounded-full bg-white ring-2 ring-[#1A3BB5]"></div>
+              <div class="text-[15px] font-semibold text-[#0B1A4A]">11 janvye 2027</div>
+              <div class="text-[14px] text-[#5B6480]">Lis final kandida yo</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-[#E1E5F0]">
+          <a href="#" class="inline-flex items-center gap-1 text-[15px] font-semibold text-[#1A3BB5] hover:underline">
+            <span>Tout dat yo</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT 5/12: NOTE CARD -->
+      <div class="col-span-12 lg:col-span-5 bg-white rounded-[16px] p-6 border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] flex items-center">
+        <div class="flex items-start gap-3.5">
+          <div class="w-10 h-10 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0 mt-0.5">
+            <span class="material-symbols-outlined text-[22px]">info</span>
+          </div>
+          <p class="text-[14px] leading-relaxed text-[#5B6480]">
+            Prezidan Pa M se yon inisyativ sivik endepandan. Nou pa sipòte okenn kandida ni pati. Rezilta yo se yon vòt pèp la, se pa yon sondaj syantifik.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-[#0B1230] text-[#B9C4E6] py-12 px-8 border-t border-white/10 text-center">
+    <div class="max-w-[1120px] mx-auto flex flex-col items-center justify-center gap-4">
+      <div class="text-[16px] font-bold text-white tracking-normal">
         Prezidan Pa M · Ayiti 2027
       </div>
-      
-      <!-- Four links -->
-      <div class="flex flex-wrap items-center justify-center gap-6 text-[14px] text-[#B9C4E6]">
+      <div class="flex flex-wrap items-center justify-center gap-6 text-[13px] text-[#B9C4E6]">
         <a href="#" class="hover:text-white transition-colors">Sou nou</a>
         <a href="#" class="hover:text-white transition-colors">Kijan sa mache</a>
         <a href="#" class="hover:text-white transition-colors">Konfidansyalite</a>

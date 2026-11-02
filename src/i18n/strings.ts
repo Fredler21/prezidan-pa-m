@@ -183,6 +183,17 @@ const ht = {
     code: 'Kòd sous la louvri sou GitHub.',
   },
 
+  journey: {
+    kicker: 'Depatman {i} sou {n}',
+    capital: 'Chèf lye',
+    population: 'Moun',
+    populationNote: 'Popilasyon: estimasyon IHSI 2015 · sipèfisi dapre Wikipedia',
+    area: 'Sipèfisi',
+    explore: 'Dekouvri peyi a',
+    tourLabel: 'Vwayaj nan 10 depatman yo',
+    toHero: 'Akèy',
+  },
+
   images: {
     flagAlt: 'Drapo Ayiti',
     citadelle: 'Sitadèl Laferyè, Milot',
@@ -460,6 +471,17 @@ const fr: Strings = {
     code: 'Le code source est ouvert sur GitHub.',
   },
 
+  journey: {
+    kicker: 'Département {i} sur {n}',
+    capital: 'Chef-lieu',
+    population: 'Habitants',
+    populationNote: 'Population : estimation IHSI 2015 · superficie d’après Wikipédia',
+    area: 'Superficie',
+    explore: 'Découvrir le pays',
+    tourLabel: 'Voyage dans les 10 départements',
+    toHero: 'Accueil',
+  },
+
   images: {
     flagAlt: 'Drapeau d’Haïti',
     citadelle: 'Citadelle Laferrière, Milot',
@@ -733,6 +755,17 @@ const en: Strings = {
     lastUpdated: 'Last updated: {d}',
     language: 'The language is chosen automatically from your region; you can change it at the top of the page.',
     code: 'The source code is open on GitHub.',
+  },
+
+  journey: {
+    kicker: 'Department {i} of {n}',
+    capital: 'Chief town',
+    population: 'People',
+    populationNote: 'Population: IHSI estimate, 2015 · area per Wikipedia',
+    area: 'Area',
+    explore: 'Discover the country',
+    tourLabel: 'Tour of the 10 departments',
+    toHero: 'Home',
   },
 
   images: {

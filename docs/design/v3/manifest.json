@@ -2,12 +2,12 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-01 v5: 3D extruded map of Haiti in the hero, Haitian flag, candidates strip, live Top 5, premium Citadelle photo card, no « Kijan sa mache » section. Older home screens still in the project (ids 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2… and the image-only ones) can be deleted in Stitch.",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-01 v6: the 3D map is the hero background (right side on desktop, top on phones) and the page tours the ten departments on scroll (the screen shows the hero and the « Lwès » chapter state). Older home screens still in the project (ids 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea… and the image-only ones) can be deleted in Stitch.",
   "screens": [
     {
       "key": "s0-home",
-      "id": "b35bb78c20394c24940d3a79085cf9af",
-      "name": "projects/16900759932870491329/screens/b35bb78c20394c24940d3a79085cf9af",
+      "id": "7562037ae4d647699aee7295c68d9294",
+      "name": "projects/16900759932870491329/screens/7562037ae4d647699aee7295c68d9294",
       "stitchTitle": "Prezidan Pa M · Akèy",
       "png": "s0-home.png",
       "html": "s0-home.html"
@@ -80,8 +80,8 @@
   "desktop": [
     {
       "key": "s0-home",
-      "id": "ca5f45eac0e845a4864e514d98940825",
-      "name": "projects/16900759932870491329/screens/ca5f45eac0e845a4864e514d98940825",
+      "id": "1ba54d7fddad45338079a508be040049",
+      "name": "projects/16900759932870491329/screens/1ba54d7fddad45338079a508be040049",
       "stitchTitle": "Prezidan Pa M · Akèy · Òdinatè",
       "png": "desktop/s0-home.png",
       "html": "desktop/s0-home.html"

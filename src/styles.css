@@ -560,3 +560,69 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
   .band { border-radius: 24px; }
   .band img { height: 300px; }
 }
+
+/* ---- home scene: the 3D map pinned behind the hero, then one chapter per department ---- */
+.scene { position: relative; min-height: 100vh; background: var(--indigo); color: #fff; }
+.scene-sticky { position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 600px; overflow: hidden; }
+.scene-sticky::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 100% 0%, rgba(26, 59, 181, .35), transparent 60%); }
+.scene-map.map3d { position: absolute; left: 0; right: 0; top: 0; height: 54%; margin: 0; z-index: 1; }
+.scene-map .map3d-glow { left: 16%; right: 16%; top: 22%; bottom: 10%; }
+.scene-shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(180deg, rgba(11, 18, 48, 0) 38%, rgba(11, 18, 48, .9) 58%, var(--indigo) 68%); }
+.scene-ui { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.scene-hero, .chapter { position: absolute; left: var(--gutter); right: var(--gutter); bottom: calc(88px + env(safe-area-inset-bottom)); pointer-events: auto; }
+.scene-hero { bottom: calc(162px + env(safe-area-inset-bottom)); }
+.scene-hero { transition: opacity .15s linear; }
+.scene h1 { font-size: 32px; font-weight: 800; line-height: 1.05; letter-spacing: -0.02em; max-width: 12ch; text-wrap: balance; }
+.scene .lead-text { margin-top: 12px; color: var(--on-indigo-muted); font-size: 16px; line-height: 1.5; max-width: 34em; }
+.scene .eyebrow { display: inline-flex; align-items: center; gap: 12px; margin: 0 0 14px; color: var(--on-indigo-muted); font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.scene .hero-actions { margin-top: 18px; }
+.scene-hint { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; color: var(--on-indigo-muted); font-size: 13px; font-weight: 600; min-height: 36px; }
+.scene-hint .ico { width: 18px; height: 18px; animation: nudge 1.8s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: translateY(4px); } }
+.scene .countdown-card { margin-top: 20px; color: var(--ink); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), 0 2px 4px rgba(11, 26, 74, .1), 0 24px 56px rgba(11, 18, 48, .45); }
+.chapter { opacity: 0; transform: translateY(18px); transition: opacity .4s var(--ease-out), transform .4s var(--ease-out); pointer-events: none; }
+.chapter.on { opacity: 1; transform: none; pointer-events: auto; }
+.chapter-kicker { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--on-indigo-muted); }
+.chapter h2 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; margin-top: 6px; }
+.chapter h2 small { display: block; font-size: 16px; font-weight: 500; color: var(--on-indigo-muted); letter-spacing: 0; margin-top: 4px; }
+.facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+.fact:first-child { grid-column: 1 / -1; }
+.fact { min-width: 0; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .14); border-radius: 14px; padding: 10px 12px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.fact b { display: block; font-size: 17px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fact span { display: block; font-size: 12px; color: var(--on-indigo-muted); margin-top: 2px; }
+.chapter-note { margin-top: 10px; font-size: 11px; color: rgba(185, 196, 230, .7); }
+.scene-dots { position: absolute; z-index: 3; left: 0; right: 0; bottom: calc(68px + env(safe-area-inset-bottom)); display: flex; justify-content: center; gap: 6px; }
+.scene-dots button { width: 8px; height: 8px; border-radius: 999px; background: rgba(255, 255, 255, .28); padding: 0; transition: transform .2s var(--ease-out), background .2s; }
+.scene-dots button[aria-current="true"] { background: #fff; transform: scale(1.45); }
+.map-pin { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity .3s; }
+.map-pin.on { opacity: 1; }
+.map-pin i { position: relative; display: block; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 999px; background: #fff; box-shadow: 0 0 0 3px rgba(255, 255, 255, .25), 0 0 18px rgba(255, 255, 255, .7); }
+.map-pin i::after { content: ""; position: absolute; inset: -6px; border-radius: 999px; border: 2px solid #fff; opacity: 0; animation: pulse 2.2s ease-out infinite; }
+.map-pin span { position: absolute; left: 0; top: -38px; transform: translateX(-50%); white-space: nowrap; background: rgba(11, 18, 48, .92); border: 1px solid rgba(255, 255, 255, .2); color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
+.stats-mobile { padding-top: 20px; }
+.stats-mobile .countdown-card { margin-bottom: 8px; }
+.home-body { padding-top: 0; }
+@media (min-width: 1024px) {
+  .scene-map.map3d { left: 42%; right: 0; top: 0; height: 100%; }
+  .scene-map .map3d-glow { left: 14%; right: 10%; top: 18%; bottom: 14%; }
+  .scene-shade { background: linear-gradient(90deg, var(--indigo) 32%, rgba(11, 18, 48, .55) 46%, rgba(11, 18, 48, 0) 60%); }
+  .scene-hero, .chapter { left: var(--gutter); right: auto; width: 48%; max-width: 580px; top: 50%; bottom: auto; transform: translateY(-50%); }
+  .chapter { transform: translateY(calc(-50% + 24px)); }
+  .chapter.on { transform: translateY(-50%); }
+  .scene h1 { font-size: 52px; max-width: 14ch; }
+  .scene .lead-text { font-size: 17px; margin-top: 12px; }
+  .scene .hero-actions { margin-top: 20px; }
+  .scene .countdown-card { margin-top: 14px; padding: 14px 20px; }
+  .scene .countdown b { font-size: 24px; }
+  .scene .stats-inline { margin-top: 10px; padding-top: 10px; }
+  .scene .stats-inline .stat-tile b { font-size: 20px; }
+  .scene-hero { bottom: auto; }
+  .scene-hint { margin-top: 4px; min-height: 32px; }
+  .chapter h2 { font-size: 60px; }
+  .chapter h2 small { font-size: 18px; }
+  .facts { grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; }
+  .fact:first-child { grid-column: auto; }
+  .fact b { font-size: 22px; }
+  .scene-dots { left: auto; right: 28px; top: 50%; bottom: auto; transform: translateY(-50%); flex-direction: column; gap: 10px; }
+  .home-body { padding-top: 0; }
+}
