@@ -1,21 +1,20 @@
-import type { Candidate, DepartmentId, L10n, StorageAdapter } from '../types';
+import type { Candidate, L10n, StorageAdapter } from '../types';
 import { h, svg, clear } from '../lib/dom';
 import { ICON } from '../lib/icons';
-import { S, fmt, fmtDate, fmtNumber, l, getLang, timeAgo } from '../i18n';
+import { S, fmt, fmtDate, fmtNumber, l, timeAgo } from '../i18n';
 import { content, candidatesShuffled } from '../content';
 import { firebaseConfig } from '../firebase-config';
 import { countDocuments, countWhere, findActive, getDocumentQuiet, recentDocs, type RestConfig } from '../content/firestore-rest';
 import { STORAGE_MODE, getStorage } from '../storage';
 import { FIRST_ROUND } from '../data/dates';
 import { IMG } from '../data/images';
-import { DEPARTMENT_FACTS, TOUR, type DepartmentFacts } from '../data/haiti-departments';
 import { pct } from '../lib/util';
 import { state } from '../state';
 import { note, footer, well, avatar } from './common';
 import { openProfile } from './profile';
 import { attachTilt } from '../lib/tilt';
 import { toast } from './toast';
-import type { Haiti3D } from './haiti3d';
+import { civicCard } from './civic-card';
 
 // Faint wrought-iron lace, inline (no image request), masked to fade before the bottom.
 const LACE = '<svg class="hero-lace" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="lace2" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M0 28A28 28 0 0 0 28 0M28 0A28 28 0 0 0 56 28M56 28A28 28 0 0 0 28 56M28 56A28 28 0 0 0 0 28" fill="none" stroke="#fff" stroke-width="1"/><circle cx="28" cy="28" r="6" fill="none" stroke="#fff" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#lace2)"/></svg>';
@@ -190,23 +189,23 @@ function revealOnScroll(els: HTMLElement[]): () => void {
   return () => io.disconnect();
 }
 
+/** Section title with a small uppercase kicker above it. */
+const secHead = (kicker: string, title: string) => h('div', { class: 'sec-head' }, h('p', { class: 'kicker' }, kicker), h('h2', null, title));
+
 const stagger = (parent: HTMLElement) => Array.from(parent.children).forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i)));
 
 export function renderHome(main: HTMLElement): () => void {
   clear(main);
   const s = S().home;
   const b = S().board;
-  const j = S().journey;
   const im = S().images;
   const c = content();
   const n = c.candidates.length;
-  const lang = getLang();
   let alive = true;
   const cleanups: (() => void)[] = [];
 
   const firstRound = c.dates.find((d) => d.date === FIRST_ROUND)?.date ?? FIRST_ROUND;
   const days = daysUntil(firstRound);
-  const deptName = (id: DepartmentId): L10n | undefined => c.departments.find((d) => d.id === id)?.label;
   const deptLabel = (id: string) => { const d = c.departments.find((x) => x.id === id); return d && d.id !== 'na' ? l(d.label) : b.someone; };
 
   // Two sets of live-number elements: tiles on phones, an inline row inside the hero card on desktop.
@@ -328,7 +327,7 @@ export function renderHome(main: HTMLElement): () => void {
   const list = h('div', { class: 'stack top-list' }, ...Array.from({ length: TOP }, (_, i) => skeletonRow(i)));
   const topLink = h('p', { class: 'top-link' }, h('a', { class: 'link-btn', href: '#results' }, s.seeAllResults, svg(ICON.arrowRight)));
   const top = h('section', { class: 'section top-sec main-col' },
-    h('div', { class: 'top-head' }, h('h2', null, s.top), liveTop),
+    h('div', { class: 'top-head' }, secHead(s.topKicker, s.top), liveTop),
     h('p', { class: 'top-sub' }, s.topSub),
     list, topLink);
 
@@ -398,7 +397,7 @@ export function renderHome(main: HTMLElement): () => void {
   const pollSub = h('span', null, s.pollSubNone);
   const entry = (href: string, icon: string, title: string, sub: Node | string) =>
     h('a', { class: 'card explore', href }, well(icon), h('span', { class: 'explore-text' }, h('strong', null, title), typeof sub === 'string' ? h('span', null, sub) : sub), svg(ICON.chevronRight, 'ico chev'));
-  const explore = h('aside', { class: 'section side-col' }, h('h2', null, s.explore),
+  const explore = h('aside', { class: 'section side-col' }, secHead(s.exploreKicker, s.explore),
     h('div', { class: 'stack explore-grid' },
       entry('#candidates', ICON.people, s.candidatesCard, fmt(s.candidatesSub, { n })),
       entry('#poll', ICON.poll, s.pollCard, pollSub),
@@ -406,81 +405,9 @@ export function renderHome(main: HTMLElement): () => void {
       entry('#about', ICON.info, s.aboutCard, s.aboutSub)));
   for (const el of explore.querySelectorAll<HTMLElement>('.explore')) cleanups.push(attachTilt(el, 4));
 
-  // ---- The tour: the 3D map pinned, one chapter per department as the page scrolls ----
-  const tour = TOUR.map((id) => DEPARTMENT_FACTS.find((d) => d.id === id)).filter((d): d is DepartmentFacts => !!d);
-  const N = tour.length;
-  const goTo = (i: number) => window.scrollTo({ top: scene.offsetTop + i * chapterPx, behavior: reducedMotion() ? 'auto' : 'smooth' });
-  const introBlock = h('div', { class: 'scene-intro' },
-    h('p', { class: 'chapter-kicker' }, h('span', null, j.tourLabel)),
-    h('h2', null, j.explore),
-    h('p', { class: 'lead-text' }, j.lead),
-    h('button', { class: 'scene-hint', type: 'button', onclick: () => goTo(1) }, j.explore, svg(ICON.expand)));
-  const fact = (value: string, label: string) => h('div', { class: 'fact' }, h('b', { class: 'num' }, value), h('span', null, label));
-  const chapterEls = tour.map((d, i) => {
-    const name = deptName(d.id);
-    const sub = lang === 'ht' && name && name.fr !== name.ht ? name.fr : null;
-    return h('div', { class: 'chapter', 'aria-hidden': 'true' },
-      h('p', { class: 'chapter-kicker' }, h('span', { class: 'num' }, fmt(j.kicker, { i: i + 1, n: N })), h('span', { class: 'kick-line', 'aria-hidden': 'true' }, h('i', { style: `width:${((i + 1) / N) * 100}%` }))),
-      h('h2', null, l(name), sub ? h('small', null, sub) : null),
-      h('div', { class: 'facts' },
-        fact(l(d.capital), j.capital),
-        fact(fmtNumber(d.population2015), j.population),
-        fact(`${fmtNumber(d.areaKm2)} km²`, j.area)),
-      h('p', { class: 'chapter-note' }, j.populationNote));
-  });
-  const dots = h('div', { class: 'scene-dots', 'aria-label': j.tourLabel },
-    ...Array.from({ length: N + 1 }, (_, i) => {
-      const d = tour[i - 1];
-      return h('button', { type: 'button', 'aria-label': d ? l(deptName(d.id)) : j.toHero, 'aria-current': i === 0 ? 'true' : 'false', onclick: () => goTo(i) });
-    }));
-  const mapHost = h('div', { class: 'map3d scene-map', 'aria-hidden': 'true' }, h('div', { class: 'map3d-glow' }));
-  const sticky = h('div', { class: 'scene-sticky' });
-  sticky.append(mapHost, h('div', { class: 'scene-shade', 'aria-hidden': 'true' }), h('div', { class: 'wrap scene-ui' }, introBlock, ...chapterEls), dots);
-  const scene = h('section', { class: 'scene', 'aria-label': j.tourLabel }, sticky);
-
-  let map: Haiti3D | null = null;
-  let chapterPx = 400, active = -2, lastP = -1;
-  const homeView = () => (window.innerWidth >= 1024 ? { cx: 0.12, cy: 0.04, zoom: 0.86 } : { cx: 0, cy: 0, zoom: 0.8 });
-  const measure = () => {
-    const vh = sticky.clientHeight;
-    chapterPx = Math.round(vh * (window.innerWidth >= 1024 ? 0.42 : 0.55));
-    scene.style.height = `${vh + N * chapterPx}px`;
-    lastP = -1;
-  };
-  const keyAt = (k: number) => {
-    if (k <= 0 || !map) return homeView();
-    const d = tour[Math.min(N, k) - 1];
-    return d ? map.frame(d.id) : homeView();
-  };
-  const update = () => {
-    if (!alive) return;
-    const p = Math.min(N, Math.max(0, -scene.getBoundingClientRect().top / chapterPx));
-    if (p === lastP) return;
-    lastP = p;
-    const introOp = Math.max(0, Math.min(1, 1 - p * 1.8));
-    introBlock.style.opacity = String(introOp);
-    introBlock.style.pointerEvents = introOp < 0.3 ? 'none' : '';
-    introBlock.setAttribute('aria-hidden', introOp < 0.3 ? 'true' : 'false');
-    const idx = p < 0.5 ? -1 : Math.min(N - 1, Math.round(p) - 1);
-    if (idx !== active) {
-      active = idx;
-      chapterEls.forEach((el, i) => { el.classList.toggle('on', i === idx); el.setAttribute('aria-hidden', i === idx ? 'false' : 'true'); });
-      Array.from(dots.children).forEach((el, i) => el.setAttribute('aria-current', i === idx + 1 ? 'true' : 'false'));
-      const d = idx >= 0 ? tour[idx] : undefined;
-      map?.setView({ focus: d ? d.id : null, pin: d ? d.capitalLonLat : null, pinText: d ? l(d.capital) : '' });
-    }
-    if (map) {
-      const k = Math.floor(p), f = p - k, sm = f * f * (3 - 2 * f);
-      const a = keyAt(k), b2 = keyAt(k + 1);
-      map.setView({ cx: a.cx + (b2.cx - a.cx) * sm, cy: a.cy + (b2.cy - a.cy) * sm, zoom: a.zoom + (b2.zoom - a.zoom) * sm });
-    }
-  };
-  let ticking = false;
-  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; update(); }); } };
-  const onResize = () => { measure(); update(); };
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onResize);
-  cleanups.push(() => { window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize); });
+  // ---- Kat sitwayen: the visitor's own civic card ----
+  const card = civicCard(firstRound);
+  cleanups.push(card.destroy);
 
   // Photo card: the Citadelle (CC BY 2.0). Wide crop on desktop, 3:2 on phones; lazy.
   const band = h('figure', { class: 'band' },
@@ -491,7 +418,7 @@ export function renderHome(main: HTMLElement): () => void {
 
   const today = new Date().toISOString().slice(0, 10);
   const upcoming = c.dates.filter((d) => d.date >= today).slice(0, 3);
-  const dates = upcoming.length ? h('section', { class: 'section main-col' }, h('h2', null, s.nextDates),
+  const dates = upcoming.length ? h('section', { class: 'section main-col' }, secHead(s.datesKicker, s.nextDates),
     h('div', { class: 'card' },
       h('ul', { class: 'timeline' }, ...upcoming.map((d) => h('li', null, h('b', null, fmtDate(d.date)), h('span', null, l(d.label))))),
       h('hr', { class: 'hr' }),
@@ -502,23 +429,9 @@ export function renderHome(main: HTMLElement): () => void {
   main.append(
     hero,
     h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore)),
-    scene,
+    card.el,
     h('div', { class: 'wrap home-body' }, band, bottom, footer()));
   cleanups.push(revealOnScroll([band, bottom]), attachTilt(band, 3));
-  measure(); update();
-
-  // The 3D map is its own chunk, mounted once the tour is near; the tour works (captions, dots) before and without it.
-  const mountMap = () => void import('./haiti3d').then((m) => {
-    if (!alive) return;
-    map = m.mountHaiti3D(mapHost, { label: (id) => l(deptName(id)) });
-    cleanups.push(() => map?.destroy());
-    lastP = -1; active = -2; update();
-  }).catch(() => { /* decorative only */ });
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); mountMap(); } }, { rootMargin: '600px 0px' });
-    io.observe(scene);
-    cleanups.push(() => io.disconnect());
-  } else mountMap();
 
   void loadStats().then((st) => {
     if (!alive) return;

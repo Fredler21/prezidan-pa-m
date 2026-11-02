@@ -5,7 +5,6 @@
  *  - Citadelle Laferrière, Milot: Alex Proimos, CC BY 2.0
  *    (File:The_Citadelle_Laferrière,_Haiti_(7761638618).jpg).
  *  - Bassin Bleu, Jacmel: Intellect'Art, CC BY-SA 4.0 (File:Bassin_bleu_(Jacmel).jpg).
- *  - The 3D map's department outlines: geoBoundaries HTI ADM1, CC BY 4.0 (src/data/haiti-geo.ts).
  */
 export const IMG = {
   flag: { src: '/img/flag-haiti-240.webp', srcset: '/img/flag-haiti-240.webp 240w, /img/flag-haiti-480.webp 480w' },

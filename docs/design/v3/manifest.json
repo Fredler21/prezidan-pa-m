@@ -2,12 +2,12 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-01 v7: no map in the header; the hero has a live board of the voters on the side (people's vote, weekly poll, latest votes); the 3D map tour is its own section lower on the page. Older home screens still in the project (ids 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f… and the image-only ones) can be deleted in Stitch.",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. Older home screens still in the project (ids 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch.",
   "screens": [
     {
       "key": "s0-home",
-      "id": "d47265983e3844dca9254557a6c578de",
-      "name": "projects/16900759932870491329/screens/d47265983e3844dca9254557a6c578de",
+      "id": "c4382157c2024b30a1447f592f684450",
+      "name": "projects/16900759932870491329/screens/c4382157c2024b30a1447f592f684450",
       "stitchTitle": "Prezidan Pa M · Akèy",
       "png": "s0-home.png",
       "html": "s0-home.html"
@@ -80,8 +80,8 @@
   "desktop": [
     {
       "key": "s0-home",
-      "id": "b6173a225ff14178b2392158ef484cba",
-      "name": "projects/16900759932870491329/screens/b6173a225ff14178b2392158ef484cba",
+      "id": "639dded5bf5a4e238307ac5b8526513d",
+      "name": "projects/16900759932870491329/screens/639dded5bf5a4e238307ac5b8526513d",
       "stitchTitle": "Prezidan Pa M · Akèy · Òdinatè",
       "png": "desktop/s0-home.png",
       "html": "desktop/s0-home.html"

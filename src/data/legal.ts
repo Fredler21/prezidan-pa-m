@@ -57,7 +57,7 @@ const ht: LegalSet = {
       { h: 'Done nou kolekte', p: ['Nou kolekte sèlman sa ki nesesè pou vòt la mache, pa plis. Men lis la, dapre fason ou itilize sit la.'], li: [
         'San kont: yon idantifyan anonim (Firebase Anonymous Authentication) ki rete sou aparèy ou pou garanti yon vòt pa moun; vòt ou (kandida, rezon opsyonèl jiska 240 karaktè, depatman opsyonèl, priyorite ou chwazi yo, lang); repons ou nan sondaj yo.',
         'Ak yon kont: adrès imèl ou; ak Google, non ak foto pwofil Google ou bay la; priyorite ou sove yo.',
-        'Sou aparèy ou sèlman: lang ou, priyorite ou, yon kopi done kandida yo ak dènye rezilta yo (localStorage ak IndexedDB).',
+        'Sou aparèy ou sèlman: lang ou, priyorite ou, non ou ekri sou kat sitwayen an (si ou ekri youn), yon kopi done kandida yo ak dènye rezilta yo (localStorage ak IndexedDB).',
         'Done teknik: adrès IP, navigatè ak dat koneksyon nan jounal sèvè founisè ebèjman yo, pou sekirite.',
       ] },
       { h: 'Poukisa nou itilize yo', li: [
@@ -180,7 +180,7 @@ const fr: LegalSet = {
       { h: 'Données collectées', p: ['Nous collectons uniquement ce qui est nécessaire au fonctionnement du vote, rien de plus. Voici la liste, selon la façon dont vous utilisez le site.'], li: [
         'Sans compte : un identifiant anonyme (Firebase Anonymous Authentication) conservé sur votre appareil pour garantir un vote par personne ; votre vote (candidat, raison facultative de 240 caractères maximum, département facultatif, priorités choisies, langue) ; vos réponses aux sondages.',
         'Avec un compte : votre adresse courriel ; avec Google, le nom et la photo de profil que Google fournit ; vos priorités sauvegardées.',
-        'Sur votre appareil seulement : langue, priorités, une copie des données des candidats et des derniers résultats (localStorage et IndexedDB).',
+        'Sur votre appareil seulement : langue, priorités, le nom écrit sur votre carte citoyenne (si vous en écrivez un), une copie des données des candidats et des derniers résultats (localStorage et IndexedDB).',
         'Données techniques : adresse IP, navigateur et horodatage dans les journaux des hébergeurs, à des fins de sécurité.',
       ] },
       { h: 'Pourquoi nous les utilisons', li: [
@@ -303,7 +303,7 @@ const en: LegalSet = {
       { h: 'Data we collect', p: ['We collect only what the vote needs to work, nothing more. Here is the list, depending on how you use the site.'], li: [
         'Without an account: an anonymous identifier (Firebase Anonymous Authentication) kept on your device to guarantee one vote per person; your vote (candidate, optional reason of up to 240 characters, optional department, chosen priorities, language); your poll answers.',
         'With an account: your email address; with Google, the name and profile picture Google provides; your saved priorities.',
-        'On your device only: language, priorities, a copy of the candidate data and of the latest results (localStorage and IndexedDB).',
+        'On your device only: language, priorities, the name you write on your citizen card (if any), a copy of the candidate data and of the latest results (localStorage and IndexedDB).',
         'Technical data: IP address, browser and timestamp in the hosting providers’ logs, for security.',
       ] },
       { h: 'Why we use it', li: [

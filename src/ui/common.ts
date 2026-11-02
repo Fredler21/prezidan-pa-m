@@ -6,6 +6,8 @@ import { S, fmt, l, fmtDate } from '../i18n';
 import { STORAGE_MODE } from '../storage';
 import { content } from '../content';
 import type { Route } from '../router';
+import { CONTACT_EMAIL, REPO_URL } from '../data/site';
+import { IMG } from '../data/images';
 
 export function priorityLabel(id: PriorityId): string {
   return l(content().priorities.find((p) => p.id === id)?.label);
@@ -101,14 +103,23 @@ export function demoBadge(): HTMLElement | null {
   return h('span', { class: 'mode' }, h('i', { 'aria-hidden': 'true' }), S().demoMode);
 }
 
+/** Site footer: a dark card with the brand, three link columns and the base line. */
 export function footer(): HTMLElement {
   const s = S();
-  const f = h('div', { class: 'foot' });
+  const f = s.foot;
+  const col = (title: string, ...links: HTMLElement[]) => h('div', { class: 'foot-col' }, h('h3', null, title), ...links);
+  const a = (href: string, label: string, external = false) => h('a', external ? { href, target: '_blank', rel: 'noopener noreferrer' } : { href }, label);
+  const base = h('div', { class: 'foot-base' }, h('span', null, fmt(f.rights, { y: new Date().getFullYear() })), h('span', null, s.tagline));
   const demo = demoBadge();
-  if (demo) f.append(demo, h('br'));
-  f.append(h('span', { class: 'foot-brand' }, `${s.appName} · Ayiti 2027`),
-    h('nav', { class: 'foot-links', 'aria-label': s.nav.aboutUs },
-      h('a', { href: '#about-us' }, s.nav.aboutUs), h('a', { href: '#about' }, s.nav.about),
-      h('a', { href: '#privacy' }, s.nav.privacy), h('a', { href: '#terms' }, s.nav.terms)));
-  return f;
+  if (demo) base.prepend(demo);
+  return h('footer', { class: 'foot' },
+    h('div', { class: 'foot-top' },
+      h('div', { class: 'foot-id' },
+        h('a', { class: 'foot-brand', href: '#home' }, svg(ICON.brand), s.appName, h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' })),
+        h('p', { class: 'foot-about' }, f.about)),
+      h('nav', { class: 'foot-cols', 'aria-label': s.nav.aboutUs },
+        col(f.platform, a('#start', s.nav.priorities), a('#candidates', s.nav.candidates), a('#results', s.nav.results), a('#poll', s.nav.poll)),
+        col(f.info, a('#about-us', s.nav.aboutUs), a('#about', s.nav.about), a('#privacy', s.nav.privacy), a('#terms', s.nav.terms)),
+        col(f.contact, a(`mailto:${CONTACT_EMAIL}`, CONTACT_EMAIL), a(REPO_URL, f.code, true)))),
+    base);
 }
