@@ -56,10 +56,10 @@ export function renderResults(main: HTMLElement): () => void {
     const sorted = candidatesShuffled().map((c) => ({ c, n: r.counts[c.id] ?? 0 })).sort((a, b) => b.n - a.n);
     const mine = state.myVote?.candidate ?? null;
     const rows = showAll ? sorted : sorted.slice(0, TOP);
-    if (r.total === 0) list.append(note(s.noVotes));
-    for (const { c, n } of rows) list.append(resultCard(c, pct(n, r.total), c.id === mine));
+    if (r.total === 0) list.append(h('div', { class: 'card empty-top' }, note(s.noVotes, ICON.ballot, false), h('a', { class: 'btn btn-primary', href: '#start' }, S().home.firstVote, svg(ICON.arrowRight))));
+    else for (const { c, n } of rows) list.append(resultCard(c, pct(n, r.total), c.id === mine));
     toggle.textContent = showAll ? s.seeLess : fmt(s.seeAll, { n: sorted.length });
-    toggle.style.display = sorted.length > TOP ? '' : 'none';
+    toggle.style.display = r.total > 0 && sorted.length > TOP ? '' : 'none';
     clear(reasons);
     if (!r.reasons.length) reasons.append(h('p', { class: 'caption', style: 'margin-top:0' }, s.noReasons));
     for (const q of r.reasons) {

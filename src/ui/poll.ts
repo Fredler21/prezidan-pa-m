@@ -25,7 +25,17 @@ export function renderPoll(main: HTMLElement): () => void {
     try { poll = await storage.getActivePoll(); }
     catch (e) { console.error(e); if (alive) body.append(h('p', { class: 'lead', style: 'margin-top:0' }, s.sub), h('div', { style: 'margin-top:16px' }, note(S().offline))); return; }
     if (!alive) return;
-    if (!poll) { body.append(h('p', { class: 'lead', style: 'margin-top:0' }, s.sub), h('div', { style: 'margin-top:16px' }, note(s.none))); return; }
+    if (!poll) {
+      const head = h('div', { class: 'qz-head', style: 'margin-top:28px' }, h('div', null, h('p', { class: 'kicker' }, S().quiz.kicker), h('h2', { class: 'qz-h2' }, S().quiz.title), h('p', { class: 'qz-lead' }, S().quiz.pollWait)));
+      body.append(h('p', { class: 'lead', style: 'margin-top:0' }, s.sub), h('div', { style: 'margin-top:16px' }, note(s.none)), head);
+      const m = await import('./quiz');
+      if (!alive) return;
+      const game = m.quizGame();
+      subs.push(game.destroy);
+      head.append(game.streakPill);
+      body.append(game.el);
+      return;
+    }
     const p = poll;
     body.append(h('span', { class: 'week' }, fmt(s.week, { w: p.week })), h('h1', { class: 'page-title desk-only', style: 'margin-top:12px' }, s.title), h('p', { class: 'lead' }, s.sub));
 

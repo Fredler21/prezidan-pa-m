@@ -1,0 +1,16 @@
+{
+  "name": "Prezidan Pa M · Ayiti 2027",
+  "short_name": "Prezidan Pa M",
+  "description": "Chwazi sa ou vle chanje, gade dosye piblik kandida yo, vote, epi jwe Konnen Ayiti chak jou.",
+  "lang": "ht",
+  "start_url": "/?source=app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F3F5FA",
+  "theme_color": "#0B1230",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ht" class="h-full bg-[#F3F5FA]">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1280, initial-scale=1.0">
+  <title>Prezidan Pa M · Konnen Ayiti</title>
+
+  <!-- Google Fonts: Bricolage Grotesque optical sizing -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            night: '#0B1230',
+            ultramarine: '#1A3BB5',
+            tint: '#EAEEFA',
+            hairline: '#E1E5F0',
+            ink: '#0B1A4A',
+            muted: '#5B6480',
+            page: '#F3F5FA',
+            track: '#E6EAF5',
+            ringlight: '#7D93E8',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html, body {
+      font-family: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
+      font-optical-sizing: auto;
+      background-color: #F3F5FA;
+      color: #0B1A4A;
+      margin: 0;
+      padding: 0;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: 300;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-up {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col justify-between selection:bg-[#EAEEFA] selection:text-[#1A3BB5]">
+
+  <!-- HEADER -->
+  <header class="bg-[#0B1230] h-14 w-full sticky top-0 z-50 border-b border-[#E1E5F0]/10">
+    <div class="max-w-[1120px] mx-auto h-full px-8 flex items-center justify-between">
+      
+      <!-- Brand & Strip -->
+      <div class="flex items-center gap-6">
+        <a href="#" class="flex items-center gap-2 text-white hover:opacity-90 transition-opacity">
+          <span class="material-symbols-outlined text-white text-[22px]">how_to_vote</span>
+          <span class="text-[18px] font-bold tracking-tight">Prezidan Pa M</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-2 pl-4 border-l border-white/15 py-1">
+          <!-- Haitian Flag SVG -->
+          <svg class="w-4 h-3 rounded-sm shadow-sm" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="18" height="6" fill="#00209F"/>
+            <rect y="6" width="18" height="6" fill="#D21034"/>
+            <rect x="6.5" y="4" width="5" height="4" rx="0.5" fill="#FFFFFF"/>
+            <circle cx="9" cy="6" r="1.2" fill="#007A3D"/>
+          </svg>
+          <span class="text-[13px] font-medium text-white/70">Ayiti 2027 · Vòt pèp la</span>
+        </div>
+      </div>
+
+      <!-- Navigation links (Desktop) -->
+      <nav class="flex items-center gap-1">
+        <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition-colors">Akèy</a>
+        <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition-colors">Priyorite</a>
+        <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition-colors">Kandida</a>
+        <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition-colors">Rezilta</a>
+        <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white hover:bg-white/5 transition-colors">Sondaj</a>
+        <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-semibold text-white bg-[#1A3BB5] transition-colors">Jwèt</a>
+      </nav>
+
+      <!-- User Account & Language -->
+      <div class="flex items-center gap-3">
+        <button type="button" aria-label="Kont itilizatè" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+          <span class="material-symbols-outlined text-[19px]">person</span>
+        </button>
+
+        <button type="button" class="h-8 px-3 rounded-full border border-white/30 bg-transparent text-white text-[13px] font-medium flex items-center gap-1 hover:border-white/50 transition-colors">
+          <span>Kreyòl ▾</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-[1120px] w-full mx-auto px-8 pt-8 pb-16 animate-fade-up">
+
+    <!-- PAGE HEAD -->
+    <div class="flex items-start justify-between mb-8">
+      <div>
+        <div class="text-[11px] font-bold text-[#1A3BB5] uppercase tracking-wider mb-1.5">
+          JWÈT · CHAK JOU
+        </div>
+        <h1 class="text-[40px] font-extrabold text-[#0B1230] leading-[1.05] tracking-[-0.02em] mb-2">
+          Konnen Ayiti
+        </h1>
+        <p class="text-[16px] text-[#5B6480] leading-normal max-w-[640px]">
+          5 kesyon chak jou sou istwa, Konstitisyon ak eleksyon yo. Tounen demen pou 5 lòt.
+        </p>
+      </div>
+
+      <!-- Streak Pill -->
+      <div class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#FEF3C7] border border-[#FDE68A] text-[#92400E] text-[13px] font-bold shadow-sm">
+        <span>🔥 Seri 3 jou</span>
+      </div>
+    </div>
+
+    <!-- TWO COLUMN LAYOUT: GAME CARD (720px) + RESULT/STATS CARD (340px) -->
+    <div class="grid grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT: GAME CARD (720px -> 8 cols) -->
+      <section class="col-span-8 bg-white rounded-[24px] border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] overflow-hidden relative">
+        <!-- Top accent gradient hairline -->
+        <div class="h-[3px] w-full bg-gradient-to-r from-[#1A3BB5] via-[#4D71F2] to-[#1A3BB5]"></div>
+
+        <div class="p-8">
+          <!-- Top Row: Day and Question counter -->
+          <div class="flex items-center justify-between text-[12px] font-medium text-[#5B6480] mb-3">
+            <span>Jou #12</span>
+            <span class="tabular-nums">Kesyon 3 sou 5</span>
+          </div>
+
+          <!-- Progress segments (5 segments) -->
+          <div class="grid grid-cols-5 gap-2 mb-8">
+            <!-- 1: Done -->
+            <div class="h-2 rounded-full bg-[#1A3BB5]"></div>
+            <!-- 2: Done -->
+            <div class="h-2 rounded-full bg-[#1A3BB5]"></div>
+            <!-- 3: Current (half filled) -->
+            <div class="h-2 rounded-full bg-[#E6EAF5] overflow-hidden relative">
+              <div class="w-1/2 h-full bg-[#1A3BB5] rounded-full"></div>
+            </div>
+            <!-- 4: Upcoming -->
+            <div class="h-2 rounded-full bg-[#E6EAF5]"></div>
+            <!-- 5: Upcoming -->
+            <div class="h-2 rounded-full bg-[#E6EAF5]"></div>
+          </div>
+
+          <!-- Question Title -->
+          <h2 class="text-[22px] font-bold text-[#0B1230] leading-snug tracking-[-0.01em] mb-6">
+            Ki dat yo te kreye drapo ayisyen an nan Lakayè?
+          </h2>
+
+          <!-- Four Answer Buttons Stacked -->
+          <div class="space-y-3 mb-6">
+            
+            <!-- Option A -->
+            <button type="button" class="w-full h-14 px-4 rounded-[14px] bg-white border border-[#E1E5F0] hover:border-[#1A3BB5]/40 text-left flex items-center justify-between group transition-all">
+              <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[13px] font-bold text-[#5B6480] flex items-center justify-center group-hover:bg-[#EAEEFA] group-hover:text-[#1A3BB5] transition-colors">
+                  A
+                </span>
+                <span class="text-[16px] font-medium text-[#0B1A4A]">1ye janvye 1804</span>
+              </div>
+            </button>
+
+            <!-- Option B (Correct answer - filled ultramarine with check) -->
+            <div class="w-full h-14 px-4 rounded-[14px] bg-[#1A3BB5] border border-[#1A3BB5] text-left flex items-center justify-between shadow-sm">
+              <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-white/20 text-[13px] font-bold text-white flex items-center justify-center">
+                  B
+                </span>
+                <span class="text-[16px] font-semibold text-white">18 me 1803</span>
+              </div>
+              <span class="material-symbols-outlined text-white text-[22px]">check</span>
+            </div>
+
+            <!-- Option C (Visitor's wrong choice - soft grey border with small x) -->
+            <div class="w-full h-14 px-4 rounded-[14px] bg-white border border-[#CBD5E1] text-left flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-[#F3F5FA] border border-[#CBD5E1] text-[13px] font-bold text-[#5B6480] flex items-center justify-center">
+                  C
+                </span>
+                <span class="text-[16px] font-medium text-[#5B6480]">18 novanm 1803</span>
+              </div>
+              <span class="material-symbols-outlined text-[#5B6480] text-[20px]">close</span>
+            </div>
+
+            <!-- Option D (Faded) -->
+            <button type="button" class="w-full h-14 px-4 rounded-[14px] bg-white/70 border border-[#E1E5F0]/70 text-left flex items-center justify-between opacity-50 cursor-not-allowed">
+              <div class="flex items-center gap-3">
+                <span class="w-7 h-7 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[13px] font-bold text-[#5B6480] flex items-center justify-center">
+                  D
+                </span>
+                <span class="text-[16px] font-medium text-[#5B6480]">7 fevriye 1987</span>
+              </div>
+            </button>
+
+          </div>
+
+          <!-- Fact explanation box -->
+          <div class="rounded-[14px] bg-[#EAEEFA] border border-[#1A3BB5]/15 p-4 mb-6 flex items-start gap-3">
+            <span class="material-symbols-outlined text-[#1A3BB5] text-[22px] flex-shrink-0 mt-0.5">info</span>
+            <p class="text-[14px] leading-relaxed text-[#0B1A4A]">
+              Drapo a te fèt 18 me 1803 nan Kongrè Lakayè. Se pou sa 18 me se jou drapo ak inivèsite.
+            </p>
+          </div>
+
+          <!-- Primary CTA Button -->
+          <button type="button" class="w-full h-12 rounded-full bg-[#1A3BB5] hover:bg-[#153096] text-white text-[16px] font-semibold flex items-center justify-center gap-2 transition-colors active:scale-[0.99]">
+            <span>Pwochen kesyon</span>
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- RIGHT: RESULT / FINISHED DAY CARD (340px -> 4 cols) -->
+      <aside class="col-span-4 bg-[#0B1230] rounded-[24px] border border-white/10 p-7 text-white shadow-[0_1px_2px_rgba(11,26,74,0.1),0_4px_16px_rgba(11,26,74,0.15)] relative overflow-hidden">
+        
+        <!-- Subtle background glow -->
+        <div class="absolute -top-24 -right-24 w-48 h-48 bg-[#1A3BB5]/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Header row of the card -->
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-[12px] font-semibold text-white/50 uppercase tracking-wider">Jou #11</span>
+          <span class="text-[12px] font-medium text-[#EAEEFA]/80 bg-white/10 px-2.5 py-0.5 rounded-full">Fini</span>
+        </div>
+
+        <!-- Huge Score -->
+        <div class="mb-1">
+          <span class="text-[56px] font-extrabold leading-none tracking-[-0.03em] tabular-nums bg-gradient-to-r from-white via-white to-[#BFDBFE] bg-clip-text text-transparent">
+            4/5
+          </span>
+        </div>
+        <p class="text-[18px] font-bold text-white mb-4">Trè byen!</p>
+
+        <!-- Five rounded score squares -->
+        <div class="flex items-center gap-2 mb-6">
+          <div class="w-8 h-2.5 rounded-[4px] bg-[#1A3BB5]"></div>
+          <div class="w-8 h-2.5 rounded-[4px] bg-[#1A3BB5]"></div>
+          <div class="w-8 h-2.5 rounded-[4px] bg-[#1A3BB5]"></div>
+          <div class="w-8 h-2.5 rounded-[4px] bg-[#1A3BB5]"></div>
+          <div class="w-8 h-2.5 rounded-[4px] bg-white/20"></div>
+        </div>
+
+        <!-- Three Stats summary -->
+        <div class="grid grid-cols-3 gap-2 py-4 mb-6 border-y border-white/10 text-center">
+          <div>
+            <div class="text-[20px] font-extrabold text-white tabular-nums">3</div>
+            <div class="text-[12px] text-white/60 font-medium mt-0.5">seri</div>
+          </div>
+          <div class="border-x border-white/10">
+            <div class="text-[20px] font-extrabold text-white tabular-nums">6</div>
+            <div class="text-[12px] text-white/60 font-medium mt-0.5">pi bon seri</div>
+          </div>
+          <div>
+            <div class="text-[20px] font-extrabold text-white tabular-nums">11</div>
+            <div class="text-[12px] text-white/60 font-medium mt-0.5">jou jwe</div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="space-y-2.5 mb-6">
+          <button type="button" class="w-full h-11 rounded-full bg-[#1A3BB5] hover:bg-[#153096] text-white text-[15px] font-semibold flex items-center justify-center gap-2 transition-colors active:scale-[0.99]">
+            <span class="material-symbols-outlined text-[19px]">share</span>
+            <span>Pataje rezilta m</span>
+          </button>
+
+          <button type="button" class="w-full h-11 rounded-full bg-transparent border border-white/30 hover:border-white/60 text-white text-[15px] font-semibold flex items-center justify-center transition-colors">
+            <span>Plis kesyon (pratik)</span>
+          </button>
+        </div>
+
+        <!-- Next daily quiz timer -->
+        <div class="flex items-center justify-center gap-1.5 text-[13px] text-white/60 font-medium pt-1">
+          <span class="material-symbols-outlined text-[16px] text-white/60">schedule</span>
+          <span>Pwochen seri nan <span class="tabular-nums text-white font-semibold">07:42:13</span></span>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#0B1230] text-white border-t border-[#E1E5F0]/10 mt-auto">
+    <div class="max-w-[1120px] mx-auto px-8 py-12">
+      <div class="grid grid-cols-12 gap-8 pb-10 border-b border-white/10">
+        
+        <!-- Col 1: Brand & Civic disclaimer -->
+        <div class="col-span-5 pr-6">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-white text-[22px]">how_to_vote</span>
+            <span class="text-[18px] font-bold tracking-tight">Prezidan Pa M</span>
+            <svg class="w-4 h-3 rounded-sm shadow-sm ml-1" viewBox="0 0 18 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="18" height="6" fill="#00209F"/>
+              <rect y="6" width="18" height="6" fill="#D21034"/>
+              <rect x="6.5" y="4" width="5" height="4" rx="0.5" fill="#FFFFFF"/>
+              <circle cx="9" cy="6" r="1.2" fill="#007A3D"/>
+            </svg>
+          </div>
+          <p class="text-[14px] text-white/70 leading-relaxed max-w-[380px]">
+            Yon inisyativ sivik endepandan pou eleksyon prezidansyèl 2027 la. Net, gratis, san piblisite.
+          </p>
+        </div>
+
+        <!-- Col 2: Platfòm -->
+        <div class="col-span-2">
+          <h3 class="text-[11px] font-bold text-white/50 uppercase tracking-wider mb-3">PLATFÒM</h3>
+          <ul class="space-y-2 text-[14px] text-white/80">
+            <li><a href="#" class="hover:text-white transition-colors">Priyorite</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kandida</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Rezilta</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Sondaj</a></li>
+            <li><a href="#" class="text-[#EAEEFA] font-semibold hover:text-white transition-colors">Konnen Ayiti</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Enfòmasyon -->
+        <div class="col-span-2">
+          <h3 class="text-[11px] font-bold text-white/50 uppercase tracking-wider mb-3">ENFÒMASYON</h3>
+          <ul class="space-y-2 text-[14px] text-white/80">
+            <li><a href="#" class="hover:text-white transition-colors">Sou nou</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kijan sa mache</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Konfidansyalite</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kondisyon itilizasyon</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Kontak -->
+        <div class="col-span-3">
+          <h3 class="text-[11px] font-bold text-white/50 uppercase tracking-wider mb-3">KONTAK</h3>
+          <ul class="space-y-2 text-[14px] text-white/80">
+            <li><a href="mailto:info@prezidanpam.com" class="hover:text-white transition-colors">info@prezidanpam.com</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kòd sous sou GitHub</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Copyright & Location line -->
+      <div class="pt-6 flex items-center justify-between text-[13px] text-white/50">
+        <p>© 2026 Prezidan Pa M · Tout dwa rezève</p>
+        <p>Ayiti 2027 · Vòt pèp la</p>
+      </div>
+
+    </div>
+  </footer>
+
+</body>
+</html>

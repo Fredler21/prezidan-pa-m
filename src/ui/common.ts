@@ -26,7 +26,14 @@ export function well(markup: string): HTMLElement {
 export function avatar(c: Candidate, large = false): HTMLElement {
   const size = large ? 64 : 52;
   const el = h('div', { class: large ? 'avatar lg' : 'avatar', 'aria-hidden': 'true' });
-  if (c.photo) el.append(h('img', { src: `/photos/${c.photo}`, alt: '', loading: 'lazy', decoding: 'async', width: size, height: size }));
+  if (c.photo) {
+    const full = `/photos/${c.photo}`;
+    const thumb = `/photos/thumb/${c.photo.replace(/\.(jpe?g|png)$/i, '.webp')}`;
+    const img = h('img', { src: thumb, srcset: `${thumb} 128w, ${full} 320w`, sizes: `${size}px`, alt: '', loading: 'lazy', decoding: 'async', width: size, height: size });
+    // A photo published later from the admin page may not have a thumbnail yet.
+    img.addEventListener('error', () => { if (img.getAttribute('src') !== full) { img.removeAttribute('srcset'); img.src = full; } }, { once: true });
+    el.append(img);
+  }
   else { el.style.setProperty('--avatar', avatarColor(c.id)); el.textContent = initials(c.name); }
   return el;
 }
@@ -118,7 +125,7 @@ export function footer(): HTMLElement {
         h('a', { class: 'foot-brand', href: '#home' }, svg(ICON.brand), s.appName, h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' })),
         h('p', { class: 'foot-about' }, f.about)),
       h('nav', { class: 'foot-cols', 'aria-label': s.nav.aboutUs },
-        col(f.platform, a('#start', s.nav.priorities), a('#candidates', s.nav.candidates), a('#results', s.nav.results), a('#poll', s.nav.poll)),
+        col(f.platform, a('#start', s.nav.priorities), a('#candidates', s.nav.candidates), a('#results', s.nav.results), a('#poll', s.nav.poll), a('#quiz', s.home.quizCard)),
         col(f.info, a('#about-us', s.nav.aboutUs), a('#about', s.nav.about), a('#privacy', s.nav.privacy), a('#terms', s.nav.terms)),
         col(f.contact, a(`mailto:${CONTACT_EMAIL}`, CONTACT_EMAIL)))),
     base);

@@ -19,17 +19,17 @@ function langPill(): HTMLElement {
 /** Desktop navigation (hidden on phones, where the bottom tabs take over). */
 function topNav(route: Route): HTMLElement {
   const s = S().nav;
-  const active: Partial<Record<Route, Route>> = { home: 'home', start: 'start', match: 'candidates', candidates: 'candidates', vote: 'candidates', results: 'results', poll: 'poll', admin: 'poll' };
+  const active: Partial<Record<Route, Route>> = { home: 'home', start: 'start', match: 'candidates', candidates: 'candidates', vote: 'candidates', results: 'results', poll: 'poll', admin: 'poll', quiz: 'quiz' };
   const cur = active[route];
   const links: { route: Route; label: string }[] = [
     { route: 'home', label: s.home }, { route: 'start', label: s.priorities }, { route: 'candidates', label: s.candidates },
-    { route: 'results', label: s.results }, { route: 'poll', label: s.poll },
+    { route: 'results', label: s.results }, { route: 'poll', label: s.poll }, { route: 'quiz', label: s.quiz },
   ];
   return h('nav', { class: 'topnav', 'aria-label': S().navLabel }, ...links.map((x) =>
     h('a', { href: `#${x.route}`, 'aria-current': x.route === cur ? 'page' : undefined }, x.label)));
 }
 
-const wordmark = (title?: string) => h('a', { class: title ? 'wordmark desk-only' : 'wordmark', href: '#home' }, svg(ICON.brand), S().appName,
+const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#home' }, svg(ICON.brand), S().appName,
   title ? h('span', { class: 'hdr-crumb' }, `· ${title}`) : null);
 
 /** Top-level pages carry the wordmark; drill-in pages a back arrow and a title (desktop: wordmark · title). */
@@ -50,11 +50,11 @@ export function renderHeader(route: Route): void {
     return;
   }
 
-  const topLevel: Partial<Record<Route, string>> = { results: s.results.title, poll: s.poll.title, admin: s.admin.title };
+  const topLevel: Partial<Record<Route, string>> = { results: s.results.title, poll: s.poll.title, admin: s.admin.title, quiz: s.quiz.title };
   const top = topLevel[route];
   if (top) {
     el.append(h('div', { class: 'wrap hdr-row' },
-      h('div', { class: 'hdr-left' }, h('span', { class: 'wordmark mobile-only' }, top), wordmark()),
+      h('div', { class: 'hdr-left' }, h('span', { class: 'wordmark mobile-only' }, top), wordmark(undefined, true)),
       topNav(route), langPill()));
     return;
   }

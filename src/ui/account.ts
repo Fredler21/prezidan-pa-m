@@ -5,6 +5,7 @@ import { STORAGE_MODE } from '../storage';
 import { getAccount, onAccountChange, connect, disconnect, type Account, prepareConnect, isConnectReady } from '../account';
 import { note } from './common';
 import { toast } from './toast';
+import { copyText } from '../lib/util';
 
 let open: HTMLDialogElement | null = null;
 
@@ -110,7 +111,11 @@ export function openAccountSheet(): void {
       h('div', { style: 'text-align:right;margin-top:6px' }, forgot),
       h('div', { style: 'margin-top:16px' }, submit));
 
-    body.append(h('p', { class: 'lead auth-lead' }, s.lead), h('div', { style: 'margin-top:20px' }, google), h('div', { class: 'divider' }, s.or), form,
+    // Google refuses sign-in inside app browsers (WhatsApp, Facebook, Instagram, TikTok...): say so and offer the way out.
+    const inApp = /FBAN|FBAV|FB_IAB|Instagram|Line\/|WhatsApp|Snapchat|TikTok|musical_ly|; wv\)/i.test(navigator.userAgent);
+    const inAppNote = inApp ? h('div', { class: 'inapp-note' }, note(s.inApp, ICON.info, false),
+      h('button', { class: 'link-btn', type: 'button', onclick: async () => { toast((await copyText(location.origin + '/')) ? s.linkCopied : location.origin, 4000); } }, svg(ICON.link), s.copySiteLink)) : null;
+    body.append(h('p', { class: 'lead auth-lead' }, s.lead), h('div', { style: 'margin-top:20px' }, google, inAppNote), h('div', { class: 'divider' }, s.or), form,
       h('p', { class: 'caption', style: 'text-align:center;margin-top:16px' }, s.caption));
   };
   render();

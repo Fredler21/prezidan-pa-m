@@ -54,6 +54,12 @@ function render(loc: Location): void {
     case 'about-us': renderLegal(main, 'aboutUs'); break;
     case 'privacy': renderLegal(main, 'privacy'); break;
     case 'terms': renderLegal(main, 'terms'); break;
+    case 'quiz': {
+      let off: () => void = () => {}; let dead = false;
+      void import('./ui/quiz').then((m) => { if (!dead) off = m.renderQuiz(main); });
+      cleanup = () => { dead = true; off(); };
+      break;
+    }
   }
   window.scrollTo({ top: 0 });
   const nav = S().nav as Record<string, string>;

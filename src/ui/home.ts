@@ -317,7 +317,7 @@ export function renderHome(main: HTMLElement): () => void {
   // ---- Candidates strip: every candidate, random order, one slow loop; pauses on hover or focus ----
   const order = candidatesShuffled();
   const half = (clone: boolean) => h('div', { class: 'marquee-half', 'aria-hidden': clone ? 'true' : undefined },
-    ...order.map((x) => h('button', { class: 'strip-av', type: 'button', 'aria-label': x.name, title: x.name, tabindex: clone ? -1 : undefined, 'aria-haspopup': 'dialog', onclick: () => openProfile(x) }, avatar(x))));
+    ...order.map((x) => h('button', { class: 'strip-av', type: 'button', title: x.name, tabindex: clone ? -1 : undefined, 'aria-haspopup': 'dialog', onclick: () => openProfile(x) }, avatar(x), h('span', { class: 'sr' }, x.name))));
   const strip = h('section', { class: 'section strip-sec', 'aria-label': s.stripLabel },
     h('p', { class: 'caption' }, fmt(s.stripCaption, { n })),
     h('div', { class: 'marquee' }, h('div', { class: 'marquee-track' }, half(false), half(true))));
@@ -402,8 +402,28 @@ export function renderHome(main: HTMLElement): () => void {
       entry('#candidates', ICON.people, s.candidatesCard, fmt(s.candidatesSub, { n })),
       entry('#poll', ICON.poll, s.pollCard, pollSub),
       entry('#results', ICON.ballot, s.resultsCard, s.resultsSub),
+      entry('#quiz', ICON.idea, s.quizCard, s.quizSub),
       entry('#about', ICON.info, s.aboutCard, s.aboutSub)));
   for (const el of explore.querySelectorAll<HTMLElement>('.explore')) cleanups.push(attachTilt(el, 4));
+
+  // ---- Konnen Ayiti: the daily game ----
+  // The game and its question bank are their own chunk, loaded when the section comes near.
+  const q = S().quiz;
+  const quizHead = h('div', { class: 'qz-head' }, h('div', null, h('p', { class: 'kicker' }, q.kicker), h('h2', null, q.title), h('p', { class: 'qz-lead' }, q.lead)));
+  const quizSlot = h('div', { class: 'qz-card qz-skel', 'aria-hidden': 'true' }, skeletonLines(4));
+  const quizSec = h('section', { class: 'section qz-sec', id: 'jwet' }, quizHead, quizSlot);
+  const mountQuiz = () => void import('./quiz').then((m) => {
+    if (!alive) return;
+    const g = m.quizGame();
+    cleanups.push(g.destroy);
+    quizHead.append(g.streakPill);
+    quizSlot.replaceWith(g.el);
+  }).catch((e) => console.warn('quiz load failed', e));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); mountQuiz(); } }, { rootMargin: '800px 0px' });
+    io.observe(quizSec);
+    cleanups.push(() => io.disconnect());
+  } else mountQuiz();
 
   // ---- Kat sitwayen: the visitor's own civic card ----
   const card = civicCard(firstRound);
@@ -428,7 +448,7 @@ export function renderHome(main: HTMLElement): () => void {
   const mobileStats = h('div', { class: 'mobile-only stats-mobile' }, h('div', { class: 'card countdown-card' }, countdownRow()), statRow('stats3', 0));
   main.append(
     hero,
-    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore)),
+    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore), quizSec),
     card.el,
     h('div', { class: 'wrap home-body' }, band, bottom, footer()));
   cleanups.push(revealOnScroll([band, bottom]), attachTilt(band, 3));

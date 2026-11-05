@@ -41,7 +41,7 @@ export function renderBottom(route: Route): void {
       { route: 'start', label: s.nav.priorities, icon: ICON.sliders, active: ['start'] },
       { route: 'candidates', label: s.nav.candidates, icon: ICON.people, active: ['candidates', 'match'] },
       { route: 'results', label: s.nav.results, icon: ICON.bars, active: ['results'] },
-      { route: 'poll', label: s.nav.poll, icon: ICON.poll, active: ['poll', 'admin'] },
+      { route: 'poll', label: s.nav.poll, icon: ICON.poll, active: ['poll', 'admin', 'quiz'] },
     ];
     el.append(h('div', { class: 'tabs' }, ...tabs.map((t) =>
       h('a', { class: 'tab', href: `#${t.route}`, 'aria-current': t.active.includes(route) ? 'page' : undefined }, svg(t.icon), t.label))));
