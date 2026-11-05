@@ -1,706 +1,698 @@
 <!DOCTYPE html>
 <html lang="ht" class="h-full bg-[#F3F5FA]">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Prezidan Pa M · Si m te prezidan</title>
-  <!-- Google Fonts: Bricolage Grotesque -->
+  <title>Prezidan Pa M · Jou sèman an</title>
+  
+  <!-- Font Bricolage Grotesque exactly as specified -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  
   <!-- Material Symbols Outlined -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
-  <!-- Tailwind CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300,0,0">
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            'night-indigo': '#0B1230',
-            'night-card': '#141D45',
-            'ultramarine': '#1A3BB5',
-            'tint': '#EAEEFA',
+            night: '#0B1230',
+            ultramarine: '#1A3BB5',
+            'ultramarine-tint': '#EAEEFA',
             'lighter-ring': '#7D93E8',
             'flag-red': '#D41E3C',
-            'page-bg': '#F3F5FA',
-            'card-border': '#E1E5F0',
-            'ink': '#0B1A4A',
-            'muted-ink': '#5B6480',
-            'track': '#E6EAF5',
-            'news-bg': '#FFF4D6',
-            'news-ink': '#7A4A00',
-            'green-solid': '#15803D',
-            'green-light': '#E7F6EC',
-            'red-light': '#FDECEF',
-            'meter-green': '#34C26F',
-            'meter-red': '#FF5A6E',
-            'meter-mid': '#7D93E8',
-            'night-sub': '#B9C4E6'
+            page: '#F3F5FA',
+            ink: '#0B1A4A',
+            muted: '#5B6480',
+            hairline: '#E1E5F0',
+            track: '#E6EAF5'
           }
         }
       }
-    };
+    }
   </script>
+
   <style>
     html, body {
       font-family: 'Bricolage Grotesque', system-ui, sans-serif;
       font-optical-sizing: auto;
+      background-color: #F3F5FA;
+      color: #0B1A4A;
+      margin: 0;
+      padding: 0;
     }
-    .tabular {
+
+    .tabular-nums {
       font-variant-numeric: tabular-nums;
     }
-    @media (prefers-reduced-motion: no-preference) {
-      .reveal-in {
-        animation: fadeUp 0.4s ease-out forwards;
-      }
+
+    /* Keyframes for premium motion as requested */
+    @keyframes sealPop {
+      0% { transform: scale(0.65); opacity: 0; }
+      70% { transform: scale(1.06); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
     }
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
+
+    @keyframes titleRise {
+      0% { transform: translateY(18px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes barGrow1 { 0% { width: 0%; } 100% { width: 25%; } }
+    @keyframes barGrow2 { 0% { width: 0%; } 100% { width: 30%; } }
+    @keyframes barGrow3 { 0% { width: 0%; } 100% { width: 30%; } }
+    @keyframes barGrow4 { 0% { width: 0%; } 100% { width: 35%; } }
+    @keyframes barGrow5 { 0% { width: 0%; } 100% { width: 40%; } }
+
+    @keyframes bannerSlideShake {
+      0% { transform: translateY(-16px); opacity: 0; }
+      60% { transform: translateY(0); opacity: 1; }
+      70% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+      90% { transform: translateX(-2px); }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes checkPop {
+      0% { transform: scale(0); opacity: 0; }
+      70% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes ringDraw {
+      0% { stroke-dashoffset: 452; }
+      100% { stroke-dashoffset: 162.7; }
+    }
+
+    .anim-seal {
+      animation: sealPop 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .anim-title {
+      animation: titleRise 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+      opacity: 0;
+    }
+
+    .anim-bar-1 { animation: barGrow1 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s forwards; width: 0%; }
+    .anim-bar-2 { animation: barGrow2 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards; width: 0%; }
+    .anim-bar-3 { animation: barGrow3 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards; width: 0%; }
+    .anim-bar-4 { animation: barGrow4 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.55s forwards; width: 0%; }
+    .anim-bar-5 { animation: barGrow5 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards; width: 0%; }
+
+    .anim-crisis-banner {
+      animation: bannerSlideShake 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    }
+
+    .anim-check {
+      animation: checkPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+
+    .anim-ring {
+      stroke-dasharray: 452;
+      stroke-dashoffset: 452;
+      animation: ringDraw 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .anim-seal, .anim-title, .anim-crisis-banner, .anim-check {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      .anim-bar-1 { width: 25% !important; animation: none !important; }
+      .anim-bar-2 { width: 30% !important; animation: none !important; }
+      .anim-bar-3 { width: 30% !important; animation: none !important; }
+      .anim-bar-4 { width: 35% !important; animation: none !important; }
+      .anim-bar-5 { width: 40% !important; animation: none !important; }
+      .anim-ring {
+        stroke-dashoffset: 162.7 !important;
+        animation: none !important;
       }
     }
   </style>
 </head>
-<body class="min-h-full flex flex-col bg-[#F3F5FA] text-[#0B1A4A] antialiased">
+<body class="min-h-full flex flex-col bg-[#F3F5FA]">
 
-  <!-- Desktop Header (56px) -->
-  <header class="h-14 bg-[#0B1230] border-b border-white/10 sticky top-0 z-50">
-    <div class="max-w-[1120px] mx-auto h-full px-8 flex items-center justify-between">
+  <!-- TOP HEADER (Desktop, 56px, Solid Night Indigo #0B1230) -->
+  <header class="w-full bg-[#0B1230] border-b border-[#E1E5F0]/15 sticky top-0 z-50">
+    <div class="max-w-[1120px] mx-auto px-8 h-14 flex items-center justify-between">
       
-      <!-- Wordmark + Flag Strip -->
-      <div class="flex items-center gap-6">
-        <a href="#" class="flex items-center gap-2.5 text-white hover:opacity-95 transition-opacity">
-          <span class="material-symbols-outlined text-white text-[22px]">how_to_vote</span>
-          <span class="text-[18px] font-bold tracking-tight">Prezidan Pa M</span>
+      <!-- Brand & Site Title -->
+      <div class="flex items-center space-x-8">
+        <a href="#" class="flex items-center space-x-3 text-white">
+          <span class="w-8 h-8 rounded-full bg-[#1A3BB5] flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-lg leading-none">account_balance</span>
+          </span>
+          <span class="text-[18px] font-bold tracking-tight text-white">Prezidan Pa M</span>
         </a>
-        <div class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[12px] font-medium text-white/80">
-          <span class="w-2 h-2 rounded-full bg-[#D41E3C]"></span>
-          <span>Ayiti 2027 · Vòt pèp la</span>
-        </div>
+
+        <!-- Desktop Nav Links -->
+        <nav class="hidden md:flex items-center space-x-1">
+          <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Akèy</a>
+          <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Priyorite</a>
+          <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Kandida</a>
+          <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Rezilta</a>
+          <a href="#" class="px-3 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Sondaj</a>
+          <!-- Active Tab: Jwèt -->
+          <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-semibold text-white bg-[#1A3BB5] transition-colors">Jwèt</a>
+        </nav>
       </div>
 
-      <!-- Navigation links (Desktop) -->
-      <nav class="hidden lg:flex items-center gap-1">
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Akèy</a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Priyorite</a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Kandida</a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Rezilta</a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-medium text-white/70 hover:text-white transition-colors">Sondaj</a>
-        <a href="#" class="px-3.5 py-1.5 rounded-full text-[14px] font-semibold text-white bg-[#1A3BB5]">Jwèt</a>
-      </nav>
-
-      <!-- Account + Language Pill -->
-      <div class="flex items-center gap-3">
-        <button class="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors" aria-label="Kont ou">
-          <span class="material-symbols-outlined text-[18px]">person</span>
-        </button>
-        <button class="h-8 px-3 rounded-full border border-white/30 text-white text-[13px] font-medium hover:bg-white/10 transition-colors flex items-center gap-1">
+      <!-- Right Header Actions: Language pill and Account button -->
+      <div class="flex items-center space-x-4">
+        <!-- Language Pill: Kreyòl ▾, 32px tall, 13px weight 500 white, transparent fill, 1px border rgba(255,255,255,.3) -->
+        <button type="button" class="h-8 px-3.5 rounded-full text-[13px] font-medium text-white border border-white/30 bg-transparent flex items-center space-x-1 hover:border-white/60 transition-colors">
           <span>Kreyòl ▾</span>
+        </button>
+
+        <!-- Round Account Button -->
+        <button type="button" aria-label="Kont itilizatè" class="w-8 h-8 rounded-full bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-colors">
+          <span class="material-symbols-outlined text-base">person</span>
         </button>
       </div>
 
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="flex-1 max-w-[1120px] w-full mx-auto px-8 py-10 reveal-in">
-
-    <!-- Page Head -->
-    <div class="mb-10">
-      <div class="text-[13px] font-bold text-[#1A3BB5] tracking-wide mb-2">
-        JWÈT · SI M TE PREZIDAN
+  <!-- SUBHEADER / BREADCRUMB ROW -->
+  <div class="w-full bg-white border-b border-[#E1E5F0]">
+    <div class="max-w-[1120px] mx-auto px-8 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2 text-[14px]">
+        <span class="text-[#5B6480] font-medium">Jwèt sivik</span>
+        <span class="text-[#5B6480]">·</span>
+        <span class="text-[#0B1A4A] font-semibold">Si m te prezidan (Edision 2027)</span>
       </div>
-      <h1 class="text-[44px] font-extrabold text-[#0B1A4A] leading-[1.05] tracking-[-0.02em] mb-3">
-        Si m te prezidan
-      </h1>
-      <p class="text-[16px] text-[#5B6480] leading-[1.5] max-w-2xl">
-        8 desizyon, 5 an, yon peyi. Chak desizyon chanje peyi a. Kèk ladan yo gen konsekans ki rive pita.
-      </p>
+      <div class="flex items-center space-x-3">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-medium bg-[#EAEEFA] text-[#1A3BB5]">
+          Similasyon 5 an
+        </span>
+        <span class="text-[13px] text-[#5B6480]">8 desizyon · 1 peyi</span>
+      </div>
     </div>
+  </div>
 
-    <!-- Two-column interactive layout (Left 7/12, Right 5/12) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-14">
+  <!-- MAIN WRAPPER: Max 1120px, 32px gutters -->
+  <main class="max-w-[1120px] mx-auto px-8 py-8 w-full flex-1 space-y-12">
 
-      <!-- LEFT COLUMN: Decision Card & Consequence Panel (7 cols) -->
-      <div class="lg:col-span-7 flex flex-col gap-6">
+    <!-- =================================================================================== -->
+    <!-- STATE 1: INTRO CARD « Jou sèman an » (Left 7/12, Country Panel Right 5/12)          -->
+    <!-- =================================================================================== -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-[13px] font-semibold text-[#1A3BB5] tracking-wide uppercase">Etap 1 · Kòmansman manda a</span>
+          <h2 class="text-[28px] font-bold text-[#0B1A4A] leading-tight tracking-tight">Jou sèman an</h2>
+        </div>
+        <span class="text-[14px] text-[#5B6480]">Seremoni ofisyèl ak eta nasyon an</span>
+      </div>
 
-        <!-- DECISION CARD -->
-        <section class="bg-white rounded-[24px] border border-[#E1E5F0] p-7 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_8px_24px_rgba(11,26,74,0.06)]">
+      <div class="grid grid-cols-12 gap-6 items-stretch">
+        
+        <!-- Left 7/12: Solid Night Indigo Card #0B1230, 24px radius, white text, centered content -->
+        <div class="col-span-12 lg:col-span-7 bg-[#0B1230] rounded-[24px] p-8 text-white flex flex-col justify-between shadow-[0_1px_2px_rgba(11,26,74,.05),0_8px_24px_rgba(11,26,74,.06)] border border-[#141D45]">
           
-          <!-- Top progress row -->
-          <div class="flex items-center justify-between mb-4">
-            <span class="text-[14px] font-bold text-[#0B1A4A]">Desizyon 3 sou 8</span>
-            <span class="px-3 py-1 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-[12px] font-semibold">
-              Ane 2
-            </span>
-          </div>
-
-          <!-- 8 Segment Progress Bar -->
-          <div class="grid grid-cols-8 gap-1.5 mb-6">
-            <div class="h-2 rounded-full bg-[#1A3BB5]"></div>
-            <div class="h-2 rounded-full bg-[#1A3BB5]"></div>
-            <div class="h-2 rounded-full bg-[#7D93E8]"></div>
-            <div class="h-2 rounded-full bg-[#E6EAF5]"></div>
-            <div class="h-2 rounded-full bg-[#E6EAF5]"></div>
-            <div class="h-2 rounded-full bg-[#E6EAF5]"></div>
-            <div class="h-2 rounded-full bg-[#E6EAF5]"></div>
-            <div class="h-2 rounded-full bg-[#E6EAF5]"></div>
-          </div>
-
-          <!-- News Banner -->
-          <div class="mb-6 p-4 rounded-[14px] bg-[#FFF4D6] border border-[#F3E2B0] flex items-center justify-between gap-3 text-[#7A4A00]">
-            <div class="flex items-center gap-2.5">
-              <span class="material-symbols-outlined text-[20px] text-[#7A4A00]">warning</span>
-              <span class="text-[14px] leading-tight">
-                <strong class="font-bold">Nouvèl</strong> · Premye peman dèt la rive.
-              </span>
-            </div>
-            <span class="px-2.5 py-0.5 rounded-full bg-[#D41E3C] text-white text-[12px] font-bold tabular whitespace-nowrap">
-              −20 Kès leta
-            </span>
-          </div>
-
-          <!-- Scenario header -->
-          <div class="flex items-start gap-4 mb-6">
-            <div class="w-14 h-14 rounded-[14px] bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center shrink-0">
-              <span class="material-symbols-outlined text-[28px]">school</span>
-            </div>
-            <div>
-              <h2 class="text-[22px] font-bold text-[#0B1A4A] leading-[1.2] mb-1.5">
-                Jèn yo ap kite peyi a an mas. Kisa ou fè?
-              </h2>
-              <p class="text-[14px] text-[#5B6480]">
-                Desizyon yo final. Pa gen retou.
-              </p>
-            </div>
-          </div>
-
-          <!-- Four choices (2 by 2) -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="flex flex-col items-center text-center space-y-4">
             
-            <!-- Choice 1 -->
-            <button class="p-4 rounded-[16px] border border-[#E1E5F0] bg-white hover:border-[#1A3BB5] transition-all text-left flex flex-col justify-between group">
-              <div class="mb-3">
-                <div class="w-8 h-8 rounded-[8px] bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center mb-2.5">
-                  <span class="material-symbols-outlined text-[18px]">workspace_premium</span>
-                </div>
-                <div class="text-[16px] font-bold text-[#0B1A4A] group-hover:text-[#1A3BB5] leading-tight mb-1">
-                  Bous ak fòmasyon
-                </div>
-                <div class="text-[14px] text-[#5B6480] leading-snug">
-                  Plis jèn nan inivèsite ak nan metye
-                </div>
-              </div>
-              <div>
-                <span class="inline-block px-2.5 py-1 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-[12px] font-semibold tabular">
-                  Koute 12
-                </span>
-              </div>
-            </button>
-
-            <!-- Choice 2 -->
-            <button class="p-4 rounded-[16px] border border-[#E1E5F0] bg-white hover:border-[#1A3BB5] transition-all text-left flex flex-col justify-between group">
-              <div class="mb-3">
-                <div class="w-8 h-8 rounded-[8px] bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center mb-2.5">
-                  <span class="material-symbols-outlined text-[18px]">storefront</span>
-                </div>
-                <div class="text-[16px] font-bold text-[#0B1A4A] group-hover:text-[#1A3BB5] leading-tight mb-1">
-                  Kredi pou ti biznis
-                </div>
-                <div class="text-[14px] text-[#5B6480] leading-snug">
-                  Ti prè pou jèn ki vle lanse
-                </div>
-              </div>
-              <div>
-                <span class="inline-block px-2.5 py-1 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-[12px] font-semibold tabular">
-                  Koute 10
-                </span>
-              </div>
-            </button>
-
-            <!-- Choice 3 -->
-            <button class="p-4 rounded-[16px] border border-[#E1E5F0] bg-white hover:border-[#1A3BB5] transition-all text-left flex flex-col justify-between group">
-              <div class="mb-3">
-                <div class="w-8 h-8 rounded-[8px] bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center mb-2.5">
-                  <span class="material-symbols-outlined text-[18px]">diversity_3</span>
-                </div>
-                <div class="text-[16px] font-bold text-[#0B1A4A] group-hover:text-[#1A3BB5] leading-tight mb-1">
-                  Sèvis sivik obligatwa
-                </div>
-                <div class="text-[14px] text-[#5B6480] leading-snug">
-                  Jèn yo travay pou peyi a pandan 1 an
-                </div>
-              </div>
-              <div>
-                <span class="inline-block px-2.5 py-1 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-[12px] font-semibold tabular">
-                  Koute 5
-                </span>
-              </div>
-            </button>
-
-            <!-- Choice 4: Disabled state -->
-            <div class="p-4 rounded-[16px] border border-[#E1E5F0] bg-white/60 opacity-60 text-left flex flex-col justify-between cursor-not-allowed">
-              <div class="mb-3">
-                <div class="w-8 h-8 rounded-[8px] bg-[#E6EAF5] text-[#5B6480] flex items-center justify-center mb-2.5">
-                  <span class="material-symbols-outlined text-[18px]">flight_takeoff</span>
-                </div>
-                <div class="text-[16px] font-bold text-[#0B1A4A] leading-tight mb-1">
-                  Fasilite dyaspora envesti
-                </div>
-                <div class="text-[14px] text-[#5B6480] leading-snug">
-                  Mwens papye, plis garanti
-                </div>
-              </div>
-              <div>
-                <span class="inline-block px-2.5 py-1 rounded-full bg-[#FDECEF] text-[#D41E3C] text-[12px] font-bold">
-                  Kès la vid
-                </span>
-              </div>
+            <!-- 72px solid ultramarine circle with white account_balance icon and thin white ring -->
+            <div class="w-[72px] h-[72px] rounded-full bg-[#1A3BB5] ring-2 ring-white/80 ring-offset-4 ring-offset-[#0B1230] flex items-center justify-center text-white shadow-none anim-seal">
+              <span class="material-symbols-outlined text-[36px]">account_balance</span>
             </div>
 
-          </div>
-
-        </section>
-
-        <!-- CONSEQUENCE PANEL (State 2: Below decision card) -->
-        <section class="bg-white rounded-[20px] border border-[#E1E5F0] border-l-4 border-l-[#1A3BB5] p-6 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_8px_24px_rgba(11,26,74,0.06)]">
-          <div class="text-[13px] font-bold text-[#1A3BB5] tracking-wide mb-1.5">
-            SA K PASE
-          </div>
-          <p class="text-[17px] text-[#0B1A4A] leading-relaxed mb-4 font-normal">
-            Lajan an antre vit, epi pou kounye a tout bagay sanble byen. Men yon jou fò w remèt li.
-          </p>
-          
-          <!-- Effect chips -->
-          <div class="flex flex-wrap items-center gap-2.5 mb-4">
-            <span class="px-3 py-1 rounded-full bg-[#E7F6EC] text-[#15803D] text-[13px] font-bold tabular">
-              +30 Kès leta
+            <!-- Kicker -->
+            <span class="text-[12px] font-semibold tracking-wider text-[#B9C4E6] uppercase anim-title">
+              JOU SÈMAN AN
             </span>
-            <span class="px-3 py-1 rounded-full bg-[#E7F6EC] text-[#15803D] text-[13px] font-bold tabular">
-              +3 Ekonomi
-            </span>
-            <div class="flex items-center gap-1.5 text-[13px] text-[#5B6480] ml-1">
-              <span class="material-symbols-outlined text-[16px] text-[#5B6480]">schedule</span>
-              <span>Konsekans sa a ap rive pita…</span>
+
+            <!-- Title: Ou fèk prete sèman, 34px weight 800 white -->
+            <h1 class="text-[34px] font-extrabold text-white leading-tight tracking-tight anim-title">
+              Ou fèk prete sèman
+            </h1>
+
+            <!-- Lead: 16px #B9C4E6 -->
+            <p class="text-[16px] text-[#B9C4E6] leading-normal max-w-md anim-title">
+              Ou gen 5 an. Men kijan peyi a ye jodi a. Chak desizyon ap konte.
+            </p>
+
+            <!-- 5 small meter rows filling up from zero -->
+            <div class="w-full space-y-3 pt-2 text-left">
+              
+              <!-- 1. Sekirite: 25 (bar solid #7D93E8) -->
+              <div>
+                <div class="flex justify-between items-center text-[14px] mb-1.5">
+                  <span class="text-white/90 font-medium">Sekirite</span>
+                  <span class="text-[#B9C4E6] font-bold tabular-nums">25 / 100</span>
+                </div>
+                <div class="w-full h-[6px] bg-white/12 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#7D93E8] rounded-full anim-bar-1"></div>
+                </div>
+              </div>
+
+              <!-- 2. Ekonomi: 30 -->
+              <div>
+                <div class="flex justify-between items-center text-[14px] mb-1.5">
+                  <span class="text-white/90 font-medium">Ekonomi</span>
+                  <span class="text-[#B9C4E6] font-bold tabular-nums">30 / 100</span>
+                </div>
+                <div class="w-full h-[6px] bg-white/12 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#7D93E8] rounded-full anim-bar-2"></div>
+                </div>
+              </div>
+
+              <!-- 3. Lekòl ak lasante: 30 -->
+              <div>
+                <div class="flex justify-between items-center text-[14px] mb-1.5">
+                  <span class="text-white/90 font-medium">Lekòl ak lasante</span>
+                  <span class="text-[#B9C4E6] font-bold tabular-nums">30 / 100</span>
+                </div>
+                <div class="w-full h-[6px] bg-white/12 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#7D93E8] rounded-full anim-bar-3"></div>
+                </div>
+              </div>
+
+              <!-- 4. Konfyans pèp la: 35 -->
+              <div>
+                <div class="flex justify-between items-center text-[14px] mb-1.5">
+                  <span class="text-white/90 font-medium">Konfyans pèp la</span>
+                  <span class="text-[#B9C4E6] font-bold tabular-nums">35 / 100</span>
+                </div>
+                <div class="w-full h-[6px] bg-white/12 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#7D93E8] rounded-full anim-bar-4"></div>
+                </div>
+              </div>
+
+              <!-- 5. Kès leta: 40 -->
+              <div>
+                <div class="flex justify-between items-center text-[14px] mb-1.5">
+                  <span class="text-white/90 font-medium">Kès leta</span>
+                  <span class="text-[#B9C4E6] font-bold tabular-nums">40 / 100</span>
+                </div>
+                <div class="w-full h-[6px] bg-white/12 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#7D93E8] rounded-full anim-bar-5"></div>
+                </div>
+              </div>
+
             </div>
+
+            <!-- Explanatory note 13px -->
+            <p class="text-[13px] text-[#B9C4E6] pt-1">
+              Chak pati tire 8 desizyon nan 18: chak manda diferan.
+            </p>
+
           </div>
 
-          <!-- Action button -->
-          <div class="pt-1">
-            <button class="h-12 px-6 rounded-full bg-[#1A3BB5] text-white text-[15px] font-semibold hover:opacity-95 transition-opacity flex items-center gap-2">
-              <span>Desizyon pwochen</span>
+          <!-- Solid white pill with ultramarine text « Kòmanse manda a » (arrow_forward) -->
+          <div class="pt-6 flex justify-center">
+            <button type="button" class="h-12 px-6 rounded-full bg-white text-[#1A3BB5] font-semibold text-[16px] inline-flex items-center space-x-2 hover:bg-[#EAEEFA] transition-colors">
+              <span>Kòmanse manda a</span>
               <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
             </button>
           </div>
-        </section>
 
-      </div>
+        </div>
 
-      <!-- RIGHT COLUMN: Country Panel (5 cols, Sticky) -->
-      <aside class="lg:col-span-5 lg:sticky lg:top-20">
-        <div class="bg-[#0B1230] rounded-[24px] p-7 text-white border border-[#141D45] shadow-[0_1px_2px_rgba(11,26,74,0.08),0_12px_32px_rgba(11,26,74,0.12)]">
+        <!-- Right 5/12: The Country Panel (Solid Night Indigo #0B1230, contextual stats) -->
+        <div class="col-span-12 lg:col-span-5 bg-[#0B1230] rounded-[24px] p-8 text-white flex flex-col justify-between shadow-[0_1px_2px_rgba(11,26,74,.05),0_8px_24px_rgba(11,26,74,.06)] border border-[#141D45]">
           
-          <!-- Header row -->
-          <div class="flex items-center justify-between pb-6 border-b border-white/10 mb-6">
-            <div>
-              <div class="text-[12px] font-bold text-[#B9C4E6] tracking-wider mb-1">
-                ETA PEYI A
-              </div>
-              <div class="text-[14px] text-white/70">
-                Endis pwogrè
-              </div>
+          <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4">
+              <span class="text-[13px] font-semibold text-[#B9C4E6] tracking-wider uppercase">Tablo nasyonal</span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[12px] font-semibold bg-[#141D45] text-white border border-white/10">
+                Ane 1 · Jou 1
+              </span>
             </div>
-            <div class="text-right">
-              <div class="flex items-baseline justify-end gap-1">
-                <span class="text-[40px] font-extrabold text-white leading-none tabular">38</span>
-                <span class="text-[15px] font-semibold text-[#B9C4E6]">/100</span>
+
+            <div class="space-y-2">
+              <span class="text-[13px] text-[#B9C4E6]">Nòt jeneral peyi a</span>
+              <div class="flex items-baseline space-x-2">
+                <span class="text-[56px] font-extrabold text-white leading-none tabular-nums">32</span>
+                <span class="text-[20px] font-bold text-[#B9C4E6]">/ 100</span>
+              </div>
+              <p class="text-[14px] text-[#B9C4E6] leading-relaxed">
+                Peyi a anba gwo presyon ekonomik ak ensekirite. Desizyon w yo pral chanje endikatè sa yo dirèkteman.
+              </p>
+            </div>
+
+            <!-- Context cards inside panel: Solid #141D45 with 1px border -->
+            <div class="space-y-3 pt-2">
+              <div class="p-4 rounded-[16px] bg-[#141D45] border border-white/10 flex items-start space-x-3.5">
+                <div class="w-9 h-9 rounded-full bg-[#1A3BB5] flex-shrink-0 flex items-center justify-center text-white">
+                  <span class="material-symbols-outlined text-[18px]">verified_user</span>
+                </div>
+                <div>
+                  <h4 class="text-[15px] font-semibold text-white">Prensip netralite</h4>
+                  <p class="text-[13px] text-[#B9C4E6] leading-snug">
+                    Similasyon an pa favorize okenn ideyoloji ni pati politik. Chak chwa gen yon pri ak yon konsekans reyèl.
+                  </p>
+                </div>
+              </div>
+
+              <div class="p-4 rounded-[16px] bg-[#141D45] border border-white/10 flex items-start space-x-3.5">
+                <div class="w-9 h-9 rounded-full bg-[#1A3BB5] flex-shrink-0 flex items-center justify-center text-white">
+                  <span class="material-symbols-outlined text-[18px]">history_edu</span>
+                </div>
+                <div>
+                  <h4 class="text-[15px] font-semibold text-white">Dosye piblik</h4>
+                  <p class="text-[13px] text-[#B9C4E6] leading-snug">
+                    Senaryo yo baze sou defi reyèl peyi d Ayiti konnen nan 30 dènye ane yo.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Five Meters -->
-          <div class="flex flex-col gap-5 mb-6">
-            
-            <!-- Meter 1: Sekirite (40) -->
-            <div>
-              <div class="flex items-center justify-between text-[14px] mb-2">
-                <div class="flex items-center gap-2 text-white">
-                  <span class="material-symbols-outlined text-[19px] text-[#B9C4E6]">shield</span>
-                  <span class="font-semibold">Sekirite</span>
-                </div>
-                <span class="font-bold tabular text-white">40</span>
-              </div>
-              <div class="h-2 w-full rounded-full bg-white/10">
-                <div class="h-full rounded-full bg-[#7D93E8]" style="width: 40%;"></div>
-              </div>
-            </div>
-
-            <!-- Meter 2: Ekonomi (33) -->
-            <div>
-              <div class="flex items-center justify-between text-[14px] mb-2">
-                <div class="flex items-center gap-2 text-white">
-                  <span class="material-symbols-outlined text-[19px] text-[#B9C4E6]">payments</span>
-                  <span class="font-semibold">Ekonomi</span>
-                </div>
-                <span class="font-bold tabular text-white">33</span>
-              </div>
-              <div class="h-2 w-full rounded-full bg-white/10">
-                <div class="h-full rounded-full bg-[#7D93E8]" style="width: 33%;"></div>
-              </div>
-            </div>
-
-            <!-- Meter 3: Lekòl ak lasante (42) -->
-            <div>
-              <div class="flex items-center justify-between text-[14px] mb-2">
-                <div class="flex items-center gap-2 text-white">
-                  <span class="material-symbols-outlined text-[19px] text-[#B9C4E6]">school</span>
-                  <span class="font-semibold">Lekòl ak lasante</span>
-                </div>
-                <span class="font-bold tabular text-white">42</span>
-              </div>
-              <div class="h-2 w-full rounded-full bg-white/10">
-                <div class="h-full rounded-full bg-[#7D93E8]" style="width: 42%;"></div>
-              </div>
-            </div>
-
-            <!-- Meter 4: Konfyans pèp la (48, +8) -->
-            <div>
-              <div class="flex items-center justify-between text-[14px] mb-2">
-                <div class="flex items-center gap-2 text-white">
-                  <span class="material-symbols-outlined text-[19px] text-[#B9C4E6]">handshake</span>
-                  <span class="font-semibold">Konfyans pèp la</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="px-2 py-0.5 rounded-full bg-[#15803D] text-white text-[11px] font-bold tabular">
-                    +8
-                  </span>
-                  <span class="font-bold tabular text-white">48</span>
-                </div>
-              </div>
-              <div class="h-2 w-full rounded-full bg-white/10">
-                <div class="h-full rounded-full bg-[#7D93E8]" style="width: 48%;"></div>
-              </div>
-            </div>
-
-            <!-- Meter 5: Kès leta (25, −15) (Under or equal 25: solid #FF5A6E) -->
-            <div>
-              <div class="flex items-center justify-between text-[14px] mb-2">
-                <div class="flex items-center gap-2 text-white">
-                  <span class="material-symbols-outlined text-[19px] text-[#B9C4E6]">account_balance</span>
-                  <span class="font-semibold">Kès leta</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="px-2 py-0.5 rounded-full bg-[#D41E3C] text-white text-[11px] font-bold tabular">
-                    −15
-                  </span>
-                  <span class="font-bold tabular text-white">25</span>
-                </div>
-              </div>
-              <div class="h-2 w-full rounded-full bg-white/10">
-                <div class="h-full rounded-full bg-[#FF5A6E]" style="width: 25%;"></div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom timeline note -->
-          <div class="pt-4 border-t border-white/10 flex items-center justify-between text-[12px] text-[#B9C4E6]">
-            <span>Ane 2 sou 5</span>
-            <span class="flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#34C26F]"></span>
-              <span>Mizajou an dirèk</span>
-            </span>
+          <div class="pt-6 border-t border-white/10 flex items-center justify-between text-[13px] text-[#B9C4E6]">
+            <span>Objektif: fini manda 5 an</span>
+            <span class="font-semibold text-white">8 desizyon pou pran</span>
           </div>
 
         </div>
-      </aside>
 
-    </div>
+      </div>
+    </section>
 
-    <!-- FINAL REPORT (Third State, Full Width Under Columns) -->
-    <section class="bg-[#0B1230] rounded-[24px] border border-[#141D45] p-8 md:p-10 text-white shadow-[0_1px_2px_rgba(11,26,74,0.08),0_12px_32px_rgba(11,26,74,0.12)] mb-14">
-      
-      <!-- Top banner & big score -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-white/10 mb-8">
+    <!-- =================================================================================== -->
+    <!-- STATE 2: DECISION CARD WITH A CRISIS                                                -->
+    <!-- =================================================================================== -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
         <div>
-          <div class="text-[12px] font-bold text-[#B9C4E6] tracking-wider mb-1.5">
-            RAPÒ 5 AN
-          </div>
-          <h2 class="text-[32px] font-extrabold text-white leading-tight mb-2">
-            Peyi a ap avanse, dousman
-          </h2>
-          <p class="text-[15px] text-[#B9C4E6]">
-            Ou fini 8 desizyon manda a. Men rezilta 5 lane gouvènans ou an.
-          </p>
+          <span class="text-[13px] font-semibold text-[#1A3BB5] tracking-wide uppercase">Etap 2 · Yon kriz rive nan manda a</span>
+          <h2 class="text-[28px] font-bold text-[#0B1A4A] leading-tight tracking-tight">Kriz sou wout ak tèminal gaz la</h2>
         </div>
-        <div class="bg-[#141D45] border border-white/10 rounded-[18px] p-5 text-center min-w-[180px]">
-          <div class="text-[12px] font-medium text-[#B9C4E6] mb-1">Nòt jeneral</div>
-          <div class="text-[44px] font-extrabold text-white leading-none tabular mb-1">
-            54<span class="text-[20px] font-semibold text-[#B9C4E6]">/100</span>
-          </div>
-          <div class="text-[13px] text-[#B9C4E6] tabular">
-            Pi bon nòt ou: 61
-          </div>
-        </div>
+        <span class="text-[14px] text-[#5B6480]">Desizyon 4 sou 8</span>
       </div>
 
-      <!-- Five comparative meters row -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-10">
+      <!-- White card: 16px radius, 1px solid hairline #E1E5F0, shadow -->
+      <div class="bg-white rounded-[16px] border border-[#E1E5F0] p-7 shadow-[0_1px_2px_rgba(11,26,74,.05),0_4px_12px_rgba(11,26,74,.05)] space-y-6">
         
-        <!-- Metric 1: Sekirite -->
-        <div class="bg-[#141D45] border border-white/10 rounded-[16px] p-4">
-          <div class="flex items-center gap-2 text-[#B9C4E6] text-[13px] mb-2">
-            <span class="material-symbols-outlined text-[18px]">shield</span>
-            <span class="font-medium">Sekirite</span>
-          </div>
-          <div class="flex items-baseline justify-between mb-2">
-            <span class="text-[22px] font-bold text-white tabular">52</span>
-            <span class="text-[13px] font-semibold text-[#34C26F] flex items-center tabular">
-              ↑ +12
-            </span>
-          </div>
-          <div class="text-[12px] text-[#B9C4E6] flex justify-between">
-            <span>Avan: 40</span>
-            <span>Apre: 52</span>
-          </div>
-        </div>
-
-        <!-- Metric 2: Ekonomi -->
-        <div class="bg-[#141D45] border border-white/10 rounded-[16px] p-4">
-          <div class="flex items-center gap-2 text-[#B9C4E6] text-[13px] mb-2">
-            <span class="material-symbols-outlined text-[18px]">payments</span>
-            <span class="font-medium">Ekonomi</span>
-          </div>
-          <div class="flex items-baseline justify-between mb-2">
-            <span class="text-[22px] font-bold text-white tabular">45</span>
-            <span class="text-[13px] font-semibold text-[#34C26F] flex items-center tabular">
-              ↑ +12
-            </span>
-          </div>
-          <div class="text-[12px] text-[#B9C4E6] flex justify-between">
-            <span>Avan: 33</span>
-            <span>Apre: 45</span>
-          </div>
-        </div>
-
-        <!-- Metric 3: Lekòl ak lasante -->
-        <div class="bg-[#141D45] border border-white/10 rounded-[16px] p-4">
-          <div class="flex items-center gap-2 text-[#B9C4E6] text-[13px] mb-2">
-            <span class="material-symbols-outlined text-[18px]">school</span>
-            <span class="font-medium">Lekòl ak lasante</span>
-          </div>
-          <div class="flex items-baseline justify-between mb-2">
-            <span class="text-[22px] font-bold text-white tabular">64</span>
-            <span class="text-[13px] font-semibold text-[#34C26F] flex items-center tabular">
-              ↑ +22
-            </span>
-          </div>
-          <div class="text-[12px] text-[#B9C4E6] flex justify-between">
-            <span>Avan: 42</span>
-            <span>Apre: 64</span>
-          </div>
-        </div>
-
-        <!-- Metric 4: Konfyans pèp la -->
-        <div class="bg-[#141D45] border border-white/10 rounded-[16px] p-4">
-          <div class="flex items-center gap-2 text-[#B9C4E6] text-[13px] mb-2">
-            <span class="material-symbols-outlined text-[18px]">handshake</span>
-            <span class="font-medium">Konfyans pèp la</span>
-          </div>
-          <div class="flex items-baseline justify-between mb-2">
-            <span class="text-[22px] font-bold text-white tabular">58</span>
-            <span class="text-[13px] font-semibold text-[#34C26F] flex items-center tabular">
-              ↑ +10
-            </span>
-          </div>
-          <div class="text-[12px] text-[#B9C4E6] flex justify-between">
-            <span>Avan: 48</span>
-            <span>Apre: 58</span>
-          </div>
-        </div>
-
-        <!-- Metric 5: Kès leta -->
-        <div class="bg-[#141D45] border border-white/10 rounded-[16px] p-4">
-          <div class="flex items-center gap-2 text-[#B9C4E6] text-[13px] mb-2">
-            <span class="material-symbols-outlined text-[18px]">account_balance</span>
-            <span class="font-medium">Kès leta</span>
-          </div>
-          <div class="flex items-baseline justify-between mb-2">
-            <span class="text-[22px] font-bold text-white tabular">22</span>
-            <span class="text-[13px] font-semibold text-[#FF5A6E] flex items-center tabular">
-              ↓ −3
-            </span>
-          </div>
-          <div class="text-[12px] text-[#B9C4E6] flex justify-between">
-            <span>Avan: 25</span>
-            <span>Apre: 22</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Profile & Matching candidates block -->
-      <div class="bg-[#141D45] border border-white/10 rounded-[20px] p-6 mb-8">
-        
-        <div class="mb-5">
-          <div class="text-[12px] font-bold text-[#B9C4E6] tracking-wide mb-1">
-            REZILTA PWOFIL OU
-          </div>
-          <div class="text-[20px] font-bold text-white">
-            Pwofil ou: Prezidan konesans
-          </div>
-          <p class="text-[14px] text-[#B9C4E6] mt-1">
-            Chwa ou yo montre ou bay fòmasyon, travay, ak enstitisyon lejislasyon plis enpòtans.
-          </p>
-        </div>
-
-        <div class="border-t border-white/10 pt-5">
-          <div class="flex items-center justify-between mb-4">
-            <div class="text-[15px] font-bold text-white">
-              Kandida ki gen dosye sou menm priyorite yo
+        <!-- Header row of the card: Desizyon 4 sou 8, Ane 2 pill popping, 8 segment progress bar -->
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+              <span class="text-[18px] font-bold text-[#0B1A4A]">Desizyon 4 sou 8</span>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-[13px] font-semibold bg-[#EAEEFA] text-[#1A3BB5]">
+                Ane 2
+              </span>
             </div>
-            <span class="px-2.5 py-0.5 rounded-full bg-white/10 text-white text-[12px] font-semibold">
-              3 sou 3
-            </span>
+            <span class="text-[13px] text-[#5B6480]">Mwatye manda a fini</span>
           </div>
 
-          <!-- Three compact candidate rows -->
-          <div class="flex flex-col gap-2.5 mb-4">
+          <!-- 8 segment progress bar: 6px tall, 4px gap, rounded, ultramarine for past/current, track for remaining -->
+          <div class="grid grid-cols-8 gap-1.5 h-1.5">
+            <div class="h-full bg-[#1A3BB5] rounded-full"></div>
+            <div class="h-full bg-[#1A3BB5] rounded-full"></div>
+            <div class="h-full bg-[#1A3BB5] rounded-full"></div>
+            <div class="h-full bg-[#1A3BB5] rounded-full"></div>
+            <div class="h-full bg-[#E6EAF5] rounded-full"></div>
+            <div class="h-full bg-[#E6EAF5] rounded-full"></div>
+            <div class="h-full bg-[#E6EAF5] rounded-full"></div>
+            <div class="h-full bg-[#E6EAF5] rounded-full"></div>
+          </div>
+        </div>
+
+        <!-- NEWS banner in solid #FDECEF with red warning icon, red bold Kriz, text and red chips -->
+        <div class="p-4 rounded-[14px] bg-[#FDECEF] border border-[#D41E3C]/20 flex flex-col md:flex-row md:items-center justify-between gap-3 anim-crisis-banner">
+          <div class="flex items-center space-x-3">
+            <span class="material-symbols-outlined text-[#D41E3C] text-[24px]">warning</span>
+            <div class="text-[15px] text-[#0B1A4A]">
+              <strong class="text-[#D41E3C] font-bold mr-1">Kriz:</strong>
+              <span>Gang yo bloke wout nasyonal yo: machandiz pa ka pase.</span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 flex-shrink-0">
+            <span class="px-2.5 py-1 rounded-full text-[12px] font-bold bg-[#D41E3C] text-white tabular-nums">
+              −8 Ekonomi
+            </span>
+            <span class="px-2.5 py-1 rounded-full text-[12px] font-bold bg-[#D41E3C] text-white tabular-nums">
+              −4 Konfyans pèp la
+            </span>
+          </div>
+        </div>
+
+        <!-- Scenario question block: 56px #EAEEFA icon tile (local_gas_station), text -->
+        <div class="flex items-start space-x-4 pt-1">
+          <div class="w-14 h-14 rounded-[14px] bg-[#EAEEFA] flex-shrink-0 flex items-center justify-center text-[#1A3BB5]">
+            <span class="material-symbols-outlined text-[30px]">local_gas_station</span>
+          </div>
+          <div class="space-y-1">
+            <span class="text-[13px] font-semibold text-[#5B6480] uppercase tracking-wider">Sitiyasyon aktyèl</span>
+            <h3 class="text-[20px] font-bold text-[#0B1A4A] leading-snug">
+              Gang yo bloke tèminal gaz la. Pa gen gaz nan ponp yo, transpò kanpe. Kisa ou fè?
+            </h3>
+          </div>
+        </div>
+
+        <!-- Four choice cards 2 by 2 with cost chips -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          
+          <!-- Choice 1: Selected card has a 2px ultramarine border, #EAEEFA fill and a check that pops -->
+          <div class="p-5 rounded-[14px] bg-[#EAEEFA] border-2 border-[#1A3BB5] relative flex flex-col justify-between space-y-4 cursor-pointer">
+            <div class="flex items-start justify-between">
+              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">
+                Reprann tèminal la pa lafòs
+              </span>
+              <!-- Check that pops -->
+              <span class="w-6 h-6 rounded-full bg-[#1A3BB5] text-white flex items-center justify-center flex-shrink-0 ml-2 anim-check">
+                <span class="material-symbols-outlined text-[16px]">check</span>
+              </span>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-[13px] text-[#5B6480]">Operasyon lapolis ak lame</span>
+              <span class="px-2.5 py-1 rounded-full text-[12px] font-semibold bg-white text-[#0B1A4A] border border-[#E1E5F0] tabular-nums">
+                Koute 12
+              </span>
+            </div>
+          </div>
+
+          <!-- Choice 2: Normal card -->
+          <div class="p-5 rounded-[14px] bg-white border border-[#E1E5F0] hover:border-[#1A3BB5]/40 relative flex flex-col justify-between space-y-4 cursor-pointer transition-colors">
+            <div class="flex items-start justify-between">
+              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">
+                Fè gaz antre pa pò Okap
+              </span>
+              <span class="w-6 h-6 rounded-full border border-[#E1E5F0] flex-shrink-0 ml-2"></span>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-[13px] text-[#5B6480]">Desantralizasyon rapid</span>
+              <span class="px-2.5 py-1 rounded-full text-[12px] font-semibold bg-[#F3F5FA] text-[#0B1A4A] border border-[#E1E5F0] tabular-nums">
+                Koute 8
+              </span>
+            </div>
+          </div>
+
+          <!-- Choice 3: Chip green +22 nan kès la -->
+          <div class="p-5 rounded-[14px] bg-white border border-[#E1E5F0] hover:border-[#1A3BB5]/40 relative flex flex-col justify-between space-y-4 cursor-pointer transition-colors">
+            <div class="flex items-start justify-between">
+              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">
+                Retire sibvansyon gaz la
+              </span>
+              <span class="w-6 h-6 rounded-full border border-[#E1E5F0] flex-shrink-0 ml-2"></span>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-[13px] text-[#5B6480]">Ajisteman pri nan ponp</span>
+              <span class="px-2.5 py-1 rounded-full text-[12px] font-semibold bg-[#EAFAEA] text-[#15803D] border border-[#15803D]/20 tabular-nums">
+                +22 nan kès la
+              </span>
+            </div>
+          </div>
+
+          <!-- Choice 4: Chip Gratis -->
+          <div class="p-5 rounded-[14px] bg-white border border-[#E1E5F0] hover:border-[#1A3BB5]/40 relative flex flex-col justify-between space-y-4 cursor-pointer transition-colors">
+            <div class="flex items-start justify-between">
+              <span class="text-[16px] font-semibold text-[#0B1A4A] leading-snug">
+                Rasyone gaz pou lopital ak transpò piblik
+              </span>
+              <span class="w-6 h-6 rounded-full border border-[#E1E5F0] flex-shrink-0 ml-2"></span>
+            </div>
+            <div class="flex items-center justify-between pt-2">
+              <span class="text-[13px] text-[#5B6480]">Priyorite sèvis ijans</span>
+              <span class="px-2.5 py-1 rounded-full text-[12px] font-semibold bg-[#F3F5FA] text-[#0B1A4A] border border-[#E1E5F0]">
+                Gratis
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Action row at bottom of decision card -->
+        <div class="pt-4 border-t border-[#E1E5F0] flex items-center justify-between">
+          <button type="button" class="text-[15px] font-semibold text-[#5B6480] hover:text-[#0B1A4A] flex items-center space-x-1.5 transition-colors">
+            <span class="material-symbols-outlined text-[18px]">undo</span>
+            <span>Retounen sou desizyon anvan</span>
+          </button>
+          
+          <button type="button" class="h-12 px-6 rounded-full bg-[#1A3BB5] text-white font-semibold text-[16px] inline-flex items-center space-x-2 hover:bg-[#153198] transition-colors">
+            <span>Aplike desizyon sa a</span>
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =================================================================================== -->
+    <!-- STATE 3: FINAL SCORE RING & OUTCOME PREVIEW                                         -->
+    <!-- =================================================================================== -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <span class="text-[13px] font-semibold text-[#1A3BB5] tracking-wide uppercase">Etap 3 · Bilan apre manda a</span>
+          <h2 class="text-[28px] font-bold text-[#0B1A4A] leading-tight tracking-tight">Rezilta ak evalyasyon 5 an</h2>
+        </div>
+        <span class="text-[14px] text-[#5B6480]">Rapò ofisyèl gouvènans</span>
+      </div>
+
+      <!-- Solid Night Indigo Card #0B1230, 24px radius, white text -->
+      <div class="bg-[#0B1230] rounded-[24px] p-8 text-white shadow-[0_1px_2px_rgba(11,26,74,.05),0_8px_24px_rgba(11,26,74,.06)] border border-[#141D45]">
+        
+        <div class="grid grid-cols-12 gap-8 items-center">
+          
+          <!-- 160px ring column (left 5/12) -->
+          <div class="col-span-12 md:col-span-5 flex flex-col items-center justify-center p-4">
             
-            <!-- Candidate 1 -->
-            <div class="bg-[#0B1230] border border-white/10 rounded-[14px] p-3.5 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-[#141D45] text-white flex items-center justify-center font-bold text-[15px] border border-white/20">
-                  GB
-                </div>
-                <div>
-                  <div class="text-[15px] font-semibold text-white leading-tight">Gary Bodeau</div>
-                  <div class="text-[12px] text-[#B9C4E6]">Rekonsilye</div>
-                </div>
+            <div class="relative w-[160px] h-[160px] flex items-center justify-center">
+              <!-- SVG 160px Ring: 8px stroke, track white at 12%, arc solid #34C26F drawing to 64% -->
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
+                <!-- Track -->
+                <circle cx="80" cy="80" r="72" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="8"></circle>
+                <!-- Arc solid #34C26F to 64% (2 * PI * 72 = ~452.39; 64% = 289.5 drawn, offset = 162.7) -->
+                <circle cx="80" cy="80" r="72" fill="none" stroke="#34C26F" stroke-width="8" stroke-linecap="round" class="anim-ring"></circle>
+              </svg>
+
+              <!-- Middle: « 64 » 56px white and « /100 » small -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span class="text-[56px] font-extrabold text-white leading-none tracking-tight tabular-nums">64</span>
+                <span class="text-[14px] font-semibold text-[#B9C4E6]">/ 100</span>
               </div>
-              <span class="px-2.5 py-1 rounded-full bg-white/10 text-white text-[12px] font-medium">
-                3 sou 3 priyorite
-              </span>
             </div>
 
-            <!-- Candidate 2 -->
-            <div class="bg-[#0B1230] border border-white/10 rounded-[14px] p-3.5 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-[#141D45] text-white flex items-center justify-center font-bold text-[15px] border border-white/20">
-                  PT
-                </div>
-                <div>
-                  <div class="text-[15px] font-semibold text-white leading-tight">Philippe Gérard Jerry Tardieu</div>
-                  <div class="text-[12px] text-[#B9C4E6]">EAPH</div>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-full bg-white/10 text-white text-[12px] font-medium">
-                3 sou 3 priyorite
+            <span class="mt-4 text-[13px] font-semibold tracking-wider text-[#B9C4E6] uppercase">Endis pwogrè nasyonal</span>
+
+          </div>
+
+          <!-- Outcome details (right 7/12) -->
+          <div class="col-span-12 md:col-span-7 space-y-6">
+            
+            <div class="space-y-2">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-medium bg-[#141D45] text-[#34C26F] border border-[#34C26F]/30">
+                Manda konplè 2027 · 2032
               </span>
+              <!-- Title: « Ayiti fè yon gwo pa pi devan » -->
+              <h3 class="text-[28px] font-bold text-white leading-tight">
+                Ayiti fè yon gwo pa pi devan
+              </h3>
+              <p class="text-[15px] text-[#B9C4E6] leading-relaxed">
+                Malgre gwo presyon sou kès leta a, envestisman nan fòmasyon, ranfòsman wout yo ak dyaspora a pèmèt peyi a jwenn yon baz estab.
+              </p>
             </div>
 
-            <!-- Candidate 3 -->
-            <div class="bg-[#0B1230] border border-white/10 rounded-[14px] p-3.5 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-[#141D45] text-white flex items-center justify-center font-bold text-[15px] border border-white/20">
-                  JS
-                </div>
-                <div>
-                  <div class="text-[15px] font-semibold text-white leading-tight">Jean-Marie Junior Salomon</div>
-                  <div class="text-[12px] text-[#B9C4E6]">OPL</div>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 rounded-full bg-white/10 text-white text-[12px] font-medium">
-                3 sou 3 priyorite
+            <!-- List: « Konsekans ki rive apre manda w » -->
+            <div class="p-5 rounded-[16px] bg-[#141D45] border border-white/10 space-y-3">
+              <span class="text-[13px] font-semibold text-[#B9C4E6] uppercase tracking-wider block">
+                Konsekans ki rive apre manda w
               </span>
+              
+              <!-- One row: « Premye gwo peman dèt la rive. » and a red chip « −25 Kès leta » -->
+              <div class="flex items-center justify-between py-2 border-b border-white/10">
+                <div class="flex items-center space-x-2.5">
+                  <span class="material-symbols-outlined text-[#B9C4E6] text-[20px]">calendar_today</span>
+                  <span class="text-[15px] text-white font-medium">Premye gwo peman dèt la rive.</span>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-[12px] font-bold bg-[#D41E3C] text-white tabular-nums">
+                  −25 Kès leta
+                </span>
+              </div>
+
+              <div class="flex items-center justify-between py-1 text-[13px] text-[#B9C4E6]">
+                <span>Pwofil lidèchip ou revele:</span>
+                <span class="font-bold text-white">Prezidan refòmatè e enfrastrikti</span>
+              </div>
+            </div>
+
+            <!-- Buttons: Jwe ankò & Pataje nòt mwen -->
+            <div class="flex flex-wrap items-center gap-3 pt-1">
+              <button type="button" class="h-11 px-5 rounded-full bg-white text-[#1A3BB5] font-semibold text-[15px] inline-flex items-center space-x-2 hover:bg-[#EAEEFA] transition-colors">
+                <span class="material-symbols-outlined text-[18px]">replay</span>
+                <span>Jwe yon lòt manda</span>
+              </button>
+              
+              <button type="button" class="h-11 px-5 rounded-full bg-[#141D45] text-white border border-white/20 font-semibold text-[15px] inline-flex items-center space-x-2 hover:bg-[#1A2558] transition-colors">
+                <span class="material-symbols-outlined text-[18px]">share</span>
+                <span>Pataje nòt mwen</span>
+              </button>
             </div>
 
           </div>
 
-          <div class="text-[13px] text-[#B9C4E6] flex items-center gap-1.5">
-            <span class="material-symbols-outlined text-[16px] text-[#B9C4E6]">info</span>
-            <span>Se pa yon rekòmandasyon. Klasman sa baze sèlman sou konparezon dosye piblik.</span>
-          </div>
         </div>
 
       </div>
-
-      <!-- Action Buttons Row -->
-      <div class="flex flex-wrap items-center gap-4">
-        <button class="h-12 px-6 rounded-full bg-white text-[#0B1230] text-[15px] font-semibold hover:bg-white/90 transition-colors flex items-center gap-2">
-          <span class="material-symbols-outlined text-[20px]">replay</span>
-          <span>Jwe ankò</span>
-        </button>
-        <button class="h-12 px-6 rounded-full bg-[#1A3BB5] text-white text-[15px] font-semibold hover:opacity-95 transition-opacity flex items-center gap-2">
-          <span class="material-symbols-outlined text-[20px]">share</span>
-          <span>Pataje nòt mwen</span>
-        </button>
-      </div>
-
     </section>
 
   </main>
 
-  <!-- Desktop Solid Night Indigo Footer -->
-  <footer class="bg-[#0B1230] border-t border-white/10 mt-auto py-12 text-white">
-    <div class="max-w-[1120px] mx-auto px-8">
+  <!-- FOOTER (Desktop, Night Indigo, clean and restrained) -->
+  <footer class="w-full bg-[#0B1230] text-white border-t border-[#E1E5F0]/15 mt-16">
+    <div class="max-w-[1120px] mx-auto px-8 py-10">
       
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-white/10 text-[14px]">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8 text-[14px]">
         
-        <!-- Col 1: Brand & Identity -->
-        <div class="md:col-span-2">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="material-symbols-outlined text-white text-[22px]">how_to_vote</span>
-            <span class="text-[18px] font-bold text-white">Prezidan Pa M</span>
-            <span class="ml-1 w-2 h-2 rounded-full bg-[#D41E3C]"></span>
+        <!-- Brand Info -->
+        <div class="space-y-3">
+          <div class="flex items-center space-x-2">
+            <span class="w-6 h-6 rounded-full bg-[#1A3BB5] flex items-center justify-center text-white text-[12px]">
+              <span class="material-symbols-outlined text-sm leading-none">account_balance</span>
+            </span>
+            <span class="font-bold text-white text-[16px]">Prezidan Pa M</span>
           </div>
-          <p class="text-[#B9C4E6] text-[14px] leading-relaxed max-w-sm mb-3">
+          <p class="text-[13px] text-[#5B6480] leading-relaxed">
             Yon inisyativ sivik endepandan pou eleksyon prezidansyèl 2027 la. Nèt, gratis, san piblisite, pou tout Ayisyen lakay ak nan dyaspora a.
           </p>
-          <div class="text-[13px] text-white/50">
-            Lang lan chwazi otomatikman dapre zòn ou, ou ka chanje l nan tèt paj la.
-          </div>
         </div>
 
-        <!-- Col 2: Platfòm -->
-        <div>
-          <div class="text-[12px] font-bold text-[#B9C4E6] tracking-wider mb-3">PLATFÒM</div>
-          <ul class="flex flex-col gap-2 text-white/80">
+        <!-- Navigation Links -->
+        <div class="space-y-2">
+          <span class="text-[12px] font-semibold uppercase tracking-wider text-[#B9C4E6]">Platfòm</span>
+          <ul class="space-y-1.5 text-[13px] text-[#5B6480]">
             <li><a href="#" class="hover:text-white transition-colors">Akèy</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Priyorite</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Kandida</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Rezilta</a></li>
-            <li><a href="#" class="hover:text-white transition-colors">Sondaj</a></li>
-            <li><a href="#" class="text-white font-semibold">Si m te prezidan</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Rezilta vòt</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Sondaj semèn nan</a></li>
           </ul>
         </div>
 
-        <!-- Col 3: Enfòmasyon & Règleman -->
-        <div>
-          <div class="text-[12px] font-bold text-[#B9C4E6] tracking-wider mb-3">ENFÒMASYON</div>
-          <ul class="flex flex-col gap-2 text-white/80">
-            <li><a href="#" class="hover:text-white transition-colors">Sou nou</a></li>
+        <!-- Educational / Civic Games -->
+        <div class="space-y-2">
+          <span class="text-[12px] font-semibold uppercase tracking-wider text-[#B9C4E6]">Jwèt sivik</span>
+          <ul class="space-y-1.5 text-[13px] text-[#5B6480]">
+            <li><a href="#" class="hover:text-white transition-colors">Si m te prezidan</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Konnen Ayiti (Kwiz)</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kat sitwayen ou</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Kijan sa mache</a></li>
+          </ul>
+        </div>
+
+        <!-- Ethics & Transparency -->
+        <div class="space-y-2">
+          <span class="text-[12px] font-semibold uppercase tracking-wider text-[#B9C4E6]">Enfòmasyon</span>
+          <ul class="space-y-1.5 text-[13px] text-[#5B6480]">
             <li><a href="#" class="hover:text-white transition-colors">Règ netralite</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Konfidansyalite</a></li>
             <li><a href="#" class="hover:text-white transition-colors">Kòd sous sou GitHub</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kontakte nou</a></li>
           </ul>
         </div>
 
       </div>
 
-      <!-- Copyright Bottom Bar -->
-      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[13px] text-[#B9C4E6] gap-4">
-        <div>
-          © 2026 Prezidan Pa M · Tout dwa rezève
-        </div>
-        <div>
-          Ayiti 2027 · Vòt pèp la
-        </div>
+      <div class="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-[13px] text-[#5B6480]">
+        <span>© 2026 Prezidan Pa M · Tout dwa rezève</span>
+        <span class="mt-2 md:mt-0">Ayiti 2027 · Vòt pèp la</span>
       </div>
 
     </div>

@@ -2,7 +2,7 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop). 2026-11-04 (later): flat redesign, no gradients anywhere (user found two-color gradients looked AI made): s0-home regenerated flat (v9), s11-dashboard (signed-in home « Tablo mwen ») and s12-president (« Si m te prezidan » decision game) added, phone and desktop. Previous home v8.1 ids e9690600… and 395d90b7… can be deleted in Stitch. 2026-11-04 (night): s10-quiz edited (right answer solid green, wrong pick solid red); s11-dashboard v2 (live flip countdown, motion); s13-card added (premium « Kat sitwayen » banner: flag line, 2027 mark, stack of two cards, controls panel); s12-president v2 (challenging simulation: five country meters, « Sa k pase » consequences, delayed news, 5 year report); s9-account v2 (« Konekte » and « Kreye kont » header buttons, welcome dialog).",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop). 2026-11-04 (later): flat redesign, no gradients anywhere (user found two-color gradients looked AI made): s0-home regenerated flat (v9), s11-dashboard (signed-in home « Tablo mwen ») and s12-president (« Si m te prezidan » decision game) added, phone and desktop. Previous home v8.1 ids e9690600… and 395d90b7… can be deleted in Stitch. 2026-11-04 (night): s10-quiz edited (right answer solid green, wrong pick solid red); s11-dashboard v2 (live flip countdown, motion); s13-card added (premium « Kat sitwayen » banner: flag line, 2027 mark, stack of two cards, controls panel); s12-president v2 (challenging simulation: five country meters, « Sa k pase » consequences, delayed news, 5 year report); s9-account v2 (« Konekte » and « Kreye kont » header buttons, welcome dialog). 2026-11-05: s12-president v3 (inauguration « Jou sèman an », crisis news, score ring; decisions drawn from a pool of 18 on Haiti today).",
   "screens": [
     {
       "key": "s0-home",
@@ -94,9 +94,9 @@
     },
     {
       "key": "s12-president",
-      "id": "2db9cf6abdcb40538c961f2bb8a3319e",
-      "name": "projects/16900759932870491329/screens/2db9cf6abdcb40538c961f2bb8a3319e",
-      "stitchTitle": "Prezidan Pa M · Si m te prezidan · Vèsyon 2",
+      "id": "3992cb57d3ad4ffe928e0973e3cb833a",
+      "name": "projects/16900759932870491329/screens/3992cb57d3ad4ffe928e0973e3cb833a",
+      "stitchTitle": "Prezidan Pa M · Jou sèman an",
       "png": "s12-president.png",
       "html": "s12-president.html"
     },
@@ -200,9 +200,9 @@
     },
     {
       "key": "s12-president",
-      "id": "46d58a5fab8041abb07fc42133231467",
-      "name": "projects/16900759932870491329/screens/46d58a5fab8041abb07fc42133231467",
-      "stitchTitle": "Prezidan Pa M · Si m te prezidan · Òdinatè v2",
+      "id": "58596441b01c4e25b3e04e43ee32a1f2",
+      "name": "projects/16900759932870491329/screens/58596441b01c4e25b3e04e43ee32a1f2",
+      "stitchTitle": "Prezidan Pa M · Jou sèman an",
       "png": "s12-president.png",
       "html": "s12-president.html"
     },
