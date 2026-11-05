@@ -15,21 +15,61 @@ const initial = (a: Account) => (a.name || a.email || '·').slice(0, 1).toUpperC
 
 /**
  * Header account controls (Stitch « s9-account » v2): « Konekte » and « Kreye kont » when signed
- * out; signed in, the way to « Tablo mwen » (their initial and the label; the label goes first when space runs out). Redraws itself on sign in or out, and stops listening
- * once the header has been replaced.
+ * out. Signed in: the visitor's initial and first name (the name goes first when space runs out),
+ * which opens a small menu: who is signed in, « Tablo mwen » and « Dekonekte ». Redraws itself on
+ * sign in or out, and stops listening once the header has been replaced.
  */
+let menuSeq = 0;
 export function accountControls(onDraw?: () => void): HTMLElement {
   const el = h('div', { class: 'acct-ctl' });
+  let closeMenu = () => {};
   const draw = (a: Account | null) => {
-    if (a) el.replaceChildren(h('a', { class: 'acct-dash', href: '#dashboard', 'aria-label': S().nav.dashboard, 'aria-current': parseHash().route === 'dashboard' ? 'page' : undefined },
-      h('span', { class: 'acct-btn on', 'aria-hidden': 'true' }, initial(a)), h('span', { class: 'acct-dash-label' }, S().account.dashPill)));
+    closeMenu();
+    if (a) el.replaceChildren(accountMenu(a, (fn) => { closeMenu = fn; }));
     else el.replaceChildren(
       h('button', { class: 'btn acct-in', type: 'button', onclick: () => openAccountSheet('in') }, svg(ICON.login), S().account.signIn),
       h('button', { class: 'btn acct-up', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp));
   };
   draw(getAccount());
-  const off = onAccountChange((a) => { if (!el.isConnected) { off(); return; } draw(a); onDraw?.(); });
+  const off = onAccountChange((a) => { if (!el.isConnected) { off(); closeMenu(); return; } draw(a); onDraw?.(); });
   return el;
+}
+
+/** The signed-in button and its menu (a disclosure: Escape, a tap outside or a page change closes it). */
+function accountMenu(a: Account, setClose: (fn: () => void) => void): HTMLElement {
+  const s = S().account;
+  const onDash = parseHash().route === 'dashboard';
+  const first = a.name.trim().split(/\s+/)[0] || a.email.split('@')[0] || '·';
+  const id = `acct-menu-${++menuSeq}`;
+  const btn = h('button', { class: onDash ? 'acct-dash here' : 'acct-dash', type: 'button', 'aria-expanded': 'false', 'aria-controls': id, 'aria-label': `${s.open}: ${a.name || a.email}` },
+    h('span', { class: 'acct-btn on', 'aria-hidden': 'true' }, initial(a)), h('span', { class: 'acct-dash-label' }, first), svg(ICON.chevronDown, 'ico acct-chev'));
+  const out = h('button', { class: 'acct-menu-item', type: 'button' }, svg(ICON.logout), s.signOut);
+  const menu = h('div', { class: 'acct-menu', id, hidden: true },
+    h('div', { class: 'acct-menu-head' }, h('span', { class: 'acct-btn on', 'aria-hidden': 'true' }, initial(a)),
+      h('div', null, h('b', null, a.name || a.email), a.name && a.email ? h('small', null, a.email) : null)),
+    h('a', { class: 'acct-menu-item', href: '#dashboard', 'aria-current': onDash ? 'page' : undefined, onclick: () => close() }, svg(ICON.home), S().nav.dashboard),
+    out);
+  const wrap = h('div', { class: 'acct-wrap' }, btn, menu);
+
+  const onDoc = (e: Event) => { if (!wrap.contains(e.target as Node)) close(); };
+  const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { close(); btn.focus(); } };
+  function close(): void {
+    if (menu.hidden) return;
+    menu.hidden = true; btn.setAttribute('aria-expanded', 'false');
+    document.removeEventListener('pointerdown', onDoc, true); document.removeEventListener('keydown', onKey); window.removeEventListener('hashchange', close);
+  }
+  const openMenu = () => {
+    menu.hidden = false; btn.setAttribute('aria-expanded', 'true');
+    document.addEventListener('pointerdown', onDoc, true); document.addEventListener('keydown', onKey); window.addEventListener('hashchange', close);
+  };
+  btn.addEventListener('click', () => { if (menu.hidden) openMenu(); else close(); });
+  out.addEventListener('click', () => {
+    out.disabled = true;
+    // the header redraws itself once signed out; on « Tablo mwen » the app goes back to the landing page
+    void disconnect().then(() => { close(); toast(s.disconnected); }).catch(() => { out.disabled = false; toast(s.errGeneric); });
+  });
+  setClose(close);
+  return wrap;
 }
 
 function errorMessage(e: unknown): string {

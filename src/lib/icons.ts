@@ -30,6 +30,8 @@ export const ICON = {
   person: wrap('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/>'),
   eye: wrap('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
   eyeOff: wrap('<path d="M3 3l18 18"/><path d="M10.6 5.3A10.5 10.5 0 0112 5c6.5 0 10 7 10 7a17 17 0 01-3.2 4.2"/><path d="M6.6 6.6A16.6 16.6 0 002 12s3.5 7 10 7c1.6 0 3-.4 4.3-1"/><path d="M9.9 9.9a3 3 0 004.2 4.2"/>'),
+  logout: wrap('<path d="M15 17l5-5-5-5"/><path d="M20 12H9"/><path d="M12 3H6a2 2 0 00-2 2v14a2 2 0 002 2h6"/>'),
+  chevronDown: wrap('<path d="M6 9l6 6 6-6"/>'),
   login: wrap('<path d="M10 17l5-5-5-5"/><path d="M15 12H3"/><path d="M12 3h6a2 2 0 012 2v14a2 2 0 01-2 2h-6"/>'),
   google: wrap('<path d="M21 12.2c0-.7-.1-1.3-.2-1.9H12v3.6h5.1a4.4 4.4 0 01-1.9 2.9v2.4h3c1.8-1.7 2.8-4.1 2.8-7z" fill="currentColor" stroke="none"/><path d="M12 21c2.5 0 4.6-.8 6.2-2.2l-3-2.4c-.8.6-1.9.9-3.2.9-2.4 0-4.5-1.6-5.2-3.9H3.7v2.4A9 9 0 0012 21z" fill="currentColor" stroke="none" opacity=".8"/><path d="M6.8 13.4a5.4 5.4 0 010-3.4V7.6H3.7a9 9 0 000 8.2l3.1-2.4z" fill="currentColor" stroke="none" opacity=".6"/><path d="M12 6.6c1.4 0 2.6.5 3.5 1.4l2.6-2.6A9 9 0 003.7 7.6l3.1 2.4C7.5 7.7 9.6 6.6 12 6.6z" fill="currentColor" stroke="none" opacity=".9"/>'),
   calendar: wrap('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/><path d="M8 14h3v3H8z"/>'),

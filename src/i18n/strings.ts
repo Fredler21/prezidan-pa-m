@@ -499,7 +499,6 @@ const ht = {
     legalPre: 'Lè w kontinye, ou dakò ak',
     legalAnd: 'ak',
     myDashboard: 'Ale nan tablo mwen',
-    dashPill: 'Tablo mwen',
   },
 
   admin: {
@@ -1051,7 +1050,6 @@ const fr: Strings = {
     legalPre: 'En continuant, vous acceptez',
     legalAnd: 'et',
     myDashboard: 'Mon tableau de bord',
-    dashPill: 'Tableau de bord',
   },
 
   admin: {
@@ -1601,7 +1599,6 @@ const en: Strings = {
     legalPre: 'By continuing, you agree to the',
     legalAnd: 'and',
     myDashboard: 'Go to my dashboard',
-    dashPill: 'Dashboard',
   },
 
   admin: {

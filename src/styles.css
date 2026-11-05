@@ -1547,11 +1547,41 @@ body { transition: background-color .25s, color .25s; }
 .hero .board p { color: var(--on-indigo-muted); }
 .hero .board .board-q { color: #fff; }
 
-/* signed in: the header button to « Tablo mwen » (initial and label; the label goes when the row is tight) */
-.acct-dash { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 3px; border: 1px solid var(--hdr-line); border-radius: 999px; color: var(--hdr-fg); text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap; transition: background-color .15s, border-color .15s; }
+/* signed in: the header button (initial, first name, chevron) and its menu: who is signed in, « Tablo mwen », « Dekonekte » */
+.acct-wrap { position: relative; }
+.acct-dash { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 10px 0 3px; border: 1px solid var(--hdr-line); border-radius: 999px; background: transparent; color: var(--hdr-fg); font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer; transition: background-color .15s, border-color .15s; }
 .acct-dash .acct-btn { width: 32px; height: 32px; border: 0; font-size: 13px; }
-.acct-dash[aria-current="page"] { background: var(--ultra-tint); border-color: transparent; color: var(--ultra-text); }
-@media (hover: hover) { .acct-dash:hover { background: var(--soft); border-color: var(--hdr-muted); } .acct-dash[aria-current="page"]:hover { background: var(--ultra-tint); } }
+.acct-dash-label { max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
+.acct-chev { width: 16px; height: 16px; margin-left: -2px; transition: transform .2s var(--ease-out); }
+.acct-dash[aria-expanded="true"] .acct-chev { transform: rotate(180deg); }
+.acct-dash.here { background: var(--ultra-tint); border-color: transparent; color: var(--ultra-text); }
+@media (hover: hover) { .acct-dash:hover { background: var(--soft); border-color: var(--hdr-muted); } .acct-dash.here:hover { background: var(--ultra-tint); border-color: transparent; } }
 .acct-dash:focus-visible { outline: 2px solid var(--ultra); outline-offset: 2px; }
-.hdr.fit-2 .acct-dash { padding-right: 3px; }
 .hdr.fit-2 .acct-dash-label { display: none; }
+.acct-menu { position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; width: min(280px, calc(100vw - 24px)); padding: 6px; border-radius: 16px; background: var(--card); color: var(--ink); border: 1px solid var(--hairline); box-shadow: 0 12px 32px rgba(11, 26, 74, .14); text-align: left; transform-origin: top right; animation: acct-pop .16s var(--ease-out); }
+.acct-menu[hidden] { display: none; }
+@keyframes acct-pop { from { opacity: 0; transform: translateY(-4px) scale(.98); } }
+.acct-menu-head { display: flex; align-items: center; gap: 10px; padding: 8px 8px 12px; margin-bottom: 4px; border-bottom: 1px solid var(--hairline); }
+.acct-menu-head .acct-btn { flex: 0 0 auto; width: 36px; height: 36px; border: 0; }
+.acct-menu-head div { display: grid; min-width: 0; }
+.acct-menu-head b { font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acct-menu-head small { font-size: 13px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.acct-menu-item { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 0 10px; border: 0; border-radius: 10px; background: transparent; color: var(--ink); font: inherit; font-size: 15px; font-weight: 600; text-align: left; text-decoration: none; cursor: pointer; }
+.acct-menu-item .ico { width: 18px; height: 18px; color: var(--muted); }
+.acct-menu-item[aria-current="page"], .acct-menu-item[aria-current="page"] .ico { color: var(--ultra-text); }
+.acct-menu-item:disabled { opacity: .5; cursor: default; }
+@media (hover: hover) { .acct-menu-item:hover { background: var(--soft); } }
+.acct-menu-item:focus-visible { outline: 2px solid var(--ultra); outline-offset: -2px; }
+:root[data-theme="dark"] .acct-menu { box-shadow: 0 12px 32px rgba(0, 0, 0, .6); }
+@media (prefers-reduced-motion: reduce) { .acct-menu { animation: none; } .acct-chev { transition: none; } }
+
+/* footer by day: white like the rest of the page, so the logo sits on it with no box; at night it stays the navy card with the logo on its white plate */
+:root:not([data-theme="dark"]) .foot { background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 1px var(--hairline); }
+:root:not([data-theme="dark"]) .foot-brand { color: var(--ink); }
+:root:not([data-theme="dark"]) .foot-brand .wm-logo { padding: 0; border-radius: 0; background: transparent; }
+:root:not([data-theme="dark"]) .foot-about, :root:not([data-theme="dark"]) .foot-col h3 { color: var(--muted); }
+:root:not([data-theme="dark"]) .foot-col a { color: var(--ink); opacity: 1; }
+@media (hover: hover) { :root:not([data-theme="dark"]) .foot-col a:hover { color: var(--ultra-text); } }
+:root:not([data-theme="dark"]) .foot-base { border-top-color: var(--hairline); color: var(--muted); }
+:root:not([data-theme="dark"]) .foot-base .mode { color: var(--ink); }
+:root:not([data-theme="dark"]) .foot :focus-visible { outline-color: var(--ultra); }
