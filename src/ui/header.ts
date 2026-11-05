@@ -7,7 +7,7 @@ import type { Route } from '../router';
 import { accountControls } from './account';
 import { IMG } from '../data/images';
 import { themeButton } from '../lib/theme';
-import { MARK_SRC, WORDMARK } from '../lib/logo';
+import { LOGO_SRC, LOGO_W, LOGO_H } from '../lib/logo';
 
 const flag = () => h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' });
 
@@ -24,8 +24,8 @@ function langPill(): HTMLElement {
 
 /**
  * Phones: the account buttons always stay on the header row. When they do not fit next to the
- * wordmark (long labels, a narrow screen, large system text), the wordmark text goes first, then
- * the sign-up button (the dialog still opens on either tab).
+ * logo (long labels, a narrow screen, large system text), the logo gets smaller first, then
+ * the sign-up button goes (the dialog still opens on either tab).
  */
 function fitHeader(el: HTMLElement): void {
   el.classList.remove('fit-1', 'fit-2');
@@ -59,9 +59,9 @@ function topNav(route: Route): HTMLElement {
     h('a', { href: `#${x.route}`, 'aria-current': x.route === cur ? 'page' : undefined }, x.label)));
 }
 
-/** The logo lockup: the medallion and the two-line wordmark (it takes the header's text colour, day or night). */
+/** The logo as supplied (on its white plate at night). */
 const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#home', 'aria-label': S().appName },
-  h('img', { class: 'wm-mark', src: MARK_SRC, width: 38, height: 38, alt: '', decoding: 'async' }), h('span', { class: 'wm-text', html: WORDMARK }),
+  h('img', { class: 'wm-logo', src: LOGO_SRC, width: LOGO_W, height: LOGO_H, alt: '', decoding: 'async' }),
   title ? h('span', { class: 'hdr-crumb' }, `· ${title}`) : null);
 
 /** Top-level pages carry the wordmark; drill-in pages a back arrow and a title (desktop: wordmark · title). */
