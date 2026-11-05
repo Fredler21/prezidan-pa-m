@@ -51,11 +51,11 @@ void document.fonts?.ready.then(refit);
 /** Desktop navigation (hidden on phones, where the bottom tabs take over). */
 function topNav(route: Route): HTMLElement {
   const s = S().nav;
-  const active: Partial<Record<Route, Route>> = { home: 'home', start: 'start', match: 'candidates', candidates: 'candidates', vote: 'candidates', results: 'results', poll: 'poll', admin: 'poll', quiz: 'quiz', president: 'quiz' };
+  const active: Partial<Record<Route, Route>> = { home: 'home', start: 'start', match: 'candidates', candidates: 'candidates', vote: 'candidates', results: 'results', poll: 'poll', admin: 'poll', quiz: 'president', president: 'president' };
   const cur = active[route];
   const links: { route: Route; label: string }[] = [
     { route: 'home', label: s.home }, { route: 'start', label: s.priorities }, { route: 'candidates', label: s.candidates },
-    { route: 'results', label: s.results }, { route: 'poll', label: s.poll }, { route: 'quiz', label: s.quiz },
+    { route: 'results', label: s.results }, { route: 'poll', label: s.poll }, { route: 'president', label: s.quiz },
   ];
   return h('nav', { class: 'topnav', 'aria-label': S().navLabel }, ...links.map((x) =>
     h('a', { href: `#${x.route}`, 'aria-current': x.route === cur ? 'page' : undefined }, x.label)));

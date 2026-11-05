@@ -2,7 +2,7 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop). 2026-11-04 (later): flat redesign, no gradients anywhere (user found two-color gradients looked AI made): s0-home regenerated flat (v9), s11-dashboard (signed-in home « Tablo mwen ») and s12-president (« Si m te prezidan » decision game) added, phone and desktop. Previous home v8.1 ids e9690600… and 395d90b7… can be deleted in Stitch. 2026-11-04 (night): s10-quiz edited (right answer solid green, wrong pick solid red); s11-dashboard v2 (live flip countdown, motion); s13-card added (premium « Kat sitwayen » banner: flag line, 2027 mark, stack of two cards, controls panel); s12-president v2 (challenging simulation: five country meters, « Sa k pase » consequences, delayed news, 5 year report); s9-account v2 (« Konekte » and « Kreye kont » header buttons, welcome dialog). 2026-11-05: s12-president v3 (inauguration « Jou sèman an », crisis news, score ring; decisions drawn from a pool of 18 on Haiti today). 2026-11-05 (later): s14-themes added (day mode all white, night mode all black, moon and sun switch in the header, new logo lockup); the « Kat sitwayen » card now shows only after sign-in, under « Poukisa vòt ou enpòtan ». 2026-11-05 (night): s15-landing (phone and desktop) replaces s0-home as the public landing page: an editorial hero with a portrait mosaic, a numbers strip, the people’s vote in white cards, the two games, the candidates, why vote, the citizen card invite, about with the Citadelle and the dates, one dark call to action; made to look unlike the dashboard. Prompt in s15-landing-prompt.txt (generated with the flat rules appended).",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop). 2026-11-04 (later): flat redesign, no gradients anywhere (user found two-color gradients looked AI made): s0-home regenerated flat (v9), s11-dashboard (signed-in home « Tablo mwen ») and s12-president (« Si m te prezidan » decision game) added, phone and desktop. Previous home v8.1 ids e9690600… and 395d90b7… can be deleted in Stitch. 2026-11-04 (night): s10-quiz edited (right answer solid green, wrong pick solid red); s11-dashboard v2 (live flip countdown, motion); s13-card added (premium « Kat sitwayen » banner: flag line, 2027 mark, stack of two cards, controls panel); s12-president v2 (challenging simulation: five country meters, « Sa k pase » consequences, delayed news, 5 year report); s9-account v2 (« Konekte » and « Kreye kont » header buttons, welcome dialog). 2026-11-05: s12-president v3 (inauguration « Jou sèman an », crisis news, score ring; decisions drawn from a pool of 18 on Haiti today). 2026-11-05 (later): s14-themes added (day mode all white, night mode all black, moon and sun switch in the header, new logo lockup); the « Kat sitwayen » card now shows only after sign-in, under « Poukisa vòt ou enpòtan ». 2026-11-05 (night): s15-landing (phone and desktop) replaces s0-home as the public landing page: an editorial hero with a portrait mosaic, a numbers strip, the people’s vote in white cards, the two games, the candidates, why vote, the citizen card invite, about with the Citadelle and the dates, one dark call to action; made to look unlike the dashboard. Prompt in s15-landing-prompt.txt (generated with the flat rules appended). 2026-11-05 (night, later): the game « Si m te prezidan » becomes the main subject. s16-landing-game: the landing hero invites to play (a preview of a real decision and the country panel), then how the game works, why the vote matters, then the vote section (s15 below). s17-pres-intro, s17-pres-decision, s17-pres-report: the game on a white page with the dark « Eta peyi a » panel as the only dark element, the report ending on the real vote. Prompts in s16-s17-game-prompts.txt.",
   "screens": [
     {
       "key": "s0-home",
@@ -115,6 +115,38 @@
       "stitchTitle": "Prezidan Pa M · Ayiti 2027",
       "png": "s15-landing.png",
       "html": "s15-landing.html"
+    },
+    {
+      "key": "s16-landing-game",
+      "id": "cbe9299cbb5b48aab40dc9c8a532d604",
+      "name": "projects/16900759932870491329/screens/cbe9299cbb5b48aab40dc9c8a532d604",
+      "stitchTitle": "Prezidan Pa M · Si w te prezidan, kisa w ta fè?",
+      "png": "s16-landing-game.png",
+      "html": "s16-landing-game.html"
+    },
+    {
+      "key": "s17-pres-intro",
+      "id": "e62d5a6e29be425c96b8c927f1a032ce",
+      "name": "projects/16900759932870491329/screens/e62d5a6e29be425c96b8c927f1a032ce",
+      "stitchTitle": "Prezidan Pa M · Si m te prezidan",
+      "png": "s17-pres-intro.png",
+      "html": "s17-pres-intro.html"
+    },
+    {
+      "key": "s17-pres-decision",
+      "id": "d6aaa5858a794a9a8cfbe0fc8b895234",
+      "name": "projects/16900759932870491329/screens/d6aaa5858a794a9a8cfbe0fc8b895234",
+      "stitchTitle": "Prezidan Pa M · Si m te prezidan",
+      "png": "s17-pres-decision.png",
+      "html": "s17-pres-decision.html"
+    },
+    {
+      "key": "s17-pres-report",
+      "id": "8e5e38ed77c0444bbd94974d618f3b34",
+      "name": "projects/16900759932870491329/screens/8e5e38ed77c0444bbd94974d618f3b34",
+      "stitchTitle": "Prezidan Pa M · Rapò 5 an",
+      "png": "s17-pres-report.png",
+      "html": "s17-pres-report.html"
     }
   ],
   "desktop": [
@@ -237,6 +269,38 @@
       "stitchTitle": "Prezidan Pa M · Ayiti 2027",
       "png": "desktop/s15-landing.png",
       "html": "desktop/s15-landing.html"
+    },
+    {
+      "key": "s16-landing-game",
+      "id": "c35ecad6c539460d94491f1eba4708a3",
+      "name": "projects/16900759932870491329/screens/c35ecad6c539460d94491f1eba4708a3",
+      "stitchTitle": "Prezidan Pa M · Si w te prezidan, kisa w ta fè?",
+      "png": "desktop/s16-landing-game.png",
+      "html": "desktop/s16-landing-game.html"
+    },
+    {
+      "key": "s17-pres-intro",
+      "id": "db118cff5dda466db99a53b3cde5ccd7",
+      "name": "projects/16900759932870491329/screens/db118cff5dda466db99a53b3cde5ccd7",
+      "stitchTitle": "Prezidan Pa M · Si m te prezidan",
+      "png": "desktop/s17-pres-intro.png",
+      "html": "desktop/s17-pres-intro.html"
+    },
+    {
+      "key": "s17-pres-decision",
+      "id": "3b6b5f4a7f6a463ab1458696eea2ab04",
+      "name": "projects/16900759932870491329/screens/3b6b5f4a7f6a463ab1458696eea2ab04",
+      "stitchTitle": "Prezidan Pa M · Si m te prezidan",
+      "png": "desktop/s17-pres-decision.png",
+      "html": "desktop/s17-pres-decision.html"
+    },
+    {
+      "key": "s17-pres-report",
+      "id": "70df2f2d45a0479aa3db59f9101400df",
+      "name": "projects/16900759932870491329/screens/70df2f2d45a0479aa3db59f9101400df",
+      "stitchTitle": "Prezidan Pa M · Rapò 5 an",
+      "png": "desktop/s17-pres-report.png",
+      "html": "desktop/s17-pres-report.html"
     }
   ]
 }

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Prezidan Pa M · Rapò 5 an</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            ink: '#0B1A4A',
+            muted: '#5B6480',
+            hairline: '#E1E5F0',
+            softfill: '#F3F5FA',
+            ultramarine: '#1A3BB5',
+            'ultramarine-tint': '#EAEEFA',
+            'night-indigo': '#0B1230',
+            'panel-dark': '#141D45',
+            'text-on-dark-sec': '#B9C4E6',
+            'bar-track': '#E6EAF5',
+            'chip-up-bg': '#E7F6EC',
+            'chip-up-text': '#15803D',
+            'chip-down-bg': '#FDECEF',
+            'chip-down-text': '#D21034',
+            'record-bg': '#FFF4D6',
+            'record-text': '#7A4A00',
+          },
+          boxShadow: {
+            card: '0 1px 2px rgba(11,26,74,0.04), 0 12px 32px rgba(11,26,74,0.06)',
+            subtle: '0 1px 2px rgba(11,26,74,0.05)',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    html, body {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-optical-sizing: auto;
+      background-color: #FFFFFF;
+      color: #0B1A4A;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-up {
+      animation: fadeUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-fade-up {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen text-ink pb-24 antialiased selection:bg-ultramarine selection:text-white">
+
+  <!-- TOP HEADER (72px, Solid White, 1px Hairline Bottom) -->
+  <header class="w-full h-[72px] bg-white border-b border-hairline sticky top-0 z-40 px-4 flex items-center justify-between">
+    <!-- Brand Logo Left -->
+    <a href="#" class="flex items-center gap-2 group">
+      <div class="flex flex-col items-start leading-none select-none">
+        <div class="flex items-center gap-1.5">
+          <!-- Small bust in tricorn hat icon -->
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="text-night-indigo">
+            <path d="M12 2L4 7L6 10L12 8L18 10L20 7L12 2Z" fill="#0B1230"/>
+            <path d="M7 11C7 13.7614 9.23858 16 12 16C14.7614 16 17 13.7614 17 11V10H7V11Z" fill="#0B1230"/>
+            <path d="M5 21C5 18 8 17 12 17C16 17 19 18 19 21V22H5V21Z" fill="#0B1230"/>
+          </svg>
+          <div class="flex items-baseline tracking-normal">
+            <span class="text-[20px] font-extrabold tracking-tight text-night-indigo">PREZ</span>
+            <!-- Red brush stroke I -->
+            <span class="text-[20px] font-black text-[#D21034] mx-[1px]">I</span>
+            <span class="text-[20px] font-extrabold tracking-tight text-night-indigo">DAN</span>
+          </div>
+        </div>
+        <!-- Small red ballot box PAM -->
+        <div class="flex items-center gap-1 ml-6 mt-[2px]">
+          <span class="inline-flex items-center justify-center bg-[#D21034] text-white text-[9px] font-black tracking-wider px-1.5 py-[1px] rounded-[3px]">
+            PAM
+          </span>
+          <span class="text-[10px] font-semibold text-muted">2027</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Right Controls: Kreyòl pill + Initial M -->
+    <div class="flex items-center gap-2">
+      <button class="h-8 px-3 rounded-full bg-softfill border border-hairline text-ink text-[13px] font-semibold flex items-center gap-1 hover:bg-[#EAEEFA] transition-colors">
+        <span>Kreyòl</span>
+        <span class="text-[10px] text-muted">▾</span>
+      </button>
+      <div class="w-8 h-8 rounded-full bg-night-indigo text-white text-[13px] font-bold flex items-center justify-center select-none">
+        M
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER (Mobile 390px, 16px Gutters) -->
+  <main class="max-w-[390px] mx-auto px-4 pt-5 pb-8 space-y-4 animate-fade-up">
+
+    <!-- 1 · REPORT HERO (White Card, 24px Radius, Card Shadow, 24px Padding) -->
+    <section class="bg-white rounded-[24px] border border-hairline p-6 shadow-card space-y-5">
+      <!-- Header text stack -->
+      <div class="space-y-1.5">
+        <span class="inline-block text-[13px] font-bold text-ultramarine tracking-tight">
+          Rapò 5 an
+        </span>
+        <h1 class="text-[32px] font-[800] text-ink leading-[1.15] tracking-[-0.035em]">
+          Peyi a ap avanse, dousman
+        </h1>
+        <p class="text-[14px] text-muted leading-relaxed pt-1">
+          Gen pwogrè, men kèk desizyon te koute chè. Eseye ankò pou w fè pi byen.
+        </p>
+      </div>
+
+      <!-- Record chip & Best score note -->
+      <div class="flex items-center gap-2 pt-0.5">
+        <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-record-bg text-record-text text-[12px] font-bold">
+          Nouvo rekò!
+        </span>
+        <span class="text-[13px] text-muted font-medium">
+          Pi bon nòt ou: <strong class="tabular-nums font-bold text-ink">58</strong>
+        </span>
+      </div>
+
+      <!-- Score Ring: 160px diameter, 12px stroke, track #E6EAF5, arc ultramarine 52% -->
+      <div class="flex justify-center py-2">
+        <div class="relative w-[160px] h-[160px] flex items-center justify-center">
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 160 160">
+            <!-- Background Track -->
+            <circle
+              cx="80"
+              cy="80"
+              r="68"
+              fill="none"
+              stroke="#E6EAF5"
+              stroke-width="12"
+            />
+            <!-- Progress Arc (52% of 2 * PI * 68 ≈ 427.25 -> 222.17) -->
+            <circle
+              cx="80"
+              cy="80"
+              r="68"
+              fill="none"
+              stroke="#1A3BB5"
+              stroke-width="12"
+              stroke-dasharray="427.25"
+              stroke-dashoffset="205.08"
+              stroke-linecap="round"
+            />
+          </svg>
+          <!-- Center Content -->
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span class="text-[48px] font-[800] text-ink leading-none tabular-nums tracking-tight">
+              52
+            </span>
+            <span class="text-[13px] font-semibold text-muted mt-0.5 tabular-nums">
+              /100
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · FIVE RESULT TILES (2 Column Grid, Last Full Width, White, 16px Radius, Hairline) -->
+    <section class="space-y-2">
+      <div class="grid grid-cols-2 gap-2.5">
+        <!-- Tile 1: Sekirite -->
+        <div class="bg-white rounded-[16px] border border-hairline p-3.5 shadow-subtle flex flex-col justify-between min-h-[110px]">
+          <div class="flex items-center gap-1.5 text-muted text-[13px] font-medium">
+            <span class="material-symbols-outlined text-[18px] text-ultramarine">shield</span>
+            <span class="truncate">Sekirite</span>
+          </div>
+          <div class="flex items-baseline justify-between pt-2">
+            <span class="text-[32px] font-[800] text-ink tabular-nums leading-none">56</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-chip-up-bg text-chip-up-text text-[11px] font-bold tabular-nums">
+              +31
+            </span>
+          </div>
+          <p class="text-[11px] text-muted tabular-nums pt-1">
+            Avan: 25 · Apre: 56
+          </p>
+        </div>
+
+        <!-- Tile 2: Ekonomi -->
+        <div class="bg-white rounded-[16px] border border-hairline p-3.5 shadow-subtle flex flex-col justify-between min-h-[110px]">
+          <div class="flex items-center gap-1.5 text-muted text-[13px] font-medium">
+            <span class="material-symbols-outlined text-[18px] text-ultramarine">payments</span>
+            <span class="truncate">Ekonomi</span>
+          </div>
+          <div class="flex items-baseline justify-between pt-2">
+            <span class="text-[32px] font-[800] text-ink tabular-nums leading-none">71</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-chip-up-bg text-chip-up-text text-[11px] font-bold tabular-nums">
+              +41
+            </span>
+          </div>
+          <p class="text-[11px] text-muted tabular-nums pt-1">
+            Avan: 30 · Apre: 71
+          </p>
+        </div>
+
+        <!-- Tile 3: Lekòl ak lasante -->
+        <div class="bg-white rounded-[16px] border border-hairline p-3.5 shadow-subtle flex flex-col justify-between min-h-[110px]">
+          <div class="flex items-center gap-1.5 text-muted text-[13px] font-medium">
+            <span class="material-symbols-outlined text-[18px] text-ultramarine">school</span>
+            <span class="truncate">Lekòl ak lasante</span>
+          </div>
+          <div class="flex items-baseline justify-between pt-2">
+            <span class="text-[32px] font-[800] text-ink tabular-nums leading-none">53</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-chip-up-bg text-chip-up-text text-[11px] font-bold tabular-nums">
+              +23
+            </span>
+          </div>
+          <p class="text-[11px] text-muted tabular-nums pt-1">
+            Avan: 30 · Apre: 53
+          </p>
+        </div>
+
+        <!-- Tile 4: Konfyans pèp la -->
+        <div class="bg-white rounded-[16px] border border-hairline p-3.5 shadow-subtle flex flex-col justify-between min-h-[110px]">
+          <div class="flex items-center gap-1.5 text-muted text-[13px] font-medium">
+            <span class="material-symbols-outlined text-[18px] text-ultramarine">sentiment_satisfied</span>
+            <span class="truncate">Konfyans pèp la</span>
+          </div>
+          <div class="flex items-baseline justify-between pt-2">
+            <span class="text-[32px] font-[800] text-ink tabular-nums leading-none">34</span>
+            <span class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-chip-down-bg text-chip-down-text text-[11px] font-bold tabular-nums">
+              −1
+            </span>
+          </div>
+          <p class="text-[11px] text-muted tabular-nums pt-1">
+            Avan: 35 · Apre: 34
+          </p>
+        </div>
+      </div>
+
+      <!-- Tile 5: Kès leta (Full Width) -->
+      <div class="bg-white rounded-[16px] border border-hairline p-3.5 shadow-subtle flex items-center justify-between">
+        <div>
+          <div class="flex items-center gap-1.5 text-muted text-[13px] font-medium mb-1">
+            <span class="material-symbols-outlined text-[18px] text-ultramarine">account_balance</span>
+            <span>Kès leta</span>
+          </div>
+          <p class="text-[11px] text-muted tabular-nums">
+            Avan: 40 · Apre: 7
+          </p>
+        </div>
+        <div class="flex items-baseline gap-2.5">
+          <span class="text-[32px] font-[800] text-ink tabular-nums leading-none">7</span>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-full bg-chip-down-bg text-chip-down-text text-[12px] font-bold tabular-nums">
+            −33
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · « Sa k rive apre manda w » (Light Row with 4px Red Left Rule) -->
+    <section class="bg-white rounded-[16px] border border-hairline p-4 shadow-subtle border-l-4 border-l-[#D21034] flex items-start justify-between gap-3">
+      <div class="space-y-1">
+        <span class="text-[11px] font-bold text-[#D21034] block">
+          Sa k rive apre manda w
+        </span>
+        <p class="text-[13px] font-medium text-ink leading-snug">
+          Pandan polis la ap veye ayewopò a, gang yo pran lòt katye.
+        </p>
+      </div>
+      <span class="shrink-0 inline-flex items-center px-2 py-0.5 rounded-full bg-chip-down-bg text-chip-down-text text-[11px] font-bold tabular-nums">
+        −8 Sekirite
+      </span>
+    </section>
+
+    <!-- 4 · YOUR PROFILE AND CANDIDATES (White Card) -->
+    <section class="bg-white rounded-[24px] border border-hairline p-6 shadow-card space-y-4">
+      <!-- Profile Header -->
+      <div class="space-y-2">
+        <span class="text-[12px] font-bold text-ultramarine block">
+          Pwofil ou
+        </span>
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-[16px] bg-ultramarine text-white flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[24px]">shield</span>
+          </div>
+          <div>
+            <h2 class="text-[24px] font-[800] text-ink leading-tight tracking-tight">
+              Prezidan lapè
+            </h2>
+            <p class="text-[13px] text-muted leading-tight mt-0.5">
+              Pou ou, anyen pa ka mache si moun pa an sekirite.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority Chips -->
+      <div class="flex flex-wrap gap-1.5 pt-1">
+        <span class="px-3 py-1 rounded-full bg-ultramarine-tint text-ultramarine text-[12px] font-bold">
+          Sekirite
+        </span>
+        <span class="px-3 py-1 rounded-full bg-ultramarine-tint text-ultramarine text-[12px] font-bold">
+          Jèn yo
+        </span>
+        <span class="px-3 py-1 rounded-full bg-ultramarine-tint text-ultramarine text-[12px] font-bold">
+          Travay ak ekonomi
+        </span>
+      </div>
+
+      <!-- Divider Hairline -->
+      <div class="h-[1px] bg-hairline w-full my-1"></div>
+
+      <!-- Candidates Section -->
+      <div class="space-y-3">
+        <h3 class="text-[18px] font-[700] text-ink">
+          Kandida ki gen dosye sou menm priyorite yo
+        </h3>
+
+        <!-- Candidates List (3 IDENTICAL rows) -->
+        <div class="space-y-2.5">
+          <!-- Row 1: Martelly -->
+          <div class="flex items-center justify-between p-2.5 rounded-[16px] bg-softfill border border-hairline">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full bg-night-indigo text-white font-bold text-[13px] flex items-center justify-center shrink-0">
+                MM
+              </div>
+              <div>
+                <p class="text-[14px] font-bold text-ink leading-tight">
+                  Michel Joseph Martelly
+                </p>
+                <span class="inline-block mt-0.5 text-[11px] font-medium text-muted bg-white px-2 py-0.5 rounded-full border border-hairline">
+                  Debloke
+                </span>
+              </div>
+            </div>
+            <span class="text-[13px] font-bold text-ultramarine tabular-nums shrink-0 pr-1">
+              2 sou 3
+            </span>
+          </div>
+
+          <!-- Row 2: Bodeau -->
+          <div class="flex items-center justify-between p-2.5 rounded-[16px] bg-softfill border border-hairline">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full bg-night-indigo text-white font-bold text-[13px] flex items-center justify-center shrink-0">
+                GB
+              </div>
+              <div>
+                <p class="text-[14px] font-bold text-ink leading-tight">
+                  Gary Bodeau
+                </p>
+                <span class="inline-block mt-0.5 text-[11px] font-medium text-muted bg-white px-2 py-0.5 rounded-full border border-hairline">
+                  Rekonsilye
+                </span>
+              </div>
+            </div>
+            <span class="text-[13px] font-bold text-ultramarine tabular-nums shrink-0 pr-1">
+              2 sou 3
+            </span>
+          </div>
+
+          <!-- Row 3: Salomon -->
+          <div class="flex items-center justify-between p-2.5 rounded-[16px] bg-softfill border border-hairline">
+            <div class="flex items-center gap-3">
+              <div class="w-11 h-11 rounded-full bg-night-indigo text-white font-bold text-[13px] flex items-center justify-center shrink-0">
+                JS
+              </div>
+              <div>
+                <p class="text-[14px] font-bold text-ink leading-tight">
+                  Jean-Marie Junior Salomon
+                </p>
+                <span class="inline-block mt-0.5 text-[11px] font-medium text-muted bg-white px-2 py-0.5 rounded-full border border-hairline">
+                  OPL
+                </span>
+              </div>
+            </div>
+            <span class="text-[13px] font-bold text-ultramarine tabular-nums shrink-0 pr-1">
+              2 sou 3
+            </span>
+          </div>
+        </div>
+
+        <!-- Muted Neutral Disclaimer Line -->
+        <p class="text-[12px] text-muted leading-relaxed pt-1">
+          Se pa yon rekòmandasyon. Nou konpare sèlman ak dosye piblik kandida yo, menm jan pou tout moun.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5 · ACTIONS ROW (Pill Buttons) -->
+    <section class="flex flex-col gap-2 pt-1">
+      <div class="grid grid-cols-2 gap-2">
+        <!-- White Pill: Jwe ankò -->
+        <button class="h-12 rounded-full bg-white border border-hairline text-ink font-bold text-[14px] flex items-center justify-center gap-1.5 hover:bg-softfill active:scale-[0.98] transition-transform">
+          <span class="material-symbols-outlined text-[18px]">refresh</span>
+          <span>Jwe ankò</span>
+        </button>
+        <!-- Ultramarine Pill: Pataje nòt mwen -->
+        <button class="h-12 rounded-full bg-ultramarine text-white font-bold text-[14px] flex items-center justify-center gap-1.5 hover:bg-[#142e8f] active:scale-[0.98] transition-transform">
+          <span class="material-symbols-outlined text-[18px]">share</span>
+          <span>Pataje nòt mwen</span>
+        </button>
+      </div>
+      <!-- White Pill: Sove kòm priyorite m -->
+      <button class="h-12 rounded-full bg-white border border-hairline text-ink font-bold text-[14px] flex items-center justify-center gap-1.5 hover:bg-softfill active:scale-[0.98] transition-transform">
+        <span class="material-symbols-outlined text-[18px] text-ultramarine">bookmark_border</span>
+        <span>Sove kòm priyorite m</span>
+      </button>
+    </section>
+
+    <!-- 6 · THE BRIDGE TO THE REAL VOTE (The One Dark Band, Solid Night Indigo #0B1230) -->
+    <section class="bg-night-indigo rounded-[28px] p-8 text-white space-y-5">
+      <div class="space-y-2">
+        <span class="text-[12px] font-bold text-text-on-dark-sec tracking-wide block">
+          Eleksyon 2027
+        </span>
+        <h2 class="text-[30px] font-[800] text-white leading-[1.15] tracking-tight">
+          Kounye a ou konnen kijan sa difisil
+        </h2>
+        <p class="text-[14px] text-text-on-dark-sec leading-relaxed pt-1">
+          Nan dat 18 jiyè 2027, se ou ki chwazi moun ki pral pran desizyon sa yo pou vre.
+        </p>
+      </div>
+
+      <!-- Action Buttons inside dark card -->
+      <div class="space-y-2.5 pt-1">
+        <!-- Solid White Pill with how_to_vote -->
+        <button class="w-full h-12 rounded-full bg-white text-night-indigo font-bold text-[15px] flex items-center justify-center gap-2 hover:bg-[#F3F5FA] active:scale-[0.98] transition-transform">
+          <span class="material-symbols-outlined text-[20px] text-night-indigo">how_to_vote</span>
+          <span>Bay vòt ou</span>
+        </button>
+        <!-- Ghost Pill (1px white at 30%) -->
+        <button class="w-full h-12 rounded-full bg-transparent border border-white/30 text-white font-semibold text-[14px] flex items-center justify-center gap-1.5 hover:bg-white/10 active:scale-[0.98] transition-transform">
+          <span>Konpare kandida yo</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 7 · COLLAPSED DISCLOSURE « Desizyon ou yo » -->
+    <section class="bg-white rounded-[20px] border border-hairline overflow-hidden shadow-subtle">
+      <details class="group">
+        <summary class="p-4 flex items-center justify-between cursor-pointer list-none select-none hover:bg-softfill transition-colors">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] text-ultramarine">ballot</span>
+            <span class="text-[15px] font-bold text-ink">Desizyon ou yo</span>
+          </div>
+          <span class="material-symbols-outlined text-[20px] text-muted group-open:rotate-180 transition-transform duration-200">
+            expand_more
+          </span>
+        </summary>
+        <div class="px-4 pb-4 pt-1 space-y-2.5 border-t border-hairline/60 text-[13px] text-muted">
+          <div class="flex items-center justify-between py-1">
+            <span class="font-medium text-ink">1. Sekirite nasyonal</span>
+            <span class="font-semibold text-ultramarine">Repran tèminal la</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-t border-hairline/40">
+            <span class="font-medium text-ink">2. Kès leta ak taks</span>
+            <span class="font-semibold text-ultramarine">Kraze kòripsyon</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-t border-hairline/40">
+            <span class="font-medium text-ink">3. Jèn ak migrasyon</span>
+            <span class="font-semibold text-ultramarine">Bous ak fòmasyon</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-t border-hairline/40">
+            <span class="font-medium text-ink">4. Enèji ak dlo</span>
+            <span class="font-semibold text-ultramarine">Envestisman santral</span>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- FOOTER (Solid White) -->
+    <footer class="pt-6 pb-2 text-center space-y-2 border-t border-hairline">
+      <p class="text-[12px] text-muted">
+        Prezidan Pa M · Platfòm sivik endepandan pou Ayiti 2027
+      </p>
+      <p class="text-[11px] text-muted/80">
+        Vòt pèp la, pa yon sondaj syantifik.
+      </p>
+    </footer>
+
+  </main>
+
+  <!-- FIXED BOTTOM NAVIGATION (64px + Safe Area, White, Hairline Top, Sondaj Tab Active) -->
+  <nav class="fixed bottom-0 left-0 right-0 h-16 bg-white border-t border-hairline z-50 flex items-center justify-around max-w-[390px] mx-auto pb-safe">
+    <!-- Tab 1: Priyorite -->
+    <a href="#" class="flex flex-col items-center justify-center gap-0.5 text-muted hover:text-ink transition-colors flex-1 py-1">
+      <span class="material-symbols-outlined text-[22px]">tune</span>
+      <span class="text-[11px] font-medium leading-none">Priyorite</span>
+    </a>
+
+    <!-- Tab 2: Kandida -->
+    <a href="#" class="flex flex-col items-center justify-center gap-0.5 text-muted hover:text-ink transition-colors flex-1 py-1">
+      <span class="material-symbols-outlined text-[22px]">groups</span>
+      <span class="text-[11px] font-medium leading-none">Kandida</span>
+    </a>
+
+    <!-- Tab 3: Rezilta -->
+    <a href="#" class="flex flex-col items-center justify-center gap-0.5 text-muted hover:text-ink transition-colors flex-1 py-1">
+      <span class="material-symbols-outlined text-[22px]">how_to_vote</span>
+      <span class="text-[11px] font-medium leading-none">Rezilta</span>
+    </a>
+
+    <!-- Tab 4: Sondaj (ACTIVE TAB) -->
+    <a href="#" class="relative flex flex-col items-center justify-center gap-0.5 text-ultramarine flex-1 py-1">
+      <!-- Active pill indicator at top -->
+      <span class="absolute top-0 w-5 h-[3px] bg-ultramarine rounded-full"></span>
+      <span class="material-symbols-outlined text-[22px]">ballot</span>
+      <span class="text-[11px] font-bold leading-none">Sondaj</span>
+    </a>
+  </nav>
+
+</body>
+</html>

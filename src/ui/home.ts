@@ -176,12 +176,13 @@ function revealOnScroll(els: HTMLElement[]): () => void {
 }
 
 /*
- * « Akèy », the public landing page (Stitch « s15-landing », phone and desktop): the same page for everyone,
- * signed in or not, and deliberately unlike the dashboard. Editorial hero (headline, two actions, three
- * promises, a mosaic of candidate portraits with the live count and the countdown), a numbers strip, the
- * people's vote (Top 5, the weekly poll answerable in place, the newest votes), the two games, the
- * candidates in random order, why the real vote matters, the citizen card invitation, who we are with the
- * next dates, one dark call to action, the footer. White everywhere by day; one dark band.
+ * « Akèy », the public landing page (Stitch « s16-landing-game » over « s15-landing », phone and desktop): the same
+ * page for everyone, signed in or not, and unlike the dashboard. The game « Si m te prezidan » is the main
+ * subject: the hero invites to play it (with a preview of a real decision and the country panel), then how
+ * the game works and why the real vote matters. Then the vote (headline, actions, a mosaic of candidate
+ * portraits with the live count and the countdown), a numbers strip, the people's vote (Top 5, the weekly
+ * poll answerable in place, the newest votes), Konnen Ayiti, the candidates in random order, the citizen
+ * card invitation, who we are with the next dates, one dark call to action, the footer.
  */
 export function renderHome(main: HTMLElement): () => void {
   clear(main);
@@ -211,11 +212,42 @@ export function renderHome(main: HTMLElement): () => void {
   const kicker = (t: string) => h('p', { class: 'lp-kicker' }, t);
   const more = (href: string, label: string) => h('a', { class: 'lp-link', href }, label, svg(ICON.arrowRight));
 
-  // ---- 1. Hero ----
+  // ---- 1. Hero: the game ----
+  const p = S().pres;
+  const preview = h('a', { class: 'lp-preview', href: '#president', 'aria-label': lp.heroPlay },
+    h('div', { class: 'lp-pv-panel', 'aria-hidden': 'true' },
+      h('p', { class: 'lp-pv-k' }, p.country), h('p', { class: 'lp-pv-score' }, h('b', { class: 'num' }, '32'), h('span', null, '/100')),
+      h('ul', null, ...lp.meters.map((m, i) => h('li', { style: `--w:${[25, 30, 30, 35, 40][i] ?? 30}%` }, h('span', null, m), h('b', { class: 'num' }, String([25, 30, 30, 35, 40][i] ?? 30)), h('i'))))),
+    h('div', { class: 'lp-pv-card', 'aria-hidden': 'true' },
+      h('div', { class: 'lp-pv-top' }, h('span', null, fmt(p.step, { i: 1, n: 8 })), h('span', { class: 'lp-pv-yr' }, fmt(p.year, { y: 1 }))),
+      h('div', { class: 'lp-pv-prog' }, ...Array.from({ length: 8 }, (_, i) => h('i', { class: i === 0 ? 'on' : '' }))),
+      h('p', { class: 'lp-pv-q' }, lp.previewQ),
+      h('span', { class: 'lp-pv-opt on' }, h('span', { class: 'lp-pv-tick' }, svg(ICON.check)), h('span', null, lp.previewA), h('em', null, fmt(p.cost, { n: 15 }))),
+      h('span', { class: 'lp-pv-opt' }, h('span', { class: 'lp-pv-tick' }), h('span', null, lp.previewB), h('em', null, fmt(p.cost, { n: 5 })))));
+  const hero = h('section', { class: 'lp-hero lp-game-hero' }, h('div', { class: 'wrap lp-hero-grid' },
+    h('div', { class: 'lp-hero-text' },
+      h('p', { class: 'lp-badge' }, h('img', { src: IMG.flag.src, width: 20, height: 12, alt: im.flagAlt, decoding: 'async' }), lp.heroBadge),
+      h('h1', null, lp.heroTitle),
+      h('p', { class: 'lp-lead' }, lp.heroLead),
+      h('div', { class: 'lp-actions' },
+        h('a', { class: 'btn btn-primary lp-btn', href: '#president' }, lp.heroPlay, svg(ICON.arrowRight)),
+        h('a', { class: 'btn lp-btn lp-btn-line', href: '#vote' }, svg(ICON.ballot), lp.heroVote)),
+      h('p', { class: 'lp-facts' }, h('b', null, lp.fact1), h('span', { 'aria-hidden': 'true' }, '·'), h('b', null, lp.fact2), h('span', { 'aria-hidden': 'true' }, '·'), h('b', null, lp.fact3))),
+    preview));
+
+  // ---- 2. How the game works ----
+  const steps = h('section', { class: 'lp-sec lp-steps', 'aria-labelledby': 'lp-steps-title' },
+    h('div', { class: 'lp-sec-head row' },
+      h('div', null, kicker(lp.stepsKicker), h('h2', { id: 'lp-steps-title' }, lp.stepsTitle)),
+      more('#president', lp.heroPlay)),
+    h('ol', { class: 'lp-steps-list' }, ...[[lp.step1t, lp.step1], [lp.step2t, lp.step2], [lp.step3t, lp.step3]].map(([t, x], i) =>
+      h('li', null, h('b', { class: 'num' }, String(i + 1)), h('h3', null, t ?? ''), h('p', null, x ?? '')))));
+
+  // ---- 4. The vote: the question, the actions, the portraits ----
   const daysLabel = `${days >= 0 ? s.beforeFirstRound : s.afterFirstRound} · ${fmtDate(firstRound)}`;
-  const heroText = h('div', { class: 'lp-hero-text' },
-    h('p', { class: 'lp-badge' }, h('img', { src: IMG.flag.src, width: 20, height: 12, alt: im.flagAlt, decoding: 'async' }), s.eyebrow),
-    h('h1', null, s.title),
+  const voteText = h('div', { class: 'lp-vote-text' },
+    kicker(b.title),
+    h('h2', { id: 'lp-vote-title' }, s.title),
     h('p', { class: 'lp-lead' }, fmt(s.sub, { n })),
     h('div', { class: 'lp-actions' },
       h('a', { class: 'btn btn-primary lp-btn', href: '#start' }, s.cta, svg(ICON.arrowRight)),
@@ -230,7 +262,7 @@ export function renderHome(main: HTMLElement): () => void {
     h('div', { class: 'lp-mosaic' }, ...faces.map(face)),
     h('div', { class: 'lp-float lp-float-live', 'aria-live': 'polite' }, liveHero, votesNum(), h('span', null, s.participants)),
     h('div', { class: 'lp-float lp-float-days' }, well(ICON.calendar), h('div', null, h('b', { class: 'num' }, fmt(s.daysLeft, { n: fmtNumber(Math.abs(days)) })), h('span', null, daysLabel))));
-  const hero = h('section', { class: 'lp-hero' }, h('div', { class: 'wrap lp-hero-grid' }, heroText, visual));
+  const voteSec = h('section', { class: 'lp-sec lp-vote', 'aria-labelledby': 'lp-vote-title' }, h('div', { class: 'lp-vote-grid' }, voteText, visual));
 
   // ---- 2. Numbers strip ----
   const stat = (num: HTMLElement, label: string) => h('div', { class: 'lp-stat' }, num, h('span', null, label));
@@ -366,17 +398,14 @@ export function renderHome(main: HTMLElement): () => void {
     : qs.answered ? fmt(d.quizProgress, { d: qs.day, a: qs.answered }) : fmt(d.quizNew, { d: qs.day });
   const games = h('section', { class: 'lp-sec', 'aria-labelledby': 'lp-games-title' },
     h('div', { class: 'lp-sec-head' }, kicker(lp.gamesKicker), h('h2', { id: 'lp-games-title' }, lp.gamesTitle)),
-    h('div', { class: 'lp-games' },
+    h('div', { class: 'lp-games one' },
       h('a', { class: 'lp-card lp-game', href: '#quiz' },
         h('div', { class: 'lp-game-top' }, well(ICON.idea), qs.streak > 0 ? h('span', { class: 'qz-streak' }, svg(ICON.flame), fmt(q.streak, { n: qs.streak })) : null),
         h('h3', null, q.title), h('p', null, q.lead),
         h('div', { class: 'lp-segs', 'aria-hidden': 'true' }, ...Array.from({ length: qs.total }, (_, i) => h('i', { class: i < qs.answered ? 'on' : '' }))),
         h('p', { class: 'lp-game-status' }, quizLine),
         h('span', { class: 'btn btn-primary lp-btn' }, qs.done ? d.seeResults : qs.answered ? d.keepGoing : lp.playToday, svg(ICON.arrowRight))),
-      h('a', { class: 'lp-game lp-game-solid', href: '#president' },
-        h('span', { class: 'lp-game-icon', 'aria-hidden': 'true' }, svg(ICON.palace)),
-        h('h3', null, s.presTitle), h('p', null, s.presSub),
-        h('span', { class: 'btn lp-btn lp-btn-white' }, s.presCta, svg(ICON.arrowRight)))));
+));
 
   // ---- 5. Candidates: every one, random order, one slow loop; pauses on hover or focus ----
   const half = (clone: boolean) => h('div', { class: 'marquee-half', 'aria-hidden': clone ? 'true' : undefined },
@@ -426,12 +455,11 @@ export function renderHome(main: HTMLElement): () => void {
   const final = h('section', { class: 'lp-final', 'aria-labelledby': 'lp-final-title' },
     h('h2', { id: 'lp-final-title' }, lp.ctaTitle), h('p', null, lp.ctaText),
     h('div', { class: 'lp-actions' },
-      h('a', { class: 'btn lp-btn lp-btn-white', href: '#start' }, s.cta, svg(ICON.arrowRight)),
-      signed ? h('a', { class: 'btn lp-btn lp-btn-ghost', href: '#dashboard' }, S().account.myDashboard)
-        : h('button', { class: 'btn lp-btn lp-btn-ghost', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp)));
+      h('a', { class: 'btn lp-btn lp-btn-white', href: '#president' }, lp.finalPlay, svg(ICON.arrowRight)),
+      h('a', { class: 'btn lp-btn lp-btn-ghost', href: '#vote' }, svg(ICON.ballot), lp.heroVote)));
 
-  main.append(hero, h('div', { class: 'wrap lp-body' }, numbers, liveSec, games, cands, why, cardInvite, about, final, footer()));
-  cleanups.push(revealOnScroll([liveSec, games, cands, why, cardInvite, about, final]));
+  main.append(hero, h('div', { class: 'wrap lp-body' }, steps, why, voteSec, numbers, liveSec, games, cands, cardInvite, about, final, footer()));
+  cleanups.push(revealOnScroll([steps, why, voteSec, liveSec, games, cands, cardInvite, about, final]));
 
   void loadStats().then((st) => {
     if (!alive) return;
