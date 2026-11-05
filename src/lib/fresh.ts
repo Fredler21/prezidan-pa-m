@@ -42,4 +42,7 @@ export function keepFresh(): void {
   window.setInterval(() => void check(false), 15 * 60_000);
   // registered before the router, so the new page opens straight in the new version
   window.addEventListener('hashchange', () => { if (stale) reload(); });
+  // An old tab asking for a file that a newer deploy replaced (a page, the sign-in or sign-out code):
+  // reload into the new version instead of failing silently.
+  window.addEventListener('vite:preloadError', () => reload());
 }

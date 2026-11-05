@@ -2,7 +2,7 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop). 2026-11-04 (later): flat redesign, no gradients anywhere (user found two-color gradients looked AI made): s0-home regenerated flat (v9), s11-dashboard (signed-in home « Tablo mwen ») and s12-president (« Si m te prezidan » decision game) added, phone and desktop. Previous home v8.1 ids e9690600… and 395d90b7… can be deleted in Stitch. 2026-11-04 (night): s10-quiz edited (right answer solid green, wrong pick solid red); s11-dashboard v2 (live flip countdown, motion); s13-card added (premium « Kat sitwayen » banner: flag line, 2027 mark, stack of two cards, controls panel); s12-president v2 (challenging simulation: five country meters, « Sa k pase » consequences, delayed news, 5 year report); s9-account v2 (« Konekte » and « Kreye kont » header buttons, welcome dialog). 2026-11-05: s12-president v3 (inauguration « Jou sèman an », crisis news, score ring; decisions drawn from a pool of 18 on Haiti today). 2026-11-05 (later): s14-themes added (day mode all white, night mode all black, moon and sun switch in the header, new logo lockup); the « Kat sitwayen » card now shows only after sign-in, under « Poukisa vòt ou enpòtan ».",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop). 2026-11-04 (later): flat redesign, no gradients anywhere (user found two-color gradients looked AI made): s0-home regenerated flat (v9), s11-dashboard (signed-in home « Tablo mwen ») and s12-president (« Si m te prezidan » decision game) added, phone and desktop. Previous home v8.1 ids e9690600… and 395d90b7… can be deleted in Stitch. 2026-11-04 (night): s10-quiz edited (right answer solid green, wrong pick solid red); s11-dashboard v2 (live flip countdown, motion); s13-card added (premium « Kat sitwayen » banner: flag line, 2027 mark, stack of two cards, controls panel); s12-president v2 (challenging simulation: five country meters, « Sa k pase » consequences, delayed news, 5 year report); s9-account v2 (« Konekte » and « Kreye kont » header buttons, welcome dialog). 2026-11-05: s12-president v3 (inauguration « Jou sèman an », crisis news, score ring; decisions drawn from a pool of 18 on Haiti today). 2026-11-05 (later): s14-themes added (day mode all white, night mode all black, moon and sun switch in the header, new logo lockup); the « Kat sitwayen » card now shows only after sign-in, under « Poukisa vòt ou enpòtan ». 2026-11-05 (night): s15-landing (phone and desktop) replaces s0-home as the public landing page: an editorial hero with a portrait mosaic, a numbers strip, the people’s vote in white cards, the two games, the candidates, why vote, the citizen card invite, about with the Citadelle and the dates, one dark call to action; made to look unlike the dashboard. Prompt in s15-landing-prompt.txt (generated with the flat rules appended).",
   "screens": [
     {
       "key": "s0-home",
@@ -107,6 +107,14 @@
       "stitchTitle": "Prezidan Pa M · Kat sitwayen",
       "png": "s13-card.png",
       "html": "s13-card.html"
+    },
+    {
+      "key": "s15-landing",
+      "id": "ce27e1b3b6104383a1efb6d8466e79a9",
+      "name": "projects/16900759932870491329/screens/ce27e1b3b6104383a1efb6d8466e79a9",
+      "stitchTitle": "Prezidan Pa M · Ayiti 2027",
+      "png": "s15-landing.png",
+      "html": "s15-landing.html"
     }
   ],
   "desktop": [
@@ -221,6 +229,14 @@
       "stitchTitle": "Prezidan Pa M · Mòd jou ak mòd nwit",
       "png": "desktop/s14-themes.png",
       "html": "desktop/s14-themes.html"
+    },
+    {
+      "key": "s15-landing",
+      "id": "1cf8a13c85c94762b1a80a12cca022ff",
+      "name": "projects/16900759932870491329/screens/1cf8a13c85c94762b1a80a12cca022ff",
+      "stitchTitle": "Prezidan Pa M · Ayiti 2027",
+      "png": "desktop/s15-landing.png",
+      "html": "desktop/s15-landing.html"
     }
   ]
 }

@@ -12,14 +12,11 @@ import { pct, daysUntil } from '../lib/util';
 import { state } from '../state';
 import { note, footer, well, avatar } from './common';
 import { openProfile } from './profile';
-import { attachTilt } from '../lib/tilt';
 import { toast } from './toast';
 import { openAccountSheet } from './account';
 import { getAccount } from '../account';
 import { whyVote } from './why-vote';
-
-// Faint wrought-iron lace, inline (no image request), masked to fade before the bottom.
-const LACE = '<svg class="hero-lace" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="lace2" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M0 28A28 28 0 0 0 28 0M28 0A28 28 0 0 0 56 28M56 28A28 28 0 0 0 28 56M28 56A28 28 0 0 0 0 28" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="28" cy="28" r="6" fill="none" stroke="currentColor" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#lace2)"/></svg>';
+import { quizStatus } from '../lib/progress';
 
 const REST: RestConfig = { projectId: firebaseConfig.projectId, apiKey: firebaseConfig.apiKey, timeoutMs: 6000 };
 const TOP = 5;
@@ -161,13 +158,6 @@ function topRow(c: Candidate, i: number): TopRow {
   return { el, pctEl, barEl, bar, value: 0, stop: () => {} };
 }
 
-/** Compact row for the hero board: identical for every candidate. */
-function boardRow(c: Candidate, p: number, mine: boolean): HTMLElement {
-  return h('button', { class: mine ? 'brow mine' : 'brow', type: 'button', 'aria-haspopup': 'dialog', onclick: () => openProfile(c) },
-    avatar(c), h('span', { class: 'bname' }, c.name, h('small', null, c.party)), h('span', { class: 'bpct num' }, asPct(p)),
-    h('span', { class: 'bbar', role: 'img', 'aria-label': `${c.name}: ${p} %` }, h('i', { style: `width:${p}%` })));
-}
-
 function skeletonRow(i: number): HTMLElement {
   return h('div', { class: 'cand skel', style: `--i:${i}`, 'aria-hidden': 'true' },
     h('div', { class: 'cand-row' }, h('span', { class: 'sk-av' }), h('span', { class: 'cand-name' }, h('span', { class: 'sk-line w60' }), h('span', { class: 'sk-line w30' })), h('span', { class: 'sk-pct' })),
@@ -185,84 +175,89 @@ function revealOnScroll(els: HTMLElement[]): () => void {
   return () => io.disconnect();
 }
 
-/** Section title with a small uppercase kicker above it. */
-const secHead = (kicker: string, title: string) => h('div', { class: 'sec-head' }, h('p', { class: 'kicker' }, kicker), h('h2', null, title));
-
-const stagger = (parent: HTMLElement) => Array.from(parent.children).forEach((el, i) => (el as HTMLElement).style.setProperty('--i', String(i)));
-
+/*
+ * « Akèy », the public landing page (Stitch « s15-landing », phone and desktop): the same page for everyone,
+ * signed in or not, and deliberately unlike the dashboard. Editorial hero (headline, two actions, three
+ * promises, a mosaic of candidate portraits with the live count and the countdown), a numbers strip, the
+ * people's vote (Top 5, the weekly poll answerable in place, the newest votes), the two games, the
+ * candidates in random order, why the real vote matters, the citizen card invitation, who we are with the
+ * next dates, one dark call to action, the footer. White everywhere by day; one dark band.
+ */
 export function renderHome(main: HTMLElement): () => void {
   clear(main);
   const s = S().home;
   const b = S().board;
   const im = S().images;
+  const lp = S().landing;
   const c = content();
   const n = c.candidates.length;
   let alive = true;
   const cleanups: (() => void)[] = [];
+  const signed = getAccount() !== null;
 
   const firstRound = c.dates.find((d) => d.date === FIRST_ROUND)?.date ?? FIRST_ROUND;
   const days = daysUntil(firstRound);
   const deptLabel = (id: string) => { const d = c.departments.find((x) => x.id === id); return d && d.id !== 'na' ? l(d.label) : b.someone; };
+  const order = candidatesShuffled();
 
-  // Two sets of live-number elements: tiles on phones, an inline row inside the hero card on desktop.
-  const votesEls = [h('b', { class: 'num' }, '·'), h('b', { class: 'num' }, '·')];
-  const answersEls = [h('b', { class: 'num' }, '·'), h('b', { class: 'num' }, '·')];
-  const statRow = (cls: string, i: number) => h('div', { class: cls },
-    h('div', { class: 'stat-tile' }, votesEls[i], h('span', null, s.participants)),
-    h('div', { class: 'stat-tile' }, h('b', { class: 'num' }, fmtNumber(n)), h('span', null, s.candidates)),
-    h('div', { class: 'stat-tile' }, answersEls[i], h('span', null, s.pollAnswers)));
-  const countdownRow = () => h('div', { class: 'countdown' }, well(ICON.calendar),
-    h('div', null,
-      h('b', { class: 'num' }, fmt(s.daysLeft, { n: fmtNumber(Math.abs(days)) })),
-      h('span', null, days >= 0 ? s.beforeFirstRound : s.afterFirstRound),
-      h('small', { class: 'num' }, fmtDate(firstRound))));
+  // Live numbers appear in two places (the hero card and the numbers strip): every slot is kept here.
+  const votesEls: HTMLElement[] = [];
+  const answersEls: HTMLElement[] = [];
+  const votesNum = () => { const e = h('b', { class: 'num' }, '·'); votesEls.push(e); return e; };
+  const answersNum = () => { const e = h('b', { class: 'num' }, '·'); answersEls.push(e); return e; };
+  let votesShown = 0;
+  let stopVotes: (() => void)[] = [];
+  const showVotes = (v: number) => { for (const f of stopVotes) f(); stopVotes = votesEls.map((e) => tween(e, votesShown, v, 1100, fmtNumber)); votesShown = v; };
+  const kicker = (t: string) => h('p', { class: 'lp-kicker' }, t);
+  const more = (href: string, label: string) => h('a', { class: 'lp-link', href }, label, svg(ICON.arrowRight));
 
-  // ---- Hero: the question on the left, the live board of the voters on the right ----
-  const deskCountdown = h('div', { class: 'card countdown-card desk-only' }, countdownRow(), statRow('stats-inline', 1));
-  cleanups.push(attachTilt(deskCountdown, 5));
-  const heroText = h('div', { class: 'hero-text intro' },
-    h('p', { class: 'eyebrow' }, h('img', { class: 'flag', src: IMG.flag.src, srcset: IMG.flag.srcset, sizes: '40px', width: 40, height: 24, alt: im.flagAlt, decoding: 'async' }), s.eyebrow),
+  // ---- 1. Hero ----
+  const daysLabel = `${days >= 0 ? s.beforeFirstRound : s.afterFirstRound} · ${fmtDate(firstRound)}`;
+  const heroText = h('div', { class: 'lp-hero-text' },
+    h('p', { class: 'lp-badge' }, h('img', { src: IMG.flag.src, width: 20, height: 12, alt: im.flagAlt, decoding: 'async' }), s.eyebrow),
     h('h1', null, s.title),
-    h('p', null, fmt(s.sub, { n })),
-    h('div', { class: 'hero-actions' },
-      h('a', { class: 'btn btn-primary hero-cta', href: '#start' }, s.cta, svg(ICON.arrowRight)),
-      h('a', { class: 'hero-link', href: '#results' }, s.seeResults, svg(ICON.outward))),
-    deskCountdown);
-  stagger(heroText);
+    h('p', { class: 'lp-lead' }, fmt(s.sub, { n })),
+    h('div', { class: 'lp-actions' },
+      h('a', { class: 'btn btn-primary lp-btn', href: '#start' }, s.cta, svg(ICON.arrowRight)),
+      h('a', { class: 'btn lp-btn lp-btn-line', href: '#candidates' }, lp.seeCandidates)),
+    h('ul', { class: 'lp-trust' }, ...[lp.trust1, lp.trust2, lp.trust3].map((t) => h('li', null, svg(ICON.check), t))));
+  // Six portraits in the shuffled order (a different six on every visit), all treated the same way.
+  const faces = order.filter((x) => x.photo).slice(0, 6);
+  const face = (x: Candidate, i: number) => h('button', { class: 'lp-face', type: 'button', style: `--i:${i}`, 'aria-haspopup': 'dialog', 'aria-label': x.name, title: x.name, onclick: () => openProfile(x) },
+    h('img', { src: `/photos/${x.photo}`, alt: '', width: 320, height: 400, loading: i < 3 ? 'eager' : 'lazy', decoding: 'async' }));
+  const liveHero = h('span', { class: 'live' }, h('i', { 'aria-hidden': 'true' }), s.live);
+  const visual = h('div', { class: 'lp-visual' },
+    h('div', { class: 'lp-mosaic' }, ...faces.map(face)),
+    h('div', { class: 'lp-float lp-float-live', 'aria-live': 'polite' }, liveHero, votesNum(), h('span', null, s.participants)),
+    h('div', { class: 'lp-float lp-float-days' }, well(ICON.calendar), h('div', null, h('b', { class: 'num' }, fmt(s.daysLeft, { n: fmtNumber(Math.abs(days)) })), h('span', null, daysLabel))));
+  const hero = h('section', { class: 'lp-hero' }, h('div', { class: 'wrap lp-hero-grid' }, heroText, visual));
 
-  // Board 1: the people's vote (participants, top 3)
-  const live = h('span', { class: 'live' }, h('i', { 'aria-hidden': 'true' }), s.live);
-  const bigNum = h('b', { class: 'board-num num' }, '·');
-  const top3 = h('div', { class: 'board-top' }, skeletonLines(3));
-  const boardVote = h('article', { class: 'board' },
-    h('div', { class: 'board-head' }, h('span', { class: 'board-kicker' }, b.title), live),
-    h('div', { class: 'board-stat' }, bigNum, h('span', null, s.participants)),
-    h('p', { class: 'board-sub' }, b.top3),
-    top3,
-    h('a', { class: 'board-link', href: '#results' }, s.seeAllResults, svg(ICON.arrowRight)));
+  // ---- 2. Numbers strip ----
+  const stat = (num: HTMLElement, label: string) => h('div', { class: 'lp-stat' }, num, h('span', null, label));
+  const numbers = h('section', { class: 'lp-numbers', 'aria-label': lp.numbersLabel },
+    stat(votesNum(), s.participants),
+    stat(h('b', { class: 'num' }, fmtNumber(n)), s.candidates),
+    stat(answersNum(), s.pollAnswers),
+    stat(h('b', { class: 'num' }, fmtNumber(Math.max(0, days))), lp.daysLabel));
 
-  // Board 2: the weekly poll, answerable in place; percentages only after answering (no nudging)
-  const pollMeta = h('span', { class: 'board-meta num' });
+  // ---- 3. The people's vote: Top 5, the weekly poll, the newest votes ----
+  const liveTop = h('span', { class: 'live' }, h('i', { 'aria-hidden': 'true' }), s.live);
+  const list = h('div', { class: 'stack top-list' }, ...Array.from({ length: TOP }, (_, i) => skeletonRow(i)));
+  const topCard = h('div', { class: 'lp-card lp-top' }, h('div', { class: 'lp-card-head' }, h('h3', null, lp.top5), liveTop), list);
+
+  const pollMeta = h('span', { class: 'lp-meta num' });
   const pollBody = h('div', { class: 'board-poll-body' }, skeletonLines(3));
-  const boardPoll = h('article', { class: 'board board-poll' },
-    h('div', { class: 'board-head' }, h('span', { class: 'board-kicker' }, s.pollCard), pollMeta),
-    pollBody,
-    h('a', { class: 'board-link', href: '#poll' }, b.allPolls, svg(ICON.arrowRight)));
-
-  // Board 3: the latest votes, by department only
+  const pollCard = h('div', { class: 'lp-card lp-poll' }, h('div', { class: 'lp-card-head' }, h('h3', null, s.pollCard), pollMeta), pollBody, more('#poll', b.allPolls));
   const feed = h('ul', { class: 'feed' }, skeletonLines(3));
-  const boardFeed = h('article', { class: 'board board-feed' },
-    h('div', { class: 'board-head' }, h('span', { class: 'board-kicker' }, b.recent)),
-    feed);
+  const feedCard = h('div', { class: 'lp-card lp-feed' }, h('div', { class: 'lp-card-head' }, h('h3', null, b.recent)), feed);
 
-  const boardCol = h('aside', { class: 'board-col intro', 'aria-label': b.title }, boardVote, boardPoll, boardFeed);
-  stagger(boardCol);
-  for (const el of [boardVote, boardPoll, boardFeed]) cleanups.push(attachTilt(el, 3));
+  const liveSec = h('section', { class: 'lp-sec lp-live', 'aria-labelledby': 'lp-live-title' },
+    h('div', { class: 'lp-sec-head row' },
+      h('div', null, kicker(b.title), h('h2', { id: 'lp-live-title' }, lp.liveTitle), h('p', { class: 'lp-sub' }, s.topSub)),
+      more('#results', s.seeAllResults)),
+    h('div', { class: 'lp-live-grid' }, topCard, h('div', { class: 'lp-live-side' }, pollCard, feedCard)));
 
-  const hero = h('section', { class: 'hero hero-home', html: LACE });
-  hero.append(h('div', { class: 'wrap hero-grid' }, heroText, boardCol));
-
-  // Poll interaction
+  // Poll interaction: percentages only after answering (no nudging)
   let poll: PollInfo | null = null;
   let myAnswer: string | null = null;
   let storage: StorageAdapter | null = null;
@@ -303,56 +298,29 @@ export function renderHome(main: HTMLElement): () => void {
     } catch (e) { console.error(e); toast(S().vote.errorSave, 5000); }
   };
 
-  // Feed
   const drawFeed = (items: FeedItem[]) => {
     clear(feed);
     if (!items.length) { feed.append(h('li', { class: 'board-empty' }, b.noRecent)); return; }
     items.forEach((it, i) => feed.append(h('li', { style: `--i:${i}` }, h('span', { class: 'dep' }, deptLabel(it.department)), h('span', null, b.justVoted), h('span', { class: 'when' }, timeAgo(it.at)))));
   };
 
-  // ---- Candidates strip: every candidate, random order, one slow loop; pauses on hover or focus ----
-  const order = candidatesShuffled();
-  const half = (clone: boolean) => h('div', { class: 'marquee-half', 'aria-hidden': clone ? 'true' : undefined },
-    ...order.map((x) => h('button', { class: 'strip-av', type: 'button', title: x.name, tabindex: clone ? -1 : undefined, 'aria-haspopup': 'dialog', onclick: () => openProfile(x) }, avatar(x), h('span', { class: 'sr' }, x.name))));
-  const strip = h('section', { class: 'section strip-sec', 'aria-label': s.stripLabel },
-    h('p', { class: 'caption' }, fmt(s.stripCaption, { n })),
-    h('div', { class: 'marquee' }, h('div', { class: 'marquee-track' }, half(false), half(true))));
-
-  // ---- Top 5 by votes: skeleton first, cached numbers next, live numbers when they arrive ----
-  const liveTop = h('span', { class: 'live' }, h('i', { 'aria-hidden': 'true' }), s.live);
-  const list = h('div', { class: 'stack top-list' }, ...Array.from({ length: TOP }, (_, i) => skeletonRow(i)));
-  const topLink = h('p', { class: 'top-link' }, h('a', { class: 'link-btn', href: '#results' }, s.seeAllResults, svg(ICON.arrowRight)));
-  const top = h('section', { class: 'section top-sec main-col' },
-    h('div', { class: 'top-head' }, secHead(s.topKicker, s.top), liveTop),
-    h('p', { class: 'top-sub' }, s.topSub),
-    list, topLink);
-
   const rows = new Map<string, TopRow>();
   let drawn = 0;
-  let bigShown = 0;
-  let stopBig = () => {};
   const draw = (res: Counts) => {
     const first = drawn++ === 0;
     const mine = state.myVote?.candidate ?? null;
     const ranked = order.map((x) => ({ x, n: res.counts[x.id] ?? 0 })).sort((a, b2) => b2.n - a.n);
-    // the board
-    stopBig(); stopBig = tween(bigNum, bigShown, res.total, 1100, fmtNumber); bigShown = res.total;
-    clear(top3);
-    if (res.total === 0) top3.append(h('p', { class: 'board-empty' }, s.noVotesYet));
-    else for (const { x, n: v } of ranked.slice(0, 3)) top3.append(boardRow(x, pct(v, res.total), x.id === mine));
-    // the Top 5
+    showVotes(res.total);
     clear(list);
     if (res.total === 0) {
-      list.append(h('div', { class: 'card empty-top' }, note(s.noVotesYet, ICON.ballot, false),
+      list.append(h('div', { class: 'empty-top' }, note(s.noVotesYet, ICON.ballot, false),
         h('a', { class: 'btn btn-primary', href: '#start' }, s.firstVote, svg(ICON.arrowRight))));
-      topLink.hidden = true;
       return;
     }
-    topLink.hidden = false;
     list.classList.toggle('enter', first);
     ranked.slice(0, TOP).forEach(({ x, n: votes }, i) => {
       let row = rows.get(x.id);
-      if (!row) { row = topRow(x, i); rows.set(x.id, row); cleanups.push(attachTilt(row.el, 3)); }
+      if (!row) { row = topRow(x, i); rows.set(x.id, row); }
       const p = pct(votes, res.total);
       row.el.style.setProperty('--i', String(i));
       row.el.classList.toggle('mine', x.id === mine);
@@ -373,8 +341,8 @@ export function renderHome(main: HTMLElement): () => void {
     if (!alive) return;
     const [r, f] = await Promise.all([loadCounts(ids), loadFeed().catch(() => [] as FeedItem[])]);
     if (!alive) return;
-    if (r) { lastAt = r.at; writeTopCache(r); draw(r); live.classList.add('on'); liveTop.classList.add('on'); }
-    else if (drawn === 0) { clear(list); list.append(note(S().offline)); topLink.hidden = true; clear(top3); top3.append(h('p', { class: 'board-empty' }, S().offline)); }
+    if (r) { lastAt = r.at; writeTopCache(r); draw(r); for (const el of [liveHero, liveTop]) el.classList.add('on'); }
+    else if (drawn === 0) { clear(list); list.append(note(S().offline)); }
     drawFeed(f);
   };
   const startLive = () => {
@@ -390,86 +358,85 @@ export function renderHome(main: HTMLElement): () => void {
   if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(() => { if (alive) startLive(); }, { timeout: 1200 });
   else window.setTimeout(() => { if (alive) startLive(); }, 300);
 
-  const pollSub = h('span', null, s.pollSubNone);
-  const entry = (href: string, icon: string, title: string, sub: Node | string) =>
-    h('a', { class: 'card explore', href }, well(icon), h('span', { class: 'explore-text' }, h('strong', null, title), typeof sub === 'string' ? h('span', null, sub) : sub), svg(ICON.chevronRight, 'ico chev'));
-  const explore = h('aside', { class: 'section side-col' }, secHead(s.exploreKicker, s.explore),
-    h('div', { class: 'stack explore-grid' },
-      entry('#candidates', ICON.people, s.candidatesCard, fmt(s.candidatesSub, { n })),
-      entry('#poll', ICON.poll, s.pollCard, pollSub),
-      entry('#results', ICON.ballot, s.resultsCard, s.resultsSub),
-      entry('#quiz', ICON.idea, s.quizCard, s.quizSub),
-      entry('#about', ICON.info, s.aboutCard, s.aboutSub)));
-  for (const el of explore.querySelectorAll<HTMLElement>('.explore')) cleanups.push(attachTilt(el, 4));
-
-  // ---- Konnen Ayiti: the daily game ----
-  // The game and its question bank are their own chunk, loaded when the section comes near.
+  // ---- 4. The two games ----
   const q = S().quiz;
-  const quizHead = h('div', { class: 'qz-head' }, h('div', null, h('p', { class: 'kicker' }, q.kicker), h('h2', null, q.title), h('p', { class: 'qz-lead' }, q.lead)));
-  const quizSlot = h('div', { class: 'qz-card qz-skel', 'aria-hidden': 'true' }, skeletonLines(4));
-  const quizSec = h('section', { class: 'section qz-sec', id: 'jwet' }, quizHead, quizSlot);
-  const mountQuiz = () => void import('./quiz').then((m) => {
-    if (!alive) return;
-    const g = m.quizGame();
-    cleanups.push(g.destroy);
-    quizHead.append(g.streakPill);
-    quizSlot.replaceWith(g.el);
-  }).catch((e) => console.warn('quiz load failed', e));
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); mountQuiz(); } }, { rootMargin: '800px 0px' });
-    io.observe(quizSec);
-    cleanups.push(() => io.disconnect());
-  } else mountQuiz();
+  const d = S().dash;
+  const qs = quizStatus();
+  const quizLine = qs.done ? (qs.score === null ? fmt(d.quizDoneNoScore, { d: qs.day }) : fmt(d.quizDone, { d: qs.day, s: qs.score }))
+    : qs.answered ? fmt(d.quizProgress, { d: qs.day, a: qs.answered }) : fmt(d.quizNew, { d: qs.day });
+  const games = h('section', { class: 'lp-sec', 'aria-labelledby': 'lp-games-title' },
+    h('div', { class: 'lp-sec-head' }, kicker(lp.gamesKicker), h('h2', { id: 'lp-games-title' }, lp.gamesTitle)),
+    h('div', { class: 'lp-games' },
+      h('a', { class: 'lp-card lp-game', href: '#quiz' },
+        h('div', { class: 'lp-game-top' }, well(ICON.idea), qs.streak > 0 ? h('span', { class: 'qz-streak' }, svg(ICON.flame), fmt(q.streak, { n: qs.streak })) : null),
+        h('h3', null, q.title), h('p', null, q.lead),
+        h('div', { class: 'lp-segs', 'aria-hidden': 'true' }, ...Array.from({ length: qs.total }, (_, i) => h('i', { class: i < qs.answered ? 'on' : '' }))),
+        h('p', { class: 'lp-game-status' }, quizLine),
+        h('span', { class: 'btn btn-primary lp-btn' }, qs.done ? d.seeResults : qs.answered ? d.keepGoing : lp.playToday, svg(ICON.arrowRight))),
+      h('a', { class: 'lp-game lp-game-solid', href: '#president' },
+        h('span', { class: 'lp-game-icon', 'aria-hidden': 'true' }, svg(ICON.palace)),
+        h('h3', null, s.presTitle), h('p', null, s.presSub),
+        h('span', { class: 'btn lp-btn lp-btn-white' }, s.presCta, svg(ICON.arrowRight)))));
 
-  // ---- Kat sitwayen: made once signed in (it lives on the dashboard); here, an invitation with a small preview ----
+  // ---- 5. Candidates: every one, random order, one slow loop; pauses on hover or focus ----
+  const half = (clone: boolean) => h('div', { class: 'marquee-half', 'aria-hidden': clone ? 'true' : undefined },
+    ...order.map((x) => h('button', { class: 'strip-av', type: 'button', title: x.name, tabindex: clone ? -1 : undefined, 'aria-haspopup': 'dialog', onclick: () => openProfile(x) }, avatar(x), h('span', { class: 'sr' }, x.name))));
+  const cands = h('section', { class: 'lp-sec lp-cands', 'aria-labelledby': 'lp-cands-title' },
+    h('div', { class: 'lp-sec-head row' },
+      h('div', null, kicker(lp.candKicker), h('h2', { id: 'lp-cands-title' }, fmt(lp.candTitle, { n })), h('p', { class: 'lp-sub' }, lp.candSub)),
+      more('#candidates', lp.seeAllCandidates)),
+    h('div', { class: 'marquee', 'aria-label': s.stripLabel }, h('div', { class: 'marquee-track' }, half(false), half(true))));
+
+  // ---- 6. Why the real vote matters (shared with the dashboard and the game; open columns here) ----
+  const why = whyVote();
+  why.classList.add('lp-sec', 'lp-why');
+
+  // ---- 7. Kat sitwayen: made once signed in (it lives on the dashboard); here, an invitation with a small preview ----
   const cs = S().card;
-  const signed = getAccount() !== null;
-  const cardInvite = h('section', { class: 'section cc-invite', 'aria-labelledby': 'cc-invite-title' },
+  const cardInvite = h('section', { class: 'lp-sec cc-invite', 'aria-labelledby': 'cc-invite-title' },
     h('div', { class: 'cc-mini', 'aria-hidden': 'true' },
       h('span', { class: 'cc-mini-top' }, svg(ICON.brand), S().appName.toUpperCase(), h('img', { src: IMG.flag.src, width: 22, height: 13, alt: '', decoding: 'async' })),
       h('span', { class: 'cc-mini-label' }, cs.onCard), h('b', null, cs.defaultName),
       h('span', { class: 'cc-mini-photo' }, svg(ICON.photo)), h('span', { class: 'cc-mini-seal' }, '2027')),
     h('div', { class: 'cc-invite-text' },
-      h('p', { class: 'kicker' }, cs.kicker), h('h2', { id: 'cc-invite-title' }, cs.title), h('p', null, signed ? cs.inviteSigned : cs.inviteLead),
+      h('p', { class: 'kicker lp-kicker' }, cs.kicker), h('h2', { id: 'cc-invite-title' }, cs.title), h('p', null, signed ? cs.inviteSigned : cs.inviteLead),
       h('div', { class: 'cc-invite-actions' }, ...(signed
         ? [h('a', { class: 'btn btn-primary', href: '#dashboard' }, S().account.myDashboard, svg(ICON.arrowRight))]
         : [h('button', { class: 'btn btn-primary', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp),
           h('button', { class: 'btn btn-outline', type: 'button', onclick: () => openAccountSheet('in') }, S().account.signIn)]))));
 
-  // Photo card: the Citadelle (CC BY 2.0). Wide crop on desktop, 3:2 on phones; lazy.
-  const band = h('figure', { class: 'band' },
+  // ---- 8. Who we are, with the Citadelle (CC BY 2.0) and the next dates ----
+  const today = new Date().toISOString().slice(0, 10);
+  const upcoming = c.dates.filter((x) => x.date >= today).slice(0, 3);
+  const photo = h('figure', { class: 'lp-photo' },
     h('picture', null,
-      h('source', { media: '(min-width: 1024px)', srcset: `${IMG.band.src800} 800w, ${IMG.band.src1400} 1400w`, sizes: '1120px' }),
+      h('source', { media: '(min-width: 1024px)', srcset: `${IMG.citadelle.src640} 640w, ${IMG.citadelle.src1200} 1200w`, sizes: '560px' }),
       h('img', { src: IMG.citadelle.src640, srcset: `${IMG.citadelle.src640} 640w, ${IMG.citadelle.src1200} 1200w`, sizes: '100vw', width: 640, height: 427, alt: im.citadelle, loading: 'lazy', decoding: 'async' })),
     h('figcaption', null, h('strong', null, im.citadelle), h('span', null, im.citadelleCredit)));
+  const about = h('section', { class: 'lp-sec lp-about', 'aria-labelledby': 'lp-about-title' },
+    photo,
+    h('div', { class: 'lp-about-text' },
+      kicker(S().nav.aboutUs), h('h2', { id: 'lp-about-title' }, lp.aboutTitle), h('p', { class: 'lp-lead' }, lp.aboutText),
+      more('#about', s.aboutCard),
+      upcoming.length ? h('div', { class: 'lp-dates' }, h('h3', null, s.nextDates),
+        h('ul', null, ...upcoming.map((x) => h('li', null, h('b', { class: 'num' }, fmtDate(x.date)), h('span', null, l(x.label)))))) : null,
+      h('p', { class: 'lp-note' }, svg(ICON.info), s.note)));
 
-  const today = new Date().toISOString().slice(0, 10);
-  const upcoming = c.dates.filter((d) => d.date >= today).slice(0, 3);
-  const dates = upcoming.length ? h('section', { class: 'section main-col' }, secHead(s.datesKicker, s.nextDates),
-    h('div', { class: 'card' },
-      h('ul', { class: 'timeline' }, ...upcoming.map((d) => h('li', null, h('b', null, fmtDate(d.date)), h('span', null, l(d.label))))),
-      h('hr', { class: 'hr' }),
-      h('a', { class: 'link-btn', href: '#about' }, s.allDates, svg(ICON.arrowRight)))) : h('div', { class: 'main-col' });
-  const bottom = h('div', { class: 'layout-2 wide-side' }, dates, h('aside', { class: 'side-col section' }, note(s.note)));
+  // ---- 9. The one dark band: the call to action ----
+  const final = h('section', { class: 'lp-final', 'aria-labelledby': 'lp-final-title' },
+    h('h2', { id: 'lp-final-title' }, lp.ctaTitle), h('p', null, lp.ctaText),
+    h('div', { class: 'lp-actions' },
+      h('a', { class: 'btn lp-btn lp-btn-white', href: '#start' }, s.cta, svg(ICON.arrowRight)),
+      signed ? h('a', { class: 'btn lp-btn lp-btn-ghost', href: '#dashboard' }, S().account.myDashboard)
+        : h('button', { class: 'btn lp-btn lp-btn-ghost', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp)));
 
-  // ---- « Si m te prezidan »: a flat ultramarine band that opens the decision game ----
-  const promo = h('a', { class: 'promo', href: '#president' },
-    h('span', { class: 'promo-icon', 'aria-hidden': 'true' }, svg(ICON.palace)),
-    h('span', { class: 'promo-text' }, h('span', { class: 'promo-kicker' }, s.presKicker), h('strong', null, s.presTitle), h('span', null, s.presSub)),
-    h('span', { class: 'btn promo-btn' }, s.presCta, svg(ICON.arrowRight)));
-  const why = whyVote();
-
-  const mobileStats = h('div', { class: 'mobile-only stats-mobile' }, h('div', { class: 'card countdown-card' }, countdownRow()), statRow('stats3', 0));
-  main.append(
-    hero,
-    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore), promo, quizSec, why, cardInvite, band, bottom, footer()));
-  cleanups.push(revealOnScroll([promo, why, cardInvite, band, bottom]), attachTilt(band, 3));
+  main.append(hero, h('div', { class: 'wrap lp-body' }, numbers, liveSec, games, cands, why, cardInvite, about, final, footer()));
+  cleanups.push(revealOnScroll([liveSec, games, cands, why, cardInvite, about, final]));
 
   void loadStats().then((st) => {
     if (!alive) return;
-    for (const el of votesEls) el.textContent = st.votes === null ? '·' : fmtNumber(st.votes);
     for (const el of answersEls) el.textContent = st.pollAnswers === null ? '·' : fmtNumber(st.pollAnswers);
-    if (st.votes !== null && bigShown === 0 && drawn === 0) { stopBig(); stopBig = tween(bigNum, 0, st.votes, 1100, fmtNumber); bigShown = st.votes; }
+    if (st.votes !== null && votesShown === 0 && drawn === 0) showVotes(st.votes);
   });
-  return () => { alive = false; stopBig(); for (const f of cleanups) f(); for (const r of rows.values()) r.stop(); };
+  return () => { alive = false; for (const f of stopVotes) f(); for (const f of cleanups) f(); for (const r of rows.values()) r.stop(); };
 }
