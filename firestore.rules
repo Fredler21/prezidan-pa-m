@@ -84,7 +84,8 @@ service cloud.firestore {
     match /users/{uid} {
       allow read, delete: if isOwner(uid);
       allow create, update: if isOwner(uid)
-        && request.resource.data.keys().hasOnly(['picks', 'lang', 'updatedAt'])
+        && request.resource.data.keys().hasOnly(['picks', 'lang', 'updatedAt', 'game'])
+        && (!('game' in request.resource.data) || (request.resource.data.game is map && request.resource.data.game.keys().hasOnly(['run', 'last', 'best'])))
         && validPriorities(request.resource.data.get('picks', []))
         && validLang(request.resource.data.get('lang', 'ht'))
         && request.resource.data.updatedAt == request.time;

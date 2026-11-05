@@ -3,11 +3,13 @@ import { LANGS } from './types';
 import { state, onState, setPicks, setMyVote } from './state';
 import { getLang } from './i18n';
 import { getStorage, STORAGE_MODE } from './storage';
+import { bestScore, gameResult, gameRun, saveGameResult, saveGameRun, type GameResult, type GameRun } from './lib/progress';
 
 /*
  * Accounts are optional: voting works anonymously. Signing in (Google, or email + password)
- * saves the visitor's progress, their priorities and their vote, under users/{uid} and
- * votes/{uid}, so it follows them across devices.
+ * saves the visitor's progress, their priorities, their vote and their « Si m te prezidan » game
+ * (the unfinished term, the last result, the best score), under users/{uid} and votes/{uid}, so it
+ * follows them across devices.
  *
  * A small flag in localStorage ('ppm.account') lets the header show the signed-in state on
  * every page without loading the Firebase SDK; the SDK itself loads only when needed.
@@ -40,13 +42,35 @@ function toAccount(u: FirebaseUser): Account {
   return { name: u.displayName || (u.email ? u.email.split('@')[0] ?? '' : ''), email: u.email ?? '', photo: u.photoURL };
 }
 
-async function progressDoc(uid: string): Promise<{ picks: PriorityId[] } | null> {
+interface CloudGame { run: GameRun | null; last: GameResult | null; best: number }
+async function progressDoc(uid: string): Promise<{ picks: PriorityId[]; game: CloudGame | null } | null> {
   const { getFirestore, doc, getDoc } = await import('firebase/firestore');
   const { app } = await import('./storage/auth');
   const snap = await getDoc(doc(getFirestore(app()), 'users', uid));
   if (!snap.exists()) return null;
   const d = snap.data();
-  return { picks: Array.isArray(d.picks) ? (d.picks as PriorityId[]).slice(0, 3) : [] };
+  const g = d.game as Partial<CloudGame> | undefined;
+  return {
+    picks: Array.isArray(d.picks) ? (d.picks as PriorityId[]).slice(0, 3) : [],
+    game: g ? { run: g.run ?? null, last: g.last ?? null, best: typeof g.best === 'number' ? g.best : 0 } : null,
+  };
+}
+
+let gameTimer: number | undefined;
+/** Signed-in players: writes the game (unfinished term, last result, best score) under users/{uid} (debounced). */
+export function saveGameProgress(): void {
+  if (STORAGE_MODE !== 'firebase' || !getAccount()) return;
+  if (gameTimer) clearTimeout(gameTimer);
+  gameTimer = window.setTimeout(async () => {
+    try {
+      const { getFirestore, doc, setDoc, serverTimestamp } = await import('firebase/firestore');
+      const { app, currentUid } = await import('./storage/auth');
+      const uid = await currentUid();
+      if (!uid) return;
+      const game: CloudGame = { run: gameRun(), last: gameResult(), best: bestScore() ?? 0 };
+      await setDoc(doc(getFirestore(app()), 'users', uid), { game, updatedAt: serverTimestamp() }, { merge: true });
+    } catch (e) { console.warn('game save failed', e); }
+  }, 600);
 }
 
 let saveTimer: number | undefined;
@@ -61,7 +85,7 @@ export function saveProgress(): void {
       const uid = await currentUid();
       if (!uid) return;
       const lang = getLang();
-      await setDoc(doc(getFirestore(app()), 'users', uid), { picks: state.picks.slice(0, 3), lang: LANGS.includes(lang) ? lang : 'ht', updatedAt: serverTimestamp() });
+      await setDoc(doc(getFirestore(app()), 'users', uid), { picks: state.picks.slice(0, 3), lang: LANGS.includes(lang) ? lang : 'ht', updatedAt: serverTimestamp() }, { merge: true });
     } catch (e) { console.warn('progress save failed', e); }
   }, 800);
 }
@@ -71,6 +95,13 @@ async function adoptFromCloud(uid: string): Promise<void> {
   try {
     const saved = await progressDoc(uid);
     if (saved && saved.picks.length && state.picks.length === 0) setPicks(saved.picks);
+    // the game: keep the better best score, and take the account's term and result when this device has none
+    const g = saved?.game;
+    if (g) {
+      if (g.best > (bestScore() ?? 0)) { try { localStorage.setItem('ppm.president.best', String(g.best)); } catch { /* storage off */ } }
+      if (g.run && !gameRun()) saveGameRun(g.run);
+      if (g.last && !gameResult()) saveGameResult(g.last);
+    }
     const st = await getStorage();
     const v = await st.getMyVote();
     setMyVote(v);
@@ -154,6 +185,7 @@ async function finishConnect(user: FirebaseUser): Promise<Account> {
   setAccount(account);
   await adoptFromCloud(user.uid);
   saveProgress();
+  saveGameProgress();
   return account;
 }
 
@@ -161,6 +193,7 @@ export async function disconnect(): Promise<void> {
   const auth = await import('./storage/auth');
   await auth.signOut();
   prepared = null; preparing = null;
+  saveGameRun(null); // the unfinished term lives in the account now, not on this device
   setAccount(null);
   setMyVote(null);
 }

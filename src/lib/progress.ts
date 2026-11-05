@@ -8,6 +8,7 @@ import type { PriorityId } from '../types';
 const QUIZ_KEY = 'ppm.quiz.v1';
 const GAME_KEY = 'ppm.president.v2';
 const BEST_KEY = 'ppm.president.best';
+const RUN_KEY = 'ppm.president.run';
 const SEEN_KEY = 'ppm.seen.candidates';
 const QUIZ_DAY_ONE = Date.UTC(2026, 10, 4);
 
@@ -37,16 +38,26 @@ export function quizStatus(): QuizStatus {
   return { day, answered, total, score: typeof s.score === 'number' ? s.score : null, done: answered >= total, streak };
 }
 
-/** score: the country index after 5 years (0 to 100). */
-export interface GameResult { answers: (number | null)[]; top: PriorityId[]; at: number; score: number }
+/** ids: the decisions drawn for that term; score: the country index after 5 years (0 to 100). */
+export interface GameResult { ids?: string[]; answers: (number | null)[]; top: PriorityId[]; at: number; score: number }
 
 export function gameResult(): GameResult | null {
   const s = read(GAME_KEY);
   if (!isRecord(s) || !Array.isArray(s.top) || !Array.isArray(s.answers) || typeof s.score !== 'number') return null;
-  return { answers: s.answers as (number | null)[], top: (s.top as PriorityId[]).slice(0, 3), at: typeof s.at === 'number' ? s.at : 0, score: s.score };
+  return { ...(Array.isArray(s.ids) ? { ids: s.ids as string[] } : {}), answers: s.answers as (number | null)[], top: (s.top as PriorityId[]).slice(0, 3), at: typeof s.at === 'number' ? s.at : 0, score: s.score };
 }
 export function saveGameResult(r: GameResult): void {
   try { localStorage.setItem(GAME_KEY, JSON.stringify(r)); } catch { /* storage off: the result stays for this visit */ }
+}
+
+/** An unfinished term (kept for signed-in players only, so it can follow them to another device). */
+export interface GameRun { ids: string[]; answers: (number | null)[] }
+export function gameRun(): GameRun | null {
+  const s = read(RUN_KEY);
+  return isRecord(s) && Array.isArray(s.ids) && Array.isArray(s.answers) ? { ids: s.ids as string[], answers: s.answers as (number | null)[] } : null;
+}
+export function saveGameRun(r: GameRun | null): void {
+  try { if (r) localStorage.setItem(RUN_KEY, JSON.stringify(r)); else localStorage.removeItem(RUN_KEY); } catch { /* storage off */ }
 }
 
 /** Best score so far; saving a better one returns true (a new record). */
