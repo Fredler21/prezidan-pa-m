@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prezidan Pa M · Mòd jou ak mòd nwit</title>
+  <!-- Google Fonts: Bricolage Grotesque -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300,0,0">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Bricolage Grotesque"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            'night-indigo': '#0B1230',
+            'ultramarine': '#1A3BB5',
+            'tint': '#EAEEFA',
+            'lighter-ring': '#7D93E8',
+            'flag-red': '#D41E3C',
+            'page-bg': '#F3F5FA',
+            'ink': '#0B1A4A',
+            'muted': '#5B6480',
+            'hairline': '#E1E5F0',
+            'bar-track': '#E6EAF5',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html, body {
+      font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+      font-optical-sizing: auto;
+      margin: 0;
+      padding: 0;
+      background-color: #070A14;
+      color: #0B1A4A;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-box {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+    @keyframes subtleFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .reveal-box {
+      animation: subtleFadeUp 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    /* SVG Flag icon */
+    .haiti-flag {
+      width: 18px;
+      height: 12px;
+      border-radius: 2px;
+      display: inline-flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body class="bg-[#080B16] text-[#0B1A4A] min-h-screen">
+
+  <!-- Top Global Bar Indicator -->
+  <div class="w-full bg-[#0B1230] border-b border-[#1E2745] px-6 py-3 flex items-center justify-between text-white">
+    <div class="flex items-center gap-3">
+      <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#1A3BB5] text-white text-xs font-bold">P</span>
+      <span class="text-sm font-semibold tracking-tight text-white">Prezidan Pa M · Konparezon mòd jou ak mòd nwit</span>
+      <span class="text-xs text-[#8A95B5] bg-[#141D45] px-2.5 py-0.5 rounded-full border border-[#232F5C]">Eleksyon 2027</span>
+    </div>
+    <div class="flex items-center gap-4 text-xs text-[#9AA6C8]">
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#1A3BB5]"></span> Mòd jou (Gòch: #FFFFFF)</span>
+      <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-white"></span> Mòd nwit (Dwat: #000000)</span>
+      <span class="text-[#5B6480]">·</span>
+      <span class="text-[#CCD5EE]">Rezolisyon 1280px desktop</span>
+    </div>
+  </div>
+
+  <!-- Side-by-Side Dual Viewport Grid (1280px split into two 50% columns) -->
+  <div class="w-full max-w-[1440px] mx-auto grid grid-cols-1 xl:grid-cols-2 shadow-2xl border-x border-[#1A223B]">
+
+    <!-- ============================================================== -->
+    <!-- LEFT HALF: MÒD JOU (DAY THEME) Pure White #FFFFFF background    -->
+    <!-- ============================================================== -->
+    <section class="bg-[#FFFFFF] text-[#0B1A4A] border-r border-[#E1E5F0] relative overflow-hidden reveal-box">
+      <!-- Badge label -->
+      <div class="sticky top-0 z-30 bg-[#FFFFFF] border-b border-[#E1E5F0] px-6 py-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#1A3BB5]"></span>
+          <span class="text-xs font-bold tracking-tight text-[#0B1A4A]">Mòd jou</span>
+          <span class="text-xs text-[#5B6480]">(Fond blanch solid #FFFFFF, antèt solid #FFFFFF)</span>
+        </div>
+        <span class="text-[11px] font-medium text-[#1A3BB5] bg-[#EAEEFA] px-2 py-0.5 rounded-full">Gòch</span>
+      </div>
+
+      <!-- DAY HEADER -->
+      <header class="bg-[#FFFFFF] border-b border-[#E1E5F0] h-14 px-6 flex items-center justify-between sticky top-9 z-20">
+        <!-- Logo Lockup -->
+        <div class="flex items-center gap-3">
+          <!-- Medallion -->
+          <div class="w-7 h-7 rounded-full bg-[#0B1230] flex items-center justify-center shadow-sm">
+            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4zm-8 17c0-2.67 5.33-4 8-4s8 1.33 8 4v2H4v-2zm1-14c1.5-1 4.5-2 7-2s5.5 1 7 2l-2 1.5H7L5 5z"/>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif font-bold text-xs tracking-wider text-[#0B1230]">PREZIDAN <span class="relative inline-block pb-0.5">PA M<span class="absolute left-0 bottom-0 w-full h-[1.5px] bg-[#D41E3C]"></span></span></span>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="hidden md:flex items-center gap-5 text-[13px] font-medium">
+          <a href="#" class="text-[#0B1230] font-bold border-b-2 border-[#1A3BB5] py-4">Akèy</a>
+          <a href="#" class="text-[#5B6480] hover:text-[#0B1A4A] transition-colors py-4">Priyorite</a>
+          <a href="#" class="text-[#5B6480] hover:text-[#0B1A4A] transition-colors py-4">Kandida</a>
+          <a href="#" class="text-[#5B6480] hover:text-[#0B1A4A] transition-colors py-4">Rezilta</a>
+          <a href="#" class="text-[#5B6480] hover:text-[#0B1A4A] transition-colors py-4">Sondaj</a>
+          <a href="#" class="text-[#5B6480] hover:text-[#0B1A4A] transition-colors py-4">Jwèt</a>
+        </nav>
+
+        <!-- Right actions -->
+        <div class="flex items-center gap-2">
+          <!-- Language pill -->
+          <div class="h-8 px-2.5 rounded-full border border-[#E1E5F0] bg-transparent text-[#0B1230] text-xs font-medium flex items-center gap-1 cursor-pointer">
+            <span>Kreyòl</span>
+            <span class="text-[10px]">▾</span>
+          </div>
+          <!-- Moon icon button -->
+          <button class="w-8 h-8 rounded-full border border-[#E1E5F0] bg-transparent text-[#0B1230] flex items-center justify-center hover:bg-[#F3F5FA] transition-colors" aria-label="Passer en mode sombre">
+            <span class="material-symbols-outlined text-sm">dark_mode</span>
+          </button>
+          <!-- Ghost Konekte -->
+          <a href="#" class="h-8 px-3 rounded-full border border-[#E1E5F0] bg-transparent text-[#0B1230] text-xs font-semibold flex items-center hover:bg-[#F3F5FA] transition-colors">Konekte</a>
+          <!-- Solid Ultramarine Kreye kont -->
+          <a href="#" class="h-8 px-3 rounded-full bg-[#1A3BB5] text-white text-xs font-semibold flex items-center hover:bg-[#142e94] transition-colors">Kreye kont</a>
+        </div>
+      </header>
+
+      <!-- DAY MAIN CONTENT -->
+      <main class="p-6 md:p-8 space-y-8 bg-[#FFFFFF]">
+        <!-- Hero Section on White -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Left Hero Column -->
+          <div class="lg:col-span-7 space-y-4">
+            <!-- Eyebrow with Haitian flag -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAEEFA] border border-[#D5DFF8]">
+              <div class="haiti-flag">
+                <div class="h-1.5 w-full bg-[#00209F]"></div>
+                <div class="h-1.5 w-full bg-[#D21034]"></div>
+              </div>
+              <span class="text-xs font-semibold text-[#1A3BB5]">Eleksyon prezidansyèl · Ayiti 2027</span>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-3xl font-extrabold text-[#0B1A4A] tracking-[-0.02em] leading-[1.1]">
+              Ki moun ou ta vle kòm prezidan Ayiti?
+            </h1>
+
+            <!-- Lead -->
+            <p class="text-sm font-normal text-[#5B6480] leading-relaxed">
+              Chwazi sa ou vle chanje, gade dosye piblik 19 kandida yo, epi bay vòt ou. Yon vòt pa moun, ou ka chanje l nenpòt lè.
+            </p>
+
+            <!-- Action buttons -->
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <a href="#" class="h-11 px-5 rounded-full bg-[#1A3BB5] text-white text-sm font-semibold flex items-center gap-2 hover:bg-[#142e94] transition-colors">
+                <span>Kòmanse</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+              <a href="#" class="h-11 px-5 rounded-full border border-[#E1E5F0] bg-white text-[#1A3BB5] text-sm font-semibold flex items-center gap-1.5 hover:bg-[#F3F5FA] transition-colors">
+                <span>Wè rezilta yo</span>
+                <span class="material-symbols-outlined text-sm">north_east</span>
+              </a>
+            </div>
+
+            <!-- Mini countdown card on white -->
+            <div class="p-4 rounded-2xl bg-white border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center">
+                  <span class="material-symbols-outlined text-lg">calendar_today</span>
+                </div>
+                <div>
+                  <div class="text-xs text-[#5B6480]">Premye tou eleksyon an</div>
+                  <div class="text-sm font-bold text-[#0B1A4A]">18 jiyè 2027</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xl font-extrabold text-[#0B1A4A] tabular-nums">259 jou</div>
+                <div class="text-[11px] text-[#5B6480]">Kalandriye CEP</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Hero Column: Live Board as Solid Night Indigo (#0B1230) Cards on White -->
+          <div class="lg:col-span-5 space-y-3">
+            <div class="p-4 rounded-2xl bg-[#0B1230] border border-[#1A2652] text-white shadow-md">
+              <div class="flex items-center justify-between pb-3 border-b border-white/10">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#1A3BB5]"></span>
+                  <span class="text-xs font-bold text-white uppercase tracking-wider">Vòt pèp la</span>
+                </div>
+                <span class="text-[11px] text-[#9AA6C8] font-medium bg-[#141D45] px-2 py-0.5 rounded-full">An dirèk</span>
+              </div>
+
+              <div class="py-3 flex items-baseline justify-between">
+                <div>
+                  <div class="text-2xl font-extrabold text-white tabular-nums">12 384</div>
+                  <div class="text-[11px] text-[#9AA6C8]">Sitwayen anrejistre vòt yo</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-sm font-bold text-white tabular-nums">19 kandida</div>
+                  <div class="text-[11px] text-[#9AA6C8]">Dosye piblik</div>
+                </div>
+              </div>
+
+              <!-- Top 3 Live rows in night indigo card -->
+              <div class="space-y-2 pt-1">
+                <div class="p-2.5 rounded-xl bg-[#141D45] border border-white/10 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-[#0B1230] border border-white/20 text-white font-bold text-xs flex items-center justify-center">WJ</div>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Wilson Jeudy</div>
+                      <div class="text-[10px] text-[#9AA6C8]">VAR</div>
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-white tabular-nums">23 %</span>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[#141D45] border border-white/10 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-[#0B1230] border border-white/20 text-white font-bold text-xs flex items-center justify-center">JM</div>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Jean Ernest Muscadin</div>
+                      <div class="text-[10px] text-[#9AA6C8]">FCN</div>
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-white tabular-nums">19 %</span>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[#141D45] border border-white/10 flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-[#0B1230] border border-white/20 text-white font-bold text-xs flex items-center justify-center">MM</div>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Michel Joseph Martelly</div>
+                      <div class="text-[10px] text-[#9AA6C8]">Debloke</div>
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-white tabular-nums">17 %</span>
+                </div>
+              </div>
+
+              <div class="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-between text-[11px] text-[#9AA6C8]">
+                <span>Mizajou chak 5 minit</span>
+                <a href="#" class="text-white hover:underline font-semibold flex items-center gap-1">Wè tout rezilta yo →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Kijan sa mache (White cards on white page) -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-[#0B1A4A]">Kijan sa mache</h2>
+            <span class="text-xs text-[#5B6480]">3 etap senp, net e gratis</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="p-4 rounded-2xl bg-white border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center font-bold text-sm">1</div>
+              <h3 class="text-sm font-bold text-[#0B1A4A]">Chwazi priyorite w</h3>
+              <p class="text-xs text-[#5B6480] leading-relaxed">Chwazi jiska 3 gwo pwoblèm ki pi enpòtan pou Ayiti selon vizyon pa w.</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center font-bold text-sm">2</div>
+              <h3 class="text-sm font-bold text-[#0B1A4A]">Konpare dosye yo</h3>
+              <p class="text-xs text-[#5B6480] leading-relaxed">Gade dosye piblik san okenn patipri ni rekòmandasyon otomatik.</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-white border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center font-bold text-sm">3</div>
+              <h3 class="text-sm font-bold text-[#0B1A4A]">Bay vòt ou</h3>
+              <p class="text-xs text-[#5B6480] leading-relaxed">Yon vòt pa moun ak chifreman sekirize, swiv rezilta an dirèk.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Example Candidate Card (White Card) -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-[#0B1A4A]">Egzanp kat kandida</h2>
+            <span class="text-xs text-[#5B6480]">Fòma estanda pou tout 19 kandida</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-white border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)] space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#0B1230] text-white font-bold text-[17px] flex items-center justify-center shadow-[0_0_0_2px_#fff,0_0_0_3px_#E1E5F0]">
+                  WJ
+                </div>
+                <div>
+                  <h3 class="text-[17px] font-semibold text-[#0B1A4A]">Wilson Jeudy</h3>
+                  <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[12px] font-medium text-[#5B6480]">
+                    VAR · Vision-Action-Réalisation
+                  </div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[#5B6480]">chevron_right</span>
+            </div>
+
+            <!-- Match block -->
+            <div class="pt-2 border-t border-[#E1E5F0] space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-medium text-[#0B1A4A]">2 sou 3 priyorite w yo</span>
+                <span class="font-bold text-[#1A3BB5] tabular-nums">66 % match</span>
+              </div>
+              <!-- Flat Progress track -->
+              <div class="w-full h-1.5 rounded-full bg-[#E6EAF5] overflow-hidden">
+                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 66%;"></div>
+              </div>
+              <!-- Matched priority pills -->
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <span class="px-2.5 py-1 rounded-full bg-[#EAEEFA] text-[13px] font-medium text-[#1A3BB5]">Sekirite</span>
+                <span class="px-2.5 py-1 rounded-full bg-[#EAEEFA] text-[13px] font-medium text-[#1A3BB5]">Travay ak ekonomi</span>
+              </div>
+            </div>
+
+            <!-- Presidential vote button in Flag Red (#D41E3C) -->
+            <div class="pt-2">
+              <button class="w-full h-[52px] rounded-full bg-[#D41E3C] text-white text-[17px] font-bold flex items-center justify-center gap-2 hover:bg-[#b51430] transition-colors">
+                <span class="material-symbols-outlined text-xl">how_to_vote</span>
+                <span>Vote pou Wilson Jeudy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Day -->
+        <footer class="pt-6 border-t border-[#E1E5F0] text-center text-xs text-[#5B6480] space-y-2">
+          <p>© 2026 Prezidan Pa M · Inisyativ sivik endepandan pou Ayiti · Vòt pèp la, pa yon sondaj syantifik</p>
+          <div class="flex justify-center gap-4 text-[#1A3BB5] font-medium">
+            <a href="#" class="hover:underline">Kondisyon</a>
+            <a href="#" class="hover:underline">Konfidansyalite</a>
+            <a href="#" class="hover:underline">Règ netralite</a>
+          </div>
+        </footer>
+      </main>
+    </section>
+
+
+    <!-- ============================================================== -->
+    <!-- RIGHT HALF: MÒD NWIT (NIGHT THEME) Pure Black #000000 background -->
+    <!-- ============================================================== -->
+    <section class="bg-[#000000] text-[#F5F7FA] relative overflow-hidden reveal-box">
+      <!-- Badge label -->
+      <div class="sticky top-0 z-30 bg-[#000000] border-b border-[#1F232B] px-6 py-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-white"></span>
+          <span class="text-xs font-bold tracking-tight text-white">Mòd nwit</span>
+          <span class="text-xs text-[#9AA3B5]">(Fond nwa solid #000000, antèt solid #000000)</span>
+        </div>
+        <span class="text-[11px] font-medium text-white bg-[#1A223B] px-2 py-0.5 rounded-full border border-[#2B3554]">Dwat</span>
+      </div>
+
+      <!-- NIGHT HEADER -->
+      <header class="bg-[#000000] border-b border-[#1F232B] h-14 px-6 flex items-center justify-between sticky top-9 z-20">
+        <!-- Logo Lockup in White -->
+        <div class="flex items-center gap-3">
+          <!-- Medallion -->
+          <div class="w-7 h-7 rounded-full bg-white text-[#0B1230] flex items-center justify-center shadow-sm">
+            <svg class="w-4 h-4 text-[#0B1230]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1-8 0V6a4 4 0 0 1 4-4zm-8 17c0-2.67 5.33-4 8-4s8 1.33 8 4v2H4v-2zm1-14c1.5-1 4.5-2 7-2s5.5 1 7 2l-2 1.5H7L5 5z"/>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif font-bold text-xs tracking-wider text-white">PREZIDAN <span class="relative inline-block pb-0.5">PA M<span class="absolute left-0 bottom-0 w-full h-[1.5px] bg-[#D41E3C]"></span></span></span>
+          </div>
+        </div>
+
+        <!-- Navigation Links in #9AA3B5 -->
+        <nav class="hidden md:flex items-center gap-5 text-[13px] font-medium">
+          <a href="#" class="text-white font-bold border-b-2 border-[#1A3BB5] py-4">Akèy</a>
+          <a href="#" class="text-[#9AA3B5] hover:text-white transition-colors py-4">Priyorite</a>
+          <a href="#" class="text-[#9AA3B5] hover:text-white transition-colors py-4">Kandida</a>
+          <a href="#" class="text-[#9AA3B5] hover:text-white transition-colors py-4">Rezilta</a>
+          <a href="#" class="text-[#9AA3B5] hover:text-white transition-colors py-4">Sondaj</a>
+          <a href="#" class="text-[#9AA3B5] hover:text-white transition-colors py-4">Jwèt</a>
+        </nav>
+
+        <!-- Right actions -->
+        <div class="flex items-center gap-2">
+          <!-- Language pill -->
+          <div class="h-8 px-2.5 rounded-full border border-[#2A2F3A] bg-transparent text-white text-xs font-medium flex items-center gap-1 cursor-pointer">
+            <span>Kreyòl</span>
+            <span class="text-[10px]">▾</span>
+          </div>
+          <!-- Sun icon button (replaces moon in dark mode) -->
+          <button class="w-8 h-8 rounded-full border border-[#2A2F3A] bg-transparent text-white flex items-center justify-center hover:bg-[#111827] transition-colors" aria-label="Passer en mode clair">
+            <span class="material-symbols-outlined text-sm">light_mode</span>
+          </button>
+          <!-- Ghost Konekte with white text & 1px #2A2F3A border -->
+          <a href="#" class="h-8 px-3 rounded-full border border-[#2A2F3A] bg-transparent text-white text-xs font-semibold flex items-center hover:bg-[#111827] transition-colors">Konekte</a>
+          <!-- Solid Ultramarine Kreye kont -->
+          <a href="#" class="h-8 px-3 rounded-full bg-[#1A3BB5] text-white text-xs font-semibold flex items-center hover:bg-[#142e94] transition-colors">Kreye kont</a>
+        </div>
+      </header>
+
+      <!-- NIGHT MAIN CONTENT -->
+      <main class="p-6 md:p-8 space-y-8 bg-[#000000]">
+        <!-- Hero Section on Black -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Left Hero Column -->
+          <div class="lg:col-span-7 space-y-4">
+            <!-- Eyebrow with Haitian flag -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#141C33] border border-[#222E54]">
+              <div class="haiti-flag">
+                <div class="h-1.5 w-full bg-[#00209F]"></div>
+                <div class="h-1.5 w-full bg-[#D21034]"></div>
+              </div>
+              <span class="text-xs font-semibold text-[#7D93E8]">Eleksyon prezidansyèl · Ayiti 2027</span>
+            </div>
+
+            <!-- Headline in Solid White -->
+            <h1 class="text-3xl font-extrabold text-white tracking-[-0.02em] leading-[1.1]">
+              Ki moun ou ta vle kòm prezidan Ayiti?
+            </h1>
+
+            <!-- Lead in #9AA3B5 -->
+            <p class="text-sm font-normal text-[#9AA3B5] leading-relaxed">
+              Chwazi sa ou vle chanje, gade dosye piblik 19 kandida yo, epi bay vòt ou. Yon vòt pa moun, ou ka chanje l nenpòt lè.
+            </p>
+
+            <!-- Action buttons -->
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <a href="#" class="h-11 px-5 rounded-full bg-[#1A3BB5] text-white text-sm font-semibold flex items-center gap-2 hover:bg-[#142e94] transition-colors">
+                <span>Kòmanse</span>
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+              <a href="#" class="h-11 px-5 rounded-full border border-[#2A2F3A] bg-transparent text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-[#111827] transition-colors">
+                <span>Wè rezilta yo</span>
+                <span class="material-symbols-outlined text-sm">north_east</span>
+              </a>
+            </div>
+
+            <!-- Mini countdown card on black -->
+            <div class="p-4 rounded-2xl bg-[#111111] border border-[#23262D] flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-[#172142] text-[#7D93E8] flex items-center justify-center">
+                  <span class="material-symbols-outlined text-lg">calendar_today</span>
+                </div>
+                <div>
+                  <div class="text-xs text-[#9AA3B5]">Premye tou eleksyon an</div>
+                  <div class="text-sm font-bold text-white">18 jiyè 2027</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xl font-extrabold text-white tabular-nums">259 jou</div>
+                <div class="text-[11px] text-[#9AA3B5]">Kalandriye CEP</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Hero Column: Live Board as Solid #111827 Cards with 1px #1F232B Border -->
+          <div class="lg:col-span-5 space-y-3">
+            <div class="p-4 rounded-2xl bg-[#111827] border border-[#1F232B] text-white">
+              <div class="flex items-center justify-between pb-3 border-b border-[#1F232B]">
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#1A3BB5]"></span>
+                  <span class="text-xs font-bold text-white uppercase tracking-wider">Vòt pèp la</span>
+                </div>
+                <span class="text-[11px] text-[#9AA3B5] font-medium bg-[#1F2937] px-2 py-0.5 rounded-full border border-[#374151]">An dirèk</span>
+              </div>
+
+              <div class="py-3 flex items-baseline justify-between">
+                <div>
+                  <div class="text-2xl font-extrabold text-white tabular-nums">12 384</div>
+                  <div class="text-[11px] text-[#9AA3B5]">Sitwayen anrejistre vòt yo</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-sm font-bold text-white tabular-nums">19 kandida</div>
+                  <div class="text-[11px] text-[#9AA3B5]">Dosye piblik</div>
+                </div>
+              </div>
+
+              <!-- Top 3 Live rows in #111827 card -->
+              <div class="space-y-2 pt-1">
+                <div class="p-2.5 rounded-xl bg-[#1F2937] border border-[#374151] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-[#111827] border border-[#4B5563] text-white font-bold text-xs flex items-center justify-center">WJ</div>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Wilson Jeudy</div>
+                      <div class="text-[10px] text-[#9AA3B5]">VAR</div>
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-white tabular-nums">23 %</span>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[#1F2937] border border-[#374151] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-[#111827] border border-[#4B5563] text-white font-bold text-xs flex items-center justify-center">JM</div>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Jean Ernest Muscadin</div>
+                      <div class="text-[10px] text-[#9AA3B5]">FCN</div>
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-white tabular-nums">19 %</span>
+                </div>
+
+                <div class="p-2.5 rounded-xl bg-[#1F2937] border border-[#374151] flex items-center justify-between">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-[#111827] border border-[#4B5563] text-white font-bold text-xs flex items-center justify-center">MM</div>
+                    <div>
+                      <div class="text-xs font-semibold text-white">Michel Joseph Martelly</div>
+                      <div class="text-[10px] text-[#9AA3B5]">Debloke</div>
+                    </div>
+                  </div>
+                  <span class="text-xs font-bold text-white tabular-nums">17 %</span>
+                </div>
+              </div>
+
+              <div class="mt-3 pt-2.5 border-t border-[#1F232B] flex items-center justify-between text-[11px] text-[#9AA3B5]">
+                <span>Mizajou chak 5 minit</span>
+                <a href="#" class="text-white hover:underline font-semibold flex items-center gap-1">Wè tout rezilta yo →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Kijan sa mache (Solid #111111 Cards on Black) -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-white">Kijan sa mache</h2>
+            <span class="text-xs text-[#9AA3B5]">3 etap senp, net e gratis</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="p-4 rounded-2xl bg-[#111111] border border-[#23262D] space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-[#182348] text-[#7D93E8] flex items-center justify-center font-bold text-sm">1</div>
+              <h3 class="text-sm font-bold text-white">Chwazi priyorite w</h3>
+              <p class="text-xs text-[#9AA3B5] leading-relaxed">Chwazi jiska 3 gwo pwoblèm ki pi enpòtan pou Ayiti selon vizyon pa w.</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-[#111111] border border-[#23262D] space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-[#182348] text-[#7D93E8] flex items-center justify-center font-bold text-sm">2</div>
+              <h3 class="text-sm font-bold text-white">Konpare dosye yo</h3>
+              <p class="text-xs text-[#9AA3B5] leading-relaxed">Gade dosye piblik san okenn patipri ni rekòmandasyon otomatik.</p>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-[#111111] border border-[#23262D] space-y-2">
+              <div class="w-8 h-8 rounded-lg bg-[#182348] text-[#7D93E8] flex items-center justify-center font-bold text-sm">3</div>
+              <h3 class="text-sm font-bold text-white">Bay vòt ou</h3>
+              <p class="text-xs text-[#9AA3B5] leading-relaxed">Yon vòt pa moun ak chifreman sekirize, swiv rezilta an dirèk.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section: Example Candidate Card (Solid #111111 Card with #23262D hairline) -->
+        <div class="space-y-4 pt-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-lg font-bold text-white">Egzanp kat kandida</h2>
+            <span class="text-xs text-[#9AA3B5]">Fòma estanda pou tout 19 kandida</span>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#111111] border border-[#23262D] space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-[52px] h-[52px] rounded-full bg-[#1A223B] text-white font-bold text-[17px] flex items-center justify-center shadow-[0_0_0_2px_#000,0_0_0_3px_#2A324A]">
+                  WJ
+                </div>
+                <div>
+                  <h3 class="text-[17px] font-semibold text-white">Wilson Jeudy</h3>
+                  <div class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-[#1A1F2B] border border-[#2A303F] text-[12px] font-medium text-[#9AA3B5]">
+                    VAR · Vision-Action-Réalisation
+                  </div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[#9AA3B5]">chevron_right</span>
+            </div>
+
+            <!-- Match block -->
+            <div class="pt-2 border-t border-[#23262D] space-y-2">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-medium text-white">2 sou 3 priyorite w yo</span>
+                <span class="font-bold text-[#7D93E8] tabular-nums">66 % match</span>
+              </div>
+              <!-- Flat Progress track -->
+              <div class="w-full h-1.5 rounded-full bg-[#1F232B] overflow-hidden">
+                <div class="h-full bg-[#1A3BB5] rounded-full" style="width: 66%;"></div>
+              </div>
+              <!-- Matched priority pills -->
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <span class="px-2.5 py-1 rounded-full bg-[#182348] text-[13px] font-medium text-[#A6BAFF]">Sekirite</span>
+                <span class="px-2.5 py-1 rounded-full bg-[#182348] text-[13px] font-medium text-[#A6BAFF]">Travay ak ekonomi</span>
+              </div>
+            </div>
+
+            <!-- Presidential vote button in Flag Red (#D41E3C) -->
+            <div class="pt-2">
+              <button class="w-full h-[52px] rounded-full bg-[#D41E3C] text-white text-[17px] font-bold flex items-center justify-center gap-2 hover:bg-[#b51430] transition-colors">
+                <span class="material-symbols-outlined text-xl">how_to_vote</span>
+                <span>Vote pou Wilson Jeudy</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Night -->
+        <footer class="pt-6 border-t border-[#1F232B] text-center text-xs text-[#9AA3B5] space-y-2">
+          <p>© 2026 Prezidan Pa M · Inisyativ sivik endepandan pou Ayiti · Vòt pèp la, pa yon sondaj syantifik</p>
+          <div class="flex justify-center gap-4 text-[#7D93E8] font-medium">
+            <a href="#" class="hover:underline">Kondisyon</a>
+            <a href="#" class="hover:underline">Konfidansyalite</a>
+            <a href="#" class="hover:underline">Règ netralite</a>
+          </div>
+        </footer>
+      </main>
+    </section>
+
+  </div>
+
+</body>
+</html>
