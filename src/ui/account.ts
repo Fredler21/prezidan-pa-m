@@ -47,7 +47,8 @@ function errorMessage(e: unknown): string {
 export function closeAccountSheet(): void {
   if (!open) return;
   const d = open; open = null;
-  if (d.open) d.close(); else d.remove();
+  // Browsers without <dialog> support get the same cleanup through a synthetic close event.
+  if (typeof d.close === 'function' && d.open) d.close(); else d.dispatchEvent(new Event('close'));
 }
 
 /** The account dialog: sign in or create an account (opened on either tab), or the signed-in view. */
@@ -150,8 +151,25 @@ export function openAccountSheet(start: Mode = 'in'): void {
   };
   render();
 
+  // Phones: the dialog fills the part of the screen above the keyboard, and the field being typed in stays in view.
+  const vv = window.visualViewport;
+  const fitViewport = () => {
+    if (!vv) return;
+    dlg.style.setProperty('--vvh', `${Math.round(vv.height)}px`); dlg.style.setProperty('--vvt', `${Math.round(vv.offsetTop)}px`);
+    const f = document.activeElement;
+    if (f instanceof HTMLInputElement && dlg.contains(f)) f.scrollIntoView({ block: 'center' });
+  };
+  vv?.addEventListener('resize', fitViewport);
+  vv?.addEventListener('scroll', fitViewport);
+  fitViewport();
+  body.addEventListener('focusin', (e) => {
+    const t = e.target;
+    // once now, and again after the keyboard has finished opening
+    if (t instanceof HTMLInputElement) for (const ms of [50, 400]) window.setTimeout(() => { if (document.activeElement === t) t.scrollIntoView({ block: 'center' }); }, ms);
+  });
+
   dlg.addEventListener('click', (e) => { if (e.target === dlg) closeAccountSheet(); });
-  dlg.addEventListener('close', () => { dlg.remove(); if (open === dlg) open = null; });
+  dlg.addEventListener('close', () => { vv?.removeEventListener('resize', fitViewport); vv?.removeEventListener('scroll', fitViewport); dlg.remove(); if (open === dlg) open = null; });
   document.body.append(dlg);
   open = dlg;
   if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
