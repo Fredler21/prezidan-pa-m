@@ -20,7 +20,9 @@ import { toast } from './ui/toast';
 import { openAccountSheet } from './ui/account';
 import { initAccount, getAccount, onAccountChange } from './account';
 import { h, clear } from './lib/dom';
+import { keepFresh } from './lib/fresh';
 
+keepFresh();
 initAccount();
 let cleanup: (() => void) | null = null;
 let current: Location = parseHash();
