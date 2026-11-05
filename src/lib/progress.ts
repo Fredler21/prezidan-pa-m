@@ -6,7 +6,8 @@ import type { PriorityId } from '../types';
  */
 
 const QUIZ_KEY = 'ppm.quiz.v1';
-const GAME_KEY = 'ppm.president.v1';
+const GAME_KEY = 'ppm.president.v2';
+const BEST_KEY = 'ppm.president.best';
 const SEEN_KEY = 'ppm.seen.candidates';
 const QUIZ_DAY_ONE = Date.UTC(2026, 10, 4);
 
@@ -36,15 +37,27 @@ export function quizStatus(): QuizStatus {
   return { day, answered, total, score: typeof s.score === 'number' ? s.score : null, done: answered >= total, streak };
 }
 
-export interface GameResult { answers: (number | null)[]; top: PriorityId[]; at: number }
+/** score: the country index after 5 years (0 to 100). */
+export interface GameResult { answers: (number | null)[]; top: PriorityId[]; at: number; score: number }
 
 export function gameResult(): GameResult | null {
   const s = read(GAME_KEY);
-  if (!isRecord(s) || !Array.isArray(s.top) || !Array.isArray(s.answers)) return null;
-  return { answers: s.answers as (number | null)[], top: (s.top as PriorityId[]).slice(0, 3), at: typeof s.at === 'number' ? s.at : 0 };
+  if (!isRecord(s) || !Array.isArray(s.top) || !Array.isArray(s.answers) || typeof s.score !== 'number') return null;
+  return { answers: s.answers as (number | null)[], top: (s.top as PriorityId[]).slice(0, 3), at: typeof s.at === 'number' ? s.at : 0, score: s.score };
 }
 export function saveGameResult(r: GameResult): void {
   try { localStorage.setItem(GAME_KEY, JSON.stringify(r)); } catch { /* storage off: the result stays for this visit */ }
+}
+
+/** Best score so far; saving a better one returns true (a new record). */
+export function bestScore(): number | null {
+  try { const v = Number(localStorage.getItem(BEST_KEY)); return Number.isFinite(v) && v > 0 ? v : null; } catch { return null; }
+}
+export function saveBestScore(score: number): boolean {
+  const best = bestScore();
+  if (best !== null && score <= best) return false;
+  try { localStorage.setItem(BEST_KEY, String(score)); } catch { /* storage off */ }
+  return true;
 }
 
 export function seenCandidates(): boolean { try { return localStorage.getItem(SEEN_KEY) === '1'; } catch { return false; } }

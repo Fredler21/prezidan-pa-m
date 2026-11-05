@@ -4,16 +4,20 @@ import { ICON } from '../lib/icons';
 import { S, getLang, setLang } from '../i18n';
 import { LANG_NAMES } from '../i18n/strings';
 import type { Route } from '../router';
-import { accountButton } from './account';
+import { accountControls } from './account';
 import { IMG } from '../data/images';
 
 const flag = () => h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' });
 
-/** Right side of the header: the account button and the language pill. */
-function langPill(): HTMLElement {
+function langSelect(): HTMLElement {
   const sel = h('select', { 'aria-label': S().langLabel, onchange: (e: Event) => setLang((e.target as HTMLSelectElement).value as Lang) },
     ...LANGS.map((code) => { const o = h('option', { value: code }, LANG_NAMES[code]); if (code === getLang()) o.selected = true; return o; }));
-  return h('div', { class: 'hdr-right' }, accountButton(), h('div', { class: 'lang' }, sel));
+  return h('div', { class: 'lang' }, sel);
+}
+
+/** Right side of the header: the language pill and the account controls (« Konekte », « Kreye kont » or the visitor's initial). */
+function langPill(): HTMLElement {
+  return h('div', { class: 'hdr-right' }, langSelect(), accountControls());
 }
 
 /** Desktop navigation (hidden on phones, where the bottom tabs take over). */
@@ -38,14 +42,14 @@ export function renderHeader(route: Route): void {
   if (!el) return;
   clear(el);
   const s = S();
-  el.className = 'hdr';
+  el.className = route === 'home' || route === 'start' ? 'hdr with-strip' : 'hdr';
 
   if (route === 'home' || route === 'start') {
     const wm = wordmark();
     wm.append(h('span', { class: 'strip-inline desk-only' }, flag(), s.tagline));
     el.append(
       h('div', { class: 'wrap hdr-row' }, h('div', { class: 'hdr-left' }, wm), topNav(route), langPill()),
-      h('div', { class: 'strip mobile-only' }, flag(), s.tagline),
+      h('div', { class: 'strip mobile-only' }, h('span', { class: 'strip-tag' }, flag(), s.tagline), langSelect()),
     );
     return;
   }

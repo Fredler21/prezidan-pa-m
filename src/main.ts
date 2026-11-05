@@ -18,7 +18,7 @@ import { renderAdmin } from './ui/admin';
 import { renderLegal } from './ui/legal';
 import { toast } from './ui/toast';
 import { initAccount, getAccount, onAccountChange } from './account';
-import { clear } from './lib/dom';
+import { h, clear } from './lib/dom';
 
 initAccount();
 let cleanup: (() => void) | null = null;
@@ -27,8 +27,12 @@ let current: Location = parseHash();
 /** Pages in their own chunk (the games, the signed-in dashboard): the old page is cleared at once. */
 function lazyPage(main: HTMLElement, load: () => Promise<(main: HTMLElement) => () => void>): () => void {
   clear(main);
+  // A quiet skeleton, shown only if the chunk takes more than a moment (no flash on fast loads).
+  const skel = h('div', { class: 'wrap page-skel', 'aria-hidden': 'true' }, h('span', { class: 'sk-line w40' }), h('span', { class: 'sk-line' }), h('div', { class: 'sk-block' }), h('div', { class: 'sk-block' }));
+  const showSkel = window.setTimeout(() => main.append(skel), 120);
   let off: () => void = () => {}; let dead = false;
-  void load().then((mount) => { if (!dead) off = mount(main); }).catch((e) => { console.warn('page load failed', e); toast(S().offline, 4000); });
+  void load().then((mount) => { clearTimeout(showSkel); skel.remove(); if (!dead) off = mount(main); })
+    .catch((e) => { clearTimeout(showSkel); console.warn('page load failed', e); toast(S().offline, 4000); });
   return () => { dead = true; off(); };
 }
 

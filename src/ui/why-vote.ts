@@ -10,7 +10,7 @@ import { well } from './common';
  * the first round and a reminder that a vote on this site is a civic poll, not the official vote.
  * Facts only: the 5 year term (Constitution, art. 134-1) and the CEP calendar dates.
  */
-export function whyVote(): HTMLElement {
+export function whyVote(opts: { countdown?: boolean } = {}): HTMLElement {
   const s = S().why;
   const days = daysUntil(FIRST_ROUND);
   const item = (icon: string, title: string, text: string) =>
@@ -24,6 +24,6 @@ export function whyVote(): HTMLElement {
       item(ICON.idcard, s.readyTitle, fmt(s.ready, { d: fmtDate(REGISTER_CLOSES) }))),
     h('div', { class: 'why-foot' },
       h('a', { class: 'btn btn-primary', href: '#vote' }, svg(ICON.ballot), s.cta),
-      days >= 0 ? h('p', { class: 'why-count num' }, svg(ICON.calendar), fmt(s.countdown, { n: fmtNumber(days), d: fmtDate(FIRST_ROUND) })) : null),
+      days >= 0 && opts.countdown !== false ? h('p', { class: 'why-count num' }, svg(ICON.calendar), fmt(s.countdown, { n: fmtNumber(days), d: fmtDate(FIRST_ROUND) })) : null),
     h('p', { class: 'why-note' }, svg(ICON.info), s.note));
 }

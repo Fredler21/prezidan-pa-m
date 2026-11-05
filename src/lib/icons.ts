@@ -53,6 +53,7 @@ export const ICON = {
   count: wrap('<path d="M4 7h16M4 12h16M4 17h10"/>'),
   globe: wrap('<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.7 2.5 15.3 0 18"/><path d="M12 3c-2.5 2.7-2.5 15.3 0 18"/>'),
   photo: wrap('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-4-7 7"/>'),
+  mail: wrap('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6.5l8.5 6.5 8.5-6.5"/>'),
   palace: wrap('<path d="M3 9.5L12 4l9 5.5"/><path d="M5 10v8M9.7 10v8M14.3 10v8M19 10v8"/><path d="M3 20h18"/>'),
   idcard: wrap('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="M6 16c.6-1.4 1.7-2.1 3-2.1s2.4.7 3 2.1"/><path d="M14.5 10h4M14.5 13.5h3"/>'),
   flame: wrap('<path d="M12 21c-3.9 0-6.5-2.6-6.5-6.2 0-3.4 2.4-5.4 3.6-8.3.6 1.8 1.6 2.8 2.7 3.3.3-2.6 1.4-4.7 3.4-6.3-.2 3 1 5 2.3 6.8.9 1.3 1.5 2.7 1.5 4.5 0 3.6-2.6 6.2-7 6.2z"/>'),

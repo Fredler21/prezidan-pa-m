@@ -1,223 +1,334 @@
 <!DOCTYPE html>
-
-<html class="h-full" lang="ht"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Prezidan Pa M · Kont ou</title>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
+<html lang="ht" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prezidan Pa M · Konekte</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300,0,0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            night: "#0B1230",
-            ultramarine: "#1A3BB5",
-            tint: "#EAEEFA",
-            page: "#F3F5FA",
-            ink: "#0B1A4A",
-            muted: "#5B6480",
-            hairline: "#E1E5F0"
-          },
-          fontFamily: {
-            headline: ["Bricolage Grotesque", "system-ui", "sans-serif"],
-            display: ["Bricolage Grotesque", "system-ui", "sans-serif"],
-            body: ["Bricolage Grotesque", "system-ui", "sans-serif"],
-            label: ["Bricolage Grotesque", "system-ui", "sans-serif"]
-          },
-          borderRadius: {
-            'DEFAULT': '0.5rem',
-            'lg': '1rem',
-            'xl': '1.5rem',
-            'full': '9999px'
+            'night-indigo': '#0B1230',
+            'ultramarine': '#1A3BB5',
+            'ultramarine-tint': '#EAEEFA',
+            'lighter-ring': '#7D93E8',
+            'flag-red': '#D41E3C',
+            'page-bg': '#F3F5FA',
+            'ink': '#0B1A4A',
+            'muted': '#5B6480',
+            'hairline': '#E1E5F0',
+            'bar-track': '#E6EAF5'
           }
         }
       }
     }
   </script>
-<style>
+  <style>
     html, body {
       font-family: 'Bricolage Grotesque', system-ui, sans-serif;
       font-optical-sizing: auto;
       background-color: #F3F5FA;
       color: #0B1A4A;
+      margin: 0;
+      padding: 0;
     }
-    .tabular-numbers {
+    .tabular-nums {
       font-variant-numeric: tabular-nums;
     }
     .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined';
-      font-weight: 300;
-      font-style: normal;
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
       font-size: 24px;
       line-height: 1;
-      letter-spacing: normal;
-      text-transform: none;
       display: inline-block;
-      white-space: nowrap;
-      word-wrap: normal;
-      direction: ltr;
-      -webkit-font-feature-settings: 'liga';
-      -webkit-font-smoothing: antialiased;
+      vertical-align: middle;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .fade-up-reveal {
+        animation: fadeUp 0.4s ease-out forwards;
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
     }
   </style>
 </head>
-<body class="min-h-screen relative overflow-hidden select-none bg-page">
-<!-- BACKGROUND AKÈY PAGE (Desktop viewport 1280px representation) -->
-<div class="w-full min-h-screen bg-page flex flex-col pointer-events-none filter blur-[2px] transition duration-200">
-<!-- Desktop Header 56px night indigo -->
-<header class="w-full bg-[#0B1230] h-14 z-10 sticky top-0 border-b border-[#E1E5F0]/10">
-<div class="max-w-[1120px] mx-auto px-8 h-full flex items-center justify-between">
-<!-- Wordmark left -->
-<div class="flex items-center gap-3">
-<span class="text-white text-[18px] font-bold tracking-tight">Prezidan Pa M</span>
-<span class="text-[11px] font-medium text-[#9AA6C8] bg-[#070B1F] px-2 py-0.5 rounded-full border border-[#22305E]">2027</span>
-</div>
-<!-- Five Nav Links center -->
-<nav class="flex items-center gap-8 text-[15px]">
-<a class="text-white font-medium relative py-1 border-b-2 border-white" href="#">Akèy</a>
-<a class="text-[#9AA6C8] font-normal hover:text-white" href="#">Priyorite</a>
-<a class="text-[#9AA6C8] font-normal hover:text-white" href="#">Kandida</a>
-<a class="text-[#9AA6C8] font-normal hover:text-white" href="#">Rezilta</a>
-<a class="text-[#9AA6C8] font-normal hover:text-white" href="#">Sondaj</a>
-</nav>
-<!-- Right actions -->
-<div class="flex items-center gap-3">
-<div class="w-9 h-9 rounded-full bg-[#0F1636] flex items-center justify-center border border-[#22305E] text-white">
-<span class="material-symbols-outlined text-[20px]">person</span>
-</div>
-<div class="h-8 px-3 rounded-full border border-white/30 bg-transparent flex items-center gap-1.5 text-white text-[13px] font-medium">
-<span>Kreyòl</span>
-<span class="text-[10px]">▾</span>
-</div>
-</div>
-</div>
-</header>
-<!-- Hero section of Akèy -->
-<main class="w-full flex-1 max-w-[1120px] mx-auto px-8 pt-16 pb-24">
-<div class="text-center max-w-[820px] mx-auto">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EAEEFA] text-[#1A3BB5] text-xs font-semibold mb-6">
-<span>Platfòm sivik endepandan</span>
-<span class="text-[10px]">·</span>
-<span>Eleksyon prezidansyèl 2027</span>
-</div>
-<h1 class="text-[46px] leading-[1.15] font-extrabold text-[#0B1A4A] tracking-tight mb-5">
-          Ki moun ou ta vle kòm prezidan Ayiti?
-        </h1>
-<p class="text-[17px] text-[#5B6480] leading-relaxed max-w-[620px] mx-auto mb-10">
-          Chwazi priyorite ki pi enpòtan pou ou ak peyi a, epi dekouvri kilès nan kandida yo ki pataje vizyon w pou lavni Ayiti.
-        </p>
-<!-- Akèy Sample Stats Box -->
-<div class="grid grid-cols-3 gap-4 max-w-[680px] mx-auto p-4 bg-white rounded-2xl border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05)]">
-<div class="p-3 text-center border-r border-[#E1E5F0]">
-<div class="text-2xl font-bold text-[#0B1A4A] tabular-numbers">24,850</div>
-<div class="text-xs text-[#5B6480] mt-0.5">Patisipan jodi a</div>
-</div>
-<div class="p-3 text-center border-r border-[#E1E5F0]">
-<div class="text-2xl font-bold text-[#0B1A4A] tabular-numbers">12</div>
-<div class="text-xs text-[#5B6480] mt-0.5">Gwo priyorite sivik</div>
-</div>
-<div class="p-3 text-center">
-<div class="text-2xl font-bold text-[#0B1A4A] tabular-numbers">100%</div>
-<div class="text-xs text-[#5B6480] mt-0.5">Vòt anonim e lib</div>
-</div>
-</div>
-</div>
-</main>
-</div>
-<!-- SCRIM OVERLAY rgba(11, 18, 48, 0.55) -->
-<div class="fixed inset-0 z-40 bg-[#0B1230]/55 backdrop-blur-[2px] transition-opacity duration-200"></div>
-<!-- MODAL CONTAINER (Centered desktop sheet, width 480px) -->
-<div class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-<div class="relative w-[480px] bg-white rounded-[24px] border border-[#E1E5F0] shadow-[0_20px_40px_rgba(11,26,74,0.2)] p-8 transition-all">
-<!-- Close button at top right -->
-<button aria-label="Fèmen" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-[#F3F5FA] flex items-center justify-center text-[#5B6480] hover:text-[#0B1A4A] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] focus:ring-offset-2" type="button">
-<span class="material-symbols-outlined text-[20px]">close</span>
-</button>
-<!-- Content Container -->
-<div class="flex flex-col items-center text-center">
-<!-- 1. 48px Circular icon well with person icon -->
-<div class="w-12 h-12 rounded-full bg-[#EAEEFA] flex items-center justify-center text-[#1A3BB5]">
-<span class="material-symbols-outlined text-[24px]">person</span>
-</div>
-<!-- 2. Title -->
-<h2 class="text-[24px] font-bold text-[#0B1A4A] tracking-tight mt-4">
-          Kont ou
+<body class="relative min-h-screen bg-[#F3F5FA] overflow-x-hidden antialiased">
+
+  <!-- Desktop Header -->
+  <header class="w-full bg-[#0B1230] h-14 sticky top-0 z-40 border-b border-[#E1E5F0]/10">
+    <div class="max-w-[1120px] mx-auto h-full px-8 flex items-center justify-between">
+      
+      <!-- Brand & Left Navigation -->
+      <div class="flex items-center gap-8">
+        <a href="#" class="flex items-center gap-2 text-white group">
+          <span class="w-8 h-8 rounded-lg bg-[#1A3BB5] flex items-center justify-center text-white">
+            <span class="material-symbols-outlined text-[20px]">how_to_vote</span>
+          </span>
+          <div class="flex items-center gap-2">
+            <span class="font-bold text-[18px] text-white tracking-normal">Prezidan Pa M</span>
+            <!-- Small Haitian flag color strip -->
+            <div class="flex flex-col w-3.5 h-2.5 rounded-[2px] overflow-hidden ml-0.5">
+              <span class="w-full h-1/2 bg-[#1A3BB5]"></span>
+              <span class="w-full h-1/2 bg-[#D41E3C]"></span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Nav Links -->
+        <nav class="hidden md:flex items-center gap-6 text-[15px] font-medium text-white/80">
+          <a href="#" class="text-white font-semibold">Akèy</a>
+          <a href="#" class="hover:text-white transition-colors">Priyorite</a>
+          <a href="#" class="hover:text-white transition-colors">Kandida</a>
+          <a href="#" class="hover:text-white transition-colors">Rezilta</a>
+          <a href="#" class="hover:text-white transition-colors">Sondaj</a>
+          <a href="#" class="hover:text-white transition-colors">Jwèt</a>
+        </nav>
+      </div>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Language Pill -->
+        <button type="button" class="h-8 px-3 rounded-full border border-white/30 text-white text-[13px] font-medium flex items-center gap-1 hover:border-white/60 transition-colors">
+          <span>Kreyòl ▾</span>
+        </button>
+
+        <!-- Ghost Login Pill -->
+        <button type="button" class="h-10 px-4 rounded-full border border-white/30 text-white text-[14px] font-medium flex items-center gap-2 hover:bg-white/10 transition-colors">
+          <span class="material-symbols-outlined text-[18px]">login</span>
+          <span>Konekte</span>
+        </button>
+
+        <!-- Solid Ultramarine Sign Up Pill -->
+        <button type="button" class="h-10 px-4 rounded-full bg-[#1A3BB5] text-white text-[14px] font-semibold flex items-center justify-center hover:bg-[#15319d] transition-colors">
+          <span>Kreye kont</span>
+        </button>
+
+        <!-- Round Account Avatar Button -->
+        <button type="button" class="w-9 h-9 rounded-full bg-white/10 border border-white/20 text-white flex items-center justify-center hover:bg-white/20 transition-colors ml-1" aria-label="Kont ou">
+          <span class="material-symbols-outlined text-[20px]">person</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Background Dimmed Home Page -->
+  <main class="w-full">
+    <!-- Dimmed Hero Banner -->
+    <div class="w-full bg-[#0B1230] pt-12 pb-20 px-8 text-white relative">
+      <div class="max-w-[1120px] mx-auto">
+        <div class="max-w-[680px]">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#141D45] border border-white/10 text-[13px] font-medium text-white mb-4">
+            <span class="w-2 h-2 rounded-full bg-[#1A3BB5]"></span>
+            <span>Eleksyon prezidansyèl 2027 · Ayiti</span>
+          </div>
+          <h1 class="text-[40px] font-extrabold leading-[1.05] tracking-[-0.02em] text-white mb-4">
+            Ki moun ou ta vle kòm prezidan Ayiti?
+          </h1>
+          <p class="text-[18px] text-white/80 leading-[1.4] mb-8 max-w-[560px]">
+            Chwazi sa ou vle chanje, gade dosye piblik 19 kandida yo, epi bay vòt ou. Yon vòt pa moun, ou ka chanje l.
+          </p>
+          <div class="flex items-center gap-4">
+            <span class="h-12 px-6 rounded-full bg-[#1A3BB5] text-white text-[16px] font-semibold inline-flex items-center gap-2 opacity-90">
+              <span>Kòmanse</span>
+              <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+            </span>
+            <span class="text-white/80 text-[15px] font-medium inline-flex items-center gap-1">
+              <span>Wè rezilta yo</span>
+              <span class="material-symbols-outlined text-[18px]">north_east</span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dimmed Content Grid Placeholder for Depth Behind Scrim -->
+    <div class="max-w-[1120px] mx-auto px-8 py-10">
+      <div class="grid grid-cols-12 gap-6">
+        <!-- Metric Cards -->
+        <div class="col-span-4 bg-white rounded-[16px] border border-[#E1E5F0] p-6 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+          <p class="text-[14px] font-medium text-[#5B6480] mb-2">Patisipasyon total</p>
+          <p class="text-[40px] font-extrabold text-[#0B1A4A] tabular-nums tracking-[-0.02em] leading-none mb-1">12 384</p>
+          <p class="text-[13px] text-[#5B6480]">sitwayen anrejistre vòt yo</p>
+        </div>
+        <div class="col-span-4 bg-white rounded-[16px] border border-[#E1E5F0] p-6 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+          <p class="text-[14px] font-medium text-[#5B6480] mb-2">Kandida deklarasyon CEP</p>
+          <p class="text-[40px] font-extrabold text-[#0B1A4A] tabular-nums tracking-[-0.02em] leading-none mb-1">19</p>
+          <p class="text-[13px] text-[#5B6480]">dosye piblik verifye san piblisite</p>
+        </div>
+        <div class="col-span-4 bg-white rounded-[16px] border border-[#E1E5F0] p-6 shadow-[0_1px_2px_rgba(11,26,74,0.05),0_4px_12px_rgba(11,26,74,0.05)]">
+          <p class="text-[14px] font-medium text-[#5B6480] mb-2">Sondaj semèn 44</p>
+          <p class="text-[40px] font-extrabold text-[#0B1A4A] tabular-nums tracking-[-0.02em] leading-none mb-1">3 912</p>
+          <p class="text-[13px] text-[#5B6480]">repons piblik anrejistre</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Night Indigo Scrim at 55 percent opacity (strictly solid overlay) -->
+  <div class="fixed inset-0 top-14 bg-[#0B1230]/55 z-40 transition-opacity"></div>
+
+  <!-- Centered Modal Layer -->
+  <div class="fixed inset-0 top-14 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    
+    <!-- The Account Dialog: 460px width, 24px radius, solid white, soft shadow -->
+    <div class="relative w-full max-w-[460px] bg-white rounded-[24px] border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05),0_8px_24px_rgba(11,26,74,0.06)] p-6 my-auto fade-up-reveal">
+      
+      <!-- Close Button (40px round, #F3F5FA, top right) -->
+      <button type="button" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] text-[#5B6480] hover:text-[#0B1A4A] flex items-center justify-center transition-colors" aria-label="Fèmen">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+
+      <!-- Content Column -->
+      <div class="flex flex-col items-center text-center">
+
+        <!-- 1) 56px solid ultramarine rounded square with white how_to_vote icon -->
+        <div class="w-14 h-14 rounded-[16px] bg-[#1A3BB5] text-white flex items-center justify-center mb-4">
+          <span class="material-symbols-outlined text-[30px]">how_to_vote</span>
+        </div>
+
+        <!-- Title & Lead -->
+        <h2 class="text-[26px] font-extrabold text-[#0B1A4A] leading-[1.15] tracking-[-0.015em] mb-2">
+          Byenvini
         </h2>
-<!-- 3. Lead text -->
-<p class="text-[15px] text-[#5B6480] leading-normal mt-2 mb-6 max-w-[380px]">
-          Kreye yon kont pou sove priyorite w ak vòt ou sou tout aparèy ou. Ou ka vote san kont tou.
+        <p class="text-[15px] text-[#5B6480] leading-[1.45] max-w-[380px] mb-6">
+          Konekte pou w sove priyorite w, vòt ou ak jwèt ou yo sou tout aparèy ou.
         </p>
-<!-- 4. Google sign-in button -->
-<button class="w-full h-12 rounded-full bg-white border border-[#E1E5F0] shadow-[0_1px_2px_rgba(11,26,74,0.05)] hover:bg-[#F3F5FA] transition-colors flex items-center justify-center gap-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] focus:ring-offset-2" type="button">
-<!-- Official Google 'G' Mark SVG -->
-<svg aria-hidden="true" class="w-5 h-5 flex-shrink-0" viewbox="0 0 24 24">
-<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
-<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
-<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"></path>
-<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"></path>
-</svg>
-<span class="text-[16px] font-semibold text-[#0B1A4A]">Kontinye ak Google</span>
-</button>
-<!-- 5. Divider row with 'oswa' -->
-<div class="relative w-full my-5 flex items-center justify-center">
-<div class="absolute inset-0 flex items-center">
-<div class="w-full border-t border-[#E1E5F0]"></div>
-</div>
-<span class="relative bg-white px-3 text-[13px] font-normal text-[#5B6480]">oswa</span>
-</div>
-<!-- 6. Segmented control (44px tall, two equal pills) -->
-<div class="w-full h-11 bg-[#F3F5FA] rounded-full p-1 flex items-center mb-5">
-<button class="flex-1 h-full rounded-full bg-white text-[#0B1A4A] font-semibold text-[14px] shadow-[0_1px_2px_rgba(11,26,74,0.06)] flex items-center justify-center transition-all" type="button">
+
+        <!-- 2) Segmented Control (full width, 48px, solid #F3F5FA, 4px padding) -->
+        <div class="w-full h-12 bg-[#F3F5FA] rounded-full p-1 flex items-center border border-[#E1E5F0] mb-5">
+          <button type="button" class="flex-1 h-full rounded-full bg-white text-[#0B1A4A] font-semibold text-[14px] shadow-[0_1px_2px_rgba(11,26,74,0.05)] border border-[#E1E5F0]/60 flex items-center justify-center transition-all">
             Konekte
           </button>
-<button class="flex-1 h-full rounded-full text-[#5B6480] hover:text-[#0B1A4A] font-medium text-[14px] flex items-center justify-center transition-colors" type="button">
+          <button type="button" class="flex-1 h-full rounded-full text-[#5B6480] font-medium text-[14px] hover:text-[#0B1A4A] flex items-center justify-center transition-colors">
             Kreye kont
           </button>
-</div>
-<!-- 7. Form Fields -->
-<form class="w-full space-y-4 text-left" onsubmit="event.preventDefault();">
-<!-- Field 1: Imèl -->
-<div>
-<label class="block text-[14px] font-semibold text-[#0B1A4A] mb-1.5" for="imel">
+        </div>
+
+        <!-- 3) Full width white button with 1px #E1E5F0 border and Google G logo, 52px -->
+        <button type="button" class="w-full h-[52px] bg-white rounded-full border border-[#E1E5F0] text-[#0B1A4A] text-[15px] font-semibold flex items-center justify-center gap-3 hover:bg-[#F3F5FA] transition-colors mb-5">
+          <!-- Google G Logo SVG -->
+          <svg class="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Kontinye ak Google</span>
+        </button>
+
+        <!-- 4) Divider « oswa » with hairlines -->
+        <div class="w-full flex items-center gap-3 mb-5">
+          <div class="flex-1 h-[1px] bg-[#E1E5F0]"></div>
+          <span class="text-[13px] font-medium text-[#5B6480]">oswa</span>
+          <div class="flex-1 h-[1px] bg-[#E1E5F0]"></div>
+        </div>
+
+        <!-- 5) Form Fields -->
+        <form class="w-full text-left flex flex-col gap-4 mb-5" onsubmit="return false;">
+          
+          <!-- Field Imèl -->
+          <div>
+            <label class="block text-[14px] font-semibold text-[#0B1A4A] mb-1.5" for="input-email">
               Imèl
             </label>
-<input class="w-full h-12 rounded-[12px] bg-white border border-[#E1E5F0] px-4 text-[15px] text-[#0B1A4A] placeholder:text-[#5B6480]/60 focus:outline-none focus:border-[#1A3BB5] focus:ring-2 focus:ring-[#1A3BB5]/20 transition-all" id="imel" name="email" placeholder="ou@egzanp.ht" type="email"/>
-</div>
-<!-- Field 2: Modpas -->
-<div>
-<label class="block text-[14px] font-semibold text-[#0B1A4A] mb-1.5" for="modpas">
+            <div class="relative w-full">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5B6480]">
+                <span class="material-symbols-outlined text-[20px]">mail</span>
+              </span>
+              <input
+                id="input-email"
+                type="email"
+                placeholder="ou@egzanp.ht"
+                class="w-full h-[52px] pl-11 pr-4 bg-white rounded-[12px] border border-[#E1E5F0] text-[15px] text-[#0B1A4A] placeholder-[#5B6480]/60 focus:outline-none focus:border-[#1A3BB5] focus:ring-1 focus:ring-[#1A3BB5] transition-colors"
+                value="marie.joseph@gmail.com"
+              >
+            </div>
+          </div>
+
+          <!-- Field Modpas -->
+          <div>
+            <label class="block text-[14px] font-semibold text-[#0B1A4A] mb-1.5" for="input-password">
               Modpas
             </label>
-<div class="relative">
-<input class="w-full h-12 rounded-[12px] bg-white border border-[#E1E5F0] pl-4 pr-11 text-[15px] text-[#0B1A4A] tracking-wider placeholder:text-[#5B6480]/60 focus:outline-none focus:border-[#1A3BB5] focus:ring-2 focus:ring-[#1A3BB5]/20 transition-all" id="modpas" name="password" placeholder="••••••••••••" type="password" value="secretpassword"/>
-<button aria-label="Montre modpas" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#5B6480] hover:text-[#0B1A4A] flex items-center justify-center p-1 rounded-md focus:outline-none" type="button">
-<span class="material-symbols-outlined text-[20px]">visibility</span>
-</button>
-</div>
-</div>
-<!-- Under it, right-aligned link: Bliye modpas? -->
-<div class="flex justify-end pt-0.5">
-<a class="text-[14px] font-semibold text-[#1A3BB5] hover:underline focus:outline-none" href="#">
-              Bliye modpas?
-            </a>
-</div>
-<!-- 8. Submit button: primary ultramarine pill full width 48px -->
-<div class="pt-2">
-<button class="w-full h-12 rounded-full bg-[#1A3BB5] hover:bg-[#153096] active:scale-[0.99] text-white text-[16px] font-semibold flex items-center justify-center gap-2 shadow-[0_1px_2px_rgba(11,26,74,0.1)] transition-all focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] focus:ring-offset-2" type="submit">
-<span class="material-symbols-outlined text-[20px]">login</span>
-<span>Konekte</span>
-</button>
-</div>
-</form>
-<!-- 9. Caption centered -->
-<p class="text-[13px] text-[#5B6480] text-center leading-normal mt-5 max-w-[390px]">
-          Nou itilize imèl ou sèlman pou kont lan. Vòt ou rete anonim nan rezilta yo.
+            <div class="relative w-full">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#5B6480]">
+                <span class="material-symbols-outlined text-[20px]">lock</span>
+              </span>
+              <input
+                id="input-password"
+                type="password"
+                placeholder="Modpas ou"
+                value="••••••••••••"
+                class="w-full h-[52px] pl-11 pr-11 bg-white rounded-[12px] border border-[#E1E5F0] text-[15px] text-[#0B1A4A] placeholder-[#5B6480]/60 focus:outline-none focus:border-[#1A3BB5] focus:ring-1 focus:ring-[#1A3BB5] transition-colors tracking-widest"
+              >
+              <button type="button" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#5B6480] hover:text-[#0B1A4A] transition-colors" aria-label="Montre modpas">
+                <span class="material-symbols-outlined text-[20px]">visibility</span>
+              </button>
+            </div>
+            
+            <!-- Right aligned link « Bliye modpas? » -->
+            <div class="w-full text-right mt-1.5">
+              <a href="#" class="text-[14px] font-semibold text-[#1A3BB5] hover:underline">
+                Bliye modpas?
+              </a>
+            </div>
+          </div>
+
+          <!-- 6) Full width solid ultramarine button « Konekte » 52px with an arrow -->
+          <button type="submit" class="w-full h-[52px] mt-1 bg-[#1A3BB5] rounded-full text-white text-[16px] font-semibold flex items-center justify-center gap-2 hover:bg-[#15319d] transition-colors">
+            <span>Konekte</span>
+            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+          </button>
+        </form>
+
+        <!-- 7) Three small benefit rows with ultramarine check icons, 13px muted -->
+        <div class="w-full bg-[#F3F5FA] rounded-[16px] border border-[#E1E5F0] p-3.5 mb-5 flex flex-col gap-2 text-left">
+          <div class="flex items-center gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-[14px]">check</span>
+            </span>
+            <span class="text-[13px] font-normal text-[#5B6480]">Priyorite w ak vòt ou sou tout aparèy</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-[14px]">check</span>
+            </span>
+            <span class="text-[13px] font-normal text-[#5B6480]">Tablo pèsonèl ak seri jwèt ou</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <span class="w-5 h-5 rounded-full bg-[#EAEEFA] text-[#1A3BB5] flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-[14px]">check</span>
+            </span>
+            <span class="text-[13px] font-normal text-[#5B6480]">Vòt ou rete anonim nan rezilta yo</span>
+          </div>
+        </div>
+
+        <!-- 8) Legal line 12px muted -->
+        <p class="text-[12px] text-[#5B6480] leading-[1.5] text-center">
+          Lè w kontinye, ou dakò ak 
+          <a href="#" class="font-semibold text-[#1A3BB5] hover:underline">Kondisyon itilizasyon</a> 
+          yo ak 
+          <a href="#" class="font-semibold text-[#1A3BB5] hover:underline">Politik konfidansyalite</a> 
+          a.
         </p>
-</div>
-</div>
-</div>
-</body></html>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

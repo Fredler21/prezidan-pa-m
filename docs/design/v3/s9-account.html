@@ -1,225 +1,298 @@
 <!DOCTYPE html>
-
-<html class="h-full" lang="ht"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Prezidan Pa M · Kont ou</title>
-<!-- Typography: Bricolage Grotesque -->
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&amp;display=swap" rel="stylesheet"/>
-<!-- Material Symbols Outlined -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<!-- Tailwind CSS -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
+<html lang="ht" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Prezidan Pa M · Konekte</title>
+  <!-- Bricolage Grotesque Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap">
+  <!-- Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
     tailwind.config = {
-      darkMode: "class",
       theme: {
         extend: {
-          colors: {},
-          borderRadius: {
-            "DEFAULT": "0.5rem",
-            "lg": "1rem",
-            "xl": "1.5rem",
-            "full": "9999px"
-          },
-          fontFamily: {
-            headline: ["Bricolage Grotesque", "system-ui", "sans-serif"],
-            display: ["Bricolage Grotesque", "system-ui", "sans-serif"],
-            body: ["Bricolage Grotesque", "system-ui", "sans-serif"],
-            label: ["Bricolage Grotesque", "system-ui", "sans-serif"]
+          colors: {
+            'night-indigo': '#0B1230',
+            'ultramarine': '#1A3BB5',
+            'tint': '#EAEEFA',
+            'ring-light': '#7D93E8',
+            'flag-red': '#D41E3C',
+            'page-bg': '#F3F5FA',
+            'ink': '#0B1A4A',
+            'muted': '#5B6480',
+            'hairline': '#E1E5F0',
+            'track': '#E6EAF5'
           }
         }
       }
     }
   </script>
-<style>
+  <style>
     html, body {
       font-family: 'Bricolage Grotesque', system-ui, sans-serif;
       font-optical-sizing: auto;
-      font-variant-numeric: tabular-nums;
       background-color: #0B1230;
+      color: #0B1A4A;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
     }
-    .material-symbols-outlined {
-      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
-      display: inline-block;
-      line-height: 1;
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
     }
-    /* Neutralize uppercase or forced transformations */
-    * {
-      text-transform: none;
+    @media (prefers-reduced-motion: no-preference) {
+      .sheet-reveal {
+        animation: slideUpFade 0.4s ease-out forwards;
+      }
+    }
+    @keyframes slideUpFade {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
-<body class="min-h-screen text-[#0B1A4A] antialiased relative overflow-hidden flex justify-center items-end sm:items-center">
-<!-- BACKGROUND SCENE: Prezidan Pa M - Akèy Canvas (Visible faintly behind scrim) -->
-<div aria-hidden="true" class="fixed inset-0 w-full max-w-[720px] mx-auto bg-[#F3F5FA] overflow-y-auto pointer-events-none select-none z-0">
-<!-- TopAppBar -->
-<header class="bg-[#0B1230] text-white px-4 py-3 flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="text-lg font-bold tracking-tight text-white">Prezidan Pa M</span>
-</div>
-<div class="flex items-center gap-2.5">
-<div class="px-2.5 py-1 bg-white/10 rounded-full text-xs font-medium text-white flex items-center gap-1">
-<span>Kreyòl ▾</span>
-</div>
-<div class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-white">
-<span class="material-symbols-outlined text-xl">person</span>
-</div>
-</div>
-</header>
-<!-- Akèy Hero -->
-<main class="p-4 space-y-4">
-<div class="bg-[#0B1230] text-white rounded-2xl p-5 pt-6 shadow-sm">
-<span class="text-xs font-semibold text-blue-200 tracking-wide">Eleksyon Prezidansyèl 2027</span>
-<h1 class="text-2xl font-extrabold leading-tight mt-1 text-white">
-          Ki moun ou ta vle kòm prezidan Ayiti?
-        </h1>
-<p class="text-sm text-slate-300 mt-2">
-          Chwazi 3 pi gwo priyorite w pou wè ki kandida ki pi byen koresponn ak avni peyi a.
-        </p>
-</div>
-<!-- Stats card -->
-<div class="bg-white rounded-xl p-4 border border-[#E1E5F0] flex justify-between items-center shadow-sm">
-<div>
-<div class="text-xs text-[#5B6480] font-medium">Sitwayen ki vote deja</div>
-<div class="text-xl font-extrabold text-[#0B1A4A]">48,920</div>
-</div>
-<div class="text-right">
-<div class="text-xs text-[#5B6480] font-medium">Kandida anrejistre</div>
-<div class="text-xl font-extrabold text-[#0B1A4A]">14</div>
-</div>
-</div>
-<!-- Priority tiles preview -->
-<div class="grid grid-cols-2 gap-3 pt-1">
-<div class="bg-white p-3.5 rounded-xl border border-[#E1E5F0] flex flex-col justify-between h-28">
-<span class="material-symbols-outlined text-[#1A3BB5]">shield</span>
-<span class="text-sm font-semibold text-[#0B1A4A]">Sekirite nasyonal</span>
-</div>
-<div class="bg-[#1A3BB5] text-white p-3.5 rounded-xl flex flex-col justify-between h-28 relative">
-<div class="flex justify-between items-start">
-<span class="material-symbols-outlined text-white">school</span>
-<span class="w-6 h-6 rounded-full bg-white text-[#1A3BB5] font-bold text-xs flex items-center justify-center">1</span>
-</div>
-<span class="text-sm font-semibold">Edikasyon gratis</span>
-</div>
-<div class="bg-white p-3.5 rounded-xl border border-[#E1E5F0] flex flex-col justify-between h-28">
-<span class="material-symbols-outlined text-[#1A3BB5]">health_and_safety</span>
-<span class="text-sm font-semibold text-[#0B1A4A]">Lopital ak lasante</span>
-</div>
-<div class="bg-white p-3.5 rounded-xl border border-[#E1E5F0] flex flex-col justify-between h-28">
-<span class="material-symbols-outlined text-[#1A3BB5]">agriculture</span>
-<span class="text-sm font-semibold text-[#0B1A4A]">Agrikilti lokal</span>
-</div>
-</div>
-</main>
-</div>
-<!-- SCRIM OVERLAY with backdrop blur -->
-<div class="fixed inset-0 bg-[#0B1230]/55 backdrop-blur-[3px] z-30 transition-opacity"></div>
-<!-- MODAL CONTAINER (Bottom sheet on mobile, centered dialog on sm/desktop) -->
-<div class="relative z-40 w-full sm:max-w-[480px] mx-auto max-h-[813px] flex flex-col">
-<!-- Bottom Sheet Card -->
-<div class="bg-white w-full rounded-t-[24px] sm:rounded-[24px] shadow-[0_8px_30px_rgba(11,18,48,0.22)] border-t sm:border border-[#E1E5F0] px-5 pt-3 pb-8 overflow-y-auto">
-<!-- Drag handle & Close button bar -->
-<div class="relative flex items-center justify-center min-h-[32px] mb-2">
-<!-- Drag handle -->
-<div class="w-9 h-1 rounded-full bg-[#E1E5F0] mx-auto"></div>
-<!-- Close button at top-right -->
-<button aria-label="Fèmen" class="absolute right-0 top-0 w-10 h-10 rounded-full bg-[#F3F5FA] border border-[#E1E5F0] flex items-center justify-center text-[#5B6480] hover:text-[#0B1A4A] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] focus:ring-offset-2" type="button">
-<span class="material-symbols-outlined text-[20px]">close</span>
-</button>
-</div>
-<!-- Icon well -->
-<div class="flex justify-center mt-1 mb-3">
-<div class="w-12 h-12 rounded-full bg-[#EAEEFA] flex items-center justify-center">
-<span class="material-symbols-outlined text-[24px] text-[#1A3BB5]">person</span>
-</div>
-</div>
-<!-- Title & Subtitle -->
-<div class="text-center px-2">
-<h2 class="text-[24px] font-bold text-[#0B1A4A] tracking-[-0.01em] leading-tight">
-          Kont ou
-        </h2>
-<p class="text-[15px] text-[#5B6480] leading-[1.5] max-w-xs mx-auto mt-2">
-          Kreye yon kont pou sove priyorite w ak vòt ou sou tout aparèy ou. Ou ka vote san kont tou.
-        </p>
-</div>
-<!-- Google authentication button -->
-<div class="mt-6">
-<button class="w-full h-12 rounded-full bg-white border border-[#E1E5F0] shadow-sm hover:bg-slate-50 transition-colors flex items-center justify-center gap-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] focus:ring-offset-2" type="button">
-<svg aria-hidden="true" class="w-5 h-5 shrink-0" viewbox="0 0 24 24">
-<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
-<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
-<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"></path>
-<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"></path>
-</svg>
-<span class="text-[16px] font-semibold text-[#0B1A4A]">Kontinye ak Google</span>
-</button>
-</div>
-<!-- Divider row with "oswa" -->
-<div class="relative my-5">
-<div aria-hidden="true" class="absolute inset-0 flex items-center">
-<div class="w-full border-t border-[#E1E5F0]"></div>
-</div>
-<div class="relative flex justify-center">
-<span class="bg-white px-3 text-[13px] text-[#5B6480] font-medium">oswa</span>
-</div>
-</div>
-<!-- Segmented control: Konekte / Kreye kont -->
-<div aria-label="Opsyon koneksyon" class="h-11 bg-[#F3F5FA] p-1 rounded-full flex items-center mb-5" role="tablist">
-<button aria-selected="true" class="flex-1 py-2 bg-white text-center text-[14px] font-semibold text-[#0B1A4A] rounded-full shadow-[0_1px_2px_rgba(11,26,74,0.06)] focus:outline-none" role="tab" type="button">
+</head>
+<body class="min-h-screen bg-night-indigo flex justify-center selection:bg-tint selection:text-ultramarine">
+  <!-- Mobile container 390px -->
+  <div class="w-full max-w-[390px] min-h-screen relative flex flex-col overflow-hidden bg-night-indigo">
+    
+    <!-- HEADER -->
+    <header class="w-full h-14 bg-night-indigo px-4 flex items-center justify-between z-30 shrink-0 border-b border-white/10">
+      <!-- Wordmark, Icon & Mini flag strip -->
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-white text-[22px]">how_to_vote</span>
+          <span class="text-white text-[18px] font-bold leading-none">Prezidan Pa M</span>
+        </div>
+        <!-- Flag strip (Haitian blue and red) -->
+        <div class="flex flex-col w-2 h-3.5 rounded-sm overflow-hidden ml-0.5 shrink-0">
+          <div class="h-1/2 w-full bg-[#00209F]"></div>
+          <div class="h-1/2 w-full bg-[#D21034]"></div>
+        </div>
+      </div>
+
+      <!-- Header right actions -->
+      <div class="flex items-center gap-2">
+        <!-- Language pill -->
+        <button type="button" class="h-8 px-2.5 rounded-full border border-white/30 text-white text-[13px] font-medium flex items-center justify-center bg-transparent">
+          Kreyòl ▾
+        </button>
+        <!-- Konekte ghost button -->
+        <button type="button" class="h-[34px] px-3 rounded-full border border-white/30 text-white text-[13px] font-medium flex items-center justify-center bg-transparent">
           Konekte
         </button>
-<button aria-selected="false" class="flex-1 py-2 text-center text-[14px] font-medium text-[#5B6480] hover:text-[#0B1A4A] rounded-full transition-colors focus:outline-none" role="tab" type="button">
+        <!-- Kreye kont solid ultramarine button -->
+        <button type="button" class="h-[34px] px-3 rounded-full bg-ultramarine text-white text-[13px] font-semibold flex items-center justify-center">
           Kreye kont
         </button>
-</div>
-<!-- Form -->
-<form class="space-y-4" onsubmit="event.preventDefault();">
-<!-- Field 1: Imèl -->
-<div>
-<label class="block text-[14px] font-semibold text-[#0B1A4A] mb-1.5" for="imel">
-            Imèl
-          </label>
-<input class="w-full h-12 rounded-[12px] border border-[#E1E5F0] bg-white px-3.5 text-[15px] text-[#0B1A4A] placeholder-[#5B6480]/60 focus:border-[#1A3BB5] focus:ring-1 focus:ring-[#1A3BB5] focus:outline-none transition-colors" id="imel" name="email" placeholder="ou@egzanp.ht" type="email"/>
-</div>
-<!-- Field 2: Modpas -->
-<div>
-<label class="block text-[14px] font-semibold text-[#0B1A4A] mb-1.5" for="modpas">
-            Modpas
-          </label>
-<div class="relative">
-<input class="w-full h-12 rounded-[12px] border border-[#E1E5F0] bg-white px-3.5 pr-10 text-[15px] text-[#0B1A4A] focus:border-[#1A3BB5] focus:ring-1 focus:ring-[#1A3BB5] focus:outline-none transition-colors" id="modpas" name="password" type="password" value="••••••••••••"/>
-<button aria-label="Montre modpas" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#5B6480] hover:text-[#0B1A4A] focus:outline-none" type="button">
-<span class="material-symbols-outlined text-[20px]">visibility_off</span>
-</button>
-</div>
-<!-- Bliye modpas link -->
-<div class="flex justify-end mt-1.5">
-<a class="text-[14px] font-semibold text-[#1A3BB5] hover:underline focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] rounded" href="#">
-              Bliye modpas?
-            </a>
-</div>
-</div>
-<!-- Primary button -->
-<div class="pt-1">
-<button class="w-full h-12 rounded-full bg-[#1A3BB5] text-white text-[16px] font-semibold flex items-center justify-center gap-2 shadow-sm hover:bg-[#153198] active:scale-[0.99] transition-all focus:outline-none focus:ring-2 focus:ring-[#1A3BB5] focus:ring-offset-2" type="submit">
-<span class="material-symbols-outlined text-[20px] text-white">login</span>
-<span>Konekte</span>
-</button>
-</div>
-</form>
-<!-- Security / Civic disclaimer caption -->
-<p class="text-center text-[13px] text-[#5B6480] mt-4 leading-normal">
-        Nou itilize imèl ou sèlman pou kont lan. Vòt ou rete anonim nan rezilta yo.
-      </p>
-</div>
-</div>
-</body></html>
+      </div>
+    </header>
+
+    <!-- MAIN BODY AREA WITH DIMMED HOME CONTENT BEHIND SCRIM -->
+    <div class="relative flex-1 w-full flex flex-col justify-end">
+      
+      <!-- BACKGROUND HOME CONTENT (Dimmed behind scrim) -->
+      <div class="absolute inset-0 w-full overflow-hidden select-none pointer-events-none opacity-40 bg-page-bg">
+        <!-- Hero section preview -->
+        <div class="w-full bg-night-indigo p-4 pt-6 pb-8">
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 text-white/90 text-[12px] mb-3">
+            <span>Eleksyon prezidansyèl · Ayiti 2027</span>
+          </div>
+          <h1 class="text-white text-[28px] font-bold leading-tight mb-2">
+            Ki moun ou ta vle kòm prezidan Ayiti?
+          </h1>
+          <p class="text-white/70 text-[14px] leading-relaxed mb-4">
+            Chwazi sa ou vle chanje, gade dosye piblik kandida yo, epi bay vòt ou.
+          </p>
+          <div class="flex gap-2">
+            <div class="h-10 px-4 rounded-full bg-ultramarine text-white text-[14px] font-semibold flex items-center">Kòmanse</div>
+            <div class="h-10 px-4 rounded-full border border-white/30 text-white text-[14px] flex items-center">Wè rezilta yo</div>
+          </div>
+        </div>
+
+        <!-- Metric card preview -->
+        <div class="p-4 space-y-3">
+          <div class="bg-white p-4 rounded-2xl border border-hairline shadow-sm">
+            <div class="text-[13px] text-muted">Vòt pèp la an dirèk</div>
+            <div class="text-[24px] font-bold text-ink tabular-nums">12 384 moun</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NIGHT INDIGO SCRIM AT 55% -->
+      <div class="absolute inset-0 bg-night-indigo/55 z-10 pointer-events-none"></div>
+
+      <!-- THE ACCOUNT DIALOG AS A BOTTOM SHEET -->
+      <div class="relative z-20 w-full bg-white rounded-t-[24px] border-t border-hairline shadow-[0_4px_24px_rgba(11,26,74,0.12)] px-6 pt-3 pb-8 flex flex-col sheet-reveal max-h-[92vh] overflow-y-auto">
+        
+        <!-- Drag handle -->
+        <div class="w-10 h-1 bg-hairline rounded-full mx-auto mb-2 shrink-0"></div>
+
+        <!-- Top row with Close button -->
+        <div class="w-full flex justify-end items-center mb-1">
+          <button type="button" aria-label="Fèmen" class="w-10 h-10 rounded-full bg-page-bg flex items-center justify-center text-ink hover:bg-hairline transition-colors">
+            <span class="material-symbols-outlined text-[20px]">close</span>
+          </button>
+        </div>
+
+        <!-- Content Column (centered) -->
+        <div class="w-full flex flex-col items-center">
+          
+          <!-- 1) 56px solid ultramarine rounded square with white how_to_vote icon -->
+          <div class="w-14 h-14 rounded-2xl bg-ultramarine flex items-center justify-center mb-3.5 shrink-0">
+            <span class="material-symbols-outlined text-white text-[28px]">how_to_vote</span>
+          </div>
+
+          <!-- Title & Lead -->
+          <h2 class="text-[26px] font-extrabold text-ink text-center leading-tight tracking-[-0.015em] mb-1.5">
+            Byenvini
+          </h2>
+          <p class="text-[15px] text-muted text-center leading-snug mb-5 px-1">
+            Konekte pou w sove priyorite w, vòt ou ak jwèt ou yo sou tout aparèy ou.
+          </p>
+
+          <!-- 2) Segmented Control (full width, 48px, solid #F3F5FA, 4px padding) -->
+          <div class="w-full h-12 bg-page-bg rounded-full p-1 flex items-center mb-4">
+            <button type="button" class="flex-1 h-full rounded-full bg-white text-ink text-[14px] font-bold shadow-[0_1px_3px_rgba(11,26,74,0.08)] flex items-center justify-center transition-all">
+              Konekte
+            </button>
+            <button type="button" class="flex-1 h-full rounded-full bg-transparent text-muted text-[14px] font-medium flex items-center justify-center hover:text-ink transition-colors">
+              Kreye kont
+            </button>
+          </div>
+
+          <!-- 3) Full width white button with 1px #E1E5F0 border and Google G logo (52px) -->
+          <button type="button" class="w-full h-[52px] bg-white rounded-full border border-hairline flex items-center justify-center gap-3 text-ink text-[15px] font-semibold hover:bg-page-bg transition-colors mb-4">
+            <!-- Google G Logo SVG -->
+            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.24v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.24C.45 8.16 0 9.97 0 12s.45 3.84 1.24 5.42l4.04-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.24 6.58l4.04 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Kontinye ak Google</span>
+          </button>
+
+          <!-- 4) Divider « oswa » with hairlines -->
+          <div class="w-full flex items-center gap-3 mb-4">
+            <div class="flex-1 h-px bg-hairline"></div>
+            <span class="text-[13px] font-medium text-muted">oswa</span>
+            <div class="flex-1 h-px bg-hairline"></div>
+          </div>
+
+          <!-- 5) Input Fields: Imèl & Modpas -->
+          <form class="w-full space-y-3.5 mb-2" onsubmit="event.preventDefault();">
+            <!-- Field: Imèl -->
+            <div class="w-full text-left">
+              <label for="imel-input" class="block text-[14px] font-semibold text-ink mb-1.5">
+                Imèl
+              </label>
+              <div class="relative w-full">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-[20px] pointer-events-none">
+                  mail
+                </span>
+                <input 
+                  type="email" 
+                  id="imel-input" 
+                  placeholder="ou@egzanp.ht" 
+                  class="w-full h-[52px] pl-11 pr-4 bg-white border border-hairline rounded-[12px] text-ink text-[15px] placeholder:text-muted/60 focus:outline-none focus:border-ultramarine focus:ring-1 focus:ring-ultramarine transition-colors"
+                >
+              </div>
+            </div>
+
+            <!-- Field: Modpas -->
+            <div class="w-full text-left">
+              <label for="modpas-input" class="block text-[14px] font-semibold text-ink mb-1.5">
+                Modpas
+              </label>
+              <div class="relative w-full">
+                <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-[20px] pointer-events-none">
+                  lock
+                </span>
+                <input 
+                  type="password" 
+                  id="modpas-input" 
+                  placeholder="••••••••••••" 
+                  class="w-full h-[52px] pl-11 pr-11 bg-white border border-hairline rounded-[12px] text-ink text-[15px] placeholder:text-muted/60 focus:outline-none focus:border-ultramarine focus:ring-1 focus:ring-ultramarine transition-colors font-mono"
+                >
+                <button 
+                  type="button" 
+                  aria-label="Montre modpas" 
+                  class="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-ink transition-colors p-1"
+                >
+                  <span class="material-symbols-outlined text-[20px]">visibility</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right aligned link « Bliye modpas? » -->
+            <div class="w-full flex justify-end pt-0.5">
+              <a href="#" class="text-[14px] font-semibold text-ultramarine hover:underline">
+                Bliye modpas?
+              </a>
+            </div>
+
+            <!-- 6) Full width solid ultramarine button « Konekte » 52px with an arrow -->
+            <button 
+              type="submit" 
+              class="w-full h-[52px] rounded-full bg-ultramarine text-white text-[16px] font-semibold flex items-center justify-center gap-2 hover:opacity-95 transition-opacity mt-2"
+            >
+              <span>Konekte</span>
+              <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+            </button>
+          </form>
+
+          <!-- 7) Three small benefit rows with ultramarine check icons, 13px muted -->
+          <div class="w-full space-y-2 pt-4 pb-4 border-t border-hairline mt-3">
+            <div class="flex items-center gap-2.5 text-left">
+              <div class="w-5 h-5 rounded-full bg-tint flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-ultramarine text-[15px] font-semibold">check</span>
+              </div>
+              <span class="text-[13px] text-muted leading-tight">
+                Priyorite w ak vòt ou sou tout aparèy
+              </span>
+            </div>
+            
+            <div class="flex items-center gap-2.5 text-left">
+              <div class="w-5 h-5 rounded-full bg-tint flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-ultramarine text-[15px] font-semibold">check</span>
+              </div>
+              <span class="text-[13px] text-muted leading-tight">
+                Tablo pèsonèl ak seri jwèt ou
+              </span>
+            </div>
+
+            <div class="flex items-center gap-2.5 text-left">
+              <div class="w-5 h-5 rounded-full bg-tint flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-ultramarine text-[15px] font-semibold">check</span>
+              </div>
+              <span class="text-[13px] text-muted leading-tight">
+                Vòt ou rete anonim nan rezilta yo
+              </span>
+            </div>
+          </div>
+
+          <!-- 8) Legal disclaimer line -->
+          <p class="text-[12px] text-muted text-center leading-normal pt-1 px-2">
+            Lè w kontinye, ou dakò ak 
+            <a href="#" class="text-ultramarine font-medium hover:underline">Kondisyon itilizasyon yo</a> 
+            ak 
+            <a href="#" class="text-ultramarine font-medium hover:underline">Politik konfidansyalite a</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

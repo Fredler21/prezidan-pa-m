@@ -132,7 +132,7 @@ function readMyAnswer(id: string): string | null { try { return localStorage.get
 function writeMyAnswer(id: string, option: string): void { try { localStorage.setItem(pollKey(id), option); } catch { /* ignore */ } }
 
 /** Counts a number up (or down) in place; instant when the visitor prefers reduced motion. */
-function tween(el: HTMLElement, from: number, to: number, ms: number, format: (n: number) => string): () => void {
+export function tween(el: HTMLElement, from: number, to: number, ms: number, format: (n: number) => string): () => void {
   if (reducedMotion() || from === to) { el.textContent = format(to); return () => {}; }
   const start = performance.now();
   let raf = 0;

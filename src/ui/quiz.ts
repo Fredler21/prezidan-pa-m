@@ -1,5 +1,7 @@
 import type { L10n } from '../types';
 import { h, svg, clear } from '../lib/dom';
+import { confetti } from '../lib/confetti';
+import { QUIZ_EXTRA } from '../data/quiz-extra';
 import { ICON } from '../lib/icons';
 import { S, fmt, fmtDate, fmtNumber, l } from '../i18n';
 import { content } from '../content';
@@ -21,8 +23,9 @@ const PER_DAY = 5;
 const DAY_ONE = Date.UTC(2026, 10, 4); // « Jou #1 »
 
 interface Stats { played: number; streak: number; best: number; last: string | null; correct: number }
-/** score: correct answers today, kept so the dashboard can show it without loading the question bank. */
-interface Save { day: string; ids: string[]; answers: (number | null)[]; stats: Stats; score?: number }
+/** order: 1 when the day's answers are shown in seeded order (days saved before that keep the bank order).
+ *  score: correct answers today, kept so the dashboard can show it without loading the question bank. */
+interface Save { day: string; ids: string[]; answers: (number | null)[]; stats: Stats; score?: number; order?: 1 }
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -44,7 +47,12 @@ function pool(): QuizQuestion[] {
   const c = content();
   const now = (iso: string): L10n => { const t = fmtDate(iso); return { ht: t, fr: t, en: t }; };
   const others = c.dates.filter((d) => d.date !== FIRST_ROUND).map((d) => now(d.date));
-  return [...QUIZ, ...quizFromContent({ firstRound: now(FIRST_ROUND), otherDates: others.slice(-3), candidates: c.candidates.length })];
+  return [...QUIZ, ...QUIZ_EXTRA, ...quizFromContent({ firstRound: now(FIRST_ROUND), otherDates: others.slice(-3), candidates: c.candidates.length })];
+}
+/** Answers in a seeded order, so the right one is not always in the same place (in the bank most are B). */
+function arranged(q: QuizQuestion, seed: string): QuizQuestion {
+  const order = shuffled(q.options.map((_, i) => i), rng(hash(seed)));
+  return { ...q, options: order.map((i) => q.options[i] ?? ''), answer: order.indexOf(q.answer) };
 }
 function dailyIds(key: string, all: QuizQuestion[]): string[] { return shuffled(all.map((q) => q.id), rng(hash(`ppm:${key}`))).slice(0, PER_DAY); }
 
@@ -54,29 +62,13 @@ function load(all: QuizQuestion[]): Save {
   try { const raw = localStorage.getItem(KEY); if (raw) s = JSON.parse(raw) as Save; } catch { /* storage off */ }
   const stats: Stats = s?.stats ?? { played: 0, streak: 0, best: 0, last: null, correct: 0 };
   if (s && s.day === today && Array.isArray(s.ids) && s.ids.length === PER_DAY && s.ids.every((id) => all.some((q) => q.id === id))) return { ...s, stats };
-  return { day: today, ids: dailyIds(today, all), answers: Array(PER_DAY).fill(null), stats };
+  return { day: today, ids: dailyIds(today, all), answers: Array(PER_DAY).fill(null), stats, order: 1 };
 }
 function persist(s: Save): void { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* storage off */ } }
 
 /** Streak shown before today is finished: it is still alive if the last finished day was yesterday or today. */
 function liveStreak(st: Stats): number { return st.last === dayKey() || st.last === yesterdayKey() ? st.streak : 0; }
 
-function confetti(host: HTMLElement): void {
-  if (reduced()) return;
-  const layer = h('div', { class: 'qz-confetti', 'aria-hidden': 'true' });
-  const colors = ['#1A3BB5', '#7D93E8', '#FFD66B', '#FFFFFF', '#3D63E6'];
-  for (let i = 0; i < 40; i++) {
-    const p = h('i');
-    p.style.setProperty('--x', `${(Math.random() * 2 - 1) * 180}px`);
-    p.style.setProperty('--y', `${-120 - Math.random() * 180}px`);
-    p.style.setProperty('--r', `${Math.random() * 720 - 360}deg`);
-    p.style.setProperty('--d', `${Math.random() * 0.25}s`);
-    p.style.background = colors[i % colors.length] ?? '#fff';
-    layer.append(p);
-  }
-  host.append(layer);
-  window.setTimeout(() => layer.remove(), 2400);
-}
 
 /** The game: a question card and a score card. Same component on the home page, the game page and the poll page. */
 export function quizGame(): { el: HTMLElement; streakPill: HTMLElement; destroy: () => void } {
@@ -97,7 +89,7 @@ export function quizGame(): { el: HTMLElement; streakPill: HTMLElement; destroy:
   const el = h('div', { class: 'qz-grid' }, card, side, live);
 
   const label = (o: string | L10n) => (typeof o === 'string' ? o : l(o));
-  const dailyQ = (i: number) => byId.get(save.ids[i] ?? '') as QuizQuestion;
+  const dailyQ = (i: number) => { const q = byId.get(save.ids[i] ?? '') as QuizQuestion; return save.order ? arranged(q, `ppm:${save.day}:${q.id}`) : q; };
   const doneCount = () => save.answers.filter((a) => a !== null).length;
   const correctCount = () => save.answers.reduce<number>((n, a, i) => n + (a !== null && a === dailyQ(i).answer ? 1 : 0), 0);
   const finished = () => doneCount() === PER_DAY;
@@ -119,7 +111,7 @@ export function quizGame(): { el: HTMLElement; streakPill: HTMLElement; destroy:
     const body = h('div', { class: 'qz-body' }, h('h3', { class: 'qz-q' }, l(q.q)), opts);
     if (picked !== null) {
       const verdict = picked === q.answer ? s.correct : `${s.wrong} ${label(q.options[q.answer] ?? '')}.`;
-      body.append(h('div', { class: 'qz-fact' }, svg(ICON.info), h('p', null, h('strong', null, verdict), ' ', l(q.fact))));
+      body.append(h('div', { class: picked === q.answer ? 'qz-fact ok' : 'qz-fact bad' }, svg(picked === q.answer ? ICON.check : ICON.close), h('p', null, h('strong', null, verdict), ' ', l(q.fact))));
       if (next) body.append(next);
     }
     return body;
@@ -151,8 +143,8 @@ export function quizGame(): { el: HTMLElement; streakPill: HTMLElement; destroy:
     const top = h('div', { class: 'qz-top' }, h('span', { class: 'num' }, fmt(s.day, { n: dayNumber(save.day) })),
       h('span', { class: 'num' }, recapNow ? s.doneToday : fmt(s.progress, { i: (viewing ?? current()) + 1, n: PER_DAY })));
     if (recapNow) {
-      const recap = h('ol', { class: 'qz-recap' }, ...save.ids.map((id, i) => {
-        const q = byId.get(id) as QuizQuestion; const ok = save.answers[i] === q.answer;
+      const recap = h('ol', { class: 'qz-recap' }, ...save.ids.map((_, i) => {
+        const q = dailyQ(i); const ok = save.answers[i] === q.answer;
         return h('li', { class: ok ? 'ok' : 'bad' }, svg(ok ? ICON.check : ICON.close, 'ico'), h('span', null, h('b', null, l(q.q)), h('small', null, label(q.options[q.answer] ?? ''))));
       }));
       card.append(top, progressBar(), h('h3', { class: 'qz-q' }, s.recapTitle), recap,
@@ -232,7 +224,7 @@ export function quizGame(): { el: HTMLElement; streakPill: HTMLElement; destroy:
   }
 
   async function share(): Promise<void> {
-    const grid = save.answers.map((a, i) => (a === dailyQ(i).answer ? '🟦' : '⬜')).join('');
+    const grid = save.answers.map((a, i) => (a === dailyQ(i).answer ? '🟩' : '🟥')).join('');
     const text = fmt(s.shareText, { d: dayNumber(save.day), s: correctCount(), grid, k: save.stats.streak, url: `${SITE_URL}/#quiz` });
     try { if (typeof navigator.share === 'function') { await navigator.share({ text }); return; } }
     catch (e) { if (e instanceof DOMException && e.name === 'AbortError') return; }
@@ -242,7 +234,8 @@ export function quizGame(): { el: HTMLElement; streakPill: HTMLElement; destroy:
   function newPractice(): void {
     const recent = practice ? [practice.q.id] : [];
     const choices = all.filter((q) => !recent.includes(q.id));
-    practice = { q: choices[Math.floor(Math.random() * choices.length)] ?? all[0] as QuizQuestion, picked: null };
+    const q = choices[Math.floor(Math.random() * choices.length)] ?? all[0] as QuizQuestion;
+    practice = { q: arranged(q, `${q.id}:${Math.random()}`), picked: null };
   }
   function startPractice(): void { mode = 'practice'; practiceScore = { ok: 0, n: 0 }; newPractice(); drawCard(); focusCard(); }
   function focusCard(): void { (card.querySelector('.qz-opt:not([aria-disabled])') as HTMLElement | null)?.focus({ preventScroll: true }); }

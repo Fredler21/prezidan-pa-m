@@ -1,7 +1,7 @@
 import type { Candidate } from '../types';
 import { h, svg, clear } from '../lib/dom';
 import { ICON, PRIORITY_ICONS } from '../lib/icons';
-import { S, fmt, fmtNumber, fmtToday, l } from '../i18n';
+import { S, fmt, fmtDate, fmtNumber, fmtToday, l } from '../i18n';
 import { state, onState, setMyVote } from '../state';
 import { content, candidateById, candidatesShuffled } from '../content';
 import { getStorage } from '../storage';
@@ -9,31 +9,42 @@ import { disconnect, type Account } from '../account';
 import { FIRST_ROUND } from '../data/dates';
 import { MAX_PICKS } from '../data/priorities';
 import { PROFILES } from '../data/president-game';
+import { QUIZ } from '../data/quiz';
+import { QUIZ_EXTRA } from '../data/quiz-extra';
 import { cardMade, gameResult, markSeenCandidates, quizStatus, seenCandidates } from '../lib/progress';
-import { daysUntil, initials, matchCandidates, pct } from '../lib/util';
+import { initials, matchCandidates, pct, shuffle } from '../lib/util';
+import { confetti } from '../lib/confetti';
 import { avatar, footer, priorityLabel, well } from './common';
 import { openProfile } from './profile';
-import { loadCounts, readTopCache, writeTopCache, type Counts } from './home';
+import { loadCounts, readTopCache, writeTopCache, tween, type Counts } from './home';
 import { civicCard } from './civic-card';
 import { whyVote } from './why-vote';
 import { toast } from './toast';
 
 /*
- * « Tablo mwen » (Stitch « s11-dashboard »): the home page once a visitor is signed in. One look
- * at where they stand: a six step civic journey, their own vote (only they see it), their
- * priorities, the candidates whose public record matches them, both games, the live results,
- * why the real vote matters, and their citizen card. Phone: one column in that order. Desktop:
- * an 8/4 split, journey, matches and games on the left, the personal cards on the right.
+ * « Tablo mwen » (Stitch « s11-dashboard » v2): the home page once a visitor is signed in. One look
+ * at where they stand: a live countdown to the first round, a six step civic journey, their own
+ * vote (only they see it), their priorities, the candidates whose public record matches them, both
+ * games, a rotating « did you know », the live results, why the real vote matters, and their
+ * citizen card. Phone: one column in that order. Desktop: an 8/4 split.
+ *
+ * Motion (all skipped with prefers-reduced-motion): cards rise in one after another, the journey
+ * ring draws itself while its number counts up, finished steps pop their check, the countdown
+ * flips every second, bars grow, and finishing all six steps sets off confetti once.
  */
+
+const JOURNEY_DONE_KEY = 'ppm.journey.done';
+const FACT_COUNT = 8;
 
 const card = (cls: string, ...children: (Node | null)[]) => h('section', { class: `card dash-card ${cls}` }, ...children);
 const cardHead = (title: string, link?: HTMLElement | null) => h('div', { class: 'dash-head' }, h('h2', null, title), link ?? null);
 const linkTo = (href: string, label: string) => h('a', { class: 'dash-link', href }, label);
+const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function ring(done: number, total: number): HTMLElement {
+function ring(done: number, total: number, draw: boolean): HTMLElement {
   const r = 30, c = 2 * Math.PI * r;
-  const arc = done ? `<circle cx="36" cy="36" r="${r}" fill="none" stroke="var(--ultra)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${(c * (1 - done / total)).toFixed(2)}" transform="rotate(-90 36 36)"/>` : '';
-  return h('div', { class: 'dash-ring', role: 'img', 'aria-label': `${done}/${total}`, html: `<svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="${r}" fill="none" stroke="var(--track)" stroke-width="7"/>${arc}</svg><b class="num">${done}/${total}</b>` });
+  const arc = done ? `<circle class="ring-arc" style="--c:${c.toFixed(2)}" cx="36" cy="36" r="${r}" fill="none" stroke="var(--ultra)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${(c * (1 - done / total)).toFixed(2)}" transform="rotate(-90 36 36)"/>` : '';
+  return h('div', { class: draw ? 'dash-ring draw' : 'dash-ring', role: 'img', 'aria-label': `${done}/${total}`, html: `<svg viewBox="0 0 72 72" aria-hidden="true"><circle cx="36" cy="36" r="${r}" fill="none" stroke="var(--track)" stroke-width="7"/>${arc}</svg><b class="num">${done}/${total}</b>` });
 }
 
 export function renderDashboard(main: HTMLElement, account: Account): () => void {
@@ -42,7 +53,6 @@ export function renderDashboard(main: HTMLElement, account: Account): () => void
   const hs = S().home;
   let alive = true;
   const cleanups: (() => void)[] = [];
-  const days = daysUntil(FIRST_ROUND);
 
   // ---- greeting ----
   const hour = new Date().getHours();
@@ -57,19 +67,54 @@ export function renderDashboard(main: HTMLElement, account: Account): () => void
   }
   const q = quizStatus();
   const greet = h('header', { class: 'dash-greet' }, av,
-    h('div', { class: 'dash-hello' },
-      h('h1', null, firstName ? fmt(d.hello, { g, name: firstName }) : g),
-      h('p', null, `${fmtToday()} · ${fmt(hs.daysLeft, { n: fmtNumber(Math.abs(days)) })} ${days >= 0 ? hs.beforeFirstRound : hs.afterFirstRound}`)),
+    h('div', { class: 'dash-hello' }, h('h1', null, firstName ? fmt(d.hello, { g, name: firstName }) : g), h('p', null, fmtToday())),
     q.streak > 0 ? h('span', { class: 'qz-streak dash-streak' }, svg(ICON.flame), fmt(S().quiz.streak, { n: q.streak })) : null);
+
+  // ---- live countdown to the first round: four flip tiles, the seconds turn over every second ----
+  const target = new Date(`${FIRST_ROUND}T00:00:00`).getTime();
+  const tiles = [d.uDays, d.uHours, d.uMin, d.uSec].map((unit) => {
+    const num = h('b', { class: 'fc-num num' }, '00');
+    return { el: h('div', { class: 'fc-tile' }, h('span', { class: 'fc-face' }, num), h('small', null, unit)), num, last: '' };
+  });
+  const countLabel = h('span', { class: 'sr' });
+  const countdown = h('section', { class: 'dash-count' },
+    h('div', { class: 'dash-count-main' },
+      h('p', { class: 'dash-count-kicker' }, fmt(d.countKicker, { d: fmtDate(FIRST_ROUND) })),
+      h('div', { class: 'fc-row', 'aria-hidden': 'true' }, ...tiles.map((t) => t.el)), countLabel),
+    h('a', { class: 'btn btn-primary dash-count-cta', href: '#vote' }, svg(ICON.ballot), d.voteNow));
+  const parts = () => {
+    const ms = Math.max(0, target - Date.now());
+    return [Math.floor(ms / 86400000), Math.floor(ms / 3600000) % 24, Math.floor(ms / 60000) % 60, Math.floor(ms / 1000) % 60];
+  };
+  const tick = (flip: boolean) => {
+    const p = parts();
+    p.forEach((v, i) => {
+      const t = tiles[i];
+      if (!t) return;
+      const txt = i === 0 ? String(v) : String(v).padStart(2, '0');
+      if (txt === t.last) return;
+      t.num.textContent = txt;
+      if (flip) { t.num.classList.remove('flip'); void t.num.offsetWidth; t.num.classList.add('flip'); }
+      t.last = txt;
+    });
+    countLabel.textContent = fmt(d.countLabel, { d: p[0] ?? 0, h: p[1] ?? 0, m: p[2] ?? 0 });
+  };
+  tick(false);
+  // the days roll up from zero once, then every unit flips when it changes
+  const days0 = tiles[0];
+  if (days0) cleanups.push(tween(days0.num, 0, Number(days0.last), 1400, String));
+  const clock = window.setInterval(() => tick(!reduced()), 1000);
+  cleanups.push(() => clearInterval(clock));
 
   // ---- citizen card (full width under the grid); the journey step scrolls to it ----
   const civic = civicCard(FIRST_ROUND);
   cleanups.push(civic.destroy);
-  const toCard = () => civic.el.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  const toCard = () => civic.el.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' });
 
   // ---- civic journey ----
   const journeyBody = h('div');
   const journey = card('dash-journey', journeyBody);
+  let firstJourney = true;
   const drawJourney = () => {
     const quiz = quizStatus();
     const steps: { done: boolean; label: string; act: string; href?: string; onclick?: () => void }[] = [
@@ -84,15 +129,27 @@ export function renderDashboard(main: HTMLElement, account: Account): () => void
     const left = steps.length - n;
     const firstOpen = steps.findIndex((x) => !x.done);
     const line = n === 0 ? d.journeyStart : left === 0 ? d.journeyDone : left === 1 ? d.journeyOne : fmt(d.journeyLeft, { n: left });
+    const draw = firstJourney && !reduced();
+    const ringEl = ring(n, steps.length, draw);
+    let doneIndex = 0;
     journeyBody.replaceChildren(
-      h('div', { class: 'dash-jhead' }, ring(n, steps.length), h('div', null, h('h2', null, d.journey), h('p', null, line))),
-      h('ol', { class: 'dash-steps' }, ...steps.map((x, i) => {
+      h('div', { class: 'dash-jhead' }, ringEl, h('div', null, h('h2', null, d.journey), h('p', null, line))),
+      h('ol', { class: draw ? 'dash-steps draw' : 'dash-steps' }, ...steps.map((x, i) => {
         const cls = i === firstOpen ? 'btn btn-primary dash-act' : 'btn btn-outline dash-act';
         const action = x.done
           ? h('span', { class: 'dash-done' }, d.done)
           : x.href ? h('a', { class: cls, href: x.href }, x.act) : h('button', { class: cls, type: 'button', onclick: x.onclick }, x.act);
-        return h('li', { class: x.done ? 'done' : '' }, h('span', { class: 'dash-tick', 'aria-hidden': 'true' }, x.done ? svg(ICON.check) : null), h('span', { class: 'dash-step' }, x.label), action);
+        return h('li', { class: x.done ? 'done' : '', style: x.done ? `--i:${doneIndex++}` : undefined }, h('span', { class: 'dash-tick', 'aria-hidden': 'true' }, x.done ? svg(ICON.check) : null), h('span', { class: 'dash-step' }, x.label), action);
       })));
+    const num = ringEl.querySelector('b');
+    if (draw && num) cleanups.push(tween(num, 0, n, 1300, (v) => `${v}/${steps.length}`));
+    firstJourney = false;
+    // all six done for the first time on this device: a small celebration
+    if (left === 0) {
+      let seen = false;
+      try { seen = localStorage.getItem(JOURNEY_DONE_KEY) === '1'; localStorage.setItem(JOURNEY_DONE_KEY, '1'); } catch { /* storage off */ }
+      if (!seen) { window.setTimeout(() => { if (alive) { confetti(journey); toast(d.celebrate, 4000); } }, 900); }
+    }
   };
 
   // ---- the visitor's own vote (private) ----
@@ -147,17 +204,54 @@ export function renderDashboard(main: HTMLElement, account: Account): () => void
         h('h3', null, hs.quizCard), h('p', null, quizLine),
         h('span', { class: 'btn btn-outline dash-act' }, qs.done ? d.seeResults : qs.answered ? d.keepGoing : d.actPlay)),
       h('a', { class: 'dash-game solid', href: '#president' }, h('span', { class: 'well' }, svg(ICON.palace)),
-        h('h3', null, S().pres.title), h('p', null, lead ? fmt(d.gameDone, { p: l(PROFILES[lead].title) }) : d.gameNew),
+        h('h3', null, S().pres.title), h('p', null, lead && res ? fmt(d.gameDone, { s: res.score, p: l(PROFILES[lead].title) }) : d.gameNew),
         h('span', { class: 'btn dash-act on-solid' }, lead ? d.playAgain : d.playNow)));
   };
+
+  // ---- « Èske w te konnen? »: a fact from Konnen Ayiti every 7 seconds (paused on hover or focus) ----
+  const facts = shuffle([...QUIZ, ...QUIZ_EXTRA]).slice(0, FACT_COUNT);
+  let fi = 0;
+  const factBody = h('div', { class: 'dyk-body', 'aria-live': 'polite' });
+  const dots = h('div', { class: 'dyk-dots', 'aria-hidden': 'true' }, ...facts.map(() => h('i')));
+  const timerBar = h('i');
+  const timer = h('div', { class: 'dyk-timer', 'aria-hidden': 'true' }, timerBar);
+  const showFact = (i: number, dir: 'fwd' | 'back') => {
+    fi = (i + facts.length) % facts.length;
+    const f = facts[fi];
+    if (!f) return;
+    const answer = f.options[f.answer] ?? '';
+    // question, answer, then the fact: some facts only make sense next to their question
+    factBody.replaceChildren(h('div', { class: dir === 'back' ? 'dyk-slide back' : 'dyk-slide' },
+      h('p', { class: 'dyk-q' }, l(f.q)),
+      h('p', { class: 'dyk-a' }, svg(ICON.check), typeof answer === 'string' ? answer : l(answer)),
+      h('p', { class: 'dyk-text' }, l(f.fact))));
+    Array.from(dots.children).forEach((dot, j) => dot.classList.toggle('on', j === fi));
+    timerBar.classList.remove('run'); void timerBar.offsetWidth; timerBar.classList.add('run');
+  };
+  timerBar.addEventListener('animationend', () => { if (alive) showFact(fi + 1, 'fwd'); });
+  const navBtn = (icon: string, label: string, onclick: () => void) => h('button', { type: 'button', 'aria-label': label, onclick }, svg(icon));
+  const dyk = card('dash-dyk',
+    h('div', { class: 'dyk-head' }, well(ICON.idea), h('h2', null, d.didYouKnow),
+      h('div', { class: 'dyk-nav' }, navBtn(ICON.back, d.factPrev, () => showFact(fi - 1, 'back')), navBtn(ICON.arrowRight, d.factNext, () => showFact(fi + 1, 'fwd')))),
+    factBody,
+    h('div', { class: 'dyk-foot' }, dots, linkTo('#quiz', d.factPlay)),
+    timer);
+  const pause = (on: boolean) => timer.classList.toggle('paused', on);
+  dyk.addEventListener('pointerenter', () => pause(true));
+  dyk.addEventListener('pointerleave', () => pause(dyk.contains(document.activeElement)));
+  dyk.addEventListener('focusin', () => pause(true));
+  dyk.addEventListener('focusout', () => pause(false));
+  showFact(0, 'fwd');
 
   // ---- live results (same numbers as the public home) ----
   const liveNum = h('b', { class: 'num' }, '·');
   const liveRows = h('div', { class: 'dash-live' }, ...Array.from({ length: 3 }, () => h('span', { class: 'sk-line' })));
   const liveCard = card('dash-results', cardHead(hs.resultsCard, linkTo('#results', hs.seeAllResults)),
     h('p', { class: 'dash-big' }, liveNum, h('span', null, hs.participants)), liveRows);
+  let liveShown = 0;
+  let stopLive = () => {};
   const drawLive = (r: Counts) => {
-    liveNum.textContent = fmtNumber(r.total);
+    stopLive(); stopLive = tween(liveNum, liveShown, r.total, 1100, fmtNumber); liveShown = r.total;
     if (r.total === 0) { liveRows.replaceChildren(h('p', { class: 'dash-muted' }, hs.noVotesYet)); return; }
     const ranked = candidatesShuffled().map((c) => ({ c, n: r.counts[c.id] ?? 0 })).sort((a, b) => b.n - a.n).slice(0, 3);
     liveRows.replaceChildren(...ranked.map(({ c, n }) => liveRow(c, pct(n, r.total))));
@@ -168,6 +262,7 @@ export function renderDashboard(main: HTMLElement, account: Account): () => void
   const cached = readTopCache();
   if (cached) drawLive(cached);
   void loadCounts(content().candidates.map((c) => c.id)).then((r) => { if (r && alive) { writeTopCache(r); drawLive(r); } }).catch(() => {});
+  cleanups.push(() => stopLive());
 
   // ---- account ----
   const out = h('button', { class: 'btn btn-outline btn-block', type: 'button' }, S().account.signOut);
@@ -180,12 +275,13 @@ export function renderDashboard(main: HTMLElement, account: Account): () => void
     h('p', { class: 'dash-muted' }, d.accountNote), out);
 
   // ---- layout: two columns on desktop; on phones the columns dissolve and `order` sets the sequence ----
-  const order = (el: HTMLElement, n: number) => { el.style.setProperty('--o', String(n)); return el; };
+  const place = (el: HTMLElement, order: number, delay: number) => { el.style.setProperty('--o', String(order)); el.style.setProperty('--d', String(delay)); el.classList.add('rise'); return el; };
   const cols = h('div', { class: 'dash-cols' },
-    h('div', { class: 'dash-main' }, order(journey, 1), order(matchCard, 4), order(games, 5)),
-    h('div', { class: 'dash-side' }, order(voteCard, 2), order(picksCard, 3), order(liveCard, 6), order(acctCard, 7)));
+    h('div', { class: 'dash-main' }, place(journey, 1, 2), place(matchCard, 4, 4), place(games, 5, 5), place(dyk, 6, 6)),
+    h('div', { class: 'dash-side' }, place(voteCard, 2, 3), place(picksCard, 3, 4), place(liveCard, 7, 5), place(acctCard, 8, 6)));
+  greet.classList.add('rise'); countdown.classList.add('rise'); countdown.style.setProperty('--d', '1');
   main.append(
-    h('div', { class: 'wrap dash' }, greet, cols, whyVote()),
+    h('div', { class: 'wrap dash' }, greet, countdown, cols, whyVote({ countdown: false })),
     civic.el,
     h('div', { class: 'wrap' }, footer()));
 

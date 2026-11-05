@@ -9,6 +9,7 @@ import { SITE_URL } from '../data/site';
 import { whatsappUrl } from '../lib/util';
 import { priorityIcon, priorityLabel } from './common';
 import { toast } from './toast';
+import { dayKey } from '../lib/progress';
 
 /*
  * « Kat sitwayen »: a personal civic card on the home page. It shows the visitor's priorities,
@@ -73,8 +74,27 @@ function artSvg(ringText: string): string {
 </svg>`;
 }
 
+/** The second card of the stack, behind the visitor's card. */
+function backSvg(): string {
+  const paths = (ds: string[], o: number) => ds.map((d) => `<path d="${d}" stroke-opacity="${o}"/>`).join('');
+  return `<svg viewBox="0 0 ${VB_W} ${VB_H}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+<g fill="none" stroke="#fff" stroke-width="0.9">${paths(ART.outer, 0.07)}${paths(ART.inner, 0.09)}${paths(ART.waves, 0.06)}</g>
+<text x="56" y="86" font-size="22" font-weight="700" letter-spacing="5" fill="#fff" fill-opacity="0.5">AYITI 2027</text>
+</svg>`;
+}
+
 // ---- model ----
-interface Model { name: string; photo: string | null; picks: PriorityId[]; voted: boolean; firstRound: string }
+interface Model { name: string; photo: string | null; picks: PriorityId[]; voted: boolean; firstRound: string; since: string }
+
+/** « Manm depi »: the day this device first opened the card, kept once in localStorage. */
+const SINCE_KEY = 'ppm.since';
+function readSince(): string {
+  try {
+    let v = localStorage.getItem(SINCE_KEY);
+    if (!v || !/^\d{4}-\d{2}-\d{2}$/.test(v)) { v = dayKey(); localStorage.setItem(SINCE_KEY, v); }
+    return v;
+  } catch { return dayKey(); }
+}
 
 // The photo is cropped to the slot on the device, re-encoded as a small JPEG and kept in localStorage.
 const PHOTO_KEY = 'ppm.card.photo';
@@ -206,6 +226,8 @@ async function renderPng(m: Model): Promise<Blob> {
   ctx.fillStyle = '#fff'; ctx.font = `600 24px ${FONT}`;
   ctx.fillText(m.voted ? `✓ ${s.voted}` : s.notVoted, 56, 546);
   ctx.fillText(m.firstRound, 330, 546);
+  label(s.since, 560, 510);
+  ctx.fillStyle = '#fff'; ctx.font = `600 24px ${FONT}`; ctx.fillText(m.since, 560, 546);
   // microprint
   ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.font = `600 11px ${FONT}`; ctx.letterSpacing = '2px';
   ctx.fillText(`${s.micro.repeat(6)}`, 0, 612); ctx.letterSpacing = '0px';
@@ -224,7 +246,8 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
   let blob: Blob | null = null;
   let blobFor = '';
   let alive = true;
-  const model = (): Model => ({ name, photo, picks: state.picks.slice(), voted: !!state.myVote, firstRound: fmtDate(firstRoundIso) });
+  const sinceIso = readSince();
+  const model = (): Model => ({ name, photo, picks: state.picks.slice(), voted: !!state.myVote, firstRound: fmtDate(firstRoundIso), since: fmtDate(sinceIso) });
   const key = (m: Model) => JSON.stringify({ ...m, photo: m.photo ? photoRev : null });
 
   // photo picker: the card's frame and the buttons open the same hidden input
@@ -254,11 +277,12 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
       h('span', { class: 'cc-label' }, s.priorities), chipsEl),
     h('div', { class: 'cc-bottom' },
       h('div', null, h('span', { class: 'cc-label' }, s.vote), voteEl),
-      h('div', null, h('span', { class: 'cc-label' }, s.firstRound), h('b', { class: 'num' }, fmtDate(firstRoundIso)))),
+      h('div', null, h('span', { class: 'cc-label' }, s.firstRound), h('b', { class: 'num' }, fmtDate(firstRoundIso))),
+      h('div', null, h('span', { class: 'cc-label' }, s.since), h('b', { class: 'num' }, fmtDate(sinceIso)))),
     h('div', { class: 'cc-micro', 'aria-hidden': 'true' }, s.micro.repeat(8)));
   const card = h('div', { class: 'ccard', role: 'group', 'aria-label': s.alt, html: artSvg(s.ring.repeat(2)) });
   card.append(face, photoBtn);
-  const stage = h('div', { class: 'cc-stage' }, card);
+  const stage = h('div', { class: 'cc-stage' }, h('div', { class: 'ccard-back', 'aria-hidden': 'true', html: backSvg() }), card);
 
   const paint = () => {
     const m = model();
@@ -320,19 +344,24 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
   const photoAddBtn = h('button', { class: 'btn cc-btn-ghost cc-photo-btn', type: 'button', onclick: pick });
   const photoRemoveBtn = h('button', { class: 'cc-text-btn', type: 'button', onclick: removePhoto }, s.photoRemove);
   const controls = h('div', { class: 'cc-controls' },
-    h('label', { class: 'cc-field', for: 'cc-name' }, h('span', null, s.nameLabel), input),
-    h('div', { class: 'cc-photo-row' }, photoAddBtn, photoRemoveBtn, file),
-    h('div', { class: 'cc-actions' },
-      h('button', { class: 'btn btn-primary', type: 'button', onclick: () => void share() }, svg(ICON.share), s.share),
-      h('button', { class: 'btn cc-btn-ghost', type: 'button', onclick: () => void download() }, svg(ICON.download), s.download)),
+    h('div', { class: 'cc-panel' },
+      h('label', { class: 'cc-field', for: 'cc-name' }, h('span', null, s.nameLabel), input),
+      h('div', { class: 'cc-photo-row' }, photoAddBtn, photoRemoveBtn, file),
+      h('div', { class: 'cc-actions' },
+        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => void share() }, svg(ICON.share), s.share),
+        h('button', { class: 'btn cc-btn-ghost', type: 'button', onclick: () => void download() }, svg(ICON.download), s.download))),
     choose,
     h('p', { class: 'cc-note' }, svg(ICON.lock), s.privacy));
+  const feat = (icon: string, title: string, sub: string) => h('li', null, h('span', { class: 'cc-feat-icon', 'aria-hidden': 'true' }, svg(icon)), h('span', null, h('b', null, title), h('small', null, sub)));
   const text = h('div', { class: 'cc-text' },
     h('p', { class: 'board-kicker' }, s.kicker),
     h('h2', null, s.title),
-    h('p', { class: 'cc-lead' }, s.lead));
+    h('p', { class: 'cc-lead' }, s.lead),
+    h('ul', { class: 'cc-feats' }, feat(ICON.idcard, s.f1t, s.f1), feat(ICON.sliders, s.f2t, s.f2), feat(ICON.ballot, s.f3t, s.f3)));
 
   const el = h('section', { class: 'cc-sec', 'aria-labelledby': 'cc-title' },
+    h('div', { class: 'cc-flagline', 'aria-hidden': 'true' }, h('i'), h('i')),
+    h('span', { class: 'cc-mark', 'aria-hidden': 'true' }, '2027'),
     h('div', { class: 'wrap cc-grid' }, text, stage, controls));
   text.querySelector('h2')?.setAttribute('id', 'cc-title');
 
