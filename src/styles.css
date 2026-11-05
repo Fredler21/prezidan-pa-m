@@ -133,7 +133,7 @@ body[data-chrome="bar"] .main { padding-bottom: calc(112px + env(safe-area-inset
 
 /* ---- counter + pills + chips ---- */
 .count { height: 28px; padding: 0 10px; display: inline-flex; align-items: center; border: 1px solid var(--hairline); background: var(--card); color: var(--muted); border-radius: 999px; font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.party { display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: top; font-size: 12px; font-weight: 500; color: var(--muted); background: var(--bg); border: 1px solid var(--hairline); border-radius: 999px; padding: 2px 8px; line-height: 16px; }
+.party { display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: top; font-size: 12px; font-weight: 500; color: var(--muted); background: var(--soft); border: 1px solid var(--hairline); border-radius: 999px; padding: 2px 8px; line-height: 16px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 4px 10px; border-radius: 999px; font-size: 13px; font-weight: 500; background: var(--ultra-tint); color: var(--ultra-text); }
 .chip .n { width: 18px; height: 18px; border-radius: 999px; background: var(--ultra); color: #fff; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
@@ -257,7 +257,7 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 @media (min-width: 720px) { dialog.sheet { width: 640px; inset: auto 0 0 0; margin: 0 auto; } }
 .sheet-body { flex: 1; overflow: auto; overscroll-behavior: contain; padding: 0 20px 24px; }
 .handle { width: 36px; height: 4px; border-radius: 999px; background: var(--handle); margin: 8px auto 0; }
-.sheet-close { position: absolute; top: 12px; right: 20px; width: 40px; height: 40px; border-radius: 999px; background: var(--bg); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; z-index: 2; }
+.sheet-close { position: absolute; top: 12px; right: 20px; width: 40px; height: 40px; border-radius: 999px; background: var(--soft); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; z-index: 2; }
 .sheet-close .ico { width: 22px; height: 22px; }
 .identity { display: flex; gap: 16px; align-items: center; padding: 20px 52px 20px 0; border-bottom: 1px solid var(--hairline); }
 .identity h2 { font-size: 28px; font-weight: 700; line-height: 1.15; letter-spacing: -0.015em; }
@@ -269,7 +269,7 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 .dots li { position: relative; padding-left: 18px; font-size: 15px; line-height: 1.5; }
 .dots li + li { margin-top: 10px; }
 .dots li::before { content: ""; position: absolute; left: 3px; top: .62em; width: 6px; height: 6px; border-radius: 999px; background: var(--ultra); }
-.spoke { display: flex; gap: 12px; align-items: flex-start; background: var(--bg); border: 1px solid var(--hairline); border-radius: 14px; padding: 14px; }
+.spoke { display: flex; gap: 12px; align-items: flex-start; background: var(--soft); border: 1px solid var(--hairline); border-radius: 14px; padding: 14px; }
 .spoke + .spoke { margin-top: 8px; }
 .spoke .well { flex: 0 0 40px; width: 40px; height: 40px; border-radius: 999px; background: var(--card); color: var(--ultra-text); display: inline-flex; align-items: center; justify-content: center; }
 .spoke .well .ico { width: 22px; height: 22px; }
@@ -442,7 +442,7 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 .btn-google .ico { color: var(--ultra-text); }
 .divider { display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 13px; margin: 16px 0; }
 .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
-.seg { display: flex; background: var(--bg); border-radius: 999px; padding: 4px; height: 44px; }
+.seg { display: flex; background: var(--soft); border-radius: 999px; padding: 4px; height: 44px; }
 .seg button { flex: 1; border-radius: 999px; font-size: 15px; font-weight: 600; color: var(--muted); transition: background-color .12s, color .12s; }
 .seg button[aria-pressed="true"] { background: var(--card); color: var(--ink); box-shadow: var(--shadow-card); }
 .pw-wrap { position: relative; }
@@ -773,7 +773,7 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 .qz-next { margin-top: 14px; min-height: 52px; }
 .qz-back { margin-top: 6px; }
 .qz-recap { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
-.qz-recap li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--bg); font-size: 14px; }
+.qz-recap li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--soft); font-size: 14px; }
 .qz-recap li .ico { flex: 0 0 18px; width: 18px; height: 18px; margin-top: 2px; }
 .qz-recap li.ok .ico { color: var(--ultra-text); }
 .qz-recap li.bad .ico { color: var(--muted); }
@@ -960,7 +960,7 @@ dialog.sheet::backdrop { background: var(--scrim); animation: fadein .2s; }
 .dash-chip .ico { width: 18px; height: 18px; }
 .dash-picks .dash-muted, .dash-matches .dash-muted { margin-top: 12px; }
 .dash-mlist { display: grid; gap: 10px; margin-top: 14px; }
-.dash-mrow { display: grid; grid-template-columns: 52px minmax(0, 1fr); column-gap: 12px; row-gap: 10px; align-items: center; width: 100%; padding: 12px; border-radius: 16px; border: 1px solid var(--hairline); background: var(--bg); color: var(--ink); text-align: left; transition: border-color .15s; }
+.dash-mrow { display: grid; grid-template-columns: 52px minmax(0, 1fr); column-gap: 12px; row-gap: 10px; align-items: center; width: 100%; padding: 12px; border-radius: 16px; border: 1px solid var(--hairline); background: var(--soft); color: var(--ink); text-align: left; transition: border-color .15s; }
 .dash-mscore { grid-column: 1 / -1; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; }
 .dash-mscore b { color: var(--ultra-text); font-size: 13px; font-weight: 700; white-space: nowrap; }
 .dash-mscore .bar { margin: 0; }
@@ -1267,7 +1267,7 @@ dialog.sheet.narrow .sheet-body { padding-top: 8px; }
 .auth-forgot .link-btn { min-height: 36px; font-size: 14px; }
 .auth-main { margin-top: 16px; min-height: 52px; }
 .auth-out { margin-top: 10px; }
-.auth-perks { list-style: none; display: grid; gap: 8px; margin: 18px 0 0; padding: 12px 14px; border-radius: 14px; background: var(--bg); border: 1px solid var(--hairline); }
+.auth-perks { list-style: none; display: grid; gap: 8px; margin: 18px 0 0; padding: 12px 14px; border-radius: 14px; background: var(--soft); border: 1px solid var(--hairline); }
 .auth-perks li { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 13px; }
 .auth-perks .ico { flex: 0 0 20px; width: 20px; height: 20px; padding: 3px; border-radius: 999px; background: var(--ultra-tint); color: var(--ultra-text); }
 .auth-legal { margin-top: 14px; color: var(--muted); font-size: 12px; line-height: 1.5; text-align: center; }
@@ -1418,3 +1418,135 @@ dialog.sheet { z-index: 90; }
   .pg-save-actions { grid-column: auto; }
   .pg-save-actions .btn { flex: 0 0 auto; padding: 0 22px; }
 }
+
+/* ---- admin: accounts list ---- */
+.adm-users-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.adm-users-actions .btn { min-height: 40px; font-size: 14px; }
+.adm-users { display: grid; gap: 8px; max-height: 560px; overflow: auto; }
+.adm-user { display: grid; gap: 6px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--hairline); background: var(--soft); }
+.adm-user-main strong { display: block; font-size: 15px; overflow-wrap: anywhere; }
+.adm-user-main span { display: block; color: var(--muted); font-size: 13px; }
+.adm-user-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; color: var(--muted); font-size: 12px; }
+.adm-user .link-btn { min-height: 32px; font-size: 13px; justify-self: start; }
+
+/* ---- home: citizen card invitation (the card itself is made once signed in, on the dashboard) ---- */
+.cc-invite { display: grid; gap: 20px; align-items: center; padding: 20px; border-radius: 24px; background: var(--card); border: 1px solid var(--hairline); box-shadow: var(--shadow-card); }
+.cc-mini { position: relative; width: min(100%, 320px); aspect-ratio: 1000 / 630; margin: 0 auto; padding: 16px 18px; border-radius: 16px; background: #13246E; color: #fff; overflow: hidden; transform: rotate(-3deg); box-shadow: 0 18px 36px rgba(11, 18, 48, .25); }
+.cc-mini-top { display: flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: .14em; }
+.cc-mini-top .ico { width: 14px; height: 14px; }
+.cc-mini-top img { margin-left: auto; border-radius: 2px; }
+.cc-mini-label { display: block; margin-top: 18%; font-size: 8px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(214, 222, 246, .85); }
+.cc-mini b { display: block; margin-top: 2px; font-size: 18px; font-weight: 700; }
+.cc-mini-photo { position: absolute; right: 7%; top: 20%; width: 22%; height: 46%; border-radius: 8px; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .4); display: flex; align-items: center; justify-content: center; color: rgba(214, 222, 246, .7); }
+.cc-mini-photo .ico { width: 22px; height: 22px; }
+.cc-mini-seal { position: absolute; right: 7%; bottom: 9%; width: 36px; height: 36px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .45); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+.cc-invite-text h2 { margin-top: 6px; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.cc-invite-text > p:not(.kicker) { margin-top: 8px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.cc-invite-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.cc-invite-actions .btn { flex: 1 1 150px; }
+@media (min-width: 1024px) {
+  .cc-invite { grid-template-columns: 340px minmax(0, 1fr); gap: 40px; padding: 32px 40px; margin-top: 56px; }
+  .cc-invite-text h2 { font-size: 30px; }
+  .cc-invite-actions .btn { flex: 0 0 auto; padding: 0 26px; }
+}
+
+/* ==== themes: day (all white, the default) and night (all black); the switch sits in the header ==== */
+:root {
+  --bg: #FFFFFF;
+  --soft: #F3F5FA;                 /* subtle fills inside cards: pills, segmented controls, list rows */
+  --hdr-bg: #FFFFFF; --hdr-fg: var(--ink); --hdr-muted: var(--muted); --hdr-line: var(--hairline);
+  --page-hero: #FFFFFF; --hero-fg: var(--ink); --hero-muted: var(--muted);
+  --deep: #0B1230;                 /* navy accent cards (live board, footer, game panels) */
+  --deep-line: rgba(255, 255, 255, .1);
+  --lace: rgba(11, 26, 74, .05);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #000000; --soft: #16181D; --card: #0E0F12; --ink: #F5F7FA; --muted: #9AA3B5;
+  --hairline: #23262D; --track: #1E222B; --handle: #2A2F3A;
+  --ultra-text: #8EA2F0; --ultra-tint: #141B36; --ultra-ring: #5B7CFF;
+  --chrome: #0E0F12; --scrim: rgba(0, 0, 0, .72); --avatar: #1A2457; --avatar-ring: 0 0 0 2px #0E0F12, 0 0 0 3px #23262D;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .6); --shadow-chrome: 0 -1px 0 #1F232B; --shadow-sheet: 0 -8px 32px rgba(0, 0, 0, .7);
+  --hdr-bg: #000000; --hdr-fg: #F5F7FA; --hdr-muted: #9AA3B5; --hdr-line: #1F232B;
+  --page-hero: #000000; --hero-fg: #F5F7FA; --hero-muted: #9AA3B5;
+  --deep: #0F1733; --deep-line: rgba(255, 255, 255, .09);
+  --good: #22A55A; --good-tint: #0F2A1A; --bad: #E5354F; --bad-tint: #2A0F15;
+  --lace: rgba(255, 255, 255, .04);
+}
+body { transition: background-color .25s, color .25s; }
+
+/* header */
+.hdr { background: var(--hdr-bg); color: var(--hdr-fg); border-bottom: 1px solid var(--hdr-line); }
+.wordmark, .hdr-back, .hdr-crumb, .hdr-title { color: var(--hdr-fg); }
+.hdr :focus-visible { outline-color: var(--ultra); }
+.lang select { color: var(--hdr-fg); border-color: var(--hdr-line); background: transparent; }
+.lang::after { border-color: var(--hdr-fg); }
+.strip { border-top-color: var(--hdr-line); color: var(--hdr-muted); }
+.acct-btn { border-color: var(--hdr-line); color: var(--hdr-fg); }
+.acct-btn.on { color: #fff; }
+.acct-in { color: var(--hdr-fg); border-color: var(--hdr-line); }
+@media (hover: hover) { .acct-in:hover { background: var(--soft); border-color: var(--hdr-muted); } }
+.theme-btn { flex: 0 0 36px; width: 36px; height: 36px; border-radius: 999px; border: 1px solid var(--hdr-line); color: var(--hdr-fg); display: inline-flex; align-items: center; justify-content: center; transition: background-color .15s, transform .35s var(--ease-out); }
+.theme-btn .ico { width: 18px; height: 18px; }
+.theme-btn:active { transform: rotate(-25deg) scale(.92); }
+@media (hover: hover) { .theme-btn:hover { background: var(--soft); } }
+.strip-ctl { display: flex; align-items: center; gap: 8px; }
+.strip .theme-btn { flex-basis: 30px; width: 30px; height: 30px; }
+@media (max-width: 1023px) { .hdr.with-strip .hdr-row .theme-btn { display: none; } }
+@media (min-width: 1024px) {
+  .topnav a { color: var(--hdr-muted); }
+  .topnav a[aria-current="page"] { color: var(--hdr-fg); }
+  @media (hover: hover) { .topnav a:hover { color: var(--hdr-fg); } }
+  .strip-inline { border-left-color: var(--hdr-line); color: var(--hdr-muted); }
+}
+
+/* the logo lockup: medallion and two-line wordmark (the letters follow the text colour) */
+.wordmark { gap: 10px; }
+.wm-mark { flex: 0 0 auto; display: block; width: 38px; height: 38px; border-radius: 999px; }
+.wm-text { display: inline-flex; }
+.wm-text svg { display: block; width: auto; height: 30px; }
+@media (min-width: 1024px) { .wm-mark { width: 42px; height: 42px; } .wm-text svg { height: 34px; } }
+.foot-brand { gap: 12px; color: #fff; }
+.foot-brand .wm-mark { width: 46px; height: 46px; }
+.foot-brand .wm-text svg { height: 38px; }
+
+/* home hero: on the page colour, the live board stays as navy cards */
+.hero { background: var(--page-hero); color: var(--hero-fg); }
+.hero p, .hero .eyebrow { color: var(--hero-muted); }
+.hero-home h1 { color: var(--hero-fg); }
+.hero-link { color: var(--ultra-text); }
+.hero :focus-visible { outline-color: var(--ultra); }
+.hero-lace, .hero-home .hero-lace { color: var(--lace); opacity: 1; }
+.hero .flag { box-shadow: 0 0 0 1px var(--hairline); }
+.board { background: var(--deep); border-color: var(--deep-line); }
+.hero-home .countdown-card { box-shadow: var(--shadow-card); }
+
+/* the citizen card band (dashboard) on the page colour; its controls panel stays navy */
+.cc-sec { background: var(--page-hero); color: var(--hero-fg); }
+.cc-sec h2 { color: var(--hero-fg); }
+.cc-lead, .cc-text .board-kicker, .cc-feats small, .cc-note { color: var(--hero-muted); }
+.cc-feat-icon { background: var(--ultra-tint); color: var(--ultra-text); }
+.cc-choose { color: var(--ultra-text); }
+.cc-mark { -webkit-text-stroke-color: var(--lace); }
+.cc-panel { background: var(--deep); }
+
+/* navy cards keep a hairline on black */
+:root[data-theme="dark"] .foot, :root[data-theme="dark"] .qz-side, :root[data-theme="dark"] .pg-country-card, :root[data-theme="dark"] .pg-oath,
+:root[data-theme="dark"] .pg-final, :root[data-theme="dark"] .dash-count, :root[data-theme="dark"] .pg-res { box-shadow: inset 0 0 0 1px var(--deep-line); background-color: var(--deep); }
+
+/* night details */
+:root[data-theme="dark"] .card, :root[data-theme="dark"] .cand, :root[data-theme="dark"] .stat-tile { box-shadow: var(--shadow-card); }
+:root[data-theme="dark"] .tilt:hover { box-shadow: 0 0 0 1px var(--hairline); }
+:root[data-theme="dark"] .qz-streak { background: #2A2410; color: #FFD66B; box-shadow: inset 0 0 0 1px #4A3A10; }
+:root[data-theme="dark"] .pg-news.bad { color: #FFB3BE; }
+:root[data-theme="dark"] .pg-news.good { color: #9BE7B5; }
+:root[data-theme="dark"] .qz-fact { color: var(--ink); }
+:root[data-theme="dark"] .btn-google { border-color: var(--hairline); }
+:root[data-theme="dark"] .cc-mini { box-shadow: 0 0 0 1px var(--hairline); }
+:root[data-theme="dark"] img.wm-mark { box-shadow: 0 0 0 1px rgba(255, 255, 255, .15); }
+/* clean page colour behind the hero (the lace pattern read as a grey patch on white and black); the tagline lives in the hero */
+.hero-lace, .hero-home .hero-lace { display: none; }
+.strip-inline { display: none !important; }
+/* text inside the navy board cards keeps its light colours whatever the page theme */
+.hero .board p { color: var(--on-indigo-muted); }
+.hero .board .board-q { color: #fff; }

@@ -14,11 +14,11 @@ import { note, footer, well, avatar } from './common';
 import { openProfile } from './profile';
 import { attachTilt } from '../lib/tilt';
 import { toast } from './toast';
-import { civicCard } from './civic-card';
+import { openAccountSheet } from './account';
 import { whyVote } from './why-vote';
 
 // Faint wrought-iron lace, inline (no image request), masked to fade before the bottom.
-const LACE = '<svg class="hero-lace" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="lace2" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M0 28A28 28 0 0 0 28 0M28 0A28 28 0 0 0 56 28M56 28A28 28 0 0 0 28 56M28 56A28 28 0 0 0 0 28" fill="none" stroke="#fff" stroke-width="1"/><circle cx="28" cy="28" r="6" fill="none" stroke="#fff" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#lace2)"/></svg>';
+const LACE = '<svg class="hero-lace" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="lace2" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M0 28A28 28 0 0 0 28 0M28 0A28 28 0 0 0 56 28M56 28A28 28 0 0 0 28 56M28 56A28 28 0 0 0 0 28" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="28" cy="28" r="6" fill="none" stroke="currentColor" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#lace2)"/></svg>';
 
 const REST: RestConfig = { projectId: firebaseConfig.projectId, apiKey: firebaseConfig.apiKey, timeoutMs: 6000 };
 const TOP = 5;
@@ -420,9 +420,18 @@ export function renderHome(main: HTMLElement): () => void {
     cleanups.push(() => io.disconnect());
   } else mountQuiz();
 
-  // ---- Kat sitwayen: the visitor's own civic card ----
-  const card = civicCard(firstRound);
-  cleanups.push(card.destroy);
+  // ---- Kat sitwayen: made once signed in (it lives on the dashboard); here, an invitation with a small preview ----
+  const cs = S().card;
+  const cardInvite = h('section', { class: 'section cc-invite', 'aria-labelledby': 'cc-invite-title' },
+    h('div', { class: 'cc-mini', 'aria-hidden': 'true' },
+      h('span', { class: 'cc-mini-top' }, svg(ICON.brand), S().appName.toUpperCase(), h('img', { src: IMG.flag.src, width: 22, height: 13, alt: '', decoding: 'async' })),
+      h('span', { class: 'cc-mini-label' }, cs.onCard), h('b', null, cs.defaultName),
+      h('span', { class: 'cc-mini-photo' }, svg(ICON.photo)), h('span', { class: 'cc-mini-seal' }, '2027')),
+    h('div', { class: 'cc-invite-text' },
+      h('p', { class: 'kicker' }, cs.kicker), h('h2', { id: 'cc-invite-title' }, cs.title), h('p', null, cs.inviteLead),
+      h('div', { class: 'cc-invite-actions' },
+        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp),
+        h('button', { class: 'btn btn-outline', type: 'button', onclick: () => openAccountSheet('in') }, S().account.signIn))));
 
   // Photo card: the Citadelle (CC BY 2.0). Wide crop on desktop, 3:2 on phones; lazy.
   const band = h('figure', { class: 'band' },
@@ -450,10 +459,8 @@ export function renderHome(main: HTMLElement): () => void {
   const mobileStats = h('div', { class: 'mobile-only stats-mobile' }, h('div', { class: 'card countdown-card' }, countdownRow()), statRow('stats3', 0));
   main.append(
     hero,
-    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore), promo, quizSec),
-    card.el,
-    h('div', { class: 'wrap home-body' }, why, band, bottom, footer()));
-  cleanups.push(revealOnScroll([promo, why, band, bottom]), attachTilt(band, 3));
+    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore), promo, quizSec, why, cardInvite, band, bottom, footer()));
+  cleanups.push(revealOnScroll([promo, why, cardInvite, band, bottom]), attachTilt(band, 3));
 
   void loadStats().then((st) => {
     if (!alive) return;

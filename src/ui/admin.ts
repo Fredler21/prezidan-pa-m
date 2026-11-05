@@ -1,5 +1,5 @@
 import { h, clear } from '../lib/dom';
-import { S, fmt } from '../i18n';
+import { S, fmt, fmtDate } from '../i18n';
 import type { Lang, L10n } from '../types';
 import { isoWeek } from '../lib/util';
 import { STORAGE_MODE } from '../storage';
@@ -9,7 +9,7 @@ import { toast } from './toast';
 
 const ADMIN_EMAILS = ['pierrelouisfredler@gmail.com', 'fredler.pierre-louis@edlight.org'];
 
-/** #admin: publish the candidate content to Firestore and post the weekly poll. Firestore rules enforce the allowlist. */
+/** #admin: publish the candidate content to Firestore, post the weekly poll, see the accounts. Firestore rules enforce the allowlist. */
 export function renderAdmin(main: HTMLElement): void {
   clear(main);
   const s = S().admin;
@@ -105,11 +105,62 @@ export function renderAdmin(main: HTMLElement): void {
         field(s.starts, starts), field(s.ends, ends), publish, closeBtn);
     };
 
+    // ---- accounts: one record per user (email, name, sign-in method, dates); passwords are never stored or shown ----
+    const usersCard = (): HTMLElement => {
+      type Row = { email: string; name: string; provider: string; created: Date | null; last: Date | null };
+      let rows: Row[] = [];
+      const count = h('p', { class: 'caption num', style: 'margin-top:0' }, S().loading);
+      const list = h('div', { class: 'adm-users' });
+      const day = (d: Date | null) => (d ? fmtDate(d.toISOString().slice(0, 10)) : '·');
+      const csv = h('button', { class: 'btn btn-outline', type: 'button' }, s.usersCsv);
+      const reload = h('button', { class: 'btn btn-outline', type: 'button' }, s.refresh);
+      const load = async () => {
+        reload.disabled = true;
+        try {
+          const snap = await fs.getDocs(fs.query(fs.collection(db, 'users'), fs.limit(5000)));
+          const at = (v: unknown) => (v instanceof fs.Timestamp ? v.toDate() : null);
+          rows = snap.docs.map((d) => d.data()).filter((d) => typeof d.email === 'string' && d.email)
+            .map((d) => ({ email: String(d.email), name: String(d.name ?? ''), provider: String(d.provider ?? ''), created: at(d.createdAt), last: at(d.lastLoginAt) }))
+            .sort((a, b) => (b.created?.getTime() ?? 0) - (a.created?.getTime() ?? 0));
+          count.textContent = fmt(s.usersCount, { n: rows.length });
+          list.replaceChildren(...(rows.length ? rows.map((r) => {
+            const reset = r.provider === 'password'
+              ? h('button', { class: 'link-btn', type: 'button', onclick: async () => {
+                try { await auth.resetPassword(r.email); toast(fmt(s.usersResetSent, { e: r.email }), 4000); } catch (e) { console.error(e); toast(s.error); }
+              } }, s.usersReset)
+              : null;
+            return h('div', { class: 'adm-user' },
+              h('div', { class: 'adm-user-main' }, h('strong', null, r.email), r.name ? h('span', null, r.name) : null),
+              h('div', { class: 'adm-user-meta' },
+                h('span', { class: 'party' }, r.provider === 'google.com' ? s.usersGoogle : s.usersEmail),
+                h('span', { class: 'num' }, `${s.usersCreated}: ${day(r.created)}`),
+                h('span', { class: 'num' }, `${s.usersLast}: ${day(r.last)}`)),
+              reset);
+          }) : [note(s.usersEmpty)]));
+        } catch (e) { console.error(e); count.textContent = s.error; }
+        finally { reload.disabled = false; }
+      };
+      csv.addEventListener('click', () => {
+        const cell = (v: string) => `"${v.replace(/"/g, '""')}"`;
+        const iso = (d: Date | null) => (d ? d.toISOString() : '');
+        const text = ['email,name,sign_in_method,created,last_sign_in', ...rows.map((r) => [cell(r.email), cell(r.name), r.provider === 'google.com' ? 'google' : 'email', iso(r.created), iso(r.last)].join(','))].join('\n');
+        const url = URL.createObjectURL(new Blob([text], { type: 'text/csv;charset=utf-8' }));
+        const a = h('a', { href: url, download: `prezidan-pa-m-users-${new Date().toISOString().slice(0, 10)}.csv` });
+        document.body.append(a); a.click(); a.remove();
+        window.setTimeout(() => URL.revokeObjectURL(url), 4000);
+      });
+      reload.addEventListener('click', () => void load());
+      void load();
+      return h('div', { class: 'card roomy', style: 'margin-top:12px' }, h('h2', null, s.usersTitle),
+        h('p', { class: 'caption', style: 'margin-top:0' }, s.usersSub), count,
+        h('div', { class: 'adm-users-actions' }, csv, reload), list);
+    };
+
     const draw = (email: string | null) => {
       clear(box);
       if (!email) { box.append(h('button', { class: 'btn btn-primary', type: 'button', onclick: () => auth.signInAdmin().then((u) => draw(u.email)).catch((e) => { console.error(e); toast(s.error); }) }, s.signIn)); return; }
       if (!ADMIN_EMAILS.includes(email)) { box.append(note(`${s.notAdmin} (${email})`), h('button', { class: 'link-btn', type: 'button', onclick: () => auth.signOut().then(() => draw(null)) }, s.signOut)); return; }
-      box.append(h('p', { class: 'caption', style: 'margin:0 0 12px' }, email), contentCard(email), pollCard(email),
+      box.append(h('p', { class: 'caption', style: 'margin:0 0 12px' }, email), usersCard(), contentCard(email), pollCard(email),
         h('button', { class: 'link-btn', type: 'button', style: 'margin-top:12px', onclick: () => auth.signOut().then(() => draw(null)) }, s.signOut));
     };
 

@@ -6,6 +6,8 @@ const ht = {
   appName: 'Prezidan Pa M',
   tagline: 'Ayiti 2027 · Vòt pèp la',
   langLabel: 'Lang',
+  themeNight: 'Mòd nwit',
+  themeDay: 'Mòd jou',
   back: 'Retounen',
   close: 'Fèmen',
   loading: 'Chajman…',
@@ -420,6 +422,7 @@ const ht = {
     f2: 'Sa ou vle chanje an Ayiti',
     f3t: 'Vòt ou: wi oswa non',
     f3: 'Jamè pou ki moun ou vote',
+    inviteLead: 'Konekte pou w fè kat pa w: non ou, foto ou ak 3 priyorite ou, pou w pataje l. Kat la pa janm montre pou ki moun ou vote.',
   },
 
   foot: {
@@ -533,6 +536,17 @@ const ht = {
     fallbackHint: 'Si ou kite Français oswa English vid, nou itilize tèks Kreyòl la.',
     accessNote: 'Sèlman kont administratè ki nan lis la ka ekri. Tout moun ka li done yo.',
     demoNote: 'Mòd demo: sondaj yo rete sou telefòn sa a, epi pibliye done yo pa disponib.',
+    usersTitle: 'Itilizatè yo',
+    usersSub: 'Chak kont gen yon dosye: imèl, non, metòd koneksyon ak dat yo. Modpas yo pa janm sere ni montre: Firebase kenbe yo kode, pèsonn pa ka li yo. Si yon moun bliye modpas li, voye l yon lyen pou chanje l.',
+    usersCount: '{n} kont',
+    usersCsv: 'Telechaje CSV',
+    usersEmpty: 'Poko gen kont.',
+    usersGoogle: 'Google',
+    usersEmail: 'Imèl',
+    usersCreated: 'Kreye',
+    usersLast: 'Dènye vizit',
+    usersReset: 'Voye lyen modpas',
+    usersResetSent: 'Lyen pou chanje modpas la voye bay {e}.',
   },
 };
 
@@ -542,6 +556,8 @@ const fr: Strings = {
   appName: 'Prezidan Pa M',
   tagline: 'Haïti 2027 · Le vote du peuple',
   langLabel: 'Langue',
+  themeNight: 'Mode nuit',
+  themeDay: 'Mode jour',
   back: 'Retour',
   close: 'Fermer',
   loading: 'Chargement…',
@@ -956,6 +972,7 @@ const fr: Strings = {
     f2: 'Ce que vous voulez changer en Haïti',
     f3t: 'Votre vote : oui ou non',
     f3: 'Jamais pour qui vous votez',
+    inviteLead: 'Connectez-vous pour créer votre carte : votre nom, votre photo et vos 3 priorités, à partager. La carte ne montre jamais pour qui vous votez.',
   },
 
   foot: {
@@ -1069,6 +1086,17 @@ const fr: Strings = {
     fallbackHint: 'Si vous laissez Français ou English vide, le texte en Kreyòl est utilisé.',
     accessNote: 'Seuls les comptes administrateurs de la liste peuvent écrire. Tout le monde peut lire les données.',
     demoNote: 'Mode démo : les sondages restent sur cet appareil et la publication des données n’est pas disponible.',
+    usersTitle: 'Utilisateurs',
+    usersSub: 'Chaque compte a une fiche : e-mail, nom, mode de connexion et dates. Les mots de passe ne sont jamais enregistrés ni affichés : Firebase les garde chiffrés, personne ne peut les lire. Si quelqu’un oublie son mot de passe, envoyez-lui un lien pour le changer.',
+    usersCount: '{n} comptes',
+    usersCsv: 'Télécharger le CSV',
+    usersEmpty: 'Aucun compte pour l’instant.',
+    usersGoogle: 'Google',
+    usersEmail: 'E-mail',
+    usersCreated: 'Créé',
+    usersLast: 'Dernière visite',
+    usersReset: 'Envoyer un lien de mot de passe',
+    usersResetSent: 'Lien de changement de mot de passe envoyé à {e}.',
   },
 };
 
@@ -1076,6 +1104,8 @@ const en: Strings = {
   appName: 'Prezidan Pa M',
   tagline: 'Haiti 2027 · The people’s vote',
   langLabel: 'Language',
+  themeNight: 'Night mode',
+  themeDay: 'Day mode',
   back: 'Back',
   close: 'Close',
   loading: 'Loading…',
@@ -1490,6 +1520,7 @@ const en: Strings = {
     f2: 'What you want to change in Haiti',
     f3t: 'Your vote: yes or no',
     f3: 'Never who you voted for',
+    inviteLead: 'Sign in to make your own card: your name, your photo and your 3 priorities, ready to share. The card never shows who you voted for.',
   },
 
   foot: {
@@ -1603,6 +1634,17 @@ const en: Strings = {
     fallbackHint: 'If you leave Français or English empty, the Kreyòl text is used.',
     accessNote: 'Only the listed administrator accounts can write. Everyone can read the data.',
     demoNote: 'Demo mode: polls stay on this device and publishing the data is not available.',
+    usersTitle: 'Users',
+    usersSub: 'Every account has a record: email, name, sign-in method and dates. Passwords are never stored or shown: Firebase keeps them hashed and nobody can read them. If someone forgets their password, send them a reset link.',
+    usersCount: '{n} accounts',
+    usersCsv: 'Download CSV',
+    usersEmpty: 'No accounts yet.',
+    usersGoogle: 'Google',
+    usersEmail: 'Email',
+    usersCreated: 'Created',
+    usersLast: 'Last visit',
+    usersReset: 'Send password link',
+    usersResetSent: 'Password reset link sent to {e}.',
   },
 };
 

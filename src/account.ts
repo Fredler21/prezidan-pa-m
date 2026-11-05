@@ -36,7 +36,7 @@ export function onAccountChange(fn: (a: Account | null) => void): () => void {
   return () => { listeners.delete(fn); };
 }
 
-type FirebaseUser = { uid: string; isAnonymous: boolean; displayName: string | null; email: string | null; photoURL: string | null };
+type FirebaseUser = { uid: string; isAnonymous: boolean; displayName: string | null; email: string | null; photoURL: string | null; providerData: { providerId: string }[] };
 
 function toAccount(u: FirebaseUser): Account {
   return { name: u.displayName || (u.email ? u.email.split('@')[0] ?? '' : ''), email: u.email ?? '', photo: u.photoURL };
@@ -55,6 +55,32 @@ async function progressDoc(uid: string): Promise<{ picks: PriorityId[]; game: Cl
     game: g ? { run: g.run ?? null, last: g.last ?? null, best: typeof g.best === 'number' ? g.best : 0 } : null,
   };
 }
+
+/**
+ * The account record under users/{uid}: email, name, sign-in method, first and last sign-in. The
+ * administrators see these on #admin. Never a password: Firebase Auth stores passwords hashed and
+ * nobody, the site owner included, can read them back (a forgotten password is reset by email).
+ */
+async function saveProfile(user: FirebaseUser): Promise<void> {
+  if (STORAGE_MODE !== 'firebase' || user.isAnonymous || !user.email) return;
+  try {
+    const { getFirestore, doc, getDoc, setDoc, serverTimestamp } = await import('firebase/firestore');
+    const { app } = await import('./storage/auth');
+    const ref = doc(getFirestore(app()), 'users', user.uid);
+    const snap = await getDoc(ref);
+    const provider = user.providerData.some((p) => p.providerId === 'google.com') ? 'google.com' : 'password';
+    await setDoc(ref, {
+      email: user.email,
+      name: (user.displayName ?? '').slice(0, 100),
+      provider,
+      ...(snap.exists() && snap.data().createdAt ? {} : { createdAt: serverTimestamp() }),
+      lastLoginAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    }, { merge: true });
+    try { localStorage.setItem(PROFILE_DAY_KEY, new Date().toISOString().slice(0, 10)); } catch { /* storage off */ }
+  } catch (e) { console.warn('profile save failed', e); }
+}
+const PROFILE_DAY_KEY = 'ppm.profile.day';
 
 let gameTimer: number | undefined;
 /** Signed-in players: writes the game (unfinished term, last result, best score) under users/{uid} (debounced). */
@@ -184,6 +210,7 @@ async function finishConnect(user: FirebaseUser): Promise<Account> {
   const account = toAccount(user);
   setAccount(account);
   await adoptFromCloud(user.uid);
+  await saveProfile(user);
   saveProgress();
   saveGameProgress();
   return account;
@@ -201,4 +228,18 @@ export async function disconnect(): Promise<void> {
 /** Keeps the saved progress current while signed in. Call once at startup. */
 export function initAccount(): void {
   onState(() => saveProgress());
+  // Visitors who stay signed in refresh their record once a day (last visit, and a record for
+  // accounts made before records existed). Waits for idle time so the first paint stays light.
+  if (STORAGE_MODE !== 'firebase' || !getAccount()) return;
+  let today = '';
+  try { today = new Date().toISOString().slice(0, 10); if (localStorage.getItem(PROFILE_DAY_KEY) === today) return; } catch { return; }
+  const touch = async () => {
+    const auth = await import('./storage/auth');
+    await auth.authReady();
+    const u = await auth.currentUser();
+    if (u && !u.isAnonymous) await saveProfile(u);
+  };
+  const run = () => { void touch().catch(() => {}); };
+  if (typeof window.requestIdleCallback === 'function') window.requestIdleCallback(run, { timeout: 8000 });
+  else window.setTimeout(run, 4000);
 }

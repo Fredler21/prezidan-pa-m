@@ -7,7 +7,7 @@ import { STORAGE_MODE } from '../storage';
 import { content } from '../content';
 import type { Route } from '../router';
 import { CONTACT_EMAIL } from '../data/site';
-import { IMG } from '../data/images';
+import { MARK_SRC, WORDMARK } from '../lib/logo';
 
 export function priorityLabel(id: PriorityId): string {
   return l(content().priorities.find((p) => p.id === id)?.label);
@@ -122,7 +122,7 @@ export function footer(): HTMLElement {
   return h('footer', { class: 'foot' },
     h('div', { class: 'foot-top' },
       h('div', { class: 'foot-id' },
-        h('a', { class: 'foot-brand', href: '#home' }, svg(ICON.brand), s.appName, h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' })),
+        h('a', { class: 'foot-brand', href: '#home', 'aria-label': s.appName }, h('img', { class: 'wm-mark', src: MARK_SRC, width: 44, height: 44, alt: '', decoding: 'async' }), h('span', { class: 'wm-text', html: WORDMARK })),
         h('p', { class: 'foot-about' }, f.about)),
       h('nav', { class: 'foot-cols', 'aria-label': s.nav.aboutUs },
         col(f.platform, a('#start', s.nav.priorities), a('#candidates', s.nav.candidates), a('#results', s.nav.results), a('#poll', s.nav.poll), a('#quiz', s.home.quizCard), a('#president', s.pres.title)),

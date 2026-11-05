@@ -6,6 +6,8 @@ import { LANG_NAMES } from '../i18n/strings';
 import type { Route } from '../router';
 import { accountControls } from './account';
 import { IMG } from '../data/images';
+import { themeButton } from '../lib/theme';
+import { MARK_SRC, WORDMARK } from '../lib/logo';
 
 const flag = () => h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' });
 
@@ -17,7 +19,7 @@ function langSelect(): HTMLElement {
 
 /** Right side of the header: the language pill and the account controls (« Konekte », « Kreye kont » or the visitor's initial). */
 function langPill(): HTMLElement {
-  return h('div', { class: 'hdr-right' }, langSelect(), accountControls(() => { const el = document.getElementById('header'); if (el) fitHeader(el); }));
+  return h('div', { class: 'hdr-right' }, langSelect(), themeButton(), accountControls(() => { const el = document.getElementById('header'); if (el) fitHeader(el); }));
 }
 
 /**
@@ -57,7 +59,9 @@ function topNav(route: Route): HTMLElement {
     h('a', { href: `#${x.route}`, 'aria-current': x.route === cur ? 'page' : undefined }, x.label)));
 }
 
-const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#home' }, svg(ICON.brand), h('span', { class: 'wm-text' }, S().appName),
+/** The logo lockup: the medallion and the two-line wordmark (it takes the header's text colour, day or night). */
+const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#home', 'aria-label': S().appName },
+  h('img', { class: 'wm-mark', src: MARK_SRC, width: 38, height: 38, alt: '', decoding: 'async' }), h('span', { class: 'wm-text', html: WORDMARK }),
   title ? h('span', { class: 'hdr-crumb' }, `· ${title}`) : null);
 
 /** Top-level pages carry the wordmark; drill-in pages a back arrow and a title (desktop: wordmark · title). */
@@ -78,7 +82,7 @@ function build(el: HTMLElement, route: Route): void {
     wm.append(h('span', { class: 'strip-inline desk-only' }, flag(), s.tagline));
     el.append(
       h('div', { class: 'wrap hdr-row' }, h('div', { class: 'hdr-left' }, wm), topNav(route), langPill()),
-      h('div', { class: 'strip mobile-only' }, h('span', { class: 'strip-tag' }, flag(), s.tagline), langSelect()),
+      h('div', { class: 'strip mobile-only' }, h('span', { class: 'strip-tag' }, flag(), s.tagline), h('div', { class: 'strip-ctl' }, themeButton(), langSelect())),
     );
     return;
   }

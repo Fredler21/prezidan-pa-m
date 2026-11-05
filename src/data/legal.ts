@@ -55,7 +55,7 @@ const ht: LegalSet = {
     sections: [
       { h: 'Done nou kolekte', p: ['Nou kolekte sèlman sa ki nesesè pou vòt la mache, pa plis. Men lis la, dapre fason ou itilize sit la.'], li: [
         'San kont: yon idantifyan anonim (Firebase Anonymous Authentication) ki rete sou aparèy ou pou garanti yon vòt pa moun; vòt ou (kandida, rezon opsyonèl jiska 240 karaktè, depatman opsyonèl, priyorite ou chwazi yo, lang); repons ou nan sondaj yo.',
-        'Ak yon kont: adrès imèl ou; ak Google, non ak foto pwofil Google ou bay la; priyorite ou sove yo.',
+        'Ak yon kont: adrès imèl ou; ak Google, non ak foto pwofil Google ou bay la; priyorite ou sove yo ak pwogrè ou nan jwèt yo. Yon dosye kont (imèl, non, metòd koneksyon, dat kreyasyon ak dènye vizit) vizib pou administratè sit la sèlman. Modpas ou pa janm sere sou sit la ni montre: Firebase kenbe l kode, e pèsonn, menm administratè yo, pa ka li l.',
         'Sou aparèy ou sèlman: lang ou, priyorite ou, non ak foto ou mete sou kat sitwayen an (si ou mete yo), yon kopi done kandida yo ak dènye rezilta yo (localStorage ak IndexedDB).',
         'Done teknik: adrès IP, navigatè ak dat koneksyon nan jounal sèvè founisè ebèjman yo, pou sekirite.',
       ] },
@@ -177,7 +177,7 @@ const fr: LegalSet = {
     sections: [
       { h: 'Données collectées', p: ['Nous collectons uniquement ce qui est nécessaire au fonctionnement du vote, rien de plus. Voici la liste, selon la façon dont vous utilisez le site.'], li: [
         'Sans compte : un identifiant anonyme (Firebase Anonymous Authentication) conservé sur votre appareil pour garantir un vote par personne ; votre vote (candidat, raison facultative de 240 caractères maximum, département facultatif, priorités choisies, langue) ; vos réponses aux sondages.',
-        'Avec un compte : votre adresse courriel ; avec Google, le nom et la photo de profil que Google fournit ; vos priorités sauvegardées.',
+        'Avec un compte : votre adresse courriel ; avec Google, le nom et la photo de profil que Google fournit ; vos priorités sauvegardées et votre progression dans les jeux. Une fiche de compte (courriel, nom, mode de connexion, date de création et dernière visite) est visible uniquement par les administrateurs du site. Votre mot de passe n’est jamais enregistré par le site ni affiché : Firebase le garde chiffré et personne, administrateurs compris, ne peut le lire.',
         'Sur votre appareil seulement : langue, priorités, le nom et la photo que vous mettez sur votre carte citoyenne (si vous en mettez), une copie des données des candidats et des derniers résultats (localStorage et IndexedDB).',
         'Données techniques : adresse IP, navigateur et horodatage dans les journaux des hébergeurs, à des fins de sécurité.',
       ] },
@@ -299,7 +299,7 @@ const en: LegalSet = {
     sections: [
       { h: 'Data we collect', p: ['We collect only what the vote needs to work, nothing more. Here is the list, depending on how you use the site.'], li: [
         'Without an account: an anonymous identifier (Firebase Anonymous Authentication) kept on your device to guarantee one vote per person; your vote (candidate, optional reason of up to 240 characters, optional department, chosen priorities, language); your poll answers.',
-        'With an account: your email address; with Google, the name and profile picture Google provides; your saved priorities.',
+        'With an account: your email address; with Google, the name and profile picture Google provides; your saved priorities and your game progress. An account record (email, name, sign-in method, creation date and last visit) is visible to the site administrators only. Your password is never stored by the site or shown: Firebase keeps it hashed and nobody, administrators included, can read it.',
         'On your device only: language, priorities, the name and photo you put on your citizen card (if any), a copy of the candidate data and of the latest results (localStorage and IndexedDB).',
         'Technical data: IP address, browser and timestamp in the hosting providers’ logs, for security.',
       ] },

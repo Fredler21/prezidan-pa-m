@@ -16,7 +16,7 @@ export function app(): FirebaseApp {
 }
 export function auth(): Auth { return getAuth(app()); }
 
-function currentUser(): Promise<User | null> {
+export function currentUser(): Promise<User | null> {
   return new Promise((resolve) => {
     const off = onAuthStateChanged(auth(), (u) => { off(); resolve(u); });
   });

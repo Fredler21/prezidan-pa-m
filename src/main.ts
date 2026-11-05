@@ -36,9 +36,6 @@ function lazyPage(main: HTMLElement, load: () => Promise<(main: HTMLElement) => 
   return () => { dead = true; off(); };
 }
 
-// ?theme=light|dark overrides prefers-color-scheme (testing and shared links).
-const themeParam = new URLSearchParams(location.search).get('theme');
-if (themeParam === 'light' || themeParam === 'dark') document.documentElement.dataset.theme = themeParam;
 
 function render(loc: Location): void {
   const main = document.getElementById('main');
