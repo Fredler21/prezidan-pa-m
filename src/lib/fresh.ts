@@ -1,7 +1,7 @@
 /**
  * An open tab keeps running the version it loaded: pages switch without a reload, so a phone left on the
  * site would never see an update. When the tab comes back to the front (and every 15 minutes) the page
- * looks at the deployed index.html; once a newer build is out it reloads at the next page change, or at
+ * looks at the deployed page ('/', never cached; '/index.html' redirects on Firebase); once a newer build is out it reloads at the next page change, or at
  * once when the visitor returns to the tab and nothing is open or being typed. At most one automatic
  * reload every 5 minutes, so a slow CDN can never cause a loop.
  */
@@ -30,7 +30,7 @@ export function keepFresh(): void {
     if (!stale && Date.now() - lastCheck > 60_000) {
       lastCheck = Date.now();
       try {
-        const html = await (await fetch(`/index.html?fresh=${Date.now()}`, { cache: 'no-store' })).text();
+        const html = await (await fetch(`/?fresh=${Date.now()}`, { cache: 'no-store' })).text();
         const live = html.match(MAIN)?.[0];
         if (live && live !== mine) stale = true;
       } catch { /* offline: try again later */ }
