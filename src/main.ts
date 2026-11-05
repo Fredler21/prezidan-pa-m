@@ -1,6 +1,6 @@
 import './styles.css';
 import { onLangChange, S } from './i18n';
-import { parseHash, onRoute, type Location } from './router';
+import { parseHash, onRoute, go, type Location } from './router';
 import { state, setMyVote, onState } from './state';
 import { getStorage, STORAGE_MODE } from './storage';
 import { candidateById, refreshContent, onContentChange } from './content';
@@ -17,6 +17,7 @@ import { renderPoll } from './ui/poll';
 import { renderAdmin } from './ui/admin';
 import { renderLegal } from './ui/legal';
 import { toast } from './ui/toast';
+import { openAccountSheet } from './ui/account';
 import { initAccount, getAccount, onAccountChange } from './account';
 import { h, clear } from './lib/dom';
 
@@ -42,17 +43,22 @@ function render(loc: Location): void {
   if (!main) return;
   if (cleanup) { cleanup(); cleanup = null; }
   closeProfile();
+  // « Tablo mwen » is for signed-in visitors: anyone else gets the landing page with the sign-in dialog
+  // (signing in from there opens the dashboard).
+  const account = getAccount();
+  if (loc.route === 'dashboard' && !account) {
+    history.replaceState(null, '', `${location.pathname}${location.search}#home`);
+    loc = { route: 'home', param: null };
+    window.setTimeout(() => openAccountSheet('in'), 0);
+  }
   current = loc;
   renderHeader(loc.route);
   // Chrome first: the Vote view mounts its own bar into #bottom and must not be cleared after.
   renderBottom(loc.route);
   switch (loc.route) {
-    case 'home': {
-      // Signed in: the personal dashboard replaces the public landing page.
-      const account = getAccount();
-      cleanup = account ? lazyPage(main, () => import('./ui/dashboard').then((m) => (el) => m.renderDashboard(el, account))) : renderHome(main);
-      break;
-    }
+    // The landing page is the same for everyone; the personal dashboard is its own page.
+    case 'home': cleanup = renderHome(main); break;
+    case 'dashboard': if (account) cleanup = lazyPage(main, () => import('./ui/dashboard').then((m) => (el) => m.renderDashboard(el, account))); break;
     case 'start': renderStart(main); break;
     case 'match': renderMatch(main, false); break;
     case 'candidates': {
@@ -75,14 +81,16 @@ function render(loc: Location): void {
   window.scrollTo({ top: 0 });
   const nav = S().nav as Record<string, string>;
   const navKey: Record<string, string> = { match: 'candidates', vote: 'candidates', admin: 'poll', start: 'priorities', 'about-us': 'aboutUs' };
-  const homeTitle = getAccount() ? S().nav.dashboard : 'Ayiti 2027';
-  document.title = loc.route === 'home' ? `${S().appName} · ${homeTitle}` : `${S().appName} · ${nav[navKey[loc.route] ?? loc.route] ?? ''}`;
+  document.title = loc.route === 'home' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[navKey[loc.route] ?? loc.route] ?? ''}`;
 }
 
 onRoute(render);
 onLangChange(() => render(current));
-// Signing in or out swaps the home page between the public landing and the dashboard.
-onAccountChange(() => { if (current.route === 'home') render(current); });
+// Signing out on the dashboard goes back to the landing page; the landing page redraws its signed-in bits.
+onAccountChange((a) => {
+  if (current.route === 'dashboard' && !a) go('home');
+  else if (current.route === 'home' || current.route === 'dashboard') render(current);
+});
 onState(() => { if (current.route === 'start') renderBottom('start'); });
 window.addEventListener('offline', () => toast(S().offline, 4000));
 
@@ -90,7 +98,7 @@ render(current);
 
 // Firestore content (candidates, priorities, dates) is fetched after the first paint and only
 // re-renders read-only pages, so a refresh never closes an open profile or wipes a half-typed vote.
-const REFRESHABLE = new Set(['home', 'start', 'match', 'candidates', 'results', 'about']);
+const REFRESHABLE = new Set(['home', 'dashboard', 'start', 'match', 'candidates', 'results', 'about']);
 onContentChange(() => {
   if (REFRESHABLE.has(current.route) && !document.querySelector('dialog[open]')) render(current);
 });

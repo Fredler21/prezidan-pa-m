@@ -34,9 +34,11 @@ function fitHeader(el: HTMLElement): void {
   if (!row || !right || window.innerWidth >= 1024) return;
   const tight = () => {
     const r = row.getBoundingClientRect(), rr = right.getBoundingClientRect();
-    const left = row.querySelector<HTMLElement>('.hdr-left')?.getBoundingClientRect();
+    // the logo can spill out of its (shrinkable) column, so it is measured on its own
+    const leftEnd = Math.max(...[row.querySelector<HTMLElement>('.hdr-left'), row.querySelector<HTMLElement>('.hdr-left .wm-logo')]
+      .map((x) => (x && x.offsetParent ? x.getBoundingClientRect() : null)).map((b) => (b && b.width > 0 ? b.right : 0)));
     const pad = parseFloat(getComputedStyle(row).paddingRight) || 0;
-    return rr.right > r.right - pad + 0.5 || (left !== undefined && left.width > 0 && left.right > rr.left - 4);
+    return rr.right > r.right - pad + 0.5 || (leftEnd > 0 && leftEnd > rr.left - 4);
   };
   if (tight()) el.classList.add('fit-1');
   if (tight()) el.classList.add('fit-2');
@@ -75,9 +77,11 @@ export function renderHeader(route: Route): void {
 function build(el: HTMLElement, route: Route): void {
   clear(el);
   const s = S();
-  el.className = route === 'home' || route === 'start' ? 'hdr with-strip' : 'hdr';
+  // The landing page, the priorities step and « Tablo mwen »: the logo, with the language and theme in a strip on phones.
+  const withStrip = route === 'home' || route === 'start' || route === 'dashboard';
+  el.className = withStrip ? 'hdr with-strip' : 'hdr';
 
-  if (route === 'home' || route === 'start') {
+  if (withStrip) {
     const wm = wordmark();
     wm.append(h('span', { class: 'strip-inline desk-only' }, flag(), s.tagline));
     el.append(

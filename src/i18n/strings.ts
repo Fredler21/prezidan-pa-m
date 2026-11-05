@@ -423,6 +423,7 @@ const ht = {
     f3t: 'Vòt ou: wi oswa non',
     f3: 'Jamè pou ki moun ou vote',
     inviteLead: 'Konekte pou w fè kat pa w: non ou, foto ou ak 3 priyorite ou, pou w pataje l. Kat la pa janm montre pou ki moun ou vote.',
+    inviteSigned: 'Kat ou ap tann ou nan tablo w: mete non w ak foto w, epi pataje l. Kat la pa janm montre pou ki moun ou vote.',
   },
 
   foot: {
@@ -498,6 +499,7 @@ const ht = {
     legalPre: 'Lè w kontinye, ou dakò ak',
     legalAnd: 'ak',
     myDashboard: 'Ale nan tablo mwen',
+    dashPill: 'Tablo mwen',
   },
 
   admin: {
@@ -973,6 +975,7 @@ const fr: Strings = {
     f3t: 'Votre vote : oui ou non',
     f3: 'Jamais pour qui vous votez',
     inviteLead: 'Connectez-vous pour créer votre carte : votre nom, votre photo et vos 3 priorités, à partager. La carte ne montre jamais pour qui vous votez.',
+    inviteSigned: 'Votre carte vous attend dans votre tableau de bord : ajoutez votre nom et votre photo, puis partagez-la. La carte ne montre jamais pour qui vous votez.',
   },
 
   foot: {
@@ -1048,6 +1051,7 @@ const fr: Strings = {
     legalPre: 'En continuant, vous acceptez',
     legalAnd: 'et',
     myDashboard: 'Mon tableau de bord',
+    dashPill: 'Tableau de bord',
   },
 
   admin: {
@@ -1521,6 +1525,7 @@ const en: Strings = {
     f3t: 'Your vote: yes or no',
     f3: 'Never who you voted for',
     inviteLead: 'Sign in to make your own card: your name, your photo and your 3 priorities, ready to share. The card never shows who you voted for.',
+    inviteSigned: 'Your card is waiting on your dashboard: add your name and photo, then share it. The card never shows who you voted for.',
   },
 
   foot: {
@@ -1596,6 +1601,7 @@ const en: Strings = {
     legalPre: 'By continuing, you agree to the',
     legalAnd: 'and',
     myDashboard: 'Go to my dashboard',
+    dashPill: 'Dashboard',
   },
 
   admin: {

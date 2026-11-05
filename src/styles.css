@@ -1546,3 +1546,12 @@ body { transition: background-color .25s, color .25s; }
 /* text inside the navy board cards keeps its light colours whatever the page theme */
 .hero .board p { color: var(--on-indigo-muted); }
 .hero .board .board-q { color: #fff; }
+
+/* signed in: the header button to « Tablo mwen » (initial and label; the label goes when the row is tight) */
+.acct-dash { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 3px; border: 1px solid var(--hdr-line); border-radius: 999px; color: var(--hdr-fg); text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap; transition: background-color .15s, border-color .15s; }
+.acct-dash .acct-btn { width: 32px; height: 32px; border: 0; font-size: 13px; }
+.acct-dash[aria-current="page"] { background: var(--ultra-tint); border-color: transparent; color: var(--ultra-text); }
+@media (hover: hover) { .acct-dash:hover { background: var(--soft); border-color: var(--hdr-muted); } .acct-dash[aria-current="page"]:hover { background: var(--ultra-tint); } }
+.acct-dash:focus-visible { outline: 2px solid var(--ultra); outline-offset: 2px; }
+.hdr.fit-2 .acct-dash { padding-right: 3px; }
+.hdr.fit-2 .acct-dash-label { display: none; }

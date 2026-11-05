@@ -15,6 +15,7 @@ import { openProfile } from './profile';
 import { attachTilt } from '../lib/tilt';
 import { toast } from './toast';
 import { openAccountSheet } from './account';
+import { getAccount } from '../account';
 import { whyVote } from './why-vote';
 
 // Faint wrought-iron lace, inline (no image request), masked to fade before the bottom.
@@ -422,16 +423,18 @@ export function renderHome(main: HTMLElement): () => void {
 
   // ---- Kat sitwayen: made once signed in (it lives on the dashboard); here, an invitation with a small preview ----
   const cs = S().card;
+  const signed = getAccount() !== null;
   const cardInvite = h('section', { class: 'section cc-invite', 'aria-labelledby': 'cc-invite-title' },
     h('div', { class: 'cc-mini', 'aria-hidden': 'true' },
       h('span', { class: 'cc-mini-top' }, svg(ICON.brand), S().appName.toUpperCase(), h('img', { src: IMG.flag.src, width: 22, height: 13, alt: '', decoding: 'async' })),
       h('span', { class: 'cc-mini-label' }, cs.onCard), h('b', null, cs.defaultName),
       h('span', { class: 'cc-mini-photo' }, svg(ICON.photo)), h('span', { class: 'cc-mini-seal' }, '2027')),
     h('div', { class: 'cc-invite-text' },
-      h('p', { class: 'kicker' }, cs.kicker), h('h2', { id: 'cc-invite-title' }, cs.title), h('p', null, cs.inviteLead),
-      h('div', { class: 'cc-invite-actions' },
-        h('button', { class: 'btn btn-primary', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp),
-        h('button', { class: 'btn btn-outline', type: 'button', onclick: () => openAccountSheet('in') }, S().account.signIn))));
+      h('p', { class: 'kicker' }, cs.kicker), h('h2', { id: 'cc-invite-title' }, cs.title), h('p', null, signed ? cs.inviteSigned : cs.inviteLead),
+      h('div', { class: 'cc-invite-actions' }, ...(signed
+        ? [h('a', { class: 'btn btn-primary', href: '#dashboard' }, S().account.myDashboard, svg(ICON.arrowRight))]
+        : [h('button', { class: 'btn btn-primary', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp),
+          h('button', { class: 'btn btn-outline', type: 'button', onclick: () => openAccountSheet('in') }, S().account.signIn)]))));
 
   // Photo card: the Citadelle (CC BY 2.0). Wide crop on desktop, 3:2 on phones; lazy.
   const band = h('figure', { class: 'band' },

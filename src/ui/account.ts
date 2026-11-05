@@ -6,6 +6,7 @@ import { getAccount, onAccountChange, connect, disconnect, type Account, prepare
 import { note } from './common';
 import { toast } from './toast';
 import { copyText } from '../lib/util';
+import { parseHash, go } from '../router';
 
 let open: HTMLDialogElement | null = null;
 type Mode = 'in' | 'up';
@@ -14,13 +15,14 @@ const initial = (a: Account) => (a.name || a.email || '·').slice(0, 1).toUpperC
 
 /**
  * Header account controls (Stitch « s9-account » v2): « Konekte » and « Kreye kont » when signed
- * out, the visitor's initial when signed in. Redraws itself on sign in or out, and stops listening
+ * out; signed in, the way to « Tablo mwen » (their initial and the label; the label goes first when space runs out). Redraws itself on sign in or out, and stops listening
  * once the header has been replaced.
  */
 export function accountControls(onDraw?: () => void): HTMLElement {
   const el = h('div', { class: 'acct-ctl' });
   const draw = (a: Account | null) => {
-    if (a) el.replaceChildren(h('button', { class: 'acct-btn on', type: 'button', 'aria-label': S().account.open, onclick: () => openAccountSheet() }, initial(a)));
+    if (a) el.replaceChildren(h('a', { class: 'acct-dash', href: '#dashboard', 'aria-label': S().nav.dashboard, 'aria-current': parseHash().route === 'dashboard' ? 'page' : undefined },
+      h('span', { class: 'acct-btn on', 'aria-hidden': 'true' }, initial(a)), h('span', { class: 'acct-dash-label' }, S().account.dashPill)));
     else el.replaceChildren(
       h('button', { class: 'btn acct-in', type: 'button', onclick: () => openAccountSheet('in') }, svg(ICON.login), S().account.signIn),
       h('button', { class: 'btn acct-up', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp));
@@ -59,6 +61,12 @@ export function openAccountSheet(start: Mode = 'in'): void {
   const dlg = h('dialog', { class: 'sheet narrow', 'aria-label': s.title },
     h('button', { class: 'sheet-close', type: 'button', 'aria-label': S().close, onclick: () => closeAccountSheet() }, svg(ICON.close)), body);
 
+  // Signed in from the landing page: straight to the dashboard. Anywhere else (a game, the vote) the visitor stays put.
+  const signedIn = () => {
+    toast(s.connected);
+    const r = parseHash().route;
+    if (r === 'home' || r === 'dashboard') { closeAccountSheet(); go('dashboard'); } else render();
+  };
   const render = () => {
     while (body.childElementCount > 1) body.lastElementChild?.remove();
     const a = getAccount();
@@ -72,7 +80,7 @@ export function openAccountSheet(start: Mode = 'in'): void {
         h('h3', { class: 'auth-title' }, a.name || a.email),
         ...(a.email && a.name ? [h('p', { class: 'auth-lead' }, a.email)] : []),
         h('div', { style: 'margin-top:16px' }, note(s.progressSaved, ICON.check)),
-        h('a', { class: 'btn btn-primary btn-block auth-main', href: '#home', onclick: () => closeAccountSheet() }, s.myDashboard, svg(ICON.arrowRight)),
+        h('a', { class: 'btn btn-primary btn-block auth-main', href: '#dashboard', onclick: () => closeAccountSheet() }, s.myDashboard, svg(ICON.arrowRight)),
         h('button', { class: 'btn btn-outline btn-block auth-out', type: 'button', onclick: async () => { await disconnect(); toast(s.disconnected); render(); } }, s.signOut));
       return;
     }
@@ -108,7 +116,7 @@ export function openAccountSheet(start: Mode = 'in'): void {
     }
     google.addEventListener('click', async () => {
       busy(true);
-      try { await connect({ kind: 'google' }); toast(s.connected); render(); }
+      try { await connect({ kind: 'google' }); signedIn(); }
       catch (e) { console.error(e); toast(errorMessage(e), 5000); }
       finally { busy(false); }
     });
@@ -118,7 +126,7 @@ export function openAccountSheet(start: Mode = 'in'): void {
       ev.preventDefault();
       if (!email.value.trim() || password.value.length < 6) { toast(mode === 'up' ? s.errWeak : s.errInvalid); return; }
       busy(true);
-      try { await connect({ kind: 'email', mode, email: email.value.trim(), password: password.value }); toast(s.connected); render(); }
+      try { await connect({ kind: 'email', mode, email: email.value.trim(), password: password.value }); signedIn(); }
       catch (e) { console.error(e); toast(errorMessage(e), 5000); }
       finally { busy(false); }
     });

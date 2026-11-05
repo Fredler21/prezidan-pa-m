@@ -22,7 +22,8 @@ import { whyVote } from './why-vote';
 import { toast } from './toast';
 
 /*
- * « Tablo mwen » (Stitch « s11-dashboard » v2): the home page once a visitor is signed in. One look
+ * « Tablo mwen » (Stitch « s11-dashboard » v2): the signed-in visitor's own page (#dashboard), apart from the
+ * landing page, which stays the same for everyone; the header button and signing in lead here. One look
  * at where they stand: a live countdown to the first round, a six step civic journey, their own
  * vote (only they see it), their priorities, the candidates whose public record matches them, both
  * games, a rotating « did you know », the live results, why the real vote matters, and their
