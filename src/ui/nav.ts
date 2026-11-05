@@ -7,6 +7,20 @@ import { go, type Route } from '../router';
 
 type Chrome = 'nav' | 'bar' | 'none';
 
+/*
+ * Phones: the tab bar slides away while the page scrolls and comes back once scrolling stops.
+ * The scroll a page change makes (back to the top) does not count.
+ */
+const SETTLE_MS = 350;
+let settle = 0;
+let quietUntil = 0;
+window.addEventListener('scroll', () => {
+  if (document.body.dataset.chrome !== 'nav' || performance.now() < quietUntil) return;
+  document.body.classList.add('scrolling');
+  clearTimeout(settle);
+  settle = window.setTimeout(() => document.body.classList.remove('scrolling'), SETTLE_MS);
+}, { passive: true });
+
 /**
  * Bottom chrome per route (docs/design/DESIGN.md section 10, plus the Home tab):
  *   Home: nav · Start: nav until the first pick, then the action bar · Kandida: action bar with the
@@ -16,6 +30,8 @@ export function renderBottom(route: Route): void {
   const el = document.getElementById('bottom');
   if (!el) return;
   clear(el);
+  quietUntil = performance.now() + 300;
+  document.body.classList.remove('scrolling');
   const s = S();
   let chrome: Chrome = 'nav';
 

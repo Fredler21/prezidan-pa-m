@@ -17,7 +17,7 @@ const initial = (a: Account) => (a.name || a.email || '·').slice(0, 1).toUpperC
  * out, the visitor's initial when signed in. Redraws itself on sign in or out, and stops listening
  * once the header has been replaced.
  */
-export function accountControls(): HTMLElement {
+export function accountControls(onDraw?: () => void): HTMLElement {
   const el = h('div', { class: 'acct-ctl' });
   const draw = (a: Account | null) => {
     if (a) el.replaceChildren(h('button', { class: 'acct-btn on', type: 'button', 'aria-label': S().account.open, onclick: () => openAccountSheet() }, initial(a)));
@@ -26,7 +26,7 @@ export function accountControls(): HTMLElement {
       h('button', { class: 'btn acct-up', type: 'button', onclick: () => openAccountSheet('up') }, S().account.signUp));
   };
   draw(getAccount());
-  const off = onAccountChange((a) => { if (!el.isConnected) { off(); return; } draw(a); });
+  const off = onAccountChange((a) => { if (!el.isConnected) { off(); return; } draw(a); onDraw?.(); });
   return el;
 }
 

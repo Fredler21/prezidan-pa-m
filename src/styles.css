@@ -1298,3 +1298,39 @@ dialog.sheet.narrow .sheet-body { padding-top: 8px; }
   .acct-ctl .btn { padding: 0 10px; }
 }
 @media (min-width: 1024px) { .pg-main { scroll-margin-top: 24px; } }
+
+/* ---- phones: header always on one row, the tab bar steps aside while scrolling, a compact sign-in dialog ---- */
+.chrome { transition: transform .3s var(--ease-out); }
+body.scrolling[data-chrome="nav"] .chrome { transform: translateY(calc(100% + 12px)); }
+.hdr.fit-1 .wm-text { display: none; }
+.hdr.fit-2 .acct-up { display: none; }
+@media (max-width: 1023px) {
+  .hdr-row { grid-template-columns: auto minmax(0, 1fr) auto; }
+  dialog.sheet.narrow { max-height: calc(100vh - 16px); max-height: calc(100dvh - 16px); }
+  dialog.sheet.narrow .sheet-body { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+  .auth-brand, .auth-avatar { width: 44px; height: 44px; margin: 4px auto 10px; border-radius: 12px; }
+  .auth-avatar { border-radius: 999px; font-size: 18px; }
+  .auth-brand .ico { width: 22px; height: 22px; }
+  .sheet .auth-title { font-size: 22px; }
+  .auth-lead { font-size: 14px; }
+  .auth .seg { margin-top: 14px; height: 44px; }
+  .auth .btn-google { margin-top: 12px; min-height: 48px; }
+  .auth .divider { margin: 12px 0; }
+  .auth .field-label { margin-bottom: 6px; font-size: 15px; }
+  .input-icon .input { min-height: 48px; }
+  .auth-forgot .link-btn { min-height: 32px; }
+  .auth-main { margin-top: 10px; min-height: 50px; }
+  .auth-perks { margin-top: 14px; }
+}
+/* short phones: the welcome lines give way so the button stays on screen */
+@media (max-width: 1023px) and (max-height: 760px) {
+  .auth-brand, .auth-lead { display: none; }
+  .sheet .auth-title { margin-top: 6px; }
+}
+@media (max-width: 1023px) {
+  .hdr-row { display: flex; }
+  .hdr-row .hdr-left { flex: 0 1 auto; min-width: 0; }
+  .hdr-row .hdr-title { flex: 1 1 auto; min-width: 0; }
+  .hdr-row .hdr-right { flex: none; margin-left: auto; }
+  .hdr-left .wordmark.mobile-only { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 44px; }
+}

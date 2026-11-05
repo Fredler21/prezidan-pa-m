@@ -17,8 +17,32 @@ function langSelect(): HTMLElement {
 
 /** Right side of the header: the language pill and the account controls (« Konekte », « Kreye kont » or the visitor's initial). */
 function langPill(): HTMLElement {
-  return h('div', { class: 'hdr-right' }, langSelect(), accountControls());
+  return h('div', { class: 'hdr-right' }, langSelect(), accountControls(() => { const el = document.getElementById('header'); if (el) fitHeader(el); }));
 }
+
+/**
+ * Phones: the account buttons always stay on the header row. When they do not fit next to the
+ * wordmark (long labels, a narrow screen, large system text), the wordmark text goes first, then
+ * the sign-up button (the dialog still opens on either tab).
+ */
+function fitHeader(el: HTMLElement): void {
+  el.classList.remove('fit-1', 'fit-2');
+  const row = el.querySelector<HTMLElement>('.hdr-row');
+  const right = row?.querySelector<HTMLElement>('.hdr-right');
+  if (!row || !right || window.innerWidth >= 1024) return;
+  const tight = () => {
+    const r = row.getBoundingClientRect(), rr = right.getBoundingClientRect();
+    const left = row.querySelector<HTMLElement>('.hdr-left')?.getBoundingClientRect();
+    const pad = parseFloat(getComputedStyle(row).paddingRight) || 0;
+    return rr.right > r.right - pad + 0.5 || (left !== undefined && left.width > 0 && left.right > rr.left - 4);
+  };
+  if (tight()) el.classList.add('fit-1');
+  if (tight()) el.classList.add('fit-2');
+}
+let fitFrame = 0;
+const refit = () => { cancelAnimationFrame(fitFrame); fitFrame = requestAnimationFrame(() => { const el = document.getElementById('header'); if (el) fitHeader(el); }); };
+window.addEventListener('resize', refit);
+void document.fonts?.ready.then(refit);
 
 /** Desktop navigation (hidden on phones, where the bottom tabs take over). */
 function topNav(route: Route): HTMLElement {
@@ -33,13 +57,18 @@ function topNav(route: Route): HTMLElement {
     h('a', { href: `#${x.route}`, 'aria-current': x.route === cur ? 'page' : undefined }, x.label)));
 }
 
-const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#home' }, svg(ICON.brand), S().appName,
+const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#home' }, svg(ICON.brand), h('span', { class: 'wm-text' }, S().appName),
   title ? h('span', { class: 'hdr-crumb' }, `· ${title}`) : null);
 
 /** Top-level pages carry the wordmark; drill-in pages a back arrow and a title (desktop: wordmark · title). */
 export function renderHeader(route: Route): void {
   const el = document.getElementById('header');
   if (!el) return;
+  build(el, route);
+  fitHeader(el);
+}
+
+function build(el: HTMLElement, route: Route): void {
   clear(el);
   const s = S();
   el.className = route === 'home' || route === 'start' ? 'hdr with-strip' : 'hdr';
