@@ -2,13 +2,13 @@
   "project": "projects/16900759932870491329",
   "designSystem": "assets/8547351849386836628",
   "regeneratedAt": "2026-11-01",
-  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop).",
+  "note": "Current screens in the Stitch project: mobile set (s0-home landing + s1 to s7 flow) and the desktop set (desktop/*, 1280px). Regenerated from the premium prompts (docs/design/DESIGN.md). Older screens still in the project carry an em dash in their title and can be deleted. Home (s0-home, phone and desktop) regenerated 2026-11-02 v8: no map anywhere; live voter board in the hero; the « Kat sitwayen » citizen card section; section kickers; dark footer card. v8.1 (same day): photo slot on the citizen card, edited from c4382157… and 639dded5…. Older home screens still in the project (ids c4382157…, 639dded5…, 363ac104…, f5f327f3…, 73dcc88d…, f34dd54a…, d4dd68b2…, b35bb78c…, ca5f45ea…, 7562037a…, 1ba54d7f…, d4726598…, b6173a22… and the image-only ones) can be deleted in Stitch. 2026-11-04: « Konnen Ayiti » daily game screens added (s10-quiz, phone and desktop). 2026-11-04 (later): flat redesign, no gradients anywhere (user found two-color gradients looked AI made): s0-home regenerated flat (v9), s11-dashboard (signed-in home « Tablo mwen ») and s12-president (« Si m te prezidan » decision game) added, phone and desktop. Previous home v8.1 ids e9690600… and 395d90b7… can be deleted in Stitch.",
   "screens": [
     {
       "key": "s0-home",
-      "id": "e9690600c6b34a1985d11b56ef6f9231",
-      "name": "projects/16900759932870491329/screens/e9690600c6b34a1985d11b56ef6f9231",
-      "stitchTitle": "Prezidan Pa M · Akèy · Kat sitwayen ak foto",
+      "id": "e4e1886a16004b949821d742eaf795e5",
+      "name": "projects/16900759932870491329/screens/e4e1886a16004b949821d742eaf795e5",
+      "stitchTitle": "Prezidan Pa M · Akèy",
       "png": "s0-home.png",
       "html": "s0-home.html"
     },
@@ -83,16 +83,32 @@
       "stitchTitle": "Prezidan Pa M · Konnen Ayiti",
       "png": "s10-quiz.png",
       "html": "s10-quiz.html"
+    },
+    {
+      "key": "s11-dashboard",
+      "id": "85845b05e62547b7a87a7baa13983b91",
+      "name": "projects/16900759932870491329/screens/85845b05e62547b7a87a7baa13983b91",
+      "stitchTitle": "Prezidan Pa M · Tablo mwen",
+      "png": "s11-dashboard.png",
+      "html": "s11-dashboard.html"
+    },
+    {
+      "key": "s12-president",
+      "id": "0c9dd123bb0445a5858a847c40a63013",
+      "name": "projects/16900759932870491329/screens/0c9dd123bb0445a5858a847c40a63013",
+      "stitchTitle": "Prezidan Pa M · Si m te prezidan",
+      "png": "s12-president.png",
+      "html": "s12-president.html"
     }
   ],
   "desktop": [
     {
       "key": "s0-home",
-      "id": "395d90b74b074edcad1fae3816049ce1",
-      "name": "projects/16900759932870491329/screens/395d90b74b074edcad1fae3816049ce1",
-      "stitchTitle": "Prezidan Pa M · Akèy · Òdinatè · Kat sitwayen ak foto",
-      "png": "desktop/s0-home.png",
-      "html": "desktop/s0-home.html"
+      "id": "7a5d78dfdd1048e69e07a03b741e5610",
+      "name": "projects/16900759932870491329/screens/7a5d78dfdd1048e69e07a03b741e5610",
+      "stitchTitle": "Prezidan Pa M · Akèy · Desktop Flat",
+      "png": "s0-home.png",
+      "html": "s0-home.html"
     },
     {
       "key": "s1-start",
@@ -165,6 +181,22 @@
       "stitchTitle": "Prezidan Pa M · Konnen Ayiti · Òdinatè",
       "png": "desktop/s10-quiz.png",
       "html": "desktop/s10-quiz.html"
+    },
+    {
+      "key": "s11-dashboard",
+      "id": "e52be69e22f84749bbdc4aec6484a4ca",
+      "name": "projects/16900759932870491329/screens/e52be69e22f84749bbdc4aec6484a4ca",
+      "stitchTitle": "Prezidan Pa M · Tablo mwen",
+      "png": "s11-dashboard.png",
+      "html": "s11-dashboard.html"
+    },
+    {
+      "key": "s12-president",
+      "id": "6542fea060794c6e980ef239a6899436",
+      "name": "projects/16900759932870491329/screens/6542fea060794c6e980ef239a6899436",
+      "stitchTitle": "Prezidan Pa M · Si m te prezidan · Òdinatè",
+      "png": "s12-president.png",
+      "html": "s12-president.html"
     }
   ]
 }

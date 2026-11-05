@@ -4,6 +4,7 @@ import { ICON } from '../lib/icons';
 import { S, fmt, l, getLang } from '../i18n';
 import { go, parseHash } from '../router';
 import { avatar, note, priorityIcon, priorityLabel, well } from './common';
+import { markSeenCandidates } from '../lib/progress';
 
 let open: HTMLDialogElement | null = null;
 let opener: HTMLElement | null = null;
@@ -11,6 +12,7 @@ let opener: HTMLElement | null = null;
 /** Candidate profile as a bottom sheet dialog with its own scroll and a sticky vote bar. */
 export function openProfile(c: Candidate): void {
   closeProfile();
+  markSeenCandidates();
   opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   const s = S().profile;
   const lang = getLang();

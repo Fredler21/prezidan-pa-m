@@ -7,6 +7,7 @@ import { candidatesShuffled } from '../content';
 import { go } from '../router';
 import { candidateCard, note, priorityLabel, footer, rail } from './common';
 import { openProfile } from './profile';
+import { markSeenCandidates } from '../lib/progress';
 
 /** #match (ranked by the visitor's priorities) and #candidates (everyone, random order). */
 export function renderMatch(main: HTMLElement, all: boolean): void {
@@ -15,6 +16,7 @@ export function renderMatch(main: HTMLElement, all: boolean): void {
   const picks = state.picks;
   const page = h('div', { class: 'wrap' }, rail('candidates'));
   main.append(page);
+  if (all || picks.length) markSeenCandidates();
 
   if (!all && picks.length === 0) {
     page.append(note(s.pickFirst), h('div', { class: 'gap-24' }, h('a', { class: 'btn btn-primary btn-block', href: '#start' }, S().hero.cta)));

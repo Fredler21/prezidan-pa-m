@@ -8,13 +8,14 @@ import { countDocuments, countWhere, findActive, getDocumentQuiet, recentDocs, t
 import { STORAGE_MODE, getStorage } from '../storage';
 import { FIRST_ROUND } from '../data/dates';
 import { IMG } from '../data/images';
-import { pct } from '../lib/util';
+import { pct, daysUntil } from '../lib/util';
 import { state } from '../state';
 import { note, footer, well, avatar } from './common';
 import { openProfile } from './profile';
 import { attachTilt } from '../lib/tilt';
 import { toast } from './toast';
 import { civicCard } from './civic-card';
+import { whyVote } from './why-vote';
 
 // Faint wrought-iron lace, inline (no image request), masked to fade before the bottom.
 const LACE = '<svg class="hero-lace" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="lace2" width="56" height="56" patternUnits="userSpaceOnUse"><path d="M0 28A28 28 0 0 0 28 0M28 0A28 28 0 0 0 56 28M56 28A28 28 0 0 0 28 56M28 56A28 28 0 0 0 0 28" fill="none" stroke="#fff" stroke-width="1"/><circle cx="28" cy="28" r="6" fill="none" stroke="#fff" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#lace2)"/></svg>';
@@ -29,7 +30,7 @@ const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'obj
 const isL10n = (v: unknown): v is L10n => isRecord(v) && typeof v.ht === 'string';
 
 interface HomeStats { votes: number | null; pollAnswers: number | null }
-interface Counts { counts: Record<string, number>; total: number; at: number }
+export interface Counts { counts: Record<string, number>; total: number; at: number }
 interface PollOpt { id: string; label: L10n }
 interface PollInfo { id: string; question: L10n; options: PollOpt[]; counts: Record<string, number>; total: number }
 interface FeedItem { department: string; at: number }
@@ -59,7 +60,7 @@ const sum = (counts: Record<string, number>) => Object.values(counts).reduce((a,
  * Votes per candidate for the Top 5 and the board, still without the SDK. A stats/presidential
  * document (maintained by Functions when they run) costs one read; otherwise one count() per candidate.
  */
-async function loadCounts(ids: readonly string[]): Promise<Counts | null> {
+export async function loadCounts(ids: readonly string[]): Promise<Counts | null> {
   if (STORAGE_MODE === 'local') {
     const st = await getStorage();
     return new Promise((resolve) => { const off = st.subscribeVotes((r) => { off(); resolve({ counts: r.counts, total: r.total, at: Date.now() }); }); });
@@ -112,7 +113,7 @@ async function loadFeed(): Promise<FeedItem[]> {
   return r.value.map((x) => ({ department: typeof x.data.department === 'string' ? x.data.department : 'na', at: typeof x.data.updatedAt === 'string' ? Date.parse(x.data.updatedAt) : Date.now() }));
 }
 
-function readTopCache(): Counts | null {
+export function readTopCache(): Counts | null {
   try {
     const raw = localStorage.getItem(TOP_CACHE);
     if (!raw) return null;
@@ -123,7 +124,7 @@ function readTopCache(): Counts | null {
     return { counts, total: v.total, at: v.at };
   } catch { return null; }
 }
-function writeTopCache(c: Counts): void {
+export function writeTopCache(c: Counts): void {
   try { localStorage.setItem(TOP_CACHE, JSON.stringify(c)); } catch { /* storage disabled or full */ }
 }
 const pollKey = (id: string) => `ppm.poll.${id}`;
@@ -145,12 +146,6 @@ function tween(el: HTMLElement, from: number, to: number, ms: number, format: (n
   return () => cancelAnimationFrame(raf);
 }
 const asPct = (n: number) => `${n} %`;
-
-function daysUntil(iso: string): number {
-  const target = new Date(`${iso}T00:00:00`);
-  const today = new Date(); today.setHours(0, 0, 0, 0);
-  return Math.round((target.getTime() - today.getTime()) / 86400000);
-}
 
 interface TopRow { el: HTMLElement; pctEl: HTMLElement; barEl: HTMLElement; bar: HTMLElement; value: number; stop: () => void }
 
@@ -445,13 +440,20 @@ export function renderHome(main: HTMLElement): () => void {
       h('a', { class: 'link-btn', href: '#about' }, s.allDates, svg(ICON.arrowRight)))) : h('div', { class: 'main-col' });
   const bottom = h('div', { class: 'layout-2 wide-side' }, dates, h('aside', { class: 'side-col section' }, note(s.note)));
 
+  // ---- « Si m te prezidan »: a flat ultramarine band that opens the decision game ----
+  const promo = h('a', { class: 'promo', href: '#president' },
+    h('span', { class: 'promo-icon', 'aria-hidden': 'true' }, svg(ICON.palace)),
+    h('span', { class: 'promo-text' }, h('span', { class: 'promo-kicker' }, s.presKicker), h('strong', null, s.presTitle), h('span', null, s.presSub)),
+    h('span', { class: 'btn promo-btn' }, s.presCta, svg(ICON.arrowRight)));
+  const why = whyVote();
+
   const mobileStats = h('div', { class: 'mobile-only stats-mobile' }, h('div', { class: 'card countdown-card' }, countdownRow()), statRow('stats3', 0));
   main.append(
     hero,
-    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore), quizSec),
+    h('div', { class: 'wrap home-body' }, mobileStats, strip, h('div', { class: 'home-top' }, top, explore), promo, quizSec),
     card.el,
-    h('div', { class: 'wrap home-body' }, band, bottom, footer()));
-  cleanups.push(revealOnScroll([band, bottom]), attachTilt(band, 3));
+    h('div', { class: 'wrap home-body' }, why, band, bottom, footer()));
+  cleanups.push(revealOnScroll([promo, why, band, bottom]), attachTilt(band, 3));
 
   void loadStats().then((st) => {
     if (!alive) return;

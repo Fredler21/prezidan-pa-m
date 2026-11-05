@@ -91,6 +91,15 @@ export function fmtDate(iso: string): string {
   try { return new Intl.DateTimeFormat(LOCALE[current], { day: 'numeric', month: 'long', year: 'numeric' }).format(d); } catch { return iso; }
 }
 
+const DAYS_HT = ['dimanch', 'lendi', 'madi', 'mèkredi', 'jedi', 'vandredi', 'samdi'];
+const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
+/** Weekday, day and month without the year: « Mèkredi 4 novanm », « Mercredi 4 novembre ». */
+export function fmtToday(d = new Date()): string {
+  if (current === 'ht') return `${cap(DAYS_HT[d.getDay()] ?? '')} ${d.getDate()} ${MONTHS_HT[d.getMonth()]}`;
+  try { return cap(new Intl.DateTimeFormat(LOCALE[current], { weekday: 'long', day: 'numeric', month: 'long' }).format(d)); } catch { return ''; }
+}
+
 export function fmtTime(ms: number): string {
   try { return new Intl.DateTimeFormat(LOCALE[current], { hour: '2-digit', minute: '2-digit' }).format(new Date(ms)); } catch { return ''; }
 }

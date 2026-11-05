@@ -6,6 +6,8 @@ export const DATES_UPDATED = '2026-10-28';
 export const CONTENT_UPDATED = '2026-10-30';
 /** First round of the presidential election; the home page counts down to it. */
 export const FIRST_ROUND = '2027-07-18';
+/** The voter register closes on this date (CEP calendar); the « why vote » block points to it. */
+export const REGISTER_CLOSES = '2027-05-20';
 
 export const DATES: readonly KeyDate[] = [
   { date: '2026-11-15', label: { ht: 'Fèmti enskripsyon kandida an liy', fr: 'Clôture de l’inscription en ligne des candidats', en: 'Online candidate registration closes' } },

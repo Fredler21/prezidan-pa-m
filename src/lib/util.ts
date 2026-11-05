@@ -94,6 +94,13 @@ export function pct(n: number, total: number): number {
   return total > 0 ? Math.round((n / total) * 100) : 0;
 }
 
+/** Whole days from today (local midnight) to an ISO date; negative once it has passed. */
+export function daysUntil(iso: string): number {
+  const target = new Date(`${iso}T00:00:00`);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  return Math.round((target.getTime() - today.getTime()) / 86400000);
+}
+
 export function isoWeek(d = new Date()): string {
   const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
   const day = date.getUTCDay() || 7;

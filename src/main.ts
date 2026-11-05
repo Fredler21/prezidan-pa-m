@@ -17,11 +17,20 @@ import { renderPoll } from './ui/poll';
 import { renderAdmin } from './ui/admin';
 import { renderLegal } from './ui/legal';
 import { toast } from './ui/toast';
-import { initAccount } from './account';
+import { initAccount, getAccount, onAccountChange } from './account';
+import { clear } from './lib/dom';
 
 initAccount();
 let cleanup: (() => void) | null = null;
 let current: Location = parseHash();
+
+/** Pages in their own chunk (the games, the signed-in dashboard): the old page is cleared at once. */
+function lazyPage(main: HTMLElement, load: () => Promise<(main: HTMLElement) => () => void>): () => void {
+  clear(main);
+  let off: () => void = () => {}; let dead = false;
+  void load().then((mount) => { if (!dead) off = mount(main); }).catch((e) => { console.warn('page load failed', e); toast(S().offline, 4000); });
+  return () => { dead = true; off(); };
+}
 
 // ?theme=light|dark overrides prefers-color-scheme (testing and shared links).
 const themeParam = new URLSearchParams(location.search).get('theme');
@@ -37,7 +46,12 @@ function render(loc: Location): void {
   // Chrome first: the Vote view mounts its own bar into #bottom and must not be cleared after.
   renderBottom(loc.route);
   switch (loc.route) {
-    case 'home': cleanup = renderHome(main); break;
+    case 'home': {
+      // Signed in: the personal dashboard replaces the public landing page.
+      const account = getAccount();
+      cleanup = account ? lazyPage(main, () => import('./ui/dashboard').then((m) => (el) => m.renderDashboard(el, account))) : renderHome(main);
+      break;
+    }
     case 'start': renderStart(main); break;
     case 'match': renderMatch(main, false); break;
     case 'candidates': {
@@ -54,21 +68,20 @@ function render(loc: Location): void {
     case 'about-us': renderLegal(main, 'aboutUs'); break;
     case 'privacy': renderLegal(main, 'privacy'); break;
     case 'terms': renderLegal(main, 'terms'); break;
-    case 'quiz': {
-      let off: () => void = () => {}; let dead = false;
-      void import('./ui/quiz').then((m) => { if (!dead) off = m.renderQuiz(main); });
-      cleanup = () => { dead = true; off(); };
-      break;
-    }
+    case 'quiz': cleanup = lazyPage(main, () => import('./ui/quiz').then((m) => m.renderQuiz)); break;
+    case 'president': cleanup = lazyPage(main, () => import('./ui/president').then((m) => m.renderPresident)); break;
   }
   window.scrollTo({ top: 0 });
   const nav = S().nav as Record<string, string>;
   const navKey: Record<string, string> = { match: 'candidates', vote: 'candidates', admin: 'poll', start: 'priorities', 'about-us': 'aboutUs' };
-  document.title = loc.route === 'home' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[navKey[loc.route] ?? loc.route] ?? ''}`;
+  const homeTitle = getAccount() ? S().nav.dashboard : 'Ayiti 2027';
+  document.title = loc.route === 'home' ? `${S().appName} · ${homeTitle}` : `${S().appName} · ${nav[navKey[loc.route] ?? loc.route] ?? ''}`;
 }
 
 onRoute(render);
 onLangChange(() => render(current));
+// Signing in or out swaps the home page between the public landing and the dashboard.
+onAccountChange(() => { if (current.route === 'home') render(current); });
 onState(() => { if (current.route === 'start') renderBottom('start'); });
 window.addEventListener('offline', () => toast(S().offline, 4000));
 

@@ -13,8 +13,8 @@ import { toast } from './toast';
 /*
  * « Kat sitwayen »: a personal civic card on the home page. It shows the visitor's priorities,
  * whether they have voted (never for whom) and the first-round date, with a name they may type.
- * The face is HTML over an SVG guilloche (banknote-style security print) with a holographic
- * foil and a glare that follow the pointer. Share and download use a PNG drawn on a canvas
+ * The face is HTML over an SVG guilloche (banknote-style security print) on a flat deep blue,
+ * tilting with the pointer. Share and download use a PNG drawn on a canvas
  * from the same geometry. The name stays in localStorage only.
  */
 
@@ -23,6 +23,8 @@ const NAME_MAX = 28;
 const VB_W = 1000;
 const VB_H = 630;
 const FONT = '"Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+/** One flat card color, shared by the CSS face (.ccard) and the PNG export. */
+const CARD_BLUE = '#13246E';
 
 // ---- guilloche geometry, in card units (1000 x 630) ----
 function polar(cx: number, cy: number, R: number, A: number, n: number, rot: number, steps: number): string {
@@ -61,14 +63,13 @@ function artSvg(ringText: string): string {
   return `<svg class="cc-art" viewBox="0 0 ${VB_W} ${VB_H}" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
 <g fill="none" stroke="#fff" stroke-width="0.9">${paths(ART.outer, 0.1)}${paths(ART.inner, 0.13)}${paths(ART.waves, 0.09)}</g>
 <g class="cc-seal-art">
-<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#ccFoil)" fill-opacity="0.22" stroke="#fff" stroke-opacity="0.45" stroke-width="1.2"/>
+<circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" fill-opacity="0.08" stroke="#fff" stroke-opacity="0.45" stroke-width="1.2"/>
 <circle cx="${cx}" cy="${cy}" r="${r - 6}" fill="none" stroke="#fff" stroke-opacity="0.3"/>
 <g fill="none" stroke="#fff" stroke-width="0.8">${paths(ART.seal, 0.35)}</g>
 <path id="ccRing" d="M ${cx - 46} ${cy} a 46 46 0 1 1 92 0 a 46 46 0 1 1 -92 0" fill="none"/>
 <text font-size="10.5" font-weight="700" letter-spacing="2.6" fill="#fff" fill-opacity="0.75"><textPath href="#ccRing">${ringText}</textPath></text>
 <text x="${cx}" y="${cy + 7}" text-anchor="middle" font-size="20" font-weight="800" fill="#fff">2027</text>
 </g>
-<defs><linearGradient id="ccFoil" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7FD3FF"/><stop offset=".5" stop-color="#B99BFF"/><stop offset="1" stop-color="#FFE3A3"/></linearGradient></defs>
 </svg>`;
 }
 
@@ -145,26 +146,14 @@ async function renderPng(m: Model): Promise<Blob> {
   ctx.scale(scale, scale);
   rr(ctx, 0, 0, VB_W, VB_H, 44); ctx.clip();
   // surface
-  const g = ctx.createLinearGradient(0, 0, VB_W, VB_H);
-  g.addColorStop(0, '#101E66'); g.addColorStop(0.5, '#1A3BB5'); g.addColorStop(1, '#0B1230');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, VB_W, VB_H);
-  const glow = ctx.createRadialGradient(780, 160, 0, 780, 160, 520);
-  glow.addColorStop(0, 'rgba(90, 130, 255, .35)'); glow.addColorStop(1, 'rgba(90, 130, 255, 0)');
-  ctx.fillStyle = glow; ctx.fillRect(0, 0, VB_W, VB_H);
+  ctx.fillStyle = CARD_BLUE; ctx.fillRect(0, 0, VB_W, VB_H);
   // guilloche
   ctx.lineWidth = 0.9;
   const strokeAll = (ds: string[], a: number) => { ctx.strokeStyle = `rgba(255,255,255,${a})`; for (const d of ds) ctx.stroke(new Path2D(d)); };
   strokeAll(ART.outer, 0.1); strokeAll(ART.inner, 0.13); strokeAll(ART.waves, 0.09);
-  // holographic band
-  const holo = ctx.createLinearGradient(150, 0, 850, VB_H);
-  holo.addColorStop(0, 'rgba(0,0,0,0)'); holo.addColorStop(0.4, 'rgba(110,200,255,0)'); holo.addColorStop(0.47, 'rgba(110,200,255,.16)');
-  holo.addColorStop(0.53, 'rgba(185,145,255,.16)'); holo.addColorStop(0.59, 'rgba(255,222,150,.12)'); holo.addColorStop(0.67, 'rgba(0,0,0,0)');
-  ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = holo; ctx.fillRect(0, 0, VB_W, VB_H); ctx.globalCompositeOperation = 'source-over';
   // seal
   const { cx, cy, r } = SEAL;
-  const foil = ctx.createLinearGradient(cx - r, cy - r, cx + r, cy + r);
-  foil.addColorStop(0, 'rgba(127,211,255,.22)'); foil.addColorStop(0.5, 'rgba(185,155,255,.22)'); foil.addColorStop(1, 'rgba(255,227,163,.22)');
-  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = foil; ctx.fill();
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,.08)'; ctx.fill();
   ctx.strokeStyle = 'rgba(255,255,255,.45)'; ctx.lineWidth = 1.2; ctx.stroke();
   ctx.beginPath(); ctx.arc(cx, cy, r - 6, 0, Math.PI * 2); ctx.strokeStyle = 'rgba(255,255,255,.3)'; ctx.lineWidth = 1; ctx.stroke();
   ctx.lineWidth = 0.8; strokeAll(ART.seal, 0.35);
@@ -188,11 +177,7 @@ async function renderPng(m: Model): Promise<Blob> {
     const { x: px, y: py, w: pw, h: ph, r: pr } = PHOTO;
     ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.4)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 10;
     rr(ctx, px, py, pw, ph, pr); ctx.fillStyle = '#0B1230'; ctx.fill(); ctx.restore();
-    ctx.save(); rr(ctx, px, py, pw, ph, pr); ctx.clip(); ctx.drawImage(photo, px, py, pw, ph);
-    const sheen = ctx.createLinearGradient(px, py, px + pw, py + ph);
-    sheen.addColorStop(0, 'rgba(127,211,255,0)'); sheen.addColorStop(0.45, 'rgba(127,211,255,.12)'); sheen.addColorStop(0.55, 'rgba(255,227,163,.1)'); sheen.addColorStop(1, 'rgba(255,227,163,0)');
-    ctx.globalCompositeOperation = 'screen'; ctx.fillStyle = sheen; ctx.fillRect(px, py, pw, ph); ctx.globalCompositeOperation = 'source-over';
-    ctx.restore();
+    ctx.save(); rr(ctx, px, py, pw, ph, pr); ctx.clip(); ctx.drawImage(photo, px, py, pw, ph); ctx.restore();
     rr(ctx, px, py, pw, ph, pr); ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 2; ctx.stroke();
   }
   // name (shrinks to stay clear of the photo)
@@ -202,10 +187,7 @@ async function renderPng(m: Model): Promise<Blob> {
   const nameText = m.name || s.defaultName;
   ctx.font = `700 50px ${FONT}`;
   const nameSize = Math.max(30, Math.min(50, Math.floor((50 * textMax) / Math.max(1, ctx.measureText(nameText).width))));
-  const ng = ctx.createLinearGradient(0, 226, 0, 282);
-  ng.addColorStop(0, '#FFFFFF'); ng.addColorStop(1, '#C9D3F2');
-  ctx.font = `700 ${nameSize}px ${FONT}`; ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillText(nameText, 56, 278, textMax);
-  ctx.fillStyle = ng; ctx.fillText(nameText, 56, 276, textMax);
+  ctx.font = `700 ${nameSize}px ${FONT}`; ctx.fillStyle = '#fff'; ctx.fillText(nameText, 56, 276, textMax);
   // priorities, wrapping onto a second row before the photo
   label(s.priorities, 56, 334);
   ctx.font = `600 20px ${FONT}`;
@@ -275,7 +257,7 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
       h('div', null, h('span', { class: 'cc-label' }, s.firstRound), h('b', { class: 'num' }, fmtDate(firstRoundIso)))),
     h('div', { class: 'cc-micro', 'aria-hidden': 'true' }, s.micro.repeat(8)));
   const card = h('div', { class: 'ccard', role: 'group', 'aria-label': s.alt, html: artSvg(s.ring.repeat(2)) });
-  card.append(h('div', { class: 'cc-holo', 'aria-hidden': 'true' }), h('div', { class: 'cc-glare', 'aria-hidden': 'true' }), face, photoBtn);
+  card.append(face, photoBtn);
   const stage = h('div', { class: 'cc-stage' }, card);
 
   const paint = () => {
@@ -366,19 +348,16 @@ export function civicCard(firstRoundIso: string): { el: HTMLElement; destroy: ()
     }, 700);
   }
 
-  // pointer: tilt, foil and glare follow the finger or the mouse
+  // pointer: the card tilts toward the finger or the mouse
   const move = (e: PointerEvent) => {
     const r = card.getBoundingClientRect();
     const px = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
     const py = Math.min(1, Math.max(0, (e.clientY - r.top) / r.height));
     card.style.setProperty('--rx', `${((0.5 - py) * 16).toFixed(2)}deg`);
     card.style.setProperty('--ry', `${((px - 0.5) * 22).toFixed(2)}deg`);
-    card.style.setProperty('--gx', `${(px * 100).toFixed(1)}%`);
-    card.style.setProperty('--gy', `${(py * 100).toFixed(1)}%`);
-    card.style.setProperty('--hx', `${(100 - px * 100).toFixed(1)}%`);
   };
   const enter = () => stage.classList.add('hovering');
-  const leave = () => { stage.classList.remove('hovering'); for (const p of ['--rx', '--ry', '--gx', '--gy', '--hx']) card.style.removeProperty(p); };
+  const leave = () => { stage.classList.remove('hovering'); for (const p of ['--rx', '--ry']) card.style.removeProperty(p); };
   if (!reduced) {
     stage.addEventListener('pointerenter', enter);
     stage.addEventListener('pointermove', move);

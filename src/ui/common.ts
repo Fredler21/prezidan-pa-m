@@ -125,7 +125,7 @@ export function footer(): HTMLElement {
         h('a', { class: 'foot-brand', href: '#home' }, svg(ICON.brand), s.appName, h('img', { class: 'flag-sm', src: IMG.flag.src, width: 20, height: 12, alt: '', decoding: 'async' })),
         h('p', { class: 'foot-about' }, f.about)),
       h('nav', { class: 'foot-cols', 'aria-label': s.nav.aboutUs },
-        col(f.platform, a('#start', s.nav.priorities), a('#candidates', s.nav.candidates), a('#results', s.nav.results), a('#poll', s.nav.poll), a('#quiz', s.home.quizCard)),
+        col(f.platform, a('#start', s.nav.priorities), a('#candidates', s.nav.candidates), a('#results', s.nav.results), a('#poll', s.nav.poll), a('#quiz', s.home.quizCard), a('#president', s.pres.title)),
         col(f.info, a('#about-us', s.nav.aboutUs), a('#about', s.nav.about), a('#privacy', s.nav.privacy), a('#terms', s.nav.terms)),
         col(f.contact, a(`mailto:${CONTACT_EMAIL}`, CONTACT_EMAIL)))),
     base);

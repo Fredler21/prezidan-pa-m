@@ -1,5 +1,5 @@
-export type Route = 'home' | 'start' | 'match' | 'candidates' | 'vote' | 'results' | 'about' | 'poll' | 'admin' | 'about-us' | 'privacy' | 'terms' | 'quiz';
-const ROUTES: readonly Route[] = ['home', 'start', 'match', 'candidates', 'vote', 'results', 'about', 'poll', 'admin', 'about-us', 'privacy', 'terms', 'quiz'];
+export type Route = 'home' | 'start' | 'match' | 'candidates' | 'vote' | 'results' | 'about' | 'poll' | 'admin' | 'about-us' | 'privacy' | 'terms' | 'quiz' | 'president';
+const ROUTES: readonly Route[] = ['home', 'start', 'match', 'candidates', 'vote', 'results', 'about', 'poll', 'admin', 'about-us', 'privacy', 'terms', 'quiz', 'president'];
 /** Pages that also answer at a clean path (hosting rewrites them to the app): /about-us, /privacy, /terms. */
 const PATH_ROUTES: readonly Route[] = ['about-us', 'privacy', 'terms'];
 

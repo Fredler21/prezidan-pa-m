@@ -19,7 +19,7 @@ function langPill(): HTMLElement {
 /** Desktop navigation (hidden on phones, where the bottom tabs take over). */
 function topNav(route: Route): HTMLElement {
   const s = S().nav;
-  const active: Partial<Record<Route, Route>> = { home: 'home', start: 'start', match: 'candidates', candidates: 'candidates', vote: 'candidates', results: 'results', poll: 'poll', admin: 'poll', quiz: 'quiz' };
+  const active: Partial<Record<Route, Route>> = { home: 'home', start: 'start', match: 'candidates', candidates: 'candidates', vote: 'candidates', results: 'results', poll: 'poll', admin: 'poll', quiz: 'quiz', president: 'quiz' };
   const cur = active[route];
   const links: { route: Route; label: string }[] = [
     { route: 'home', label: s.home }, { route: 'start', label: s.priorities }, { route: 'candidates', label: s.candidates },
@@ -50,7 +50,7 @@ export function renderHeader(route: Route): void {
     return;
   }
 
-  const topLevel: Partial<Record<Route, string>> = { results: s.results.title, poll: s.poll.title, admin: s.admin.title, quiz: s.quiz.title };
+  const topLevel: Partial<Record<Route, string>> = { results: s.results.title, poll: s.poll.title, admin: s.admin.title, quiz: s.quiz.title, president: s.pres.title };
   const top = topLevel[route];
   if (top) {
     el.append(h('div', { class: 'wrap hdr-row' },

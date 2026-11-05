@@ -21,7 +21,8 @@ const PER_DAY = 5;
 const DAY_ONE = Date.UTC(2026, 10, 4); // « Jou #1 »
 
 interface Stats { played: number; streak: number; best: number; last: string | null; correct: number }
-interface Save { day: string; ids: string[]; answers: (number | null)[]; stats: Stats }
+/** score: correct answers today, kept so the dashboard can show it without loading the question bank. */
+interface Save { day: string; ids: string[]; answers: (number | null)[]; stats: Stats; score?: number }
 
 const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pad = (n: number) => String(n).padStart(2, '0');
@@ -185,6 +186,7 @@ export function quizGame(): { el: HTMLElement; streakPill: HTMLElement; destroy:
         st.last = save.day;
       }
     }
+    save.score = correctCount();
     persist(save);
     buzz();
     announce(choice === q.answer ? s.correct : `${s.wrong} ${label(q.options[q.answer] ?? '')}`);
