@@ -58,6 +58,7 @@ export function decisionScreen(c: Ctx): HTMLElement {
       h('span', { class: `gm-cost${o.cost ? '' : ' free'}${ok ? '' : ' broke'}`, id: `gm-oc-${k}` }, cost),
       h('b', null, l(o.t)),
       h('span', { class: 'gm-optd' }, l(o.d)),
+      h('span', { class: 'gm-dos num', 'aria-hidden': 'true' }, fmt(s.dossierOf, { i: k + 1, n: D.o.length })),
       h('span', { class: 'gm-stamp', 'aria-hidden': 'true' }, s.stamp));
     b.addEventListener('click', () => pick(k));
     return b;

@@ -69,7 +69,12 @@ export interface MapOptions { labels?: boolean; storm?: boolean; levels?: MapLev
 export function mapSVG(st: Readonly<Stats>, o: MapOptions): string {
   const road = st.security < 35 ? 'blocked' : st.security < 55 ? 'risky' : 'open';
   const schools = Math.min(8, Math.floor(st.social / 12));
-  let s = `<svg viewBox="0 0 360 262" role="img" aria-label="${esc(o.aria)}"><polygon class="gm-land" points="${pts(COAST)}"/>`;
+  let s = `<svg viewBox="0 0 360 262" role="img" aria-label="${esc(o.aria)}">`;
+  // a quiet chart: half-degree graticule, a compass, and the land lifted off the sea by a darker edge
+  for (let lon = -74.5; lon <= -71.5; lon += 0.5) s += `<line class="gm-grid" x1="${X(lon)}" y1="0" x2="${X(lon)}" y2="262"/>`;
+  for (let lat = 18; lat <= 20; lat += 0.5) s += `<line class="gm-grid" x1="0" y1="${Y(lat)}" x2="360" y2="${Y(lat)}"/>`;
+  s += '<g class="gm-compass" transform="translate(24 26)"><circle r="10"/><path d="M0 -7l3 7h-6z" class="n"/><path d="M0 7l3 -7h-6z"/></g>';
+  s += `<polygon class="gm-relief" points="${pts(COAST)}" transform="translate(0 4)"/><polygon class="gm-land" points="${pts(COAST)}"/>`;
   s += `<ellipse class="gm-land" cx="${X(-73.05)}" cy="${Y(18.83)}" rx="32" ry="8" transform="rotate(20 ${X(-73.05)} ${Y(18.83)})"/>`;
   s += ROADS.map((r) => `<polyline class="gm-road ${road}" points="${pts(r)}"/>`).join('');
   CITY_ORDER.forEach((k, i) => {
@@ -101,7 +106,10 @@ export function mapSVG(st: Readonly<Stats>, o: MapOptions): string {
       s += state === 'lock'
         ? `<g transform="translate(${x - 6} ${y - 7}) scale(.5)" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></g>`
         : `<text class="num" x="${x}" y="${y + 4.5}">${i + 1}</text>`;
-      s += `<text class="ct" x="${x}" y="${y + 28}">${esc(l(level.name))}</text>`;
+      // labels sit where they do not collide: right of Okap, left of Gonayiv, under the others
+      s += level.city === 'okp' ? `<text class="ct" style="text-anchor:start" x="${x + 21}" y="${y + 3}">${esc(l(level.name))}</text>`
+        : level.city === 'gon' ? `<text class="ct" style="text-anchor:end" x="${x - 21}" y="${y + 3}">${esc(l(level.name))}</text>`
+        : `<text class="ct" x="${x}" y="${y + 28}">${esc(l(level.name))}</text>`;
       if (state === 'done' && n) s += [0, 1, 2].map((k) => `<polygon class="${k < n ? 'st on' : 'st'}" points="${starShape(x - 12 + k * 12, y - 23, 5)}"/>`).join('');
       s += '</g>';
     });
@@ -117,6 +125,7 @@ export function sceneSVG(t: SceneId, label: string): string {
   const dark = t === 'stm';
   const band = { sec: '#E58A5C', eko: '#2C4A96', lek: '#E58A5C', stm: '#262D45', vot: '#2C4A96' }[t];
   const back = `<rect width="360" height="140" fill="${dark ? '#141A2E' : '#1B2F7A'}"/><rect y="48" width="360" height="56" fill="${band}"/>`
+    + '<g fill="#FFFFFF" opacity=".4"><circle cx="28" cy="14" r="1"/><circle cx="74" cy="30" r=".8"/><circle cx="131" cy="11" r="1"/><circle cx="186" cy="26" r=".8"/><circle cx="232" cy="12" r="1"/><circle cx="322" cy="20" r=".8"/><circle cx="344" cy="36" r="1"/></g>'
     + (dark ? '' : '<circle cx="290" cy="56" r="18" fill="#FFD27A"/>')
     + `<path d="M0 92l50-34 46 26 52-40 60 44 54-30 98 40v42H0z" fill="${dark ? '#20283F' : '#27407F'}"/><path d="M0 104l70-22 80 20 90-26 120 30v34H0z" fill="${dark ? '#1A2A2A' : '#1D5148'}"/>`;
   const art: Record<SceneId, string> = {

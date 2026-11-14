@@ -119,7 +119,7 @@ export function renderPresident(main: HTMLElement): () => void {
   const page = h('div', { class: 'wrap gm-page' },
     bar, stage,
     h('p', { class: 'gm-note' }, svg(ICON.info), s.gameNote),
-    whyVote(), footer());
+    h('div', { class: 'gm-why' }, whyVote()), footer());
   main.append(page);
   const unlock = () => unlockSound();
   page.addEventListener('pointerdown', unlock, { capture: true });
@@ -155,6 +155,7 @@ export function renderPresident(main: HTMLElement): () => void {
     else if (r?.done && (screen === 'map' || screen === 'intro' || screen === 'decision')) screen = 'final';
     else if (r && !r.done && screen === 'final') screen = 'map';
     current = screen;
+    page.dataset.screen = screen;
     const el = BUILD[screen](c, o);
     el.classList.add('gm-screen');
     stage.replaceChildren(el);
