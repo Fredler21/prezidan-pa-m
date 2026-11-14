@@ -3,7 +3,10 @@ import { LANGS } from './types';
 import { state, onState, setPicks, setMyVote } from './state';
 import { getLang } from './i18n';
 import { getStorage, STORAGE_MODE } from './storage';
-import { bestScore, gameResult, gameRun, saveGameResult, saveGameRun, type GameResult, type GameRun } from './lib/progress';
+import {
+  asGameMeta, asGameResult, asGameRun, bestScore, clearGame, gameMeta, gameResult, gameRun, saveBestScore, saveGameMeta, saveGameResult, saveGameRun,
+  type GameMeta, type GameResult, type GameRun,
+} from './lib/progress';
 
 /*
  * Accounts are optional: voting works anonymously. Signing in (Google, or email + password)
@@ -42,18 +45,26 @@ function toAccount(u: FirebaseUser): Account {
   return { name: u.displayName || (u.email ? u.email.split('@')[0] ?? '' : ''), email: u.email ?? '', photo: u.photoURL };
 }
 
-interface CloudGame { run: GameRun | null; last: GameResult | null; best: number }
+/** « Si m te prezidan » v4 under users/{uid}.game4 (the older game's `game` field is left as it was). */
+interface CloudGame { run: GameRun | null; last: GameResult | null; best: number; meta: GameMeta | null }
 async function progressDoc(uid: string): Promise<{ picks: PriorityId[]; game: CloudGame | null } | null> {
   const { getFirestore, doc, getDoc } = await import('firebase/firestore');
   const { app } = await import('./storage/auth');
   const snap = await getDoc(doc(getFirestore(app()), 'users', uid));
   if (!snap.exists()) return null;
   const d = snap.data();
-  const g = d.game as Partial<CloudGame> | undefined;
+  const g = d.game4 as Record<string, unknown> | undefined;
   return {
     picks: Array.isArray(d.picks) ? (d.picks as PriorityId[]).slice(0, 3) : [],
-    game: g ? { run: g.run ?? null, last: g.last ?? null, best: typeof g.best === 'number' ? g.best : 0 } : null,
+    game: g ? { run: asGameRun(g.run), last: asGameResult(g.last), best: typeof g.best === 'number' ? g.best : 0, meta: asGameMeta(g.meta) } : null,
   };
+}
+
+const gameListeners = new Set<() => void>();
+/** Fires after a sign-in has merged the account's game into this device. */
+export function onGameSynced(fn: () => void): () => void {
+  gameListeners.add(fn);
+  return () => { gameListeners.delete(fn); };
 }
 
 /**
@@ -83,7 +94,7 @@ async function saveProfile(user: FirebaseUser): Promise<void> {
 const PROFILE_DAY_KEY = 'ppm.profile.day';
 
 let gameTimer: number | undefined;
-/** Signed-in players: writes the game (unfinished term, last result, best score) under users/{uid} (debounced). */
+/** Signed-in players: writes the game (unfinished term, last result, best score, badges and streak) under users/{uid} (debounced). */
 export function saveGameProgress(): void {
   if (STORAGE_MODE !== 'firebase' || !getAccount()) return;
   if (gameTimer) clearTimeout(gameTimer);
@@ -93,8 +104,8 @@ export function saveGameProgress(): void {
       const { app, currentUid } = await import('./storage/auth');
       const uid = await currentUid();
       if (!uid) return;
-      const game: CloudGame = { run: gameRun(), last: gameResult(), best: bestScore() ?? 0 };
-      await setDoc(doc(getFirestore(app()), 'users', uid), { game, updatedAt: serverTimestamp() }, { merge: true });
+      const game4: CloudGame = { run: gameRun(), last: gameResult(), best: bestScore() ?? 0, meta: gameMeta() };
+      await setDoc(doc(getFirestore(app()), 'users', uid), { game4, updatedAt: serverTimestamp() }, { merge: true });
     } catch (e) { console.warn('game save failed', e); }
   }, 600);
 }
@@ -121,13 +132,20 @@ async function adoptFromCloud(uid: string): Promise<void> {
   try {
     const saved = await progressDoc(uid);
     if (saved && saved.picks.length && state.picks.length === 0) setPicks(saved.picks);
-    // the game: keep the better best score, and take the account's term and result when this device has none
+    // the game: keep the better best score, take the account's term and result when this device has none,
+    // and keep every badge from both sides with the longer streak
     const g = saved?.game;
     if (g) {
-      if (g.best > (bestScore() ?? 0)) { try { localStorage.setItem('ppm.president.best', String(g.best)); } catch { /* storage off */ } }
+      if (g.best > 0) saveBestScore(g.best);
       if (g.run && !gameRun()) saveGameRun(g.run);
       if (g.last && !gameResult()) saveGameResult(g.last);
+      if (g.meta) {
+        const m = gameMeta();
+        const later = g.meta.day > m.day ? g.meta : m;
+        saveGameMeta({ badges: [...new Set([...m.badges, ...g.meta.badges])], streak: later.streak, day: later.day });
+      }
     }
+    for (const fn of gameListeners) fn();
     const st = await getStorage();
     const v = await st.getMyVote();
     setMyVote(v);
@@ -220,7 +238,7 @@ export async function disconnect(): Promise<void> {
   const auth = await import('./storage/auth');
   await auth.signOut();
   prepared = null; preparing = null;
-  saveGameRun(null); // the unfinished term lives in the account now, not on this device
+  clearGame(); // the game lives in the account, not on this device
   setAccount(null);
   setMyVote(null);
 }

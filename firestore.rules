@@ -86,13 +86,14 @@ service cloud.firestore {
       allow read: if isOwner(uid) || isAdmin();
       allow delete: if isOwner(uid);
       allow create, update: if isOwner(uid)
-        && request.resource.data.keys().hasOnly(['picks', 'lang', 'updatedAt', 'game', 'email', 'name', 'provider', 'createdAt', 'lastLoginAt'])
+        && request.resource.data.keys().hasOnly(['picks', 'lang', 'updatedAt', 'game', 'game4', 'email', 'name', 'provider', 'createdAt', 'lastLoginAt'])
         && (!('email' in request.resource.data) || request.resource.data.email == request.auth.token.email)
         && (!('name' in request.resource.data) || (request.resource.data.name is string && request.resource.data.name.size() <= 100))
         && (!('provider' in request.resource.data) || request.resource.data.provider in ['google.com', 'password'])
         && (!('createdAt' in request.resource.data) || request.resource.data.createdAt is timestamp)
         && (!('lastLoginAt' in request.resource.data) || request.resource.data.lastLoginAt is timestamp)
         && (!('game' in request.resource.data) || (request.resource.data.game is map && request.resource.data.game.keys().hasOnly(['run', 'last', 'best'])))
+        && (!('game4' in request.resource.data) || (request.resource.data.game4 is map && request.resource.data.game4.keys().hasOnly(['run', 'last', 'best', 'meta'])))
         && validPriorities(request.resource.data.get('picks', []))
         && validLang(request.resource.data.get('lang', 'ht'))
         && request.resource.data.updatedAt == request.time;

@@ -78,7 +78,7 @@ function render(loc: Location): void {
     case 'privacy': renderLegal(main, 'privacy'); break;
     case 'terms': renderLegal(main, 'terms'); break;
     case 'quiz': cleanup = lazyPage(main, () => import('./ui/quiz').then((m) => m.renderQuiz)); break;
-    case 'president': cleanup = lazyPage(main, () => import('./ui/president').then((m) => m.renderPresident)); break;
+    case 'president': cleanup = lazyPage(main, () => import('./ui/president/index').then((m) => m.renderPresident)); break;
   }
   window.scrollTo({ top: 0 });
   const nav = S().nav as Record<string, string>;

@@ -9,6 +9,7 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
+    "test": "node --test src/lib/president-rules.test.ts",
     "deploy": "npm run build && firebase deploy --only hosting,firestore"
   },
   "dependencies": {

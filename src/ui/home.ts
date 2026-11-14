@@ -219,8 +219,8 @@ export function renderHome(main: HTMLElement): () => void {
       h('p', { class: 'lp-pv-k' }, p.country), h('p', { class: 'lp-pv-score' }, h('b', { class: 'num' }, '32'), h('span', null, '/100')),
       h('ul', null, ...lp.meters.map((m, i) => h('li', { style: `--w:${[25, 30, 30, 35, 40][i] ?? 30}%` }, h('span', null, m), h('b', { class: 'num' }, String([25, 30, 30, 35, 40][i] ?? 30)), h('i'))))),
     h('div', { class: 'lp-pv-card', 'aria-hidden': 'true' },
-      h('div', { class: 'lp-pv-top' }, h('span', null, fmt(p.step, { i: 1, n: 8 })), h('span', { class: 'lp-pv-yr' }, fmt(p.year, { y: 1 }))),
-      h('div', { class: 'lp-pv-prog' }, ...Array.from({ length: 8 }, (_, i) => h('i', { class: i === 0 ? 'on' : '' }))),
+      h('div', { class: 'lp-pv-top' }, h('span', null, fmt(p.step, { i: 1, n: 3 })), h('span', { class: 'lp-pv-yr' }, fmt(p.year, { y: 1 }))),
+      h('div', { class: 'lp-pv-prog' }, ...Array.from({ length: 3 }, (_, i) => h('i', { class: i === 0 ? 'on' : '' }))),
       h('p', { class: 'lp-pv-q' }, lp.previewQ),
       h('span', { class: 'lp-pv-opt on' }, h('span', { class: 'lp-pv-tick' }, svg(ICON.check)), h('span', null, lp.previewA), h('em', null, fmt(p.cost, { n: 15 }))),
       h('span', { class: 'lp-pv-opt' }, h('span', { class: 'lp-pv-tick' }), h('span', null, lp.previewB), h('em', null, fmt(p.cost, { n: 5 })))));

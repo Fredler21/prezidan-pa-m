@@ -1,14 +1,12 @@
 import type { PriorityId } from '../types';
+import type { ProfileId } from '../data/president-levels.ts';
 
 /*
- * What the visitor has done so far, read from this device only (localStorage). The dashboard
+ * What the visitor has done so far, read from this device (localStorage). The dashboard
  * uses these summaries so it never has to load the games or their question banks.
  */
 
 const QUIZ_KEY = 'ppm.quiz.v1';
-const GAME_KEY = 'ppm.president.v2';
-const BEST_KEY = 'ppm.president.best';
-const RUN_KEY = 'ppm.president.run';
 const SEEN_KEY = 'ppm.seen.candidates';
 const QUIZ_DAY_ONE = Date.UTC(2026, 10, 4);
 
@@ -38,37 +36,60 @@ export function quizStatus(): QuizStatus {
   return { day, answered, total, score: typeof s.score === 'number' ? s.score : null, done: answered >= total, streak };
 }
 
-/** ids: the decisions drawn for that term; score: the country index after 5 years (0 to 100). */
-export interface GameResult { ids?: string[]; answers: (number | null)[]; top: PriorityId[]; at: number; score: number }
+// ---- « Si m te prezidan » v4: kept on the device for signed-in players only (and synced to the account) ----
+const RUN4 = 'ppm.pres4.run';
+const LAST4 = 'ppm.pres4.last';
+const BEST4 = 'ppm.pres4.best';
+const META4 = 'ppm.pres4.meta';
+const LEGACY = ['ppm.president.run', 'ppm.president.v2', 'ppm.president.best'];
+const isNums = (v: unknown): v is number[] => Array.isArray(v) && v.every((x) => typeof x === 'number');
+const isStrs = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === 'string');
+const write = (key: string, v: unknown) => { try { if (v === null) localStorage.removeItem(key); else localStorage.setItem(key, JSON.stringify(v)); } catch { /* storage off */ } };
 
-export function gameResult(): GameResult | null {
-  const s = read(GAME_KEY);
-  if (!isRecord(s) || !Array.isArray(s.top) || !Array.isArray(s.answers) || typeof s.score !== 'number') return null;
-  return { ...(Array.isArray(s.ids) ? { ids: s.ids as string[] } : {}), answers: s.answers as (number | null)[], top: (s.top as PriorityId[]).slice(0, 3), at: typeof s.at === 'number' ? s.at : 0, score: s.score };
+/** An unfinished term: the decisions drawn (15 ids) and the answers given so far. */
+export interface GameRun { v: 4; ids: string[]; answers: number[] }
+/** The last finished term. score: the state of the country, 0 to 100; stars: out of 15. */
+export interface GameResult { v: 4; ids: string[]; answers: number[]; score: number; stars: number; profile: ProfileId; top: PriorityId[]; at: number }
+/** Badges earned, and the days-in-a-row streak. */
+export interface GameMeta { badges: string[]; streak: number; day: string }
+
+export function asGameRun(v: unknown): GameRun | null {
+  return isRecord(v) && v.v === 4 && isStrs(v.ids) && isNums(v.answers) ? { v: 4, ids: v.ids, answers: v.answers } : null;
 }
-export function saveGameResult(r: GameResult): void {
-  try { localStorage.setItem(GAME_KEY, JSON.stringify(r)); } catch { /* storage off: the result stays for this visit */ }
+export function asGameResult(v: unknown): GameResult | null {
+  if (!isRecord(v) || v.v !== 4 || !isStrs(v.ids) || !isNums(v.answers) || typeof v.score !== 'number' || typeof v.profile !== 'string') return null;
+  return { v: 4, ids: v.ids, answers: v.answers, score: v.score, stars: typeof v.stars === 'number' ? v.stars : 0, profile: v.profile as ProfileId,
+    top: isStrs(v.top) ? (v.top as PriorityId[]).slice(0, 3) : [], at: typeof v.at === 'number' ? v.at : 0 };
+}
+export function asGameMeta(v: unknown): GameMeta | null {
+  return isRecord(v) && isStrs(v.badges) ? { badges: v.badges, streak: typeof v.streak === 'number' ? v.streak : 0, day: typeof v.day === 'string' ? v.day : '' } : null;
 }
 
-/** An unfinished term (kept for signed-in players only, so it can follow them to another device). */
-export interface GameRun { ids: string[]; answers: (number | null)[] }
-export function gameRun(): GameRun | null {
-  const s = read(RUN_KEY);
-  return isRecord(s) && Array.isArray(s.ids) && Array.isArray(s.answers) ? { ids: s.ids as string[], answers: s.answers as (number | null)[] } : null;
-}
-export function saveGameRun(r: GameRun | null): void {
-  try { if (r) localStorage.setItem(RUN_KEY, JSON.stringify(r)); else localStorage.removeItem(RUN_KEY); } catch { /* storage off */ }
-}
+export function gameRun(): GameRun | null { return asGameRun(read(RUN4)); }
+export function saveGameRun(r: GameRun | null): void { write(RUN4, r); }
+export function gameResult(): GameResult | null { return asGameResult(read(LAST4)); }
+export function saveGameResult(r: GameResult): void { write(LAST4, r); }
+export function gameMeta(): GameMeta { return asGameMeta(read(META4)) ?? { badges: [], streak: 0, day: '' }; }
+export function saveGameMeta(m: GameMeta): void { write(META4, m); }
 
 /** Best score so far; saving a better one returns true (a new record). */
 export function bestScore(): number | null {
-  try { const v = Number(localStorage.getItem(BEST_KEY)); return Number.isFinite(v) && v > 0 ? v : null; } catch { return null; }
+  try { const v = Number(localStorage.getItem(BEST4)); return Number.isFinite(v) && v > 0 ? v : null; } catch { return null; }
 }
 export function saveBestScore(score: number): boolean {
   const best = bestScore();
   if (best !== null && score <= best) return false;
-  try { localStorage.setItem(BEST_KEY, String(score)); } catch { /* storage off */ }
+  try { localStorage.setItem(BEST4, String(score)); } catch { /* storage off */ }
   return true;
+}
+
+/** Signing out: the game belongs to the account, not to this device. Also drops the old game's keys. */
+export function clearGame(): void {
+  for (const k of [RUN4, LAST4, BEST4, META4, ...LEGACY]) { try { localStorage.removeItem(k); } catch { /* storage off */ } }
+}
+/** The previous version of the game kept its data under other keys; nothing reads them any more. */
+export function dropLegacyGame(): void {
+  for (const k of LEGACY) { try { localStorage.removeItem(k); } catch { /* storage off */ } }
 }
 
 export function seenCandidates(): boolean { try { return localStorage.getItem(SEEN_KEY) === '1'; } catch { return false; } }

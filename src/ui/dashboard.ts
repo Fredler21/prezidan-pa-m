@@ -8,7 +8,7 @@ import { getStorage } from '../storage';
 import { disconnect, type Account } from '../account';
 import { FIRST_ROUND } from '../data/dates';
 import { MAX_PICKS } from '../data/priorities';
-import { PROFILES } from '../data/president-game';
+import { PROFILES } from '../data/president-levels.ts';
 import { QUIZ } from '../data/quiz';
 import { QUIZ_EXTRA } from '../data/quiz-extra';
 import { cardMade, gameResult, markSeenCandidates, quizStatus, seenCandidates } from '../lib/progress';
@@ -199,14 +199,13 @@ export function renderDashboard(main: HTMLElement, account: Account): () => void
     const quizLine = qs.done ? (qs.score === null ? fmt(d.quizDoneNoScore, { d: qs.day }) : fmt(d.quizDone, { d: qs.day, s: qs.score }))
       : qs.answered ? fmt(d.quizProgress, { d: qs.day, a: qs.answered }) : fmt(d.quizNew, { d: qs.day });
     const res = gameResult();
-    const lead = res?.top[0];
     games.replaceChildren(
       h('a', { class: 'card dash-game', href: '#quiz' }, well(ICON.idea),
         h('h3', null, hs.quizCard), h('p', null, quizLine),
         h('span', { class: 'btn btn-outline dash-act' }, qs.done ? d.seeResults : qs.answered ? d.keepGoing : d.actPlay)),
       h('a', { class: 'dash-game solid', href: '#president' }, h('span', { class: 'well' }, svg(ICON.palace)),
-        h('h3', null, S().pres.title), h('p', null, lead && res ? fmt(d.gameDone, { s: res.score, p: l(PROFILES[lead].title) }) : d.gameNew),
-        h('span', { class: 'btn dash-act on-solid' }, lead ? d.playAgain : d.playNow)));
+        h('h3', null, S().pres.title), h('p', null, res ? fmt(d.gameDone, { s: res.score, p: l(PROFILES[res.profile]?.title) }) : d.gameNew),
+        h('span', { class: 'btn dash-act on-solid' }, res ? d.playAgain : d.playNow)));
   };
 
   // ---- « Èske w te konnen? »: a fact from Konnen Ayiti every 7 seconds (paused on hover or focus) ----
