@@ -1,0 +1,619 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0}[hidden]{display:none!important}</style></head><body>
+<title>Si m te prezidan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one phone-width column; the map of Haiti is the scoreboard, the desk is where you sign. Single dark look by choice. */
+:root{
+  color-scheme:dark;
+  --night:#090f22; --panel:#111936; --panel2:#18224a; --line:#2a3768;
+  --ink:#eef1fb; --mute:#9ba7d1;
+  --blue:#3b66ff; --red:#e8405a; --gold:#f6c445; --green:#36cc8c; --amber:#f0a13a;
+  --sea:#0c1740; --land:#1d5148; --land-edge:#3d8a78;
+  --paper:#f2e9d6; --paper-ink:#1c1a16;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+html,body{height:100%}
+body{background:var(--night);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 28px;
+  background-image:radial-gradient(900px 420px at 50% -120px,#1a2a6c55,transparent)}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.08}
+h1{font-size:2.3rem;font-weight:800;letter-spacing:-.02em}
+h2{font-size:1.55rem;font-weight:800}
+h3{font-size:1.08rem;font-weight:700}
+p{margin:0}
+.mute{color:var(--mute)}
+.fine{font-size:.8rem;color:var(--mute);text-align:center}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);font-weight:700}
+
+.top{display:flex;align-items:center;gap:8px;padding-block:12px 4px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.05rem;margin-right:auto;display:flex;align-items:center;gap:8px}
+.flag{width:22px;height:15px;border-radius:3px;background:linear-gradient(#2447d6 50%,var(--red) 50%);flex:none}
+.chip{font-size:.72rem;font-weight:700;padding:4px 9px;border-radius:99px;background:var(--panel2);border:1px solid var(--line);color:var(--mute);white-space:nowrap}
+.chip.gold{color:var(--gold);border-color:#6b5a22}
+.icon-btn{width:40px;height:40px;border-radius:12px;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;font-size:1.05rem}
+.icon-btn:hover{background:var(--panel2)}
+
+.primary{width:100%;padding:15px 18px;border-radius:16px;background:var(--blue);color:#fff;font-weight:700;font-size:1.05rem;
+  box-shadow:0 6px 0 #1f3aa8;transition:transform .08s,box-shadow .08s,opacity .2s}
+.primary:active{transform:translateY(4px);box-shadow:0 2px 0 #1f3aa8}
+.primary:disabled{opacity:.4;cursor:not-allowed}
+.primary.red{background:var(--red);box-shadow:0 6px 0 #9c2238}
+.primary.red:active{box-shadow:0 2px 0 #9c2238}
+.second{width:100%;padding:13px 16px;border-radius:14px;border:1px solid var(--line);background:var(--panel);font-weight:600}
+.second:hover{background:var(--panel2)}
+.ghost{padding:8px 10px;border-radius:10px;color:var(--mute);font-weight:600;font-size:.9rem}
+.ghost:hover{color:var(--ink);background:var(--panel)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.row>.grow{flex:1;min-width:0}
+
+.card{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.screen{display:flex;flex-direction:column;gap:14px;animation:in .35s ease both}
+@keyframes in{from{opacity:.0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* meters */
+.hud{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.m{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:7px 8px;display:flex;flex-direction:column;gap:5px;position:relative;min-width:0}
+.m .r{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.m svg{width:15px;height:15px;fill:var(--c)}
+.m b{font-variant-numeric:tabular-nums;font-size:.92rem}
+.bar{height:5px;border-radius:9px;background:#0006;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:9px;background:var(--c);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.k-sek{--c:#74a9ff}.k-eko{--c:var(--gold)}.k-lek{--c:var(--green)}.k-kon{--c:#ff8196}.k-kes{--c:#c7b6ff}
+.list{display:flex;flex-direction:column;gap:9px}
+.lm{display:grid;grid-template-columns:20px 1fr 34px 44px;align-items:center;gap:8px;font-size:.9rem}
+.lm svg{width:17px;height:17px;fill:var(--c)}
+.lm .nm{display:flex;flex-direction:column;gap:4px;min-width:0}
+.lm b{text-align:right;font-variant-numeric:tabular-nums}
+.delta{font-weight:800;font-size:.85rem;text-align:right;font-variant-numeric:tabular-nums;animation:pop .6s .5s both}
+.delta.up{color:var(--green)}.delta.dn{color:var(--red)}
+@keyframes pop{0%{opacity:0;transform:translateY(8px) scale(.6)}60%{transform:translateY(-3px) scale(1.2)}100%{opacity:1;transform:none}}
+
+/* scene */
+.scene{border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#0b1330;line-height:0}
+.scene svg{width:100%;height:auto;display:block}
+.blink{animation:blink .7s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+.bob{animation:bob 3s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes bob{50%{transform:translateY(3px) rotate(-1.5deg)}}
+.wave{animation:wave 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:left center}
+@keyframes wave{50%{transform:skewY(7deg) scaleX(.93)}}
+.hop{animation:hop 1s ease-in-out infinite;transform-box:fill-box}
+@keyframes hop{50%{transform:translateY(-5px)}}
+.sway{animation:sway 1.3s ease-in-out infinite;transform-box:fill-box;transform-origin:bottom center}
+@keyframes sway{0%,100%{transform:rotate(10deg)}50%{transform:rotate(24deg)}}
+.rain{animation:rain .5s linear infinite}
+@keyframes rain{to{transform:translate(-14px,28px)}}
+.spin{animation:spin 5s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(-360deg)}}
+.drop{animation:drop 2.2s ease-in infinite;transform-box:fill-box}
+@keyframes drop{0%{transform:translateY(-26px);opacity:0}25%{opacity:1}70%,100%{transform:translateY(16px);opacity:0}}
+
+/* adviser */
+.adv{display:flex;gap:10px;align-items:flex-start}
+.ava{flex:none;width:52px;height:52px;border-radius:50%;overflow:hidden;border:2px solid var(--line);background:var(--panel2)}
+.ava svg{width:100%;height:100%;display:block}
+.bub{flex:1;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:4px 18px 18px 18px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.bub small{color:var(--mute);font-weight:700;font-size:.74rem;letter-spacing:.04em}
+.q{font-family:var(--display);font-weight:700;font-size:1.18rem;line-height:1.2;text-wrap:balance}
+.hintb{align-self:flex-start;font-size:.82rem;font-weight:700;color:var(--gold);padding:6px 10px;border-radius:99px;border:1px dashed #6b5a22}
+.hint{font-size:.9rem;color:#ffe9a8;animation:in .3s both}
+
+/* dossier cards */
+.opts{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.opts::-webkit-scrollbar{display:none}
+.opt{flex:0 0 80%;scroll-snap-align:center;text-align:left;background:linear-gradient(170deg,#1d2957,#141d42);border:2px solid var(--line);border-radius:18px;
+  padding:16px;display:flex;flex-direction:column;gap:8px;min-height:150px;position:relative;overflow:hidden;transition:transform .15s,border-color .15s}
+.opt:before{content:"";position:absolute;top:0;left:18px;width:64px;height:7px;border-radius:0 0 7px 7px;background:var(--line)}
+.opt.sel{border-color:var(--gold);transform:translateY(-4px)}
+.opt.sel:before{background:var(--gold)}
+.opt.no{opacity:.5}
+.opt b{font-family:var(--display);font-size:1.15rem;line-height:1.15}
+.opt span{color:var(--mute);font-size:.92rem}
+.cost{align-self:flex-start;font-size:.74rem;font-weight:800;padding:3px 9px;border-radius:99px;background:#0005;border:1px solid var(--line);color:#c7b6ff !important;margin-top:6px}
+.cost.free{color:var(--green) !important}
+.stamp{position:absolute;right:14px;bottom:14px;font-family:var(--display);font-weight:800;font-size:1.3rem;letter-spacing:.08em;color:var(--red) !important;
+  border:3px solid var(--red);border-radius:8px;padding:2px 10px;transform:rotate(-12deg) scale(3);opacity:0;pointer-events:none}
+.opt.stamped .stamp{animation:slam .4s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes slam{to{transform:rotate(-12deg) scale(1);opacity:1}}
+.dots{display:flex;gap:6px;justify-content:center}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:all .2s}
+.dots i.on{background:var(--ink);width:20px}
+.pips{display:flex;gap:4px}
+.pips i{width:22px;height:5px;border-radius:9px;background:var(--line)}
+.pips i.on{background:var(--gold)}
+
+/* newspaper */
+.paper{background:var(--paper);color:var(--paper-ink);border-radius:6px;padding:14px 16px 16px;transform:rotate(-1.2deg);box-shadow:0 14px 30px #0008;animation:paper .5s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes paper{from{transform:rotate(-14deg) scale(.5);opacity:0}}
+.paper .mast{display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px double var(--paper-ink);padding-bottom:5px;margin-bottom:9px;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.paper .mast b{font-family:var(--display);font-size:1rem;letter-spacing:0;text-transform:none}
+.paper h2{font-size:1.45rem;color:var(--paper-ink)}
+.paper p{font-size:.9rem;margin-top:6px;color:#4a453b}
+
+/* map */
+.mapbox{background:var(--sea);border:1px solid var(--line);border-radius:20px;overflow:hidden;position:relative}
+.mapbox svg{width:100%;height:auto;display:block}
+.land{fill:var(--land);stroke:var(--land-edge);stroke-width:1.5;stroke-linejoin:round}
+.road{fill:none;stroke-width:2.4;stroke-linecap:round;transition:stroke 1s}
+.road.blocked{stroke:var(--red);stroke-dasharray:3 5}
+.road.risky{stroke:var(--amber);stroke-dasharray:7 4}
+.road.open{stroke:#7ff0bb;stroke-dasharray:9 3;animation:flow 1.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-12}}
+.glow{fill:var(--gold);transition:opacity 1s,r 1s}
+.town{fill:#fff}
+.school{fill:var(--green);stroke:#062;stroke-width:.6;animation:pop .5s both}
+.maplabel{font:600 9px var(--body);fill:#cfe0ff}
+.legend{display:flex;gap:12px;flex-wrap:wrap;padding:8px 12px;font-size:.74rem;color:var(--mute);border-top:1px solid var(--line);background:var(--panel)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.node{cursor:pointer}
+.node circle.n{fill:var(--panel2);stroke:var(--line);stroke-width:2}
+.node.done circle.n{fill:var(--green);stroke:#0b5}
+.node.cur circle.n{fill:var(--blue);stroke:#fff}
+.node.cur circle.pulse{fill:none;stroke:var(--gold);stroke-width:2;animation:pulse 1.4s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{from{transform:scale(.8);opacity:1}to{transform:scale(1.9);opacity:0}}
+.node text.num{font:800 13px var(--display);fill:#fff;text-anchor:middle}
+.node text.st{font:700 10px var(--body);fill:var(--gold);text-anchor:middle}
+.node text.ct{font:700 9px var(--body);fill:#e6ecff;text-anchor:middle}
+.trail{fill:none;stroke:#ffffff55;stroke-width:2;stroke-dasharray:2 6;stroke-linecap:round}
+
+/* stars, score, badges */
+.stars{display:flex;gap:10px;justify-content:center;font-size:3rem;line-height:1}
+.stars span{color:var(--line)}
+.stars span.on{color:var(--gold);animation:starin .5s cubic-bezier(.2,1.6,.4,1) both;text-shadow:0 0 22px #f6c44588}
+@keyframes starin{from{transform:scale(0) rotate(-90deg)}}
+.big{font-family:var(--display);font-weight:800;font-size:4rem;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:1.2rem;color:var(--mute);font-weight:700}
+.center{text-align:center;align-items:center}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:8px}
+.bd{border:1px solid var(--line);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:3px;background:var(--panel2);font-size:.8rem;color:var(--mute)}
+.bd b{color:var(--ink);font-size:.88rem}
+.bd .e{font-size:1.4rem}
+.bd.off{opacity:.42;filter:grayscale(1)}
+.yr{display:flex;align-items:center;gap:10px;font-size:.92rem}
+.yr .s{margin-left:auto;color:var(--gold);letter-spacing:2px}
+.event{border:1px dashed var(--amber);background:#f0a13a14;border-radius:14px;padding:12px;font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+.event b{color:var(--amber)}
+
+.toasts{position:fixed;left:0;right:0;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;z-index:30;padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.toast{background:#fff;color:#111;font-weight:700;font-size:.9rem;padding:10px 16px;border-radius:99px;box-shadow:0 10px 30px #000a;animation:toast 3s both}
+@keyframes toast{0%{transform:translateY(30px);opacity:0}10%,85%{transform:none;opacity:1}100%{opacity:0}}
+.sheet{position:fixed;inset:0;background:#040818d9;z-index:20;display:flex;align-items:flex-end;justify-content:center;
+  padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));animation:in .25s both}
+.sheet>.card{width:100%;max-width:460px;max-height:86%;overflow:auto}
+.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.conf{position:fixed;top:-12px;width:9px;height:14px;z-index:25;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.float{animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px)}}
+a{color:#9db6ff}
+@media (max-width:360px){h1{font-size:1.9rem}.opt{flex-basis:86%}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="flag"></span>Si m te prezidan</div>
+    <span class="chip gold" id="streak"></span>
+    <button class="icon-btn" id="bbtn" aria-label="Badj yo" title="Badj yo">🏅</button>
+    <button class="icon-btn" id="mbtn" aria-label="Son" title="Son">🔊</button>
+  </header>
+  <main id="app"></main>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+(function(){
+"use strict";
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const app=$('#app');
+const clamp=v=>Math.max(0,Math.min(100,v));
+const SITE='https://prezidan-pa-m-sand.vercel.app/';
+
+/* ---------- data ---------- */
+const IC={
+ sek:'<svg viewBox="0 0 16 16"><path d="M8 1l6 2v4c0 4-2.6 6.6-6 8-3.4-1.4-6-4-6-8V3z"/></svg>',
+ eko:'<svg viewBox="0 0 16 16"><path d="M2 13h3V7H2zm4.5 0h3V3h-3zM11 13h3V9h-3z"/></svg>',
+ lek:'<svg viewBox="0 0 16 16"><path d="M1 3h5a2 2 0 012 2v9a2 2 0 00-2-2H1zm14 0h-5a2 2 0 00-2 2v9a2 2 0 012-2h5z"/></svg>',
+ kon:'<svg viewBox="0 0 16 16"><path d="M8 14S2 10 2 6a3 3 0 016-1 3 3 0 016 1c0 4-6 8-6 8z"/></svg>',
+ kes:'<svg viewBox="0 0 16 16"><path d="M1 6l7-4 7 4v1H1zm2 2h2v5H3zm4 0h2v5H7zm4 0h2v5h-2zM1 14h14v1H1z"/></svg>'
+};
+const STATS=[['sek','Sekirite'],['eko','Ekonomi'],['lek','Lekòl ak lasante'],['kon','Konfyans pèp la'],['kes','Kès leta']];
+const ADV={
+ kom:{n:'Komisè Renòl',r:'Sekirite'},
+ vik:{n:'Madan Viktwa',r:'Finans'},
+ mir:{n:'Doktè Mirèy',r:'Lekòl ak lasante'},
+ tij:{n:'Ti Jan',r:'Vwa pèp la'}
+};
+const YEARS=[
+ {n:'Sekirite',t:'Wout yo bloke',city:'Pòtoprens',sc:'sec',adv:'kom',line:'Prezidan, peyi a ap tann premye siy ou. Ann kòmanse ak wout yo.'},
+ {n:'Ekonomi',t:'Travay ak lajan',city:'Okap',sc:'eko',adv:'vik',line:'Kès la pa gwo. Chak goud dwe travay de fwa.'},
+ {n:'Lekòl ak lasante',t:'Timoun yo anvan',city:'Hinche',sc:'lek',adv:'mir',line:'Yon peyi vo sa lekòl li ak lopital li vo.'},
+ {n:'Siklòn',t:'Sezon siklòn nan',city:'Okay',sc:'stm',adv:'tij',line:'Syèl la ap chanje sou Sid la. Pèp la ap gade w.'},
+ {n:'Eleksyon',t:'Remèt pouvwa a',city:'Gonayiv',sc:'vot',adv:'tij',line:'Dènye ane a. Se kounye a istwa ap jije w.'}
+];
+// o: t title, d desc, c cost, e effects, h headline, w why, f flag
+const DEC=[
+ [ // Ane 1
+  {a:'kom',q:'Premye jou ou nan Palè Nasyonal la. Gang yo kontwole wout nasyonal yo. Kisa ou fè anvan?',
+   hint:'Lafòs mache vit. Men yon polis ki pa pwòp ap vann enfòmasyon bay gang yo.',
+   o:[{t:'Voye polis ak lame',d:'Reprann wout yo pa lafòs.',c:15,e:{sek:10,eko:2,kon:-3},h:'Wout nasyonal yo relouvri, katye yo rete pè',w:'Lafòs bay rezilta vit, men san lajistis pèp la pa fè Leta konfyans nèt.'},
+      {t:'Netwaye polis la anvan',d:'Revoke polisye ki kolabore ak gang.',c:5,e:{sek:4,kon:6},f:'clean',h:'200 polisye kowonpi pèdi badj yo',w:'Sa pran tan, men yon polis pwòp ap bay rezilta pandan plizyè ane.'},
+      {t:'Negosye ak gang yo',d:'Yon akò pou yo kite wout yo.',c:0,e:{sek:6,kon:-8},f:'nego',h:'Akò sekrè: gang yo kite wout yo… pou kounye a',w:'Wout yo louvri san tire, men pèp la wè Leta ap pale ak bandi. Yon akò konsa ka kase.'},
+      {t:'Mande yon misyon entènasyonal',d:'Lòt peyi voye sòlda ak lajan.',c:3,e:{sek:7,eko:1,kon:-2},h:'Sòlda etranje debake Pòtoprens',w:'Èd la rive vit, men anpil moun sonje ansyen misyon yo epi yo pa kontan.'}]},
+  {a:'tij',q:'Yon katye popilè fin libere. Jèn yo pa gen travay, e gang yo ap rekrite ankò.',
+   hint:'Yon jèn ki gen yon travay pa bezwen yon zam.',
+   o:[{t:'Pwogram travay pou jèn',d:'Netwaye, rebati, touche chak kenzèn.',c:10,e:{sek:4,eko:4,kon:5},h:'3 000 jèn ap rebati pwòp katye yo',w:'Travay la bay lajan, diyite, epi li retire rekrit nan men gang yo.'},
+      {t:'Baz polis pèmanan',d:'Polis rete nan katye a lajounen kou lannuit.',c:8,e:{sek:8,kon:1},h:'Nouvo komisarya louvri nan katye a',w:'Sekirite a kenbe, men san travay pwoblèm nan rete anba sann.'},
+      {t:'Kite sa pou pita',d:'Gen lòt ijans ki pi cho.',c:0,e:{sek:-5,kon:-4},h:'Katye a tonbe nan men gang yo ankò',w:'Yon katye libere ki abandone pa rete lib lontan.'}]},
+  {a:'kom',q:'Prizon sivil la twò plen. Pifò prizonye yo poko janm wè yon jij.',
+   hint:'Lajistis ki mache se pi bon zam kont ensekirite.',
+   o:[{t:'Tribinal mobil',d:'Jij yo vin jije dosye yo nan prizon an.',c:8,e:{sek:3,kon:7},h:'Jij yo antre nan prizon an: 900 dosye regle',w:'Inosan yo soti, koupab yo kondane. Pèp la wè lajistis ap travay.'},
+      {t:'Bati yon nouvo prizon',d:'Plis plas, plis gad.',c:14,e:{sek:6,kon:-1},h:'Yon nouvo prizon ap bati nan Kwadèbouke',w:'Plis plas ede sekirite, men dosye yo toujou ap dòmi nan tiwa.'},
+      {t:'Lage ti dosye yo',d:'Libere san jijman moun ki la pou ti zak.',c:0,e:{sek:-6,kon:2},h:'500 prizonye lage menm jou a',w:'Prizon an respire, men san swivi kèk ladan yo retounen nan lari ak zam.'}]}
+ ],
+ [ // Ane 2
+  {a:'vik',q:'Pri diri a double nan twa mwa. Pèp la nan lari.',
+   hint:'Diri enpòte kalme lari a jodi a. Diri Latibonit bay manje demen.',
+   o:[{t:'Sibvansyone diri enpòte',d:'Leta peye yon pati nan pri a.',c:14,e:{eko:-3,kon:8},h:'Pri diri a desann, kès Leta a santi sa',w:'Pèp la soulaje touswit, men lajan an kite peyi a epi peyizan yo pèdi kliyan.'},
+      {t:'Ede peyizan Latibonit yo',d:'Semans, angrè ak kanal irigasyon.',c:9,e:{eko:7,kon:2},f:'farm',h:'Latibonit ap plante ankò',w:'Rekòt la pran tan, men peyi a ap depann mwens de bato ki soti lòt bò.'},
+      {t:'Kite mache a regle sa',d:'Pa depanse anyen.',c:0,e:{eko:1,kon:-9},h:'Manifestasyon grangou nan tout gwo vil yo',w:'Kès la rete entak, men yon pèp ki grangou pa tann.'}]},
+  {a:'vik',q:'Ladwàn nan pèdi yon gwo pati nan lajan li nan kontrebann.',
+   hint:'Yon òdinatè pa pran lajan anba tab.',
+   o:[{t:'Enfòmatize ladwàn nan',d:'Tout peman fèt sou sistèm, pa nan men.',c:8,e:{eko:5,kon:3},f:'customs',h:'Ladwàn: fini ak resi ekri alamen',w:'Lè peman yo sou sistèm, lajan an rive nan kès Leta a. W ap wè rezilta a pita.'},
+      {t:'Ogmante taks ti machann',d:'Lajan rapid pou kès la.',c:0,e:{eko:-3,kon:-8,kes:8},h:'Madan Sara yo fèmen mache a an pwotestasyon',w:'Kès la monte, men se moun ki pi fèb yo ki peye pandan gwo kontrebandye yo ap ri.'},
+      {t:'Arete gwo kontrebandye yo',d:'Yon operasyon nan pò yo.',c:6,e:{sek:3,eko:2,kon:6},h:'Twa gwo non arete nan pò a',w:'Pèp la wè lalwa a pou tout moun. Men san sistèm, lòt ap ranplase yo.'}]},
+  {a:'tij',q:'Dyaspora a voye anpil lajan lakay chak ane. Kijan Leta ka travay ak li?',
+   hint:'Dyaspora a vle envesti, men li vle wè kote lajan l pase.',
+   o:[{t:'Fon envestisman dyaspora',d:'Lajan pou ti antrepriz, ak kont piblik.',c:6,e:{eko:8,kon:2},h:'Dyaspora a finanse 400 ti antrepriz',w:'Lè kont yo piblik, lajan an tounen travay olye li rete konsomasyon sèlman.'},
+      {t:'Taks sou transfè yo',d:'Yon ti kòb sou chak transfè.',c:0,e:{eko:-2,kon:-7,kes:10},h:'Nouvo taks sou transfè: fanmi yo fache',w:'Kès la monte, men se manje fanmi yo ou koupe.'},
+      {t:'Bay dyaspora a dwa vote',d:'Biwo vòt nan gwo vil aletranje.',c:4,e:{kon:8},h:'Ayisyen aletranje ap ka vote',w:'Milyon Ayisyen santi peyi a se pou yo tou.'}]}
+ ],
+ [ // Ane 3
+  {a:'mir',q:'Nan zòn riral yo, anpil timoun pa al lekòl.',
+   hint:'Yon timoun ki grangou pa aprann. Yon lekòl ki lwen pa sèvi.',
+   o:[{t:'Kantin eskolè gratis',d:'Yon plat cho chak jou, ak manje lokal.',c:12,e:{lek:9,kon:4},h:'Kantin yo plen, klas yo plen tou',w:'Manje a mennen timoun yo lekòl, epi peyizan yo jwenn yon kliyan.'},
+      {t:'Yon lekòl nasyonal pa komin',d:'Bati lekòl piblik toupatou.',c:16,e:{eko:2,lek:12},h:'Chantye lekòl louvri nan 40 komin',w:'Se pi gwo envestisman an. Li koute chè, men li dire plizyè jenerasyon.'},
+      {t:'Sibvansyon pou lekòl prive',d:'Leta peye yon pati nan ekolaj la.',c:7,e:{lek:4,kon:-2},h:'Leta ap peye ekolaj nan lekòl prive',w:'Li pi rapid, men Leta pa kontwole kalite a, e kèk direktè gonfle lis yo.'}]},
+  {a:'mir',q:'Kolera retounen nan twa depatman.',
+   hint:'Kolera pase nan dlo. Trete dlo a, ou koupe maladi a.',
+   o:[{t:'Dlo pwòp ak vaksen',d:'Kanpay nan tout zòn ki touche yo.',c:12,e:{lek:9,kon:4},h:'Kanpay vaksen an rive nan dènye seksyon kominal',w:'Ou trete kòz la, pa sèlman malad yo. Epidemi an bese vit.'},
+      {t:'Fèmen mache yo yon mwa',d:'Mwens kontak, mwens ka.',c:0,e:{eko:-7,lek:4,kon:-4},h:'Mache fèmen: machann yo pèdi tout',w:'Ka yo bese, men fanmi yo pèdi lajan yo epi dlo a rete sal.'},
+      {t:'Kite ONG yo jere sa',d:'Yo gen eksperyans ak materyèl.',c:3,e:{lek:5,kon:-3},h:'ONG yo pran kontwòl sant kolera yo',w:'Sa mache, men pèp la mande kote Leta ye.'}]},
+  {a:'mir',q:'Pwofesè yo an grèv: yo gen sis mwa san touche.',
+   hint:'Yon pwomès ki pa kenbe koute pi chè pase yon dèt.',
+   o:[{t:'Peye tout aryere yo',d:'Sis mwa salè, yon sèl kou.',c:14,e:{lek:8,kon:6},h:'Pwofesè yo touche, lekòl relouvri lendi',w:'Li koute chè, men klas yo reprann e pwofesè yo fè Leta konfyans.'},
+      {t:'Peye mwatye, pwomèt rès la',d:'Twa mwa kounye a, twa mwa pita.',c:6,e:{lek:3,kon:-2},f:'half',h:'Akò ak sendika yo: mwatye kounye a',w:'Lekòl relouvri, men pwofesè yo ap tann rès la. Y ap sonje pwomès la.'},
+      {t:'Ranplase grevis yo',d:'Anplwaye nouvo pwofesè san fòmasyon.',c:0,e:{lek:-6,kon:-8},h:'Grevis revoke, klas yo vid',w:'Ou pèdi pwofesè ki gen eksperyans, e paran yo pran pati pwofesè yo.'}]}
+ ],
+ [ // Ane 4
+  {a:'tij',q:'Yon siklòn kategori 4 ap rive sou Sid la nan twa jou.',
+   hint:'Yon evakyasyon ki pa t nesesè koute lajan. Yon evakyasyon ki manke koute lavi.',
+   o:[{t:'Evakye kòt la kounye a',d:'Bis, abri, manje pou twa jou.',c:10,e:{sek:2,kon:7},h:'80 000 moun nan abri anvan siklòn nan',w:'Kay yo ka rebati. Moun yo te deja an sekirite lè van an rive.'},
+      {t:'Mesaj radyo sèlman',d:'Di moun yo pare tèt yo.',c:2,e:{kon:-3},h:'Radyo yo avèti, men bis pa janm vini',w:'Moun ki pa gen mwayen pa ka deplase pou kont yo.'},
+      {t:'Tann pou wè si l ap devye',d:'Siklòn konn chanje wout.',c:0,e:{lek:-4,kon:-10},h:'Siklòn nan frape Sid la san avètisman',w:'Li pa t devye. Lopital yo debòde epi pèp la mande kote prezidan an te ye.'}]},
+  {a:'kom',q:'Siklòn nan pase. Okay ak Jeremi anba dlo. Èd la rive nan pò a.',
+   hint:'Moun nan zòn nan konnen ki fanmi ki pi nan bezwen.',
+   o:[{t:'Pase pa meri yo ak legliz yo',d:'Moun lokal distribye, Leta kontwole.',c:6,e:{lek:3,kon:7},h:'Èd la rive nan mòn yo nan 4 jou',w:'Rezo lokal yo konnen chak fanmi. Èd la rive kote li dwe rive.'},
+      {t:'Lame distribye tout bagay',d:'Kamyon, lòd, sekirite.',c:9,e:{sek:4,kon:3},h:'Kamyon lame yo sou wout Sid la',w:'Pa gen piyay, men kamyon yo pa ka monte nan ti seksyon yo.'},
+      {t:'Kite ONG yo fè l',d:'Yo deja sou plas.',c:0,e:{lek:2,kon:-5},h:'Chak ONG distribye nan kwen pa l',w:'Kèk zòn resevwa twa fwa, lòt pa resevwa anyen. Pèsonn pa kowòdone.'}]},
+  {a:'vik',q:'Lè pou rebati. Kisa ki pase anvan?',
+   hint:'Mòn ki san pyebwa voye dlo ak labou sou vil yo chak sezon.',
+   o:[{t:'Wout ak pon',d:'Rekonekte Sid la ak rès peyi a.',c:12,e:{sek:2,eko:8},h:'Pon Kavayon an relouvri',w:'Machandiz ak moun sikile ankò. Ekonomi Sid la reprann souf.'},
+      {t:'Kay ki reziste siklòn',d:'Bati pi solid, ak bòs lokal.',c:14,e:{eko:2,lek:4,kon:6},h:'5 000 kay solid pou Sid la',w:'Pwochen siklòn nan ap jwenn kay ki kanpe, ak bòs ki gen travay.'},
+      {t:'Rebwaze mòn yo',d:'Plante pyebwa, peye peyizan pou pwoteje yo.',c:7,e:{eko:3,lek:2,kon:3},h:'Yon milyon pyebwa pou mòn Makaya',w:'Li pa parèt anpil jodi a, men se sa ki anpeche pwochen inondasyon an.'}]}
+ ],
+ [ // Ane 5
+  {a:'tij',q:'Eleksyon yo nan sis mwa. Konsèy elektoral la mande lajan ak sekirite.',
+   hint:'Yon eleksyon ki mal fèt koute pi chè pase yon eleksyon ki byen finanse.',
+   o:[{t:'Bay tout sa li mande',d:'Bidjè konplè ak sekirite pou biwo yo.',c:12,e:{sek:2,kon:9},h:'Kat elektoral yo ap distribye nan 10 depatman',w:'Lè tout moun ka vote an sekirite, rezilta a gen plis lejitimite.'},
+      {t:'Bay mwatye',d:'Fè sa nou kapab ak sa nou genyen.',c:6,e:{kon:2},h:'Eleksyon yo ap fèt, ak mwens biwo vòt',w:'Vòt la fèt, men nan zòn ki lwen yo moun mache plizyè èdtan pou vote.'},
+      {t:'Ranvwaye eleksyon yo',d:'Peyi a poko pare.',c:0,e:{sek:-3,kon:-12},h:'Eleksyon ranvwaye: lari a cho',w:'Chak ranvwa fè pèp la kwè ou pa vle kite pouvwa a.'}]},
+  {a:'kom',q:'Yon minis akize de kòripsyon. Li se zanmi w depi lontan.',
+   hint:'Pèp la ap gade si lalwa a menm pou zanmi prezidan an.',
+   o:[{t:'Revoke l, kite lajistis travay',d:'Menm lalwa pou tout moun.',c:0,e:{kon:9},h:'Prezidan an lage pwòp minis li bay lajistis',w:'Ou pèdi yon zanmi, men ou montre pèsonn pa pi wo pase lalwa.'},
+      {t:'Fè yon ankèt entèn',d:'Yon komisyon ap gade dosye a.',c:2,e:{kon:-2},h:'Yon komisyon ap ankete… san dat limit',w:'Pèp la konnen komisyon konsa: dosye a ap dòmi.'},
+      {t:'Defann li an piblik',d:'Se yon konplo politik.',c:0,e:{eko:-2,kon:-10},h:'Prezidan an defann minis li a',w:'Envestisè yo ak pèp la tire menm konklizyon an: kòripsyon an pwoteje.'}]},
+  {a:'tij',q:'Dènye mwa manda a. Patizan w yo mande w rete sou pouvwa a.',
+   hint:'Konstitisyon an klè: senk an, epi ou remèt echap la.',
+   o:[{t:'Remèt pouvwa a nan dat la',d:'7 fevriye, jan Konstitisyon an mande.',c:0,e:{sek:3,kon:10},f:'remit',h:'7 fevriye: echap la pase nan lapè',w:'Yon pasasyon pouvwa nan lapè se pi gwo eritaj yon prezidan ka kite.'},
+      {t:'Mande yon ane anplis',d:'Pou fini sa ou te kòmanse.',c:0,e:{sek:-6,kon:-12},h:'Prezidan an refize kite Palè a',w:'Tout sa ou te bati vin yon kesyon: èske se te pou peyi a oswa pou ou?'},
+      {t:'Deba nasyonal sou Konstitisyon an',d:'Anvan ou ale, koute pèp la.',c:5,e:{lek:2,kon:5},h:'Pèp la pran lapawòl nan 10 depatman',w:'Ou kite ak yon peyi ki ap pale youn ak lòt.'}]}
+ ]
+];
+// delayed consequences, applied at the start of year index y
+const EVENTS=[
+ {y:1,f:'nego',t:'Gang yo kase akò a',d:'Akò ou te fè Ane 1 an pa kenbe. Wout yo bloke ankò.',e:{sek:-8,kon:-2}},
+ {y:2,f:'clean',t:'Polis pwòp la bay rezilta',d:'Polisye ou te kenbe yo arete plizyè chèf gang.',e:{sek:6,kon:2}},
+ {y:2,f:'customs',t:'Ladwàn nan rapòte plis',d:'Sistèm enfòmatik la fè lajan an rive nan kès la.',e:{kes:12}},
+ {y:3,f:'farm',t:'Rekòt Latibonit la rive',d:'Diri lokal la ap nouri Sid la anvan siklòn nan.',e:{eko:2,kon:5}},
+ {y:4,f:'half',t:'Pwofesè yo tounen nan lari',d:'Rès salè ou te pwomèt la pa janm peye.',e:{lek:-6,kon:-3}}
+];
+const BADGES=[
+ ['first','✍️','Premye siyati','Siyen premye dekrè w'],
+ ['road','🛣️','Wout lib','Sekirite rive 55'],
+ ['build','🏗️','Batisè','Ekonomi rive 55'],
+ ['teach','📚','Lekòl pou tout moun','Lekòl ak lasante rive 55'],
+ ['people','❤️','Vwa pèp la','Konfyans rive 70'],
+ ['thrift','🏦','Kès byen jere','Fini yon ane ak 25 nan kès la'],
+ ['star3','⭐','Twa zetwal','Jwenn 3 zetwal nan yon ane'],
+ ['storm','🌀','Kanpe apre siklòn nan','2 zetwal oswa plis nan Ane 4'],
+ ['remit','🕊️','Demokrat','Remèt pouvwa a nan dat la'],
+ ['full','🎖️','Manda konplè','Fini 5 an yo'],
+ ['streak','🔥','Fidèl','Jwe 3 jou youn dèyè lòt']
+];
+
+/* ---------- state ---------- */
+const fresh=()=>({year:0,d:0,inYear:false,st:{sek:25,eko:30,lek:30,kon:35,kes:40},stars:[],flags:{},y0:0,last:null,done:false,evs:[]});
+let S=fresh(), M={best:0,badges:{},streak:0,last:'',tut:false,muted:false};
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const save=()=>{store.set('smp_state',S);store.set('smp_meta',M)};
+const sum=st=>st.sek+st.eko+st.lek+st.kon;
+const score=st=>Math.round(sum(st)/4);
+
+/* ---------- sound + haptics ---------- */
+let ac;
+function tone(f,t,type,v,when){if(M.muted)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();
+  const o=ac.createOscillator(),g=ac.createGain(),s=ac.currentTime+(when||0);o.type=type||'triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(v||.1,s);g.gain.exponentialRampToValueAtTime(.001,s+t);o.connect(g);g.connect(ac.destination);o.start(s);o.stop(s+t+.02)}catch(e){}}
+const sfx={
+ tap(){tone(540,.06)},
+ stamp(){tone(95,.22,'square',.16);tone(55,.32,'sine',.3)},
+ up(){[523,659,784].forEach((f,i)=>tone(f,.16,'triangle',.11,i*.09))},
+ down(){[330,262,196].forEach((f,i)=>tone(f,.2,'sawtooth',.05,i*.11))},
+ star(i){tone(700+i*180,.25,'triangle',.13)},
+ win(){[523,659,784,1047,1319].forEach((f,i)=>tone(f,.22,'triangle',.12,i*.11))},
+ badge(){tone(988,.1,'sine',.12);tone(1319,.25,'sine',.12,.1)}
+};
+const vib=p=>{if(M.muted)return;try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+
+/* ---------- small ui helpers ---------- */
+function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;$('#toasts').appendChild(e);setTimeout(()=>e.remove(),3100)}
+function confetti(){const cs=['#3b66ff','#e8405a','#f6c445','#36cc8c','#fff'];for(let i=0;i<46;i++){const e=document.createElement('i');e.className='conf';
+  e.style.left=Math.random()*100+'vw';e.style.background=cs[i%5];e.style.animationDuration=(1.4+Math.random()*1.6)+'s';e.style.animationDelay=Math.random()*.4+'s';
+  document.body.appendChild(e);setTimeout(()=>e.remove(),3600)}}
+function award(id){if(M.badges[id])return;M.badges[id]=1;const b=BADGES.find(x=>x[0]===id);setTimeout(()=>{toast(b[1]+' Nouvo badj: '+b[2]);sfx.badge()},900);save()}
+function checkBadges(){const s=S.st;if(s.sek>=55)award('road');if(s.eko>=55)award('build');if(s.lek>=55)award('teach');if(s.kon>=70)award('people');if(S.flags.remit)award('remit')}
+function countUp(root){$$('[data-to]',root).forEach(el=>{const to=+el.dataset.to;if(el.tagName==='I'){requestAnimationFrame(()=>requestAnimationFrame(()=>el.style.width=to+'%'));return}
+  const from=+el.dataset.from;if(from===to){el.textContent=to;return}const t0=performance.now();(function step(t){const p=Math.min(1,(t-t0)/900);el.textContent=Math.round(from+(to-from)*p);if(p<1)requestAnimationFrame(step)})(t0)})}
+function hud(st){return '<div class="hud">'+STATS.map(([k,n])=>`<div class="m k-${k}" title="${n}"><div class="r">${IC[k]}<b>${st[k]}</b></div><div class="bar"><i style="width:${st[k]}%"></i></div></div>`).join('')+'</div>'}
+function meterList(st,prev){return '<div class="list">'+STATS.map(([k,n])=>{const p=prev?prev[k]:st[k],d=st[k]-p;
+  return `<div class="lm k-${k}">${IC[k]}<div class="nm"><span>${n}</span><div class="bar"><i style="width:${p}%" data-to="${st[k]}"></i></div></div><b data-from="${p}" data-to="${st[k]}">${p}</b>${d?`<span class="delta ${d>0?'up':'dn'}">${d>0?'+':''}${d}</span>`:'<span></span>'}</div>`}).join('')+'</div>'}
+function avatar(k){const c={kom:['#274690','#8d5a3b'],vik:['#7a2e52','#a66a45'],mir:['#1f6f63','#7b4b30'],tij:['#8a5a12','#9a623f']}[k];
+  const extra={kom:'<path d="M12 17q12-12 24 0v3H12z" fill="#16264f"/><rect x="21" y="12" width="6" height="4" rx="1" fill="#f6c445"/>',
+   vik:'<path d="M11 24q0-16 13-16t13 16q-3-9-13-9t-13 9z" fill="#1a1210"/><circle cx="19.500" cy="23" r="3.600" fill="none" stroke="#f6c445" stroke-width="1.200"/><circle cx="28.500" cy="23" r="3.600" fill="none" stroke="#f6c445" stroke-width="1.200"/>',
+   mir:'<path d="M12 22q0-13 12-13t12 13q-4-7-12-7t-12 7z" fill="#1a1210"/><path d="M17 38q7 7 14 0" fill="none" stroke="#cfd8ff" stroke-width="2"/>',
+   tij:'<ellipse cx="24" cy="15" rx="16" ry="4" fill="#e3c27a"/><path d="M15 15q9-12 18 0z" fill="#d1ad5e"/>'}[k];
+  return `<svg viewBox="0 0 48 48" aria-hidden="true"><rect width="48" height="48" fill="${c[0]}"/><path d="M6 50q0-14 18-14t18 14z" fill="#eef1fb" opacity=".9"/><circle cx="24" cy="23" r="10" fill="${c[1]}"/>${extra}<circle cx="20" cy="23" r="1.300" fill="#111"/><circle cx="28" cy="23" r="1.300" fill="#111"/><path d="M20 28q4 3 8 0" fill="none" stroke="#111" stroke-width="1.300" stroke-linecap="round"/></svg>`}
+
+/* ---------- scenes ---------- */
+function scene(t){
+ const dark=t==='stm';
+ const back=`<defs><linearGradient id="sk${t}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${dark?'#141a2e':'#1b2f7a'}"/><stop offset="1" stop-color="${dark?'#39405a':'#e58a5c'}"/></linearGradient></defs>
+  <rect width="360" height="140" fill="url(#sk${t})"/>${dark?'':'<circle cx="290" cy="62" r="20" fill="#ffd27a" opacity=".9"/>'}
+  <path d="M0 92l50-34 46 26 52-40 60 44 54-30 98 40v42H0z" fill="${dark?'#20283f':'#27407f'}"/><path d="M0 104l70-22 80 20 90-26 120 30v34H0z" fill="${dark?'#1a2a2a':'#1d5148'}"/>`;
+ const flag=(x,y)=>`<rect x="${x}" y="${y}" width="2" height="34" fill="#ddd"/><g class="wave"><rect x="${x+2}" y="${y}" width="22" height="7" fill="#2447d6"/><rect x="${x+2}" y="${y+7}" width="22" height="7" fill="#e8405a"/></g>`;
+ const S_={
+  sec:`<path d="M130 140l34-44h32l34 44z" fill="#2b2f3d"/><path d="M180 100v8m0 8v10" stroke="#f6c445" stroke-width="2" stroke-dasharray="6 6"/>
+   <rect x="120" y="108" width="120" height="9" fill="#f6c445"/><path d="M130 108l9 9m10-9l9 9m10-9l9 9m10-9l9 9m10-9l9 9m10-9l9 9" stroke="#111" stroke-width="4"/><rect x="128" y="117" width="5" height="14" fill="#999"/><rect x="227" y="117" width="5" height="14" fill="#999"/>
+   <circle cx="104" cy="126" r="8" fill="none" stroke="#111" stroke-width="5"/><circle cx="256" cy="128" r="8" fill="none" stroke="#111" stroke-width="5"/><path d="M252 112q4-14 8 0z" fill="#ff8a3d" class="blink"/>
+   <rect x="34" y="108" width="50" height="16" rx="4" fill="#e9edf8"/><rect x="42" y="100" width="30" height="10" rx="3" fill="#9fb4e8"/><circle cx="46" cy="126" r="5" fill="#111"/><circle cx="74" cy="126" r="5" fill="#111"/><rect x="52" y="95" width="10" height="5" fill="#e8405a" class="blink"/>`,
+  eko:`<rect y="106" width="360" height="34" fill="#12306e"/><path d="M0 112q15-5 30 0t30 0 30 0 30 0 30 0 30 0 30 0 30 0 30 0 30 0 30 0 30 0" stroke="#5f8cff" fill="none" opacity=".6"/>
+   <g class="bob"><path d="M40 104h110l-12 20H52z" fill="#b93a4e"/><rect x="62" y="88" width="16" height="16" fill="#f6c445"/><rect x="80" y="88" width="16" height="16" fill="#36cc8c"/><rect x="98" y="88" width="16" height="16" fill="#3b66ff"/><rect x="122" y="80" width="12" height="24" fill="#eee"/></g>
+   <rect x="200" y="100" width="160" height="40" fill="#3a4466"/><path d="M230 100V44h56M230 44l-18 20M286 44v26" stroke="#f6c445" stroke-width="4" fill="none"/><rect x="278" y="70" width="16" height="12" fill="#e8405a" class="hop"/>
+   <rect x="300" y="84" width="18" height="16" fill="#36cc8c"/><rect x="320" y="84" width="18" height="16" fill="#3b66ff"/><rect x="310" y="68" width="18" height="16" fill="#f6c445"/>`,
+  lek:`<rect x="110" y="66" width="140" height="62" fill="#f1e2bd"/><path d="M100 68l80-30 80 30z" fill="#b93a4e"/><rect x="170" y="96" width="20" height="32" fill="#7a4a2b"/>
+   <rect x="124" y="82" width="24" height="18" fill="#7fb2ff"/><rect x="212" y="82" width="24" height="18" fill="#7fb2ff"/><text x="180" y="62" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">LEKÒL NASYONAL</text>
+   ${flag(268,60)}
+   <g class="hop"><circle cx="70" cy="112" r="6" fill="#8d5a3b"/><rect x="65" y="118" width="10" height="13" rx="2" fill="#3b66ff"/></g><g class="hop" style="animation-delay:.3s"><circle cx="90" cy="114" r="5" fill="#7b4b30"/><rect x="86" y="119" width="8" height="12" rx="2" fill="#f6c445"/></g>
+   <rect x="300" y="100" width="40" height="28" fill="#fff"/><path d="M320 106v16m-8-8h16" stroke="#e8405a" stroke-width="5"/>`,
+  stm:`<g class="spin"><circle cx="270" cy="38" r="26" fill="none" stroke="#c9d3ff" stroke-width="6" stroke-dasharray="30 14" opacity=".8"/><circle cx="270" cy="38" r="12" fill="none" stroke="#c9d3ff" stroke-width="4" stroke-dasharray="14 8" opacity=".8"/></g>
+   <g class="sway"><path d="M92 132q-4-34 2-58" stroke="#5b3d24" stroke-width="6" fill="none"/><path d="M94 74q-26-10-40 6m40-6q-20-22-44-14m44 14q4-24 30-22m-30 22q22-8 36 8" stroke="#2f8f63" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+   <g class="sway" style="animation-delay:.25s"><path d="M176 134q-3-26 2-44" stroke="#5b3d24" stroke-width="5" fill="none"/><path d="M178 90q-22-8-32 6m32-6q-16-18-36-10m36 10q4-20 24-18m-24 18q18-6 30 6" stroke="#2f8f63" stroke-width="4" fill="none" stroke-linecap="round"/></g>
+   <rect x="226" y="108" width="54" height="24" fill="#8a7a66"/><path d="M220 110l33-18 33 18z" fill="#6b3140" class="hop"/>
+   <g class="rain" stroke="#b8c8ff" stroke-width="1.500" opacity=".7">${Array.from({length:26},(_,i)=>`<path d="M${i*15+((i*37)%11)} ${(i*29)%120-20}l-7 14"/>`).join('')}</g>`,
+  vot:`${flag(60,58)}<rect x="140" y="82" width="80" height="50" rx="4" fill="#eef1fb"/><rect x="160" y="80" width="40" height="5" fill="#111"/><text x="180" y="114" text-anchor="middle" font-size="13" font-weight="800" fill="#2447d6">VÒT</text>
+   <rect x="170" y="52" width="20" height="26" fill="#fff" stroke="#999" class="drop"/>
+   ${[250,272,294,316].map((x,i)=>`<g class="hop" style="animation-delay:${i*.2}s"><circle cx="${x}" cy="${104+i%2*3}" r="6" fill="${['#8d5a3b','#7b4b30','#a66a45','#6e422a'][i]}"/><rect x="${x-6}" y="${110+i%2*3}" width="12" height="20" rx="3" fill="${['#e8405a','#f6c445','#36cc8c','#3b66ff'][i]}"/></g>`).join('')}`
+ };
+ return `<div class="scene"><svg viewBox="0 0 360 140" role="img" aria-label="${YEARS.find(y=>y.sc===t).n}">${back}${S_[t]}</svg></div>`}
+
+/* ---------- map of Haiti ---------- */
+const K=118,X=l=>+((l+74.6)*K).toFixed(1),Y=l=>+((20.12-l)*K).toFixed(1),pts=a=>a.map(p=>X(p[0])+','+Y(p[1])).join(' ');
+const COAST=[[-73.4,19.8],[-73.2,19.93],[-72.83,19.95],[-72.5,19.9],[-72.2,19.78],[-71.84,19.68],[-71.72,19.6],[-71.7,19.35],[-71.63,19.15],[-71.75,18.95],[-71.95,18.62],[-71.72,18.33],[-71.77,18.04],[-72.1,18.2],[-72.53,18.2],[-73,18.17],[-73.4,18.24],[-73.75,18.16],[-73.92,18.04],[-74.2,18.2],[-74.42,18.33],[-74.46,18.57],[-74.12,18.67],[-73.6,18.54],[-73.09,18.46],[-72.75,18.44],[-72.4,18.53],[-72.33,18.62],[-72.52,18.77],[-72.72,19.08],[-72.78,19.3],[-72.69,19.45],[-73.05,19.63],[-73.25,19.66]];
+const C={pap:[-72.29,18.58,'Pòtoprens'],okp:[-72.2,19.72,'Okap'],gon:[-72.62,19.44,'Gonayiv'],hin:[-72.01,19.15,'Hinche'],oka:[-73.75,18.22,'Okay'],jer:[-74.12,18.62,'Jeremi'],jak:[-72.53,18.26,'Jakmèl'],pdp:[-72.83,19.9,'Pòdepè']};
+const ROADS=[['pap',[-72.6,19.0],'gon','okp'],['pap','hin','okp'],['pap','jak'],['pap',[-72.75,18.42],[-73.09,18.42],'oka'],['oka',[-73.95,18.4],'jer'],['gon','pdp']];
+const NODES=['pap','okp','hin','oka','gon'];
+const cp=k=>typeof k==='string'?C[k]:k;
+function mapSVG(st,level,storm){
+ const rc=st.sek<35?'blocked':st.sek<55?'risky':'open';
+ const schools=Math.min(8,Math.floor(st.lek/12)), keys=Object.keys(C);
+ let h=`<svg viewBox="0 0 360 262" role="img" aria-label="Kat Ayiti"><polygon class="land" points="${pts(COAST)}"/><ellipse class="land" cx="${X(-73.05)}" cy="${Y(18.83)}" rx="32" ry="8" transform="rotate(20 ${X(-73.05)} ${Y(18.83)})"/>`;
+ h+=ROADS.map(r=>`<polyline class="road ${rc}" points="${pts(r.map(cp))}"/>`).join('');
+ keys.forEach((k,i)=>{const [lo,la,n]=C[k],x=X(lo),y=Y(la);
+  h+=`<circle class="glow" cx="${x}" cy="${y}" r="${4+st.eko/7}" opacity="${(st.eko/260).toFixed(2)}"/><circle class="town" cx="${x}" cy="${y}" r="2.600"/>`;
+  if(i<schools)h+=`<rect class="school" x="${x+5}" y="${y-10}" width="7" height="7" rx="1.500" style="animation-delay:${i*.08}s"/>`;
+  if(!level)h+=`<text class="maplabel" x="${x+(k==='jer'||k==='oka'?-4:6)}" y="${y+12}" text-anchor="${k==='hin'||k==='okp'?'end':'start'}">${n}</text>`});
+ if(storm)h+=`<g class="spin"><circle cx="${X(-73.9)}" cy="${Y(18.3)}" r="30" fill="none" stroke="#dfe6ff" stroke-width="5" stroke-dasharray="26 14" opacity=".75"/><circle cx="${X(-73.9)}" cy="${Y(18.3)}" r="14" fill="none" stroke="#dfe6ff" stroke-width="4" stroke-dasharray="12 8" opacity=".75"/></g>`;
+ if(level){
+  h+=`<polyline class="trail" points="${pts(NODES.map(k=>C[k]))}"/>`;
+  NODES.forEach((k,i)=>{const x=X(C[k][0]),y=Y(C[k][1]),cls=i<S.year||S.done?'done':i===S.year?'cur':'lock',s=S.stars[i];
+   h+=`<g class="node ${cls}" data-y="${i}" tabindex="0" role="button" aria-label="Ane ${i+1}: ${YEARS[i].n}">${cls==='cur'?`<circle class="pulse" cx="${x}" cy="${y}" r="17"/>`:''}<circle class="n" cx="${x}" cy="${y}" r="16"/>
+    <text class="num" x="${x}" y="${y+4.500}">${cls==='lock'?'🔒':i+1}</text><text class="ct" x="${x}" y="${y+28}">${YEARS[i].n}</text>${s?`<text class="st" x="${x}" y="${y-20}">${'★'.repeat(s)}${'☆'.repeat(3-s)}</text>`:''}</g>`})}
+ return h+'</svg>'}
+const legend='<div class="legend"><span><i style="background:#7ff0bb"></i>Wout = sekirite</span><span><i style="background:var(--gold)"></i>Limyè = ekonomi</span><span><i style="background:var(--green)"></i>Kare = lekòl</span></div>';
+
+/* ---------- screens ---------- */
+function show(html){app.innerHTML=`<div class="screen">${html}</div>`;window.scrollTo(0,0);countUp(app)}
+function on(sel,fn){$$(sel,app).forEach(e=>e.addEventListener('click',fn))}
+
+function home(){
+ const has=S.year>0||S.inYear||S.d>0;
+ show(`<span class="eyebrow">Jwèt sivik · Ayiti 2027</span>
+  <h1>Si w te prezidan, kisa w ta fè?</h1>
+  <p class="mute">5 an, 5 nivo, 15 desizyon. Chak siyati chanje kat peyi a, e kèk konsekans rive pita.</p>
+  <div class="mapbox float">${mapSVG(S.st)}${legend}</div>
+  ${S.done?'':`<button class="primary" id="go">${has?'Kontinye manda a · Ane '+(S.year+1):'Prete sèman'}</button>`}
+  ${has||S.done?'<button class="second" id="new">Kòmanse yon nouvo manda</button>':''}
+  ${S.done?'<button class="primary" id="fin">Wè rapò 5 an ou</button>':''}
+  <div class="row"><span class="chip">Pi bon nòt: ${M.best||'–'}/100</span><span class="chip">${Object.keys(M.badges).length}/${BADGES.length} badj</span></div>
+  <p class="fine">Se yon jwèt: senaryo yo ak chif yo envante pou fè w reflechi, yo pa yon pwevizyon. Jwèt la pa sipòte okenn kandida.</p>`);
+ on('#go',()=>{sfx.up();levelMap()});
+ on('#fin',()=>final());
+ on('#new',()=>{S=fresh();save();sfx.tap();levelMap()});
+}
+
+function levelMap(){
+ if(S.done)return final();
+ const y=YEARS[S.year];
+ show(`<div class="row"><button class="ghost" id="hm">‹ Akèy</button><span class="grow"></span><span class="chip">Eta peyi a ${score(S.st)}/100</span></div>
+  <h2>Manda w: 5 an sou kat la</h2>
+  <div class="mapbox">${mapSVG(S.st,true)}</div>
+  ${hud(S.st)}
+  <div class="card"><span class="eyebrow">Ane ${S.year+1} · ${y.city}</span><h3>${y.n}: ${y.t}</h3>
+   <p class="mute">3 desizyon. Jwenn jiska 3 zetwal si peyi a avanse.</p>
+   <button class="primary" id="play">${S.inYear?'Kontinye Ane '+(S.year+1):'Jwe Ane '+(S.year+1)}</button></div>
+  <div class="card">${YEARS.map((v,i)=>`<div class="yr"><b>Ane ${i+1}</b><span class="mute">${v.n}</span><span class="s">${S.stars[i]?'★'.repeat(S.stars[i])+'☆'.repeat(3-S.stars[i]):i===S.year?'An kou':'🔒'}</span></div>`).join('')}</div>`);
+ const start=()=>{sfx.tap();S.inYear?play():intro()};
+ on('#play',start);on('#hm',home);
+ $$('.node',app).forEach(n=>{const f=()=>{const i=+n.dataset.y;if(i===S.year)start();else toast(i<S.year?'Ane '+(i+1)+' fini deja.':'Fini Ane '+(S.year+1)+' anvan.')};
+  n.addEventListener('click',f);n.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')f()})});
+}
+
+function intro(){
+ const y=YEARS[S.year],before={...S.st};let evs=[];
+ if(S.year>0){S.st.kes=clamp(S.st.kes+12+Math.round(S.st.eko/4));
+  evs=EVENTS.filter(e=>e.y===S.year&&S.flags[e.f]);evs.forEach(e=>{for(const k in e.e)S.st[k]=clamp(S.st[k]+e.e[k])})}
+ S.inYear=true;S.d=0;S.y0=sum(S.st);save();
+ const bad=evs.some(e=>Object.values(e.e).some(v=>v<0));
+ show(`<span class="eyebrow">Ane ${S.year+1} sou 5 · ${y.city}</span><h1>${y.n}</h1><p class="mute">${y.t}</p>
+  ${scene(y.sc)}
+  <div class="adv"><div class="ava">${avatar(y.adv)}</div><div class="bub"><small>${ADV[y.adv].n} · ${ADV[y.adv].r}</small><p>${y.line}</p></div></div>
+  ${evs.map(e=>`<div class="event"><b>Konsekans ki rive pita: ${e.t}</b><span>${e.d}</span></div>`).join('')}
+  ${S.year>0?`<div class="card"><span class="eyebrow">Kòmansman ane a</span>${meterList(S.st,before)}<p class="fine">Taks yo antre nan kès la. Plis ekonomi an mache, plis kès la plen.</p></div>`:''}
+  <button class="primary" id="st">Kòmanse Ane ${S.year+1}</button>`);
+ if(evs.length){bad?(sfx.down(),vib([60,40,60]),app.firstChild.classList.add('shake')):sfx.up()}
+ on('#st',()=>{sfx.tap();play()});
+}
+
+function play(){
+ const D=DEC[S.year][S.d],y=YEARS[S.year],kes=S.st.kes;
+ const afford=D.o.map(o=>o.c<=kes),none=!afford.some(Boolean),cheap=Math.min(...D.o.map(o=>o.c));
+ const ok=D.o.map((o,i)=>afford[i]||(none&&o.c===cheap));
+ show(`<div class="row"><button class="ghost" id="bk">‹ Kat</button><span class="chip">Ane ${S.year+1} · ${y.n}</span><span class="grow"></span><span class="pips" aria-label="Desizyon ${S.d+1} sou 3">${[0,1,2].map(i=>`<i class="${i<=S.d?'on':''}"></i>`).join('')}</span></div>
+  ${hud(S.st)}
+  ${scene(y.sc)}
+  <div class="adv"><div class="ava">${avatar(D.a)}</div><div class="bub"><small>${ADV[D.a].n} · ${ADV[D.a].r}</small><p class="q">${D.q}</p>
+   <button class="hintb" id="hb">💡 Mande konsèy</button><p class="hint" id="ht" hidden>« ${D.hint} »</p></div></div>
+  <div class="opts" id="opts">${D.o.map((o,i)=>`<button class="opt ${ok[i]?'':'no'}" data-i="${i}" ${ok[i]?'':'aria-disabled="true"'}>
+   <span class="cost ${o.c?'':'free'}">${o.c?'Koute '+o.c:'Gratis'}${ok[i]?(afford[i]?'':' · sou kredi'):' · kès la pa ase'}</span><b>${o.t}</b><span>${o.d}</span><span class="stamp">DESIDE</span></button>`).join('')}</div>
+  <div class="dots" id="dots">${D.o.map((_,i)=>`<i class="${i?'':'on'}"></i>`).join('')}</div>
+  <button class="primary red" id="sign" disabled>Chwazi yon dosye</button>
+  <p class="fine">Glise pou wè tout dosye yo. Desizyon yo final, pa gen retou.</p>`);
+ let sel=-1;const box=$('#opts'),sign=$('#sign'),cards=$$('.opt',box);
+ box.addEventListener('scroll',()=>{const c=box.scrollLeft+box.clientWidth/2;let b=0,bd=1e9;cards.forEach((e,i)=>{const d=Math.abs(e.offsetLeft-box.offsetLeft+e.offsetWidth/2-c);if(d<bd){bd=d;b=i}});
+  $$('#dots i').forEach((e,i)=>e.classList.toggle('on',i===b))},{passive:true});
+ cards.forEach((c,i)=>c.addEventListener('click',()=>{if(sign.dataset.busy)return;if(!ok[i]){toast('Kès leta a pa gen ase lajan pou sa.');vib(40);return}
+  sel=i;cards.forEach(x=>x.classList.toggle('sel',x===c));sign.disabled=false;sign.textContent='Siyen dekrè a';sfx.tap();vib(10);
+  box.scrollTo({left:c.offsetLeft-box.offsetLeft-(box.clientWidth-c.offsetWidth)/2,behavior:'smooth'})}));
+ on('#hb',e=>{$('#ht').hidden=false;e.currentTarget.hidden=true;sfx.tap()});
+ on('#bk',levelMap);
+ sign.addEventListener('click',()=>{if(sel<0||sign.dataset.busy)return;sign.dataset.busy=1;sign.disabled=true;cards[sel].classList.add('stamped');
+  setTimeout(()=>{sfx.stamp();vib(80);app.firstChild.classList.add('shake')},260);setTimeout(()=>choose(sel,!afford[sel]),950)});
+ if(!M.tut){M.tut=true;save();tutorial()}
+}
+
+function choose(i,loan){
+ const o=DEC[S.year][S.d].o[i],before={...S.st};
+ S.st.kes=clamp(S.st.kes-o.c);for(const k in o.e)S.st[k]=clamp(S.st[k]+o.e[k]);if(loan)S.st.kon=clamp(S.st.kon-3);
+ if(o.f)S.flags[o.f]=1;S.last={y:S.year,d:S.d,i,before,loan};S.d++;award('first');checkBadges();save();result();
+}
+
+function result(){
+ const L=S.last,D=DEC[L.y][L.d],o=D.o[L.i],net=sum(S.st)-sum(L.before),lastD=S.d>=3;
+ show(`<div class="row"><span class="chip">Ane ${L.y+1} · Desizyon ${L.d+1} sou 3</span><span class="grow"></span><span class="chip">Eta peyi a ${score(S.st)}/100</span></div>
+  <div class="paper"><div class="mast"><b>Jounal Pèp la</b><span>Edisyon espesyal</span></div><h2>${o.h}</h2><p>Prezidan an chwazi: ${o.t.toLowerCase()}.</p></div>
+  <div class="mapbox" id="mb">${mapSVG(L.before,false,L.y===3)}${legend}</div>
+  <div class="card">${meterList(S.st,L.before)}${L.loan?'<p class="fine">Ou te oblije prete lajan: konfyans −3.</p>':''}</div>
+  <div class="adv"><div class="ava">${avatar(D.a)}</div><div class="bub"><small>${ADV[D.a].n} · Poukisa?</small><p>${o.w}</p></div></div>
+  <button class="primary" id="nx">${lastD?'Wè rapò Ane '+(L.y+1):'Pwochen desizyon'}</button>`);
+ setTimeout(()=>{const m=$('#mb');if(m){m.querySelector('svg').outerHTML=mapSVG(S.st,false,L.y===3)}},700);
+ setTimeout(()=>{if(net>=0)sfx.up();else{sfx.down();vib([50,40,50]);app.firstChild&&app.firstChild.classList.add('shake')}},500);
+ on('#nx',()=>{sfx.tap();lastD?report():play()});
+}
+
+function report(){
+ const y=S.year,delta=(sum(S.st)-S.y0)/4,stars=delta>=6?3:delta>=2?2:1;
+ S.stars[y]=stars;S.inYear=false;S.d=0;
+ if(S.st.kes>=25)award('thrift');if(stars===3)award('star3');if(y===3&&stars>=2)award('storm');
+ const end=y===4;if(end){S.done=true;award('full');M.best=Math.max(M.best,score(S.st))}else S.year++;
+ save();
+ const msg=['Peyi a pa avanse ane sa a. Ou ka fè pi byen.','Peyi a fè yon ti pa annavan.','Yon gwo ane pou peyi a!'][stars-1];
+ show(`<div class="card center"><span class="eyebrow">Rapò Ane ${y+1} · ${YEARS[y].n}</span>
+   <div class="stars">${[0,1,2].map(i=>`<span class="${i<stars?'on':''}" style="animation-delay:${.3+i*.35}s">★</span>`).join('')}</div>
+   <h2>${msg}</h2><p class="mute">Eta peyi a ${delta>=0?'monte':'desann'} ${Math.abs(Math.round(delta*10)/10)} pwen ane sa a.</p></div>
+  <div class="mapbox">${mapSVG(S.st)}${legend}</div>
+  <div class="card">${meterList(S.st)}</div>
+  <button class="primary" id="nx">${end?'Wè rapò 5 an ou':'Ale nan Ane '+(y+2)}</button>`);
+ for(let i=0;i<stars;i++)setTimeout(()=>{sfx.star(i);vib(20)},300+i*350);
+ if(stars===3)setTimeout(confetti,1200);
+ on('#nx',()=>{sfx.tap();end?final():levelMap()});
+}
+
+function profile(){const s=S.st,top=[['sek','Prezidan Lòd','Ou te mete sekirite anvan tout bagay.'],['eko','Prezidan Batisè','Ou te mize sou travay ak ekonomi.'],['lek','Prezidan Pwofesè','Ou te envesti nan lekòl ak lasante.'],['kon','Prezidan Pèp la','Ou te koute pèp la epi kenbe pawòl ou.']].sort((a,b)=>s[b[0]]-s[a[0]])[0];return top}
+function final(){
+ const sc=score(S.st),p=profile(),tot=S.stars.reduce((a,b)=>a+b,0);
+ const grade=sc>=60?'Yon manda istorik':sc>=50?'Yon bon manda':sc>=40?'Yon manda mwayen':'Yon manda difisil';
+ const txt=`Mwen fè ${sc}/100 kòm prezidan Ayiti (${tot}/15 zetwal). Pwofil mwen: ${p[1]}. E ou menm, kisa w ta fè? ${SITE}`;
+ show(`<div class="card center"><span class="eyebrow">Rapò 5 an ou</span><div class="big"><span data-from="30" data-to="${sc}">30</span><small>/100</small></div>
+   <h2>${grade}</h2><span class="chip gold">${'★'.repeat(tot)} ${tot}/15 zetwal</span>
+   <h3>${p[1]}</h3><p class="mute">${p[2]}</p></div>
+  <div class="mapbox">${mapSVG(S.st)}${legend}</div>
+  <div class="card">${meterList(S.st,fresh().st)}</div>
+  <div class="card">${YEARS.map((v,i)=>`<div class="yr"><b>Ane ${i+1}</b><span class="mute">${v.n}</span><span class="s">${'★'.repeat(S.stars[i]||0)}${'☆'.repeat(3-(S.stars[i]||0))}</span></div>`).join('')}</div>
+  <div class="card"><h3>Pataje rezilta w</h3><p class="mute" id="sht" style="user-select:all">${txt}</p><button class="second" id="cp">Kopye pou WhatsApp</button></div>
+  <button class="primary" id="ag">Rejwe pou yon pi bon nòt</button>
+  <div class="card center"><h3>Kounye a, se tou pa w</h3><p class="mute">Yon prezidan gen 5 an pou l deside pou ou. Vòt ou enpòtan.</p><a href="${SITE}" target="_blank" rel="noopener">Ale sou Prezidan Pa M</a></div>`);
+ sfx.win();if(sc>=50)confetti();
+ on('#ag',()=>{S=fresh();save();levelMap()});
+ on('#cp',e=>{const b=e.currentTarget;try{navigator.clipboard.writeText(txt).then(()=>{b.textContent='Kopye ✓'},()=>sel())}catch(x){sel()}
+  function sel(){const r=document.createRange();r.selectNodeContents($('#sht'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Tèks la chwazi, kopye l'}});
+}
+
+/* ---------- sheets ---------- */
+function sheet(html){const d=document.createElement('div');d.className='sheet';d.innerHTML=`<div class="card">${html}</div>`;document.body.appendChild(d);
+ d.addEventListener('click',e=>{if(e.target===d||e.target.closest('[data-x]'))d.remove()});return d}
+function tutorial(){
+ const steps=['Byenveni nan biwo w, Prezidan. Chak desizyon rive sou fòm <b>dosye</b>. Glise yo agoch ak adwat pou w wè tout chwa yo.',
+  'Chak chwa koute lajan nan <b>Kès leta</b>. Gade 5 ba ki anlè yo: sekirite, ekonomi, lekòl ak lasante, konfyans, kès.',
+  'Si w ezite, peze <b>Mande konsèy</b>. Lè w pare, touche yon dosye epi <b>siyen dekrè a</b>. Kat Ayiti a ap montre w rezilta a.'];
+ let i=0;const d=sheet('');const draw=()=>{d.firstChild.innerHTML=`<div class="adv"><div class="ava">${avatar('tij')}</div><div class="bub"><small>Ti Jan · Kijan pou jwe (${i+1}/3)</small><p>${steps[i]}</p></div></div><button class="primary" id="tn">${i<2?'Kontinye':'Mwen pare'}</button>`;
+  $('#tn',d).onclick=()=>{sfx.tap();if(++i>2)d.remove();else draw()}};draw()}
+function badgeSheet(){sheet(`<div class="row"><h2 class="grow">Badj yo</h2><button class="icon-btn" data-x aria-label="Fèmen">✕</button></div>
+  <p class="mute">Seri jwèt: ${M.streak} jou · Pi bon nòt: ${M.best||'–'}/100</p>
+  <div class="badges">${BADGES.map(b=>`<div class="bd ${M.badges[b[0]]?'':'off'}"><span class="e">${b[1]}</span><b>${b[2]}</b><span>${b[3]}</span></div>`).join('')}</div>`)}
+
+/* ---------- boot ---------- */
+function start(data){
+ const s=(data&&data.S)||store.get('smp_state'),m=store.get('smp_meta');
+ if(s&&s.st&&s.stars)S=Object.assign(fresh(),s);if(m)M=Object.assign(M,m);
+ const day=d=>d.toISOString().slice(0,10),today=day(new Date()),yest=day(new Date(Date.now()-864e5));
+ if(M.last!==today){M.streak=M.last===yest?M.streak+1:1;M.last=today}
+ if(M.streak>=3)award('streak');save();
+ $('#streak').textContent='🔥 '+M.streak+' jou';
+ const mb=$('#mbtn');const setM=()=>{mb.textContent=M.muted?'🔇':'🔊';mb.setAttribute('aria-pressed',M.muted)};setM();
+ mb.onclick=()=>{M.muted=!M.muted;setM();save();sfx.tap()};
+ $('#bbtn').onclick=()=>{sfx.tap();badgeSheet()};
+ home();
+}
+try{window.claude&&window.claude.hot&&window.claude.hot.snapshot&&window.claude.hot.snapshot(()=>({S}))}catch(e){}
+if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(start);else start((window.claude&&window.claude.hot&&window.claude.hot.data)||{});
+})();
+</script>
+</body></html>

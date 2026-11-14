@@ -1,0 +1,17 @@
+{
+  "project": "projects/3650381135727742422",
+  "projectTitle": "Si m te prezidan · jwèt nivo (v4)",
+  "generatedAt": "2026-11-13",
+  "spec": "docs/si-m-te-prezidan-prototype.html",
+  "note": "Phone designs for the level based rebuild of « Si m te prezidan » (5 years = 5 levels, 3 decisions each). Kept in their own Stitch project because the main project's list_screens is capped at 15 entries. Stitch returns phone screens on a 2560px canvas; the PNGs here are the centred phone column (800px = 390px at 2x). Day mode only; night mode uses the site's dark tokens. Desktop layouts not designed yet.",
+  "mobile": {
+    "s18-home": { "id": "2a1bb557bc5d492a8b18c10ab570367e", "title": "Si m te prezidan · Akèy" },
+    "s19-level-map": { "id": "7151a77b00c74afe846febc2e447d25a", "title": "Si m te prezidan · Kat manda a" },
+    "s20-year-intro": { "id": "edd86d90b5d747f09e765999878d75f9", "title": "Si m te prezidan · Ane 2" },
+    "s21-decision": { "id": "dcc2759dbcaa41aeb66fd385b86f6843", "title": "Si m te prezidan · Desizyon" },
+    "s22-result": { "id": "b9e3d2db8a624e8dba388766f4948392", "title": "Si m te prezidan · Jounal Pèp la" },
+    "s23-year-report": { "id": "31f522116e7c4c9cb8a4f6bcc7401941", "title": "Si m te prezidan · Rapò Ane 1" },
+    "s24-final": { "id": "cb09445c465a457099416744729a9542", "title": "Si m te prezidan · Rapò 5 an" },
+    "s25-badges": { "id": "6cbad30ce8ea41a9b89eafb96dda8cb2", "title": "Si m te prezidan · Badj yo" }
+  }
+}
