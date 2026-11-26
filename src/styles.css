@@ -1928,4 +1928,6 @@ dialog.sheet.gm-dialog .gm-tut { padding-top: 36px; }
 .gm-sot-prog i { background: var(--ultra); }
 .gm-delta.sm { padding: 1px 7px; font-size: 11px; }
 .gm-sot .gm-list { gap: 11px; }
-.gm-sot .gm-bud { --c: var(--gm-bud); border-top: 1px solid var(--hairline); padding-top: 12px; margin-top: 1px; }
+.gm-bud { --c: var(--gm-bud); }
+.gm-list .gm-bud { border-top: 1px solid var(--hairline); padding-top: 11px; margin-top: 1px; }
+.gm-sot-cap { display: grid; gap: 10px; margin-bottom: 2px; }

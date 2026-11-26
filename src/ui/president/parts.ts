@@ -60,7 +60,7 @@ export function meterList(c: Ctx, st: Readonly<Stats>, prev?: Readonly<Stats>, f
     const val = h('b', { class: 'num' }, String(fromTo ? st[id] : from));
     if (prev && !fromTo) c.track(tween(val, from, st[id], 900, String));
     requestAnimationFrame(() => requestAnimationFrame(() => { bar.style.width = `${st[id]}%`; }));
-    return h('div', { class: `gm-lm k-${id}`, role: 'listitem', 'aria-label': `${label(id)}: ${st[id]}${d ? ` (${signed(d)})` : ''}` },
+    return h('div', { class: `gm-lm k-${id}${id === 'treasury' ? ' gm-bud' : ''}`, role: 'listitem', 'aria-label': `${label(id)}: ${st[id]}${d ? ` (${signed(d)})` : ''}` },
       h('span', { class: 'gm-well', 'aria-hidden': 'true' }, svg(STAT_ICON[id])),
       h('span', { class: 'nm', 'aria-hidden': 'true' }, h('span', null, label(id)), h('span', { class: 'gm-bar' }, bar)),
       fromTo ? h('span', { class: 'gm-ft num', 'aria-hidden': 'true' }, `${from} → `, val) : h('span', { 'aria-hidden': 'true' }, val),
@@ -139,4 +139,15 @@ export function countryHud(st: Readonly<Stats>, projected?: Readonly<Stats>): HT
         h('b', null, String(score)), h('span', { class: 'gm-sot-max' }, '/ 100'))),
     h('span', { class: 'gm-bar gm-sot-prog', 'aria-hidden': 'true' }, h('i', { style: `width:${score}%` })),
     h('div', { class: 'gm-list', role: 'list' }, ...COUNTRY.map((id) => row(id)), row('treasury', true)));
+}
+
+/** The « State of the country » heading: the score out of 100 and a progress line, for the report cards. */
+export function scoreHead(st: Readonly<Stats>): HTMLElement {
+  const s = S().pres;
+  const score = scoreOf(st);
+  return h('div', { class: 'gm-sot-cap' },
+    h('div', { class: 'gm-sot-head' },
+      h('span', { class: 'gm-sot-label' }, s.country),
+      h('span', { class: 'gm-sot-score num' }, h('b', null, String(score)), h('span', { class: 'gm-sot-max' }, '/ 100'))),
+    h('span', { class: 'gm-bar gm-sot-prog', 'aria-hidden': 'true' }, h('i', { style: `width:${score}%` })));
 }

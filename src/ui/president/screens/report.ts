@@ -3,7 +3,7 @@ import { ICON } from '../../../lib/icons';
 import { S, fmt, getLang, l } from '../../../i18n';
 import { BADGES, LEVELS } from '../../../data/president-levels.ts';
 import { BADGE_ICON } from '../art';
-import { mapBox, meterList, primary, stars, type Ctx, type ShowOptions } from '../parts';
+import { mapBox, meterList, primary, scoreHead, stars, type Ctx, type ShowOptions } from '../parts';
 import { sfx, vibrate } from '../sound';
 
 const decimal = (n: number) => new Intl.NumberFormat(getLang() === 'en' ? 'en-US' : 'fr-FR', { maximumFractionDigits: 1 }).format(n);
@@ -34,7 +34,7 @@ export function reportScreen(c: Ctx, o: ShowOptions): HTMLElement {
       h('p', { class: 'gm-muted' }, fmt(delta >= 0 ? s.movedUp : s.movedDown, { n: decimal(Math.abs(delta)) }))),
     ...strips,
     h('div', { class: 'gm-side' }, mapBox(end, { labels: true })),
-    h('div', { class: 'gm-card' }, meterList(c, end)),
+    h('div', { class: 'gm-card' }, scoreHead(end), meterList(c, end)),
     primary(last ? s.finish : fmt(s.nextYear, { y: y + 2 }), () => { sfx.tap(); c.go(last ? 'final' : 'map', { fresh: true }); }, ICON.arrowRight));
 
   for (let i = 0; i < n; i++) c.later(() => { sfx.star(i); vibrate(20); }, 300 + i * 350);
