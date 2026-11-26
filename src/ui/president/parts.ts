@@ -1,7 +1,7 @@
 import { h, svg } from '../../lib/dom';
 import { S, fmt, l } from '../../i18n';
-import { ADVISERS, STATS, type AdviserId, type BadgeId, type GameDecision, type StatId, type Stats } from '../../data/president-levels.ts';
-import type { Replay } from '../../lib/president-rules.ts';
+import { ADVISERS, COUNTRY, STATS, type AdviserId, type BadgeId, type GameDecision, type StatId, type Stats } from '../../data/president-levels.ts';
+import { scoreOf, type Replay } from '../../lib/president-rules.ts';
 import type { GameMeta, GameResult } from '../../lib/progress';
 import { tween } from '../home';
 import { GI, STAT_ICON, avatarSVG, mapSVG, type MapOptions } from './art';
@@ -112,4 +112,31 @@ export function secondary(text: string, onclick: () => void, icon?: string): HTM
 }
 export function ghost(text: string, onclick: () => void): HTMLButtonElement {
   return h('button', { class: 'gm-ghost', type: 'button', onclick }, svg(GI.back), text);
+}
+
+/**
+ * The « State of the country » card (Stitch HUD): the score out of 100 with a progress line, the four
+ * country stats as rows, and the treasury set apart below a hairline as the budget. With `projected`,
+ * the pending change of a chosen dossier shows as +/- chips; the bars stay put until the decree is signed.
+ */
+export function countryHud(st: Readonly<Stats>, projected?: Readonly<Stats>): HTMLElement {
+  const s = S().pres;
+  const score = scoreOf(st);
+  const sd = projected ? scoreOf(projected) - score : 0;
+  const row = (id: StatId, budget = false): HTMLElement => {
+    const d = projected ? projected[id] - st[id] : 0;
+    return h('div', { class: `gm-lm k-${id}${budget ? ' gm-bud' : ''}`, role: 'listitem', 'aria-label': `${label(id)}: ${st[id]}${d ? ` (${signed(d)})` : ''}` },
+      h('span', { class: 'gm-well', 'aria-hidden': 'true' }, svg(STAT_ICON[id])),
+      h('span', { class: 'nm' }, h('span', null, label(id)), h('span', { class: 'gm-bar' }, h('i', { style: `width:${st[id]}%` }))),
+      h('b', { class: 'num' }, String(st[id])),
+      d ? h('span', { class: `gm-delta ${d > 0 ? 'up' : 'dn'}` }, signed(d)) : h('span', { 'aria-hidden': 'true' }));
+  };
+  return h('div', { class: 'gm-sot', role: 'group', 'aria-label': fmt(s.stateOf, { n: score }) },
+    h('div', { class: 'gm-sot-head' },
+      h('span', { class: 'gm-sot-label' }, s.country),
+      h('span', { class: 'gm-sot-score num' },
+        sd ? h('span', { class: `gm-delta sm ${sd > 0 ? 'up' : 'dn'}` }, signed(sd)) : null,
+        h('b', null, String(score)), h('span', { class: 'gm-sot-max' }, '/ 100'))),
+    h('span', { class: 'gm-bar gm-sot-prog', 'aria-hidden': 'true' }, h('i', { style: `width:${score}%` })),
+    h('div', { class: 'gm-list', role: 'list' }, ...COUNTRY.map((id) => row(id)), row('treasury', true)));
 }

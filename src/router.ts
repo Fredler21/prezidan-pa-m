@@ -5,14 +5,14 @@ const PATH_ROUTES: readonly Route[] = ['about-us', 'privacy', 'terms'];
 
 export interface Location { route: Route; param: string | null }
 
-/** Empty or unknown hash opens the home page (or the clean-path page when the URL is one); #start is the priorities step. */
+/** Empty or unknown hash opens the game, the site's front door (or the clean-path page when the URL is one); #home is the vote hub, #start the priorities step. */
 export function parseHash(hash = location.hash): Location {
   const raw = hash.replace(/^#\/?/, '');
   const [first = '', param] = raw.split('/');
   if ((ROUTES as readonly string[]).includes(first)) return { route: first as Route, param: param ? decodeURIComponent(param) : null };
   const path = location.pathname.replace(/^\/|\/$/g, '');
   if ((PATH_ROUTES as readonly string[]).includes(path)) return { route: path as Route, param: null };
-  return { route: 'home', param: null };
+  return { route: 'president', param: null };
 }
 
 export function go(route: Route, param?: string): void {

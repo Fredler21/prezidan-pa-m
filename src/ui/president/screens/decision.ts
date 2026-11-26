@@ -1,10 +1,10 @@
 import { h, svg } from '../../../lib/dom';
 import { S, fmt, l } from '../../../i18n';
 import { LEVELS } from '../../../data/president-levels.ts';
-import { payable } from '../../../lib/president-rules.ts';
+import { applyChoice, payable } from '../../../lib/president-rules.ts';
 import { toast } from '../../toast';
 import { GI, sceneSVG } from '../art';
-import { adviser, adviserName, chip, ghost, hud, reduced, type Ctx } from '../parts';
+import { adviser, adviserName, chip, countryHud, ghost, reduced, type Ctx } from '../parts';
 import { sfx, vibrate } from '../sound';
 
 /**
@@ -20,6 +20,7 @@ export function decisionScreen(c: Ctx): HTMLElement {
   const lv = r ? LEVELS[r.year] : undefined;
   if (!t || !r || !D || !lv) return h('div');
   const pay = payable(r.stats, D.o);
+  let hudEl = countryHud(r.stats);
 
   const hint = h('p', { class: 'gm-hint', id: 'gm-hint', hidden: true, tabindex: -1 }, `« ${l(D.hint)} »`);
   const hintBtn = h('button', { class: 'gm-hintb', type: 'button', 'aria-expanded': 'false', 'aria-controls': 'gm-hint' }, svg(GI.idea), s.hintBtn);
@@ -46,6 +47,8 @@ export function decisionScreen(c: Ctx): HTMLElement {
     sign.disabled = false;
     sign.replaceChildren(svg(GI.pen), s.sign);
     sfx.tap(); vibrate(10);
+    const po = D.o[k];
+    if (po) { const nx = countryHud(r.stats, applyChoice(r.stats, po, pay.credit[k] ?? false)); hudEl.replaceWith(nx); hudEl = nx; }
     const card = cards[k];
     if (card) center(card);
   };
@@ -91,7 +94,7 @@ export function decisionScreen(c: Ctx): HTMLElement {
       chip(`${fmt(s.year, { y: r.year + 1 })} · ${l(lv.name)}`, undefined, 'soft'),
       h('span', { class: 'grow' }),
       h('span', { class: 'gm-pips', role: 'img', 'aria-label': fmt(s.step, { i: r.d + 1, n: 3 }) }, ...[0, 1, 2].map((k) => h('i', { class: k <= r.d ? 'on' : '' })))),
-    hud(r.stats),
+    hudEl,
     h('div', { class: 'gm-side' }, h('div', { class: 'gm-scene', html: sceneSVG(lv.scene, l(lv.name)) })),
     adviser(D.adv, adviserName(D.adv), h('h2', { class: 'gm-q', id: 'gm-q', tabindex: -1, 'data-focus': '' }, l(D.q)), hintBtn, hint),
     h('div', { class: 'gm-desk' }, box, dots),

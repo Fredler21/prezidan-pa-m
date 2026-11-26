@@ -83,7 +83,7 @@ function render(loc: Location): void {
   window.scrollTo({ top: 0 });
   const nav = S().nav as Record<string, string>;
   const navKey: Record<string, string> = { match: 'candidates', vote: 'candidates', admin: 'poll', start: 'priorities', 'about-us': 'aboutUs' };
-  document.title = loc.route === 'home' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[navKey[loc.route] ?? loc.route] ?? ''}`;
+  document.title = loc.route === 'home' || loc.route === 'president' ? `${S().appName} · Ayiti 2027` : `${S().appName} · ${nav[navKey[loc.route] ?? loc.route] ?? ''}`;
 }
 
 onRoute(render);

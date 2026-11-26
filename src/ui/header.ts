@@ -54,15 +54,15 @@ function topNav(route: Route): HTMLElement {
   const active: Partial<Record<Route, Route>> = { home: 'home', start: 'start', match: 'candidates', candidates: 'candidates', vote: 'candidates', results: 'results', poll: 'poll', admin: 'poll', quiz: 'president', president: 'president' };
   const cur = active[route];
   const links: { route: Route; label: string }[] = [
-    { route: 'home', label: s.home }, { route: 'start', label: s.priorities }, { route: 'candidates', label: s.candidates },
-    { route: 'results', label: s.results }, { route: 'poll', label: s.poll }, { route: 'president', label: s.quiz },
+    { route: 'president', label: s.quiz }, { route: 'start', label: s.priorities }, { route: 'candidates', label: s.candidates },
+    { route: 'results', label: s.results }, { route: 'poll', label: s.poll }, { route: 'home', label: s.home },
   ];
   return h('nav', { class: 'topnav', 'aria-label': S().navLabel }, ...links.map((x) =>
     h('a', { href: `#${x.route}`, 'aria-current': x.route === cur ? 'page' : undefined }, x.label)));
 }
 
 /** The logo as supplied (on its white plate at night). */
-const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#home', 'aria-label': S().appName },
+const wordmark = (title?: string, deskOnly = Boolean(title)) => h('a', { class: deskOnly ? 'wordmark desk-only' : 'wordmark', href: '#president', 'aria-label': S().appName },
   h('img', { class: 'wm-logo', src: LOGO_SRC, width: LOGO_W, height: LOGO_H, alt: '', decoding: 'async' }),
   title ? h('span', { class: 'hdr-crumb' }, `· ${title}`) : null);
 
@@ -78,7 +78,7 @@ function build(el: HTMLElement, route: Route): void {
   clear(el);
   const s = S();
   // The landing page, the priorities step and « Tablo mwen »: the logo, with the language and theme in a strip on phones.
-  const withStrip = route === 'home' || route === 'start' || route === 'dashboard';
+  const withStrip = route === 'president' || route === 'home' || route === 'start' || route === 'dashboard';
   el.className = withStrip ? 'hdr with-strip' : 'hdr';
 
   if (withStrip) {

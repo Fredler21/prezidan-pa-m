@@ -1590,7 +1590,7 @@ body { transition: background-color .25s, color .25s; }
    The page follows the site theme (white by day, black at night); only the map and the story scenes are navy.
    Flat colours only. Every animation is reduced under prefers-reduced-motion (end of this block). */
 .gm-page {
-  --gm-sec: #1A3BB5; --gm-eko: #B7791F; --gm-lek: #15803D; --gm-kon: #C2185B; --gm-kes: #6D4AFF;
+  --gm-sec: #1A3BB5; --gm-eko: #B7791F; --gm-lek: #15803D; --gm-kon: #C2185B; --gm-kes: #6D4AFF; --gm-bud: #475569;
   --gm-gold: #E8A317; --gm-gold-ink: #8A6100; --gm-gold-tint: #FFF4DB;
   --gm-green: #15803D; --gm-green-tint: #E7F6EC; --gm-red: #D41E3C; --gm-red-tint: #FDECEF;
   --gm-amber: #B45309; --gm-amber-line: #F0A13A; --gm-amber-tint: #FFF7EA; --gm-violet-tint: #F1EDFF;
@@ -1599,7 +1599,7 @@ body { transition: background-color .25s, color .25s; }
   padding-top: 16px;
 }
 :root[data-theme="dark"] .gm-page, :root[data-theme="dark"] .gm-dialog {
-  --gm-sec: #7D93E8; --gm-eko: #E3B34F; --gm-lek: #4ADE80; --gm-kon: #F472B6; --gm-kes: #A78BFA;
+  --gm-sec: #7D93E8; --gm-eko: #E3B34F; --gm-lek: #4ADE80; --gm-kon: #F472B6; --gm-kes: #A78BFA; --gm-bud: #94A3B8;
   --gm-gold-ink: #FFD66B; --gm-gold-tint: #2A2410; --gm-green: #4ADE80; --gm-green-tint: #0F2A1A; --gm-red: #FF6B81; --gm-red-tint: #2A1016;
   --gm-amber: #F5B454; --gm-amber-tint: #241A0B; --gm-violet-tint: #1E1840; --gm-sea: #0F1733;
 }
@@ -1916,3 +1916,16 @@ dialog.sheet.gm-dialog .gm-tut { padding-top: 36px; }
 .gm-scene { box-shadow: 0 1px 2px rgba(11, 26, 74, .08), 0 14px 32px rgba(11, 26, 74, .12); }
 .gm-btn.btn-primary { box-shadow: 0 1px 2px rgba(26, 59, 181, .25), 0 8px 20px rgba(26, 59, 181, .18); }
 .gm-btn.btn-primary[disabled] { box-shadow: none; }
+
+/* « State of the country » HUD card (Stitch HUD): score out of 100, the four country stats, treasury set apart */
+.gm-sot { border: 1px solid var(--hairline); border-radius: 16px; background: var(--card); padding: 14px; display: grid; gap: 12px; }
+.gm-sot-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.gm-sot-label { color: var(--muted); font-size: 14px; font-weight: 600; }
+.gm-sot-score { display: inline-flex; align-items: baseline; gap: 6px; color: var(--ink); white-space: nowrap; }
+.gm-sot-score b { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+.gm-sot-max { color: var(--muted); font-size: 13px; font-weight: 600; }
+.gm-sot-prog { height: 4px; }
+.gm-sot-prog i { background: var(--ultra); }
+.gm-delta.sm { padding: 1px 7px; font-size: 11px; }
+.gm-sot .gm-list { gap: 11px; }
+.gm-sot .gm-bud { --c: var(--gm-bud); border-top: 1px solid var(--hairline); padding-top: 12px; margin-top: 1px; }

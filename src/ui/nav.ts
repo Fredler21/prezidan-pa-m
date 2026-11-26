@@ -53,11 +53,11 @@ export function renderBottom(route: Route): void {
     chrome = 'none';
   } else {
     const tabs: { route: Route; label: string; icon: string; active: Route[] }[] = [
-      { route: 'home', label: s.nav.home, icon: ICON.home, active: ['home'] },
+      { route: 'president', label: s.nav.home, icon: ICON.home, active: ['president', 'home'] },
       { route: 'start', label: s.nav.priorities, icon: ICON.sliders, active: ['start'] },
       { route: 'candidates', label: s.nav.candidates, icon: ICON.people, active: ['candidates', 'match'] },
       { route: 'results', label: s.nav.results, icon: ICON.bars, active: ['results'] },
-      { route: 'poll', label: s.nav.poll, icon: ICON.poll, active: ['poll', 'admin', 'quiz', 'president'] },
+      { route: 'poll', label: s.nav.poll, icon: ICON.poll, active: ['poll', 'admin', 'quiz'] },
     ];
     el.append(h('div', { class: 'tabs' }, ...tabs.map((t) =>
       h('a', { class: 'tab', href: `#${t.route}`, 'aria-current': t.active.includes(route) ? 'page' : undefined }, svg(t.icon), t.label))));
